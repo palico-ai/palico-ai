@@ -1,6 +1,17 @@
 {
   "name": "@palico-ai/client-js",
   "version": "1.10.0",
+  "bugs": {
+    "url": "https://github.com/palico-ai/palico-main/issues"
+  },
+  "homepage": "https://github.com/palico-ai/palico-main#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/palico-ai/palico-main"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "openai": "^4.28.4"
   },

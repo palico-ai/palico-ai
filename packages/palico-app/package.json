@@ -3,6 +3,17 @@
   "version": "1.10.0",
   "main": "./src/index.js",
   "typings": "./src/index.d.ts",
+  "bugs": {
+    "url": "https://github.com/palico-ai/palico-main/issues"
+  },
+  "homepage": "https://github.com/palico-ai/palico-main#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/palico-ai/palico-main"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "publish:clean": "npm unpublish --force --registry http://localhost:4873",
     "publish:local": "npm publish --registry http://localhost:4873"

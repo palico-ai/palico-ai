@@ -2,6 +2,17 @@
   "name": "@palico-ai/react",
   "version": "1.10.0",
   "typings": "./src/index.d.ts",
+  "bugs": {
+    "url": "https://github.com/palico-ai/palico-main/issues"
+  },
+  "homepage": "https://github.com/palico-ai/palico-main#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/palico-ai/palico-main"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "openai": "^4.28.4"
   },
