@@ -1,0 +1,18 @@
+{
+  "app": {
+    "entryPath": "dist/index.js",
+    "build": [
+      "npm run build"
+    ]
+  },
+  "include": {
+    "files": [
+      "package.json",
+      "package-lock.json"
+    ],
+    "directories": [
+      "dist",
+      "node_modules"
+    ]
+  }
+}

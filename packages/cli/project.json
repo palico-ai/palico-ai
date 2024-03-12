@@ -5,33 +5,13 @@
   "projectType": "library",
   "targets": {
     "build": {
-      "executor": "@nx/rollup:rollup",
+      "executor": "@nx/js:tsc",
       "outputs": ["{options.outputPath}"],
-      "defaultConfiguration": "production",
       "options": {
-        "main": "packages/cli/src/index.ts",
         "outputPath": "dist/packages/cli",
+        "main": "packages/cli/src/index.ts",
         "tsConfig": "packages/cli/tsconfig.lib.json",
-        "compiler": "babel",
-        "project": "packages/cli/package.json",
-        "format": ["esm", "cjs"],
-        "generateExportsField": true,
-        "assets": [
-          {
-            "glob": "packages/cli/README.md",
-            "input": ".",
-            "output": "."
-          }
-        ]
-      },
-      "configurations": {
-        "production": {
-          "optimization": true,
-          "sourceMap": false,
-          "namedChunks": false,
-          "extractLicenses": true,
-          "vendorChunk": false
-        }
+        "assets": ["packages/cli/templates/**/*"]
       }
     },
     "publish": {

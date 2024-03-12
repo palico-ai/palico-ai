@@ -13,7 +13,8 @@
     "projects": [
       "packages/client-js",
       "packages/palico-app",
-      "packages/react-client"
+      "packages/react-client",
+      "packages/cli"
     ],
     "changelog": {
       "workspaceChangelog": {
