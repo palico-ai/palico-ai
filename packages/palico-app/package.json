@@ -1,57 +1,32 @@
 {
   "name": "@palico-ai/app",
-  "version": "1.0.0",
+  "version": "1.9.0",
   "main": "./src/index.js",
   "typings": "./src/index.d.ts",
+  "scripts": {
+    "publish:clean": "npm unpublish --force --registry http://localhost:4873",
+    "publish:local": "npm publish --registry http://localhost:4873"
+  },
   "bin": {
-    "palico-app": "lib/cli/index.js"
+    "palico-app": "src/cli/index.js"
   },
   "dependencies": {
-    "tslib": "^2.3.0",
     "archiver": "^6.0.1",
     "aws-serverless-express": "^3.4.0",
     "axios": "^1.6.3",
     "body-parser": "^1.20.2",
     "chalk": "^4.1.2",
     "commander": "^11.1.0",
-    "configstore": "^6.0.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.4",
     "express": "^4.18.2",
     "find-up": "^5.0.0",
-    "json-schema": "^0.4.0",
     "jsonwebtoken": "^9.0.2",
-    "mysql2": "^3.9.1",
     "nodemon": "^3.0.3",
     "openai": "^4.24.1",
-    "oracledb": "^6.3.0",
-    "pg": "^8.11.3",
-    "pg-hstore": "^2.3.4",
     "sequelize": "^6.36.0",
-    "sqlite3": "^5.1.7",
-    "zip-a-folder": "^3.1.5",
     "zod": "^3.22.4",
-    "zod-to-json-schema": "^3.22.4"
-  },
-  "devDependencies": {
-    "@types/archiver": "^6.0.2",
-    "@types/aws-serverless-express": "^3.3.9",
-    "@types/body-parser": "^1.19.5",
-    "@types/configstore": "^6.0.2",
-    "@types/cors": "^2.8.17",
-    "@types/express": "^4.17.21",
-    "@types/json-schema": "^7.0.15",
-    "@types/jsonwebtoken": "^9.0.5",
-    "@types/node": "^20.2.4",
-    "@types/nodemon": "^1.19.6",
-    "@typescript-eslint/eslint-plugin": "^6.19.1",
-    "eslint": "^8.56.0",
-    "eslint-config-standard-with-typescript": "^43.0.1",
-    "eslint-plugin-import": "^2.29.1",
-    "eslint-plugin-n": "^16.6.2",
-    "eslint-plugin-promise": "^6.1.1",
-    "semantic-release": "^23.0.0",
-    "ts-node": "^10.9.1",
-    "typescript": "^5.3.3"
+    "zod-to-json-schema": "^3.22.4",
+    "tslib": "^2.3.0"
   }
 }

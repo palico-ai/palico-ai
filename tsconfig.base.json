@@ -17,7 +17,8 @@
     "paths": {
       "@palico-ai/app": ["packages/palico-app/src/index.ts"],
       "@palico-ai/client-js": ["packages/client-js/src/index.ts"],
-      "@palico-ai/react": ["packages/react-client/src/index.ts"]
+      "@palico-ai/react": ["packages/react-client/src/index.ts"],
+      "palico": ["packages/cli/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

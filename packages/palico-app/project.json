@@ -5,38 +5,30 @@
   "projectType": "library",
   "targets": {
     "build": {
-      "executor": "@nx/rollup:rollup",
+      "executor": "@nx/js:tsc",
       "outputs": ["{options.outputPath}"],
-      "defaultConfiguration": "production",
       "options": {
-        "main": "packages/palico-app/src/index.ts",
         "outputPath": "dist/packages/palico-app",
+        "main": "packages/palico-app/src/index.ts",
         "tsConfig": "packages/palico-app/tsconfig.lib.json",
-        "compiler": "tsc",
-        "project": "packages/palico-app/package.json",
-        "format": ["esm", "cjs"],
-        "generateExportsField": true,
-        "assets": [
-          {
-            "glob": "packages/palico-app/README.md",
-            "input": ".",
-            "output": "."
-          }
-        ]
-      },
-      "configurations": {
-        "production": {
-          "optimization": true,
-          "sourceMap": false,
-          "namedChunks": false,
-          "extractLicenses": true,
-          "vendorChunk": false
-        }
+        "assets": []
       }
     },
     "publish": {
       "command": "node tools/scripts/publish.mjs palico-app {args.ver} {args.tag}",
       "dependsOn": ["build"]
+    },
+    "publish-local": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["build"],
+      "options": {
+        "cwd": "dist/packages/palico-app",
+        "commands": [
+          "npm unpublish --force --registry http://localhost:4873",
+          "npm publish --registry http://localhost:4873"
+        ],
+        "parallel": false
+      }
     }
   },
   "tags": []

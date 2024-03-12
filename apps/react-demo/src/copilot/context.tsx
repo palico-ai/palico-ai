@@ -5,7 +5,7 @@ import ThemeContext from "../context/theme";
 
 const proxyRequestHandler = createProxyAPIAgentRequestHandler(
   "http://localhost:8002",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkZXBsb3ltZW50SWQiOi0xLCJpYXQiOjE3MTAxMzIyODZ9.Cc0cYUapRyRav6vIz7aBvp8_LYWadObEv_fShEs6ZJM"
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkZXBsb3ltZW50SWQiOi0xLCJpYXQiOjE3MTAxODA2NDR9.QRrnRWkC-kxik8TH9F1fKNSK0Q1j2xRIzjfyJY2zSA4"
 );
 
 type Props = {

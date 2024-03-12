@@ -1,95 +1,94 @@
-import * as findUp from 'find-up'
-import { readFileSync } from 'fs'
-import { type SimpleApplicationConfig, type PackageConfig } from '../app/types'
-import config from '../config'
-import { RunShellCommands } from './os'
-import { ZipDirectory } from './create_zip'
+import * as findUp from 'find-up';
+import { readFileSync } from 'fs';
+import { type SimpleApplicationConfig, type PackageConfig } from '../app/types';
+import config from '../config';
+import { RunShellCommands } from './os';
+import { ZipDirectory } from './create_zip';
 
 export interface ApplicationBundle {
-  bundlePath: string
+  bundlePath: string;
   metadata: {
-    appEntryPath: string
-  }
+    appEntryPath: string;
+  };
 }
 
 export class CurrentProject {
-  private static hasBuiltApplication: boolean = false
-  private static projectPath: string
-  private static projectConfig: PackageConfig
-  private static applicationConfig: any
+  private static hasBuiltApplication = false;
+  private static projectPath: string;
+  private static projectConfig: PackageConfig;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private static applicationConfig: any;
 
-  static async getPackageDirectory (): Promise<string> {
+  static async getPackageDirectory(): Promise<string> {
     if (this.projectPath) {
-      return this.projectPath
+      return this.projectPath;
     }
-    const path = await findUp(config.ProjectConfigFileName)
+    const path = await findUp(config.ProjectConfigFileName);
     if (!path) {
-      throw new Error('Failed to find project root')
+      throw new Error('Failed to find project root');
     }
-    this.projectPath = path.replace(`/${config.ProjectConfigFileName}`, '')
-    return this.projectPath
+    this.projectPath = path.replace(`/${config.ProjectConfigFileName}`, '');
+    return this.projectPath;
   }
 
-  static async getPackageConfig (): Promise<PackageConfig> {
+  static async getPackageConfig(): Promise<PackageConfig> {
     if (this.projectConfig) {
-      return this.projectConfig
+      return this.projectConfig;
     }
-    const projectRootPath = await this.getPackageDirectory()
+    const projectRootPath = await this.getPackageDirectory();
     this.projectConfig = JSON.parse(
       readFileSync(`${projectRootPath}/${config.ProjectConfigFileName}`, 'utf8')
-    )
-    return this.projectConfig
+    );
+    return this.projectConfig;
   }
 
-  static async buildApplication (): Promise<void> {
+  static async buildApplication(): Promise<void> {
     if (this.hasBuiltApplication) {
-      return
+      return;
     }
-    const config = await this.getPackageConfig()
-    const buildCommands = config.app.build
+    const config = await this.getPackageConfig();
+    const buildCommands = config.app.build;
     if (buildCommands && buildCommands.length > 0) {
-      await RunShellCommands(buildCommands)
+      await RunShellCommands(buildCommands);
     }
-    this.hasBuiltApplication = true
+    this.hasBuiltApplication = true;
   }
 
-  static async createApplicationBundle (): Promise<ApplicationBundle> {
-    await this.buildApplication()
+  static async createApplicationBundle(): Promise<ApplicationBundle> {
+    await this.buildApplication();
     const {
       include,
-      app: { entryPath }
-    } = await CurrentProject.getPackageConfig()
-    const packageRootPath = await CurrentProject.getPackageDirectory()
-    const packageBundlePath = await CurrentProject.getPackageBundlePath()
+      app: { entryPath },
+    } = await CurrentProject.getPackageConfig();
+    const packageRootPath = await CurrentProject.getPackageDirectory();
+    const packageBundlePath = await CurrentProject.getPackageBundlePath();
     await ZipDirectory(packageRootPath, packageBundlePath, {
-      files: [
-        ...include.files,
-        config.ProjectConfigFileName
-      ],
-      directories: include.directories
-    })
+      files: [...include.files, config.ProjectConfigFileName],
+      directories: include.directories,
+    });
     return {
       bundlePath: packageBundlePath,
       metadata: {
-        appEntryPath: entryPath
-      }
-    }
+        appEntryPath: entryPath,
+      },
+    };
   }
 
-  static async getApplicationAPIConfig (): Promise<SimpleApplicationConfig> {
+  static async getApplicationAPIConfig(): Promise<SimpleApplicationConfig> {
     if (this.applicationConfig) {
-      return this.applicationConfig
+      return this.applicationConfig;
     }
-    const projectRootPath = await this.getPackageDirectory()
-    const config = await this.getPackageConfig()
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    this.applicationConfig = require(`${projectRootPath}/${config.app.entryPath}`).default
-    return this.applicationConfig
+    const projectRootPath = await this.getPackageDirectory();
+    const config = await this.getPackageConfig();
+    this.applicationConfig =
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      require(`${projectRootPath}/${config.app.entryPath}`).default;
+    return this.applicationConfig;
   }
 
-  static async getPackageBundlePath (): Promise<string> {
-    const projectRootPath = await this.getPackageDirectory()
-    const bundlePath = `${projectRootPath}/${config.TempDirectory}/${config.BundleFileKey}`
-    return bundlePath
+  static async getPackageBundlePath(): Promise<string> {
+    const projectRootPath = await this.getPackageDirectory();
+    const bundlePath = `${projectRootPath}/${config.TempDirectory}/${config.BundleFileKey}`;
+    return bundlePath;
   }
 }

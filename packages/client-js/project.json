@@ -37,6 +37,18 @@
     "publish": {
       "command": "node tools/scripts/publish.mjs client-js {args.ver} {args.tag}",
       "dependsOn": ["build"]
+    },
+    "publish-local": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["build"],
+      "options": {
+        "cwd": "dist/packages/client-js",
+        "commands": [
+          "npm unpublish --force --registry http://localhost:4873",
+          "npm publish --registry http://localhost:4873"
+        ],
+        "parallel": false
+      }
     }
   },
   "tags": []

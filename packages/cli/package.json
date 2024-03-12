@@ -1,9 +1,7 @@
 {
-  "name": "@palico-ai/client-js",
+  "name": "palico",
   "version": "1.9.0",
-  "dependencies": {
-    "openai": "^4.28.4"
-  },
+  "dependencies": {},
   "type": "commonjs",
   "main": "./src/index.js",
   "typings": "./src/index.d.ts"

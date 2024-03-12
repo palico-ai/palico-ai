@@ -1,26 +1,24 @@
 {
-  "name": "react-client",
+  "name": "cli",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "packages/react-client/src",
+  "sourceRoot": "packages/cli/src",
   "projectType": "library",
-  "tags": [],
   "targets": {
     "build": {
       "executor": "@nx/rollup:rollup",
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
       "options": {
-        "main": "packages/react-client/src/index.ts",
-        "outputPath": "dist/packages/react-client",
-        "tsConfig": "packages/react-client/tsconfig.lib.json",
-        "compiler": "tsc",
-        "generateExportsField": true,
-        "project": "packages/react-client/package.json",
+        "main": "packages/cli/src/index.ts",
+        "outputPath": "dist/packages/cli",
+        "tsConfig": "packages/cli/tsconfig.lib.json",
+        "compiler": "babel",
+        "project": "packages/cli/package.json",
         "format": ["esm", "cjs"],
-        "external": ["react", "react-dom"],
+        "generateExportsField": true,
         "assets": [
           {
-            "glob": "packages/react-client/README.md",
+            "glob": "packages/cli/README.md",
             "input": ".",
             "output": "."
           }
@@ -36,11 +34,15 @@
         }
       }
     },
+    "publish": {
+      "command": "node tools/scripts/publish.mjs cli {args.ver} {args.tag}",
+      "dependsOn": ["build"]
+    },
     "publish-local": {
       "executor": "nx:run-commands",
       "dependsOn": ["build"],
       "options": {
-        "cwd": "dist/packages/react-client",
+        "cwd": "dist/packages/cli",
         "commands": [
           "npm unpublish --force --registry http://localhost:4873",
           "npm publish --registry http://localhost:4873"
@@ -48,5 +50,6 @@
         "parallel": false
       }
     }
-  }
+  },
+  "tags": []
 }

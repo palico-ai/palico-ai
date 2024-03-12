@@ -6,23 +6,23 @@ export class APIError extends Error {
     this.statusCode = code
   }
 
-  static unauthorized (message: string = 'Unauthorized'): APIError {
+  static unauthorized (message = 'Unauthorized'): APIError {
     return new APIError(message, 401)
   }
 
-  static forbidden (message: string = 'Forbidden'): APIError {
+  static forbidden (message = 'Forbidden'): APIError {
     return new APIError(message, 403)
   }
 
-  static notFound (message: string = 'Not Found'): APIError {
+  static notFound (message = 'Not Found'): APIError {
     return new APIError(message, 404)
   }
 
-  static badRequest (message: string = 'Bad Request'): APIError {
+  static badRequest (message = 'Bad Request'): APIError {
     return new APIError(message, 400)
   }
 
-  static internalServerError (message: string = 'Internal Server Error'): APIError {
+  static internalServerError (message = 'Internal Server Error'): APIError {
     return new APIError(message, 500)
   }
 
