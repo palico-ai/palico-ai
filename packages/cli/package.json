@@ -1,7 +1,25 @@
 {
   "name": "palico",
-  "version": "1.9.0",
-  "dependencies": {},
+  "version": "1.11.0",
+  "bugs": {
+    "url": "https://github.com/palico-ai/palico-main/issues"
+  },
+  "homepage": "https://github.com/palico-ai/palico-main#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/palico-ai/palico-main"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "tslib": "^2.3.0",
+    "chalk": "^4.1.2",
+    "commander": "^11.1.0"
+  },
+  "bin": {
+    "palico": "src/index.js"
+  },
   "type": "commonjs",
   "main": "./src/index.js",
   "typings": "./src/index.d.ts"
