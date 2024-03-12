@@ -1,6 +1,6 @@
 {
   "name": "@palico-ai/app",
-  "version": "1.9.0",
+  "version": "1.10.0",
   "main": "./src/index.js",
   "typings": "./src/index.d.ts",
   "scripts": {
