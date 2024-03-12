@@ -11,11 +11,16 @@
   },
   "release": {
     "projects": [
-      "packages/cli",
       "packages/client-js",
       "packages/palico-app",
       "packages/react-client"
-    ]
+    ],
+    "changelog": {
+      "workspaceChangelog": {
+        "file": false,
+        "createRelease": "github"
+      }
+    }
   },
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
   "nxCloudAccessToken": "ZmUxZGNiN2ItN2MxZC00NzMwLWJiYWQtNzQ0MjQ4MTk3NzZifHJlYWQtd3JpdGU=",
