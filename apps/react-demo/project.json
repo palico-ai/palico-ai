@@ -1,8 +1,0 @@
-{
-  "name": "react-demo",
-  "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/react-demo",
-  "projectType": "application",
-  "targets": {},
-  "tags": []
-}
