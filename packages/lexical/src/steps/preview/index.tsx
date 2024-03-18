@@ -11,30 +11,20 @@ import {
   InitialConfigType,
   LexicalComposer,
 } from '@lexical/react/LexicalComposer';
-import { ListItemNode, ListNode } from '@lexical/list';
-import { HeadingNode, QuoteNode } from '@lexical/rich-text';
-import { TableCellNode, TableNode, TableRowNode } from '@lexical/table';
-import { CodeHighlightNode, CodeNode } from '@lexical/code';
-import { AutoLinkNode, LinkNode } from '@lexical/link';
+import { HeadingNode } from '@lexical/rich-text';
 import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
 import { ContentEditable } from '@lexical/react/LexicalContentEditable';
 import LexicalErrorBoundary from '@lexical/react/LexicalErrorBoundary';
 import LexicalPreviewContent from './lexical_preview_content';
 import { useHotkeys } from 'react-hotkeys-hook';
-import { PreviewUIOverrideProps } from '../../types';
-import { ContentNode } from '../../utils/use_content_node_parser';
-
-function Placeholder() {
-  return <div />;
-}
-
-interface RenderPreviewProps extends PreviewUIOverrideProps {
-  content: ContentNode[];
-  enableReplace: boolean;
-  onSelectInsertBelow: () => Promise<void>;
-  onSelectReplace: () => Promise<void>;
-  onSelectCancel: () => Promise<void>;
-}
+import {
+  PreviewLexicalEditorOverrides,
+  PreviewUIOverrideProps,
+} from '../../types';
+import {
+  ContentNode,
+  LexicalContentNodeParser,
+} from '../../utils/use_content_node_parser';
 
 const editorConfig: InitialConfigType = {
   namespace: '',
@@ -44,25 +34,27 @@ const editorConfig: InitialConfigType = {
     throw error;
   },
   // Any custom nodes go here
-  nodes: [
-    HeadingNode,
-    ListNode,
-    ListItemNode,
-    QuoteNode,
-    CodeNode,
-    CodeHighlightNode,
-    TableNode,
-    TableCellNode,
-    TableRowNode,
-    AutoLinkNode,
-    LinkNode,
-  ],
+  nodes: [HeadingNode],
 };
+
+interface RenderPreviewProps
+  extends PreviewUIOverrideProps,
+    PreviewLexicalEditorOverrides {
+  content: ContentNode[];
+  enableReplace: boolean;
+  lexicalContentNodeParser: LexicalContentNodeParser;
+  onSelectInsertBelow: () => Promise<void>;
+  onSelectReplace: () => Promise<void>;
+  onSelectCancel: () => Promise<void>;
+}
 
 const RenderPreview: React.FC<RenderPreviewProps> = ({
   content,
+  lexicalContentNodeParser,
   onSelectInsertBelow: onSelectInsert,
   enableReplace,
+  lexicalNodes,
+  editorTheme,
   onSelectReplace,
   onSelectCancel,
   renderCancelButton,
@@ -167,13 +159,22 @@ const RenderPreview: React.FC<RenderPreviewProps> = ({
       fullWidth
     >
       <DialogContent>
-        <LexicalComposer initialConfig={editorConfig}>
+        <LexicalComposer
+          initialConfig={{
+            ...editorConfig,
+            nodes: lexicalNodes ?? editorConfig.nodes,
+            theme: editorTheme,
+          }}
+        >
           <RichTextPlugin
             contentEditable={<ContentEditable />}
             ErrorBoundary={LexicalErrorBoundary}
-            placeholder={<Placeholder />}
+            placeholder={<div />}
           />
-          <LexicalPreviewContent content={content} />
+          <LexicalPreviewContent
+            content={content}
+            lexicalContentNodeParser={lexicalContentNodeParser}
+          />
         </LexicalComposer>
         <Divider sx={{ py: 1 }} />
       </DialogContent>

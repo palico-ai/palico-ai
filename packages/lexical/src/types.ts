@@ -1,4 +1,6 @@
-import { UseParseContentNodeParams } from './utils';
+import { EditorThemeClasses } from 'lexical';
+import { ContentNodeParserFN } from './utils';
+import { InitialConfigType } from '@lexical/react/LexicalComposer';
 
 export interface AIActionOption {
   label: string;
@@ -49,6 +51,7 @@ type ButtonOverrideFN = (
 ) => React.ReactNode;
 
 export interface PreviewUIOverrideProps {
+  editorTheme?: EditorThemeClasses;
   renderInsertButton?: ButtonOverrideFN;
   renderReplaceButton?: ButtonOverrideFN;
   renderCancelButton?: ButtonOverrideFN;
@@ -56,12 +59,19 @@ export interface PreviewUIOverrideProps {
 
 export type LexicalAIUIOverrideProps = PreviewUIOverrideProps;
 
+export type PreviewLexicalEditorOverrides = {
+  editorTheme?: EditorThemeClasses;
+  lexicalNodes?: InitialConfigType["nodes"];
+}
+
 export interface ParserOverrideProps {
-  customParsers?: UseParseContentNodeParams['parsers'];
-  setParsers?: UseParseContentNodeParams['parsers'];
-  setInvalidTypeParser?: UseParseContentNodeParams['parseInvalidType'];
+  customParsers?: Record<string, ContentNodeParserFN>;
+  setParsers?: Record<string, ContentNodeParserFN>; // Default: Paragraph and Header (1, 2, 3)
+  setInvalidTypeParser?: ContentNodeParserFN;
 }
 
 export interface LexicalAIPluginUserOverrideProps
   extends LexicalAIUIOverrideProps,
-    ParserOverrideProps {}
+    ParserOverrideProps, 
+    PreviewLexicalEditorOverrides
+     {}

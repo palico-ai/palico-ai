@@ -22,7 +22,11 @@ import ListMaxIndentLevelPlugin from './plugins/ListMaxIndentLevelPlugin';
 import CodeHighlightPlugin from './plugins/CodeHighlightPlugin';
 import AutoLinkPlugin from './plugins/AutoLinkPlugin';
 import './styles.css';
-import { AIAction, LexicalAIPlugin, ContentNodeParser } from '@palico-ai/lexical';
+import {
+  AIAction,
+  LexicalAIPlugin,
+  ContentNodeParserFN,
+} from '@palico-ai/lexical';
 import { Container } from '@mui/material';
 import HotKeyPlugin from './plugins/hotkey_plugin';
 import { $createTextNode } from 'lexical';
@@ -120,13 +124,13 @@ const aiActions: AIAction[] = [
 ];
 
 interface ListContentNode {
-  type: "bullet_list";
+  type: 'bullet_list';
   value: string[];
 }
 
 export default function Editor() {
-  const parseBulletListNode: ContentNodeParser = (entry) => {
-    const list = $createListNode("bullet");
+  const parseBulletListNode: ContentNodeParserFN = (entry) => {
+    const list = $createListNode('bullet');
     const contentNode = entry as ListContentNode;
     contentNode.value.forEach((item) => {
       const listItem = $createListItemNode();
@@ -134,7 +138,7 @@ export default function Editor() {
       list.append(listItem);
     });
     return [list];
-  }
+  };
 
   return (
     <Container>
@@ -147,9 +151,14 @@ export default function Editor() {
               placeholder={<Placeholder />}
               ErrorBoundary={LexicalErrorBoundary}
             />
-            <LexicalAIPlugin options={aiActions} customParsers={{
-              bullet_list: parseBulletListNode
-            }} />
+            <LexicalAIPlugin
+              options={aiActions}
+              editorTheme={ExampleTheme}
+              customParsers={{
+                bullet_list: parseBulletListNode,
+              }}
+              lexicalNodes={[HeadingNode, ListNode, ListItemNode]}
+            />
             <HotKeyPlugin />
             <HistoryPlugin />
             <AutoFocusPlugin />

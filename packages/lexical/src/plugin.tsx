@@ -7,6 +7,7 @@ import { LexicalAITypeahead } from './typeahead';
 import { ToastContainer } from 'react-toastify';
 import { LexicalAITypeaheadProvider } from './typeahead.context';
 import { AIAction, LexicalAIPluginUserOverrideProps } from './types';
+import { useParseContentNode } from './utils';
 
 export const OPEN_ASK_AI_COMMAND = createCommand('palico-ai/open-ask-ai');
 export const CLOSE_ASK_AI_COMMAND = createCommand('palico-ai/close-ask-ai');
@@ -19,11 +20,22 @@ export interface LexicalAIPluginProps extends LexicalAIPluginUserOverrideProps {
 
 export const LexicalAIPlugin: React.FC<LexicalAIPluginProps> = ({
   options,
-  ...uiOverrideProps
+  setParsers,
+  customParsers,
+  editorTheme,
+  lexicalNodes,
+  setInvalidTypeParser,
+  renderCancelButton,
+  renderInsertButton,
+  renderReplaceButton,
 }) => {
   const [editor] = useLexicalComposerContext();
   const [isOpen, setIsOpen] = useState(false);
-
+  const contentNodeParser = useParseContentNode({
+    setParsers,
+    customParsers,
+    setInvalidTypeParser,
+  });
   const handleOpenAskAI = useCallback(() => {
     setIsOpen(true);
   }, []);
@@ -61,7 +73,14 @@ export const LexicalAIPlugin: React.FC<LexicalAIPluginProps> = ({
       onClose={handleClose}
     >
       <ToastContainer />
-      <LexicalAITypeahead {...uiOverrideProps} />
+      <LexicalAITypeahead
+        lexicalNodes={lexicalNodes}
+        editorTheme={editorTheme}
+        lexicalContentNodeParser={contentNodeParser}
+        renderCancelButton={renderCancelButton}
+        renderInsertButton={renderInsertButton}
+        renderReplaceButton={renderReplaceButton}
+      />
     </LexicalAITypeaheadProvider>
   );
 };

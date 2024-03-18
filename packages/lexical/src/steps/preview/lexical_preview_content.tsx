@@ -1,34 +1,29 @@
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
-import { $getRoot } from 'lexical';
+import { $getRoot, $insertNodes } from 'lexical';
 import React from 'react'
-import { ContentNode, UseParseContentNodeParams, useParseContentNode } from '../../utils/use_content_node_parser';
+import { ContentNode, LexicalContentNodeParser } from '../../utils/use_content_node_parser';
 
-export interface LexicalPreviewContentProps extends UseParseContentNodeParams  {
+export interface LexicalPreviewContentProps  {
   content: ContentNode[];
+  lexicalContentNodeParser: LexicalContentNodeParser
 }
 
 const LexicalPreviewContent : React.FC<LexicalPreviewContentProps> = ({
   content,
-  parsers,
-  parseInvalidType,
+  lexicalContentNodeParser
 }) => {
   const [editor] = useLexicalComposerContext();
-  const parseContentNode = useParseContentNode({
-    parsers,
-    parseInvalidType,
-  })
-
   React.useEffect(() => {
     const updatePreview = async () => {
       editor.update(() => {
-        const nodes = parseContentNode(content);
+        const nodes = lexicalContentNodeParser(content);
         const root = $getRoot();
         root.clear()
-        root.append(...nodes);
+        $insertNodes(nodes);
       });
     }
     void updatePreview();
-  }, [content, editor, parseContentNode]);
+  }, [content, editor, lexicalContentNodeParser]);
 
   return null;
 }

@@ -13,26 +13,31 @@ import {
   $insertNodes,
 } from 'lexical';
 import RenderPreview from './steps/preview';
-import { DefaultContentNodeParsers, useParseContentNode } from './utils/use_content_node_parser';
+import { LexicalContentNodeParser } from './utils/use_content_node_parser';
 import { LexicalAITypeaheadContext, Step } from './typeahead.context';
 import PromptSelectAIAction, { OnSelectParams } from './steps/select_action';
 import {
   AIAction,
   AskAgentRequestParams,
-  LexicalAIPluginUserOverrideProps,
+  PreviewLexicalEditorOverrides,
+  PreviewUIOverrideProps,
 } from './types';
 import { useShowError } from './utils/useShowError';
 import ThemeProvider from './theme';
 
-export type LexicalAITypeaheadProps = LexicalAIPluginUserOverrideProps
+export interface LexicalAITypeaheadProps
+  extends PreviewUIOverrideProps,
+    PreviewLexicalEditorOverrides {
+  lexicalContentNodeParser: LexicalContentNodeParser;
+}
 
 export const LexicalAITypeahead: React.FC<LexicalAITypeaheadProps> = ({
   renderCancelButton,
   renderInsertButton,
   renderReplaceButton,
-  setParsers,
-  customParsers: addParsers,
-  setInvalidTypeParser,
+  lexicalContentNodeParser: parseContentNode,
+  editorTheme,
+  lexicalNodes
 }) => {
   const {
     isOpen,
@@ -51,19 +56,6 @@ export const LexicalAITypeahead: React.FC<LexicalAITypeaheadProps> = ({
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkZXBsb3ltZW50SWQiOi0xLCJpYXQiOjE3MDkzMzc2ODF9.VtDihjqMcviS37AsUJZSuIxrxNp5QXegmz26qf2QyK4',
   });
   const containerRef = React.useRef<HTMLDivElement>(null);
-  const parsers = useMemo(() => {
-    if (addParsers) {
-      return {
-        ...DefaultContentNodeParsers,
-        ...addParsers,
-      }
-    }
-    return setParsers;
-  }, [addParsers, setParsers]);
-  const parseContentNode = useParseContentNode({
-    parsers,
-    parseInvalidType: setInvalidTypeParser,
-  });
   const { showErrorMessage } = useShowError({ closeOnError: true });
 
   const callAgentAndShowPreview = useCallback(
@@ -200,7 +192,7 @@ export const LexicalAITypeahead: React.FC<LexicalAITypeaheadProps> = ({
         return;
       }
       const nodes = parseContentNode(stepOutput[Step.PreviewGeneration]);
-      nodeSelection.insertNodes([$createLineBreakNode() ,...nodes]);
+      nodeSelection.insertNodes([$createLineBreakNode(), ...nodes]);
       handleClose();
     });
   }, [
@@ -236,8 +228,11 @@ export const LexicalAITypeahead: React.FC<LexicalAITypeaheadProps> = ({
         return (
           <RenderPreview
             enableReplace={!!selection?.rangeSelection}
+            lexicalContentNodeParser={parseContentNode}
             renderCancelButton={renderCancelButton}
             renderInsertButton={renderInsertButton}
+            editorTheme={editorTheme}
+            lexicalNodes={lexicalNodes}
             renderReplaceButton={renderReplaceButton}
             onSelectReplace={handleReplaceSelection}
             onSelectCancel={async () => {
@@ -251,7 +246,7 @@ export const LexicalAITypeahead: React.FC<LexicalAITypeaheadProps> = ({
       default:
         return null;
     }
-  }, [handleClose, handleInsertBelowSelection, handleReplaceSelection, handleSelectOption, handleSubmitFreetext, isOpen, options, renderCancelButton, renderInsertButton, renderReplaceButton, selection?.cursorPosition, selection?.rangeSelection, step, stepOutput]);
+  }, [editorTheme, handleClose, handleInsertBelowSelection, handleReplaceSelection, handleSelectOption, handleSubmitFreetext, isOpen, lexicalNodes, options, parseContentNode, renderCancelButton, renderInsertButton, renderReplaceButton, selection?.cursorPosition, selection?.rangeSelection, step, stepOutput]);
 
   if (!isOpen) {
     return null;

@@ -1,7 +1,8 @@
 /* eslint-disable no-case-declarations */
 import { $createParagraphNode, $createTextNode, LexicalNode } from "lexical";
 import { $createHeadingNode } from "@lexical/rich-text";
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
+import { ParserOverrideProps } from "../types";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export interface ContentNode<Value = any> {
@@ -9,67 +10,80 @@ export interface ContentNode<Value = any> {
   value: Value;
 }
 
-export type ContentNodeParser = (entry: ContentNode) => LexicalNode[];
+export type ContentNodeParserFN = (entry: ContentNode) => LexicalNode[];
 
-export const H1NodeParser : ContentNodeParser = (entry) => {
+export const H1NodeParser : ContentNodeParserFN = (entry) => {
   const heading = $createHeadingNode("h1");
   heading.append($createTextNode(entry.value));
   return [heading];
 }
 
-export const H2NodeParser : ContentNodeParser = (entry) => {
+export const H2NodeParser : ContentNodeParserFN = (entry) => {
   const heading = $createHeadingNode("h2");
   heading.append($createTextNode(entry.value));
   return [heading];
 }
 
-export const H3NodeParser : ContentNodeParser = (entry) => {
+export const H3NodeParser : ContentNodeParserFN = (entry) => {
   const heading = $createHeadingNode("h3");
   heading.append($createTextNode(entry.value));
   return [heading];
 }
 
-export const ParagraphNodeParser : ContentNodeParser = (entry) => {
+export const ParagraphNodeParser : ContentNodeParserFN = (entry) => {
   const paragraph = $createParagraphNode();
   paragraph.append($createTextNode(entry.value));
   return [paragraph];
 }
 
-export const DefaultContentNodeParsers: Record<string, ContentNodeParser> = {
+export const DefaultContentNodeParsers: Record<string, ContentNodeParserFN> = {
   heading1: H1NodeParser,
   heading2: H2NodeParser,
   heading3: H3NodeParser,
   paragraph: ParagraphNodeParser,
 };
 
-export const DefaultInvalidTypeParser: ContentNodeParser = (entry) => {
+export const DefaultInvalidTypeParser: ContentNodeParserFN = (entry) => {
   console.error("Unknown content type: ", entry.type)
   const paragraph = $createParagraphNode();
   paragraph.append($createTextNode(entry.value));
   return [paragraph];
 }
 
-export interface UseParseContentNodeParams {
-  parsers?: Record<string, ContentNodeParser>;
-  parseInvalidType?: ContentNodeParser;
+export type UseParseContentNodeParams = {
+  setParsers?: ParserOverrideProps["setParsers"];
+  setInvalidTypeParser: ParserOverrideProps["setInvalidTypeParser"];
+  customParsers?: ParserOverrideProps["customParsers"];
+
 }
 
 export type LexicalContentNodeParser = (content: ContentNode[]) => LexicalNode[];
 
 export const useParseContentNode = (params: UseParseContentNodeParams) : LexicalContentNodeParser => {
   const { 
-    parsers = DefaultContentNodeParsers, 
-    parseInvalidType = DefaultInvalidTypeParser 
+    setParsers,
+    setInvalidTypeParser,
+    customParsers
   } = params;
+
+  const parsers = useMemo(() => {
+    if (customParsers) {
+      return {
+        ...DefaultContentNodeParsers,
+        ...customParsers,
+      }
+    }
+    return setParsers ?? DefaultContentNodeParsers;
+  }, [customParsers, setParsers]);
 
   const parse = useCallback((content: ContentNode[]): LexicalNode[] => {
     const nodes: LexicalNode[] = [];
     content.forEach((node) => {
-      const parser = parsers[node.type] || parseInvalidType;
+      const parser = parsers[node.type] || setInvalidTypeParser;
       nodes.push(...parser(node));
     });
     return nodes;
-  }, [parseInvalidType, parsers]);
+  }, [parsers, setInvalidTypeParser]);
 
   return parse;
 };
