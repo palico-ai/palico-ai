@@ -51,9 +51,9 @@ export const DefaultInvalidTypeParser: ContentNodeParserFN = (entry) => {
 }
 
 export type UseParseContentNodeParams = {
-  setParsers?: ParserOverrideProps["setParsers"];
+  setParsers?: ParserOverrideProps["contentParsers"];
   setInvalidTypeParser: ParserOverrideProps["setInvalidTypeParser"];
-  customParsers?: ParserOverrideProps["customParsers"];
+  customParsers?: ParserOverrideProps["additionalContentParsers"];
 
 }
 

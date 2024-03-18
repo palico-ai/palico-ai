@@ -8,6 +8,7 @@ import { ToastContainer } from 'react-toastify';
 import { LexicalAITypeaheadProvider } from './typeahead.context';
 import { AIAction, LexicalAIPluginUserOverrideProps } from './types';
 import { useParseContentNode } from './utils';
+import { AgentRequestHandler } from '@palico-ai/client-js';
 
 export const OPEN_ASK_AI_COMMAND = createCommand('palico-ai/open-ask-ai');
 export const CLOSE_ASK_AI_COMMAND = createCommand('palico-ai/close-ask-ai');
@@ -15,15 +16,18 @@ export const CLOSE_ASK_AI_COMMAND = createCommand('palico-ai/close-ask-ai');
 export type ElementAbsoluteCoordinate = { x: number; y: number };
 
 export interface LexicalAIPluginProps extends LexicalAIPluginUserOverrideProps {
-  options: AIAction[];
+  actions: AIAction[];
+  requestHandler: AgentRequestHandler
 }
 
 export const LexicalAIPlugin: React.FC<LexicalAIPluginProps> = ({
-  options,
-  setParsers,
-  customParsers,
+  actions,
+  requestHandler,
+  contentParsers: setParsers,
+  additionalContentParsers: customParsers,
   editorTheme,
   lexicalNodes,
+  additionalLexicalNodesNodes,
   setInvalidTypeParser,
   renderCancelButton,
   renderInsertButton,
@@ -68,14 +72,16 @@ export const LexicalAIPlugin: React.FC<LexicalAIPluginProps> = ({
 
   return (
     <LexicalAITypeaheadProvider
-      actions={options}
+      actions={actions}
       isOpen={isOpen}
       onClose={handleClose}
     >
       <ToastContainer />
       <LexicalAITypeahead
+        requestHandler={requestHandler}
         lexicalNodes={lexicalNodes}
         editorTheme={editorTheme}
+        additionalLexicalNodesNodes={additionalLexicalNodesNodes}
         lexicalContentNodeParser={contentNodeParser}
         renderCancelButton={renderCancelButton}
         renderInsertButton={renderInsertButton}

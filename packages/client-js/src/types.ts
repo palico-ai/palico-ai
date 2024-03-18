@@ -16,15 +16,18 @@ export interface AgentCallResponse {
   conversationId: number
 }
 
+export type ConversationContextParams = Record<string, unknown>
+
 export interface NewConversationParams {
   message: string
-  context?: Record<string, unknown>
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  context?: ConversationContextParams
 }
 
 export interface ReplyAsUserParams {
   conversationId: number
   message: string
-  context?: Record<string, unknown>
+  context?: ConversationContextParams
 }
 
 export interface ToolExecutionMessage {

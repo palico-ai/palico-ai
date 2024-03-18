@@ -30,6 +30,7 @@ import {
 import { Container } from '@mui/material';
 import HotKeyPlugin from './plugins/hotkey_plugin';
 import { $createTextNode } from 'lexical';
+import { createRequestHandler } from '@palico-ai/client-js';
 
 function Placeholder() {
   return <div className="editor-placeholder">Enter some rich text...</div>;
@@ -128,6 +129,11 @@ interface ListContentNode {
   value: string[];
 }
 
+const agentRequestHandler = createRequestHandler(
+  'http://localhost:8000',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkZXBsb3ltZW50SWQiOi0xLCJpYXQiOjE3MDk0MDIzMTJ9.2ttpybL5p9aQHzk-utoFgitA7AGF6yBA8-M95WSbpfc'
+);
+
 export default function Editor() {
   const parseBulletListNode: ContentNodeParserFN = (entry) => {
     const list = $createListNode('bullet');
@@ -152,12 +158,13 @@ export default function Editor() {
               ErrorBoundary={LexicalErrorBoundary}
             />
             <LexicalAIPlugin
-              options={aiActions}
+              requestHandler={agentRequestHandler}
+              actions={aiActions}
               editorTheme={ExampleTheme}
-              customParsers={{
+              additionalContentParsers={{
                 bullet_list: parseBulletListNode,
               }}
-              lexicalNodes={[HeadingNode, ListNode, ListItemNode]}
+              additionalLexicalNodesNodes={[ListNode, ListItemNode]}
             />
             <HotKeyPlugin />
             <HistoryPlugin />

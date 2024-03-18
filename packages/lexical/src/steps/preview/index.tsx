@@ -33,8 +33,6 @@ const editorConfig: InitialConfigType = {
   onError(error: Error) {
     throw error;
   },
-  // Any custom nodes go here
-  nodes: [HeadingNode],
 };
 
 interface RenderPreviewProps
@@ -54,6 +52,7 @@ const RenderPreview: React.FC<RenderPreviewProps> = ({
   onSelectInsertBelow: onSelectInsert,
   enableReplace,
   lexicalNodes,
+  additionalLexicalNodesNodes,
   editorTheme,
   onSelectReplace,
   onSelectCancel,
@@ -150,6 +149,16 @@ const RenderPreview: React.FC<RenderPreviewProps> = ({
     );
   }, [loading, onSelectReplace, renderReplaceButton]);
 
+  const editorNodeConfig = useMemo(() => {
+    if(lexicalNodes) {
+      return lexicalNodes;
+    }
+    return [
+      HeadingNode,
+      ...(additionalLexicalNodesNodes ?? []),
+    ];
+  }, [additionalLexicalNodesNodes, lexicalNodes]);
+
   return (
     <Dialog
       open={true}
@@ -162,7 +171,7 @@ const RenderPreview: React.FC<RenderPreviewProps> = ({
         <LexicalComposer
           initialConfig={{
             ...editorConfig,
-            nodes: lexicalNodes ?? editorConfig.nodes,
+            nodes: editorNodeConfig,
             theme: editorTheme,
           }}
         >

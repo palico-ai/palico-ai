@@ -2,9 +2,7 @@ import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext
 import React, { useCallback, useContext, useMemo } from 'react';
 import PromptFreetext from './steps/prompt_freetext';
 import {
-  getDefaultRequestParams,
   getRequestParamForAction,
-  useQueryAgent,
 } from './utils/request';
 import {
   $createLineBreakNode,
@@ -24,17 +22,21 @@ import {
 } from './types';
 import { useShowError } from './utils/useShowError';
 import ThemeProvider from './theme';
+import { AgentRequestHandler, AgentRequestType } from '@palico-ai/client-js';
 
 export interface LexicalAITypeaheadProps
   extends PreviewUIOverrideProps,
     PreviewLexicalEditorOverrides {
   lexicalContentNodeParser: LexicalContentNodeParser;
+  requestHandler: AgentRequestHandler
 }
 
 export const LexicalAITypeahead: React.FC<LexicalAITypeaheadProps> = ({
   renderCancelButton,
+  additionalLexicalNodesNodes,
   renderInsertButton,
   renderReplaceButton,
+  requestHandler,
   lexicalContentNodeParser: parseContentNode,
   editorTheme,
   lexicalNodes
@@ -50,17 +52,18 @@ export const LexicalAITypeahead: React.FC<LexicalAITypeaheadProps> = ({
     activeStep: step,
   } = useContext(LexicalAITypeaheadContext);
   const [editor] = useLexicalComposerContext();
-  const { askAgent } = useQueryAgent({
-    apiURL: 'http://localhost:8000',
-    serviceKey:
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkZXBsb3ltZW50SWQiOi0xLCJpYXQiOjE3MDkzMzc2ODF9.VtDihjqMcviS37AsUJZSuIxrxNp5QXegmz26qf2QyK4',
-  });
   const containerRef = React.useRef<HTMLDivElement>(null);
   const { showErrorMessage } = useShowError({ closeOnError: true });
 
   const callAgentAndShowPreview = useCallback(
     async (params: AskAgentRequestParams) => {
-      const response = await askAgent(params.message, params.context);
+      const response = await requestHandler({
+        type: AgentRequestType.NewConversation,
+        payload: {
+          message: params.message,
+          context: params.context,
+        }
+      });
       const content = response?.message.content;
       if (!content) {
         throw new Error('Invalid response from agent');
@@ -71,7 +74,7 @@ export const LexicalAITypeahead: React.FC<LexicalAITypeaheadProps> = ({
       });
       setStep(Step.PreviewGeneration);
     },
-    [askAgent, setStep, setStepOutput, stepOutput]
+    [requestHandler, setStep, setStepOutput, stepOutput]
   );
 
   const handleSelectOption = useCallback(
@@ -87,7 +90,7 @@ export const LexicalAITypeahead: React.FC<LexicalAITypeaheadProps> = ({
         setStep(Step.AddFreeText);
         return;
       } else {
-        const requestBody = getDefaultRequestParams({
+        const requestBody = await getRequestParamForAction({
           action,
           selectedOptionValue: params.selectedOptionValue,
           selectedText: selection?.rangeSelection?.selectedText,
@@ -232,6 +235,7 @@ export const LexicalAITypeahead: React.FC<LexicalAITypeaheadProps> = ({
             renderCancelButton={renderCancelButton}
             renderInsertButton={renderInsertButton}
             editorTheme={editorTheme}
+            additionalLexicalNodesNodes={additionalLexicalNodesNodes}
             lexicalNodes={lexicalNodes}
             renderReplaceButton={renderReplaceButton}
             onSelectReplace={handleReplaceSelection}
@@ -246,7 +250,7 @@ export const LexicalAITypeahead: React.FC<LexicalAITypeaheadProps> = ({
       default:
         return null;
     }
-  }, [editorTheme, handleClose, handleInsertBelowSelection, handleReplaceSelection, handleSelectOption, handleSubmitFreetext, isOpen, lexicalNodes, options, parseContentNode, renderCancelButton, renderInsertButton, renderReplaceButton, selection?.cursorPosition, selection?.rangeSelection, step, stepOutput]);
+  }, [additionalLexicalNodesNodes, editorTheme, handleClose, handleInsertBelowSelection, handleReplaceSelection, handleSelectOption, handleSubmitFreetext, isOpen, lexicalNodes, options, parseContentNode, renderCancelButton, renderInsertButton, renderReplaceButton, selection?.cursorPosition, selection?.rangeSelection, step, stepOutput]);
 
   if (!isOpen) {
     return null;

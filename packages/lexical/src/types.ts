@@ -1,6 +1,7 @@
 import { EditorThemeClasses } from 'lexical';
 import { ContentNodeParserFN } from './utils';
 import { InitialConfigType } from '@lexical/react/LexicalComposer';
+import { ConversationContextParams } from '@palico-ai/client-js';
 
 export interface AIActionOption {
   label: string;
@@ -15,19 +16,19 @@ export interface FormatAPIRequestParams {
 
 export interface DefaultRichTextEditorContext<
   Payload = FormatAPIRequestParams
-> {
+> extends ConversationContextParams {
   action: string;
   payload: Payload;
 }
 
 export interface AskAgentRequestParams<
-  PromptContext = DefaultRichTextEditorContext
+  PromptContext extends ConversationContextParams = DefaultRichTextEditorContext
 > {
   message: string;
   context: PromptContext;
 }
 
-export type FormatAPIRequestFN<PromptContext = DefaultRichTextEditorContext> = (
+export type FormatAPIRequestFN<PromptContext extends ConversationContextParams = DefaultRichTextEditorContext> = (
   input: FormatAPIRequestParams
 ) => Promise<AskAgentRequestParams<PromptContext>>;
 
@@ -62,11 +63,12 @@ export type LexicalAIUIOverrideProps = PreviewUIOverrideProps;
 export type PreviewLexicalEditorOverrides = {
   editorTheme?: EditorThemeClasses;
   lexicalNodes?: InitialConfigType["nodes"];
+  additionalLexicalNodesNodes?: InitialConfigType["nodes"];
 }
 
 export interface ParserOverrideProps {
-  customParsers?: Record<string, ContentNodeParserFN>;
-  setParsers?: Record<string, ContentNodeParserFN>; // Default: Paragraph and Header (1, 2, 3)
+  additionalContentParsers?: Record<string, ContentNodeParserFN>;
+  contentParsers?: Record<string, ContentNodeParserFN>; // Default: Paragraph and Header (1, 2, 3)
   setInvalidTypeParser?: ContentNodeParserFN;
 }
 
