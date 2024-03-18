@@ -38,9 +38,13 @@ export type LexicalAISelection = {
   cursorPosition: ElementAbsoluteCoordinate;
 };
 
+type HandleCloseParams = {
+  dontRestoreSelection?: boolean;
+}
+
 export type LexicalAITypeaheadContextProps = {
   isOpen: boolean;
-  handleClose: () => void;
+  handleClose: (params?: HandleCloseParams) => void;
   actions: AIAction[];
   activeStep?: Step;
   setActiveStep: (step?: Step) => void;
@@ -75,8 +79,8 @@ const DEFAULT_VALUE = {
   STEP_OUTPUT: {
     [Step.PreviewGeneration]: testPreviewContent,
   },
-  // STEP: Step.PreviewGeneration,
-  STEP: Step.SelectMenuItem,
+  STEP: Step.PreviewGeneration,
+  // STEP: Step.SelectMenuItem,
 };
 
 export const LexicalAITypeaheadProvider: React.FC<
@@ -90,12 +94,18 @@ export const LexicalAITypeaheadProvider: React.FC<
   const containerRef = React.useRef<HTMLDivElement>(null);
   const [selection, setSelection] = React.useState<LexicalAISelection>();
 
-  const handleClose = () => {
-    tryRestoreSelection();
+  const handleClose = (params?: HandleCloseParams) => {
     onClose();
+    if (params?.dontRestoreSelection) {
+      console.log("Not restoring selection")
+      return;
+    }
+    tryRestoreSelection();
   };
 
-  useHotkeys('esc', handleClose, {
+  useHotkeys('esc', () => {
+    handleClose();
+  }, {
     enableOnContentEditable: true,
     enableOnFormTags: true,
   });
@@ -139,8 +149,7 @@ export const LexicalAITypeaheadProvider: React.FC<
       calculateSelection();
       resetDefaultState();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isOpen]);
+  }, [editor, isOpen]);
 
   const tryRestoreSelection = useCallback(() => {
     editor.update(() => {
@@ -162,6 +171,7 @@ export const LexicalAITypeaheadProvider: React.FC<
     if (isOpen) {
       return Date.now();
     }
+    return undefined
   }, [isOpen]);
 
   return (
@@ -181,7 +191,7 @@ export const LexicalAITypeaheadProvider: React.FC<
         onClickAway={() => {
           if (!isOpen || !openTimestamp) return;
           const elapsed = Date.now() - openTimestamp;
-          if (elapsed > 100) {
+          if (elapsed > 1000) {
             handleClose();
           }
         }}

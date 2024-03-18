@@ -1,15 +1,7 @@
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import React, { useCallback, useContext, useMemo } from 'react';
 import PromptFreetext from './steps/prompt_freetext';
-import {
-  getRequestParamForAction,
-} from './utils/request';
-import {
-  $createLineBreakNode,
-  $createNodeSelection,
-  $getNodeByKey,
-  $insertNodes,
-} from 'lexical';
+import { getRequestParamForAction } from './utils/request';
 import RenderPreview from './steps/preview';
 import { LexicalContentNodeParser } from './utils/use_content_node_parser';
 import { LexicalAITypeaheadContext, Step } from './typeahead.context';
@@ -23,12 +15,13 @@ import {
 import { useShowError } from './utils/useShowError';
 import ThemeProvider from './theme';
 import { AgentRequestHandler, AgentRequestType } from '@palico-ai/client-js';
+import { useInsertContentNode } from './utils/use_insert_content_node';
 
 export interface LexicalAITypeaheadProps
   extends PreviewUIOverrideProps,
     PreviewLexicalEditorOverrides {
   lexicalContentNodeParser: LexicalContentNodeParser;
-  requestHandler: AgentRequestHandler
+  requestHandler: AgentRequestHandler;
 }
 
 export const LexicalAITypeahead: React.FC<LexicalAITypeaheadProps> = ({
@@ -39,7 +32,7 @@ export const LexicalAITypeahead: React.FC<LexicalAITypeaheadProps> = ({
   requestHandler,
   lexicalContentNodeParser: parseContentNode,
   editorTheme,
-  lexicalNodes
+  lexicalNodes,
 }) => {
   const {
     isOpen,
@@ -54,6 +47,11 @@ export const LexicalAITypeahead: React.FC<LexicalAITypeaheadProps> = ({
   const [editor] = useLexicalComposerContext();
   const containerRef = React.useRef<HTMLDivElement>(null);
   const { showErrorMessage } = useShowError({ closeOnError: true });
+  const { insertContentBelowSelection, replaceSelectionWithContent } =
+    useInsertContentNode({
+      editor,
+      parser: parseContentNode,
+    });
 
   const callAgentAndShowPreview = useCallback(
     async (params: AskAgentRequestParams) => {
@@ -62,7 +60,7 @@ export const LexicalAITypeahead: React.FC<LexicalAITypeaheadProps> = ({
         payload: {
           message: params.message,
           context: params.context,
-        }
+        },
       });
       const content = response?.message.content;
       if (!content) {
@@ -142,71 +140,28 @@ export const LexicalAITypeahead: React.FC<LexicalAITypeaheadProps> = ({
   );
 
   const handleInsertBelowSelection = useCallback(async () => {
-    editor.update(() => {
-      if (!stepOutput[Step.PreviewGeneration]) {
-        showErrorMessage('No preview content to insert', {
-          consoleMessage:
-            'No preview content to insert. This is likely due to a bug transitioning from the preview generation step to the insert below selection step.',
-        });
-        return;
-      }
-      if (!selection) {
-        showErrorMessage('No selection', {
-          consoleMessage:
-            'No selection. This is likely due to a the state value on previous steps not being set correctly.',
-        });
-        return;
-      }
-      const nodes = parseContentNode(stepOutput[Step.PreviewGeneration]);
-      console.log('nodes', nodes);
-      const lastNode = $getNodeByKey(selection.lastNodeKey);
-      if (lastNode) {
-        lastNode.selectNext();
-      }
-      console.log('lastNode', lastNode);
-      $insertNodes([$createLineBreakNode(), ...nodes]);
-      handleClose();
-    });
-  }, [
-    editor,
-    handleClose,
-    parseContentNode,
-    selection,
-    showErrorMessage,
-    stepOutput,
-  ]);
+    if (!stepOutput[Step.PreviewGeneration]) {
+      showErrorMessage('No preview content to insert', {
+        consoleMessage:
+          'No preview content to insert. This is likely due to a bug transitioning from the preview generation step to the insert below selection step.',
+      });
+      return;
+    }
+    insertContentBelowSelection(stepOutput[Step.PreviewGeneration]);
+    handleClose({ dontRestoreSelection: true });
+  }, [handleClose, insertContentBelowSelection, showErrorMessage, stepOutput]);
 
   const handleReplaceSelection = useCallback(async () => {
-    editor.update(() => {
-      const rangeSelection = selection?.rangeSelection;
-      if (!rangeSelection) {
-        handleInsertBelowSelection();
-        return;
-      }
-      const nodeSelection = $createNodeSelection();
-      rangeSelection.selectionKeys.forEach((key) => {
-        nodeSelection.add(key);
+    if (!stepOutput[Step.PreviewGeneration]) {
+      showErrorMessage('No preview content to insert', {
+        consoleMessage:
+          'No preview content to insert. This is likely due to a bug transitioning from the preview generation step to the insert below selection step.',
       });
-      if (!stepOutput[Step.PreviewGeneration]) {
-        showErrorMessage('No preview content to insert', {
-          consoleMessage:
-            'No preview content to insert. This is likely due to a bug transitioning from the preview generation step to the insert below selection step.',
-        });
-        return;
-      }
-      const nodes = parseContentNode(stepOutput[Step.PreviewGeneration]);
-      nodeSelection.insertNodes([$createLineBreakNode(), ...nodes]);
-      handleClose();
-    });
-  }, [
-    editor,
-    handleClose,
-    handleInsertBelowSelection,
-    parseContentNode,
-    selection?.rangeSelection,
-    showErrorMessage,
-    stepOutput,
-  ]);
+      return;
+    }
+    replaceSelectionWithContent(stepOutput[Step.PreviewGeneration]);
+    handleClose({ dontRestoreSelection: true });
+  }, [handleClose, replaceSelectionWithContent, showErrorMessage, stepOutput]);
 
   const stepContent = useMemo(() => {
     if (!isOpen) return null;
@@ -250,7 +205,26 @@ export const LexicalAITypeahead: React.FC<LexicalAITypeaheadProps> = ({
       default:
         return null;
     }
-  }, [additionalLexicalNodesNodes, editorTheme, handleClose, handleInsertBelowSelection, handleReplaceSelection, handleSelectOption, handleSubmitFreetext, isOpen, lexicalNodes, options, parseContentNode, renderCancelButton, renderInsertButton, renderReplaceButton, selection?.cursorPosition, selection?.rangeSelection, step, stepOutput]);
+  }, [
+    additionalLexicalNodesNodes,
+    editorTheme,
+    handleClose,
+    handleInsertBelowSelection,
+    handleReplaceSelection,
+    handleSelectOption,
+    handleSubmitFreetext,
+    isOpen,
+    lexicalNodes,
+    options,
+    parseContentNode,
+    renderCancelButton,
+    renderInsertButton,
+    renderReplaceButton,
+    selection?.cursorPosition,
+    selection?.rangeSelection,
+    step,
+    stepOutput,
+  ]);
 
   if (!isOpen) {
     return null;

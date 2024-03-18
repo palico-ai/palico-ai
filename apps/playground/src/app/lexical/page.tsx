@@ -31,6 +31,7 @@ import { Container } from '@mui/material';
 import HotKeyPlugin from './plugins/hotkey_plugin';
 import { $createTextNode } from 'lexical';
 import { createRequestHandler } from '@palico-ai/client-js';
+import TreeViewPlugin from './plugins/TreeViewPlugin';
 
 function Placeholder() {
   return <div className="editor-placeholder">Enter some rich text...</div>;
@@ -168,6 +169,7 @@ export default function Editor() {
             />
             <HotKeyPlugin />
             <HistoryPlugin />
+            <TreeViewPlugin />
             <AutoFocusPlugin />
             <CodeHighlightPlugin />
             <ListPlugin />
