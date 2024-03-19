@@ -23,7 +23,6 @@ import CodeHighlightPlugin from './plugins/CodeHighlightPlugin';
 import AutoLinkPlugin from './plugins/AutoLinkPlugin';
 import './styles.css';
 import {
-  AIAction,
   LexicalAIPlugin,
   ContentNodeParserFN,
 } from '@palico-ai/lexical';
@@ -32,6 +31,7 @@ import HotKeyPlugin from './plugins/hotkey_plugin';
 import { $createTextNode } from 'lexical';
 import { createRequestHandler } from '@palico-ai/client-js';
 import TreeViewPlugin from './plugins/TreeViewPlugin';
+import { aiActions } from './constants';
 
 function Placeholder() {
   return <div className="editor-placeholder">Enter some rich text...</div>;
@@ -60,70 +60,6 @@ const editorConfig = {
     LinkNode,
   ],
 };
-
-const aiActions: AIAction[] = [
-  {
-    name: 'CREATE_VIDEO_SUMMARY',
-    label: 'Create video summary',
-    options: [
-      {
-        label: 'Zoom Video 1',
-        value: 'zoom-video-1',
-      },
-      {
-        label: 'Zoom Video 2',
-        value: 'zoom-video-2',
-      },
-    ],
-  },
-  {
-    name: 'SUMMARIZE_TEXT',
-    label: 'Summarize Section',
-    requiresRangeSelection: true,
-  },
-  {
-    name: 'TRANSLATE_TEXT',
-    label: 'Translate Section',
-    requiresRangeSelection: true,
-    options: [
-      {
-        label: 'Spanish',
-        value: 'spanish',
-      },
-      {
-        label: 'French',
-        value: 'french',
-      },
-      {
-        label: 'German',
-        value: 'german',
-      },
-      {
-        label: 'Chinese',
-        value: 'chinese',
-      },
-      {
-        label: 'Japanese',
-        value: 'japanese',
-      },
-    ],
-  },
-  {
-    name: 'CREATE_PRICING_SUGGESTIONS',
-    label: 'Create a pricing suggestion',
-    options: [
-      {
-        label: 'Create a pricing suggestion',
-        value: 'pricing-suggestion',
-      },
-    ],
-  },
-  {
-    name: 'ASK_AI_TO_WRITE',
-    label: 'Ask AI to write',
-    promptForFreeText: true,
-  },
-];
 
 interface ListContentNode {
   type: 'bullet_list';

@@ -63,8 +63,9 @@ h1 {
 }
 
 .editor-input {
-  min-height: 450px;
-  max-height: 450px;
+  /* height: "100%"; */
+  min-height: 70vh;
+  max-height: 70vh;
   overflow-y: auto;
   resize: none;
   font-size: 15px;

@@ -66,13 +66,22 @@ export const LexicalAITypeahead: React.FC<LexicalAITypeaheadProps> = ({
       if (!content) {
         throw new Error('Invalid response from agent');
       }
-      setStepOutput({
-        ...stepOutput,
-        [Step.PreviewGeneration]: JSON.parse(content as string),
-      });
-      setStep(Step.PreviewGeneration);
+      try {
+        const contentNodes = JSON.parse(content as string);
+        setStepOutput({
+          ...stepOutput,
+          [Step.PreviewGeneration]: contentNodes
+        });
+        setStep(Step.PreviewGeneration);
+      } catch (error) {
+        console.error(error);
+        console.error('Error parsing content. Make sure agent is responding with valid JSON Array');
+        console.log('received content')
+        console.log(content)
+        showErrorMessage('Error generating preview');
+      }
     },
-    [requestHandler, setStep, setStepOutput, stepOutput]
+    [requestHandler, setStep, setStepOutput, showErrorMessage, stepOutput]
   );
 
   const handleSelectOption = useCallback(
@@ -112,6 +121,7 @@ export const LexicalAITypeahead: React.FC<LexicalAITypeaheadProps> = ({
           consoleMessage:
             'No selected option. This is likely due to a bug transitioning from the select action step to the free text step.',
         });
+        handleClose();
         return;
       }
       const selectedOption = stepOutput[Step.SelectMenuItem];
@@ -131,12 +141,7 @@ export const LexicalAITypeahead: React.FC<LexicalAITypeaheadProps> = ({
         showErrorMessage(message);
       }
     },
-    [
-      callAgentAndShowPreview,
-      selection?.rangeSelection?.selectedText,
-      showErrorMessage,
-      stepOutput,
-    ]
+    [callAgentAndShowPreview, handleClose, selection?.rangeSelection?.selectedText, showErrorMessage, stepOutput]
   );
 
   const handleInsertBelowSelection = useCallback(async () => {

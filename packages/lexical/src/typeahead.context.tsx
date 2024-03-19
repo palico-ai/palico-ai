@@ -71,16 +71,21 @@ export interface LexicalAITypeaheadProviderProps {
 }
 
 // For testing purposes
-const testPreviewContent: ContentNode[] = JSON.parse(
-  "[\n  {\n    \"type\": \"heading1\",\n    \"value\": \"The Wonderful World of Cats\"\n  },\n  {\n    \"type\": \"paragraph\",\n    \"value\": \"Cats have been a beloved companion to humans for centuries, captivating us with their mysterious and independent nature. From their playful antics to their soothing purrs, cats have a special place in our hearts.\"\n  },\n  {\n    \"type\": \"heading2\",\n    \"value\": \"The History of Cats\"\n  },\n  {\n    \"type\": \"paragraph\",\n    \"value\": \"Cats have a rich history, dating back to ancient Egypt where they were revered as sacred animals. Over time, cats have been both worshipped and feared, with their enigmatic presence leaving a lasting impression on cultures around the world.\"\n  },\n  {\n    \"type\": \"heading2\",\n    \"value\": \"The Unique Personalities of Cats\"\n  },\n  {\n    \"type\": \"paragraph\",\n    \"value\": \"One of the most fascinating aspects of cats is their diverse personalities. From the adventurous explorer to the laid-back cuddler, each cat has its own distinct character that brings joy and companionship to their human families.\"\n  },\n  {\n    \"type\": \"heading2\",\n    \"value\": \"Caring for Your Feline Friend\"\n  },\n  {\n    \"type\": \"paragraph\",\n    \"value\": \"Caring for a cat involves providing a safe and stimulating environment, regular veterinary care, and plenty of love and attention. Understanding a cat's unique needs and behaviors is essential for building a strong and fulfilling bond.\"\n  }\n]"
-);
+// const testPreviewContent: ContentNode[] = JSON.parse(
+//   "[\n  {\n    \"type\": \"heading1\",\n    \"value\": \"The Wonderful World of Cats\"\n  },\n  {\n    \"type\": \"paragraph\",\n    \"value\": \"Cats have been a beloved companion to humans for centuries, captivating us with their mysterious and independent nature. From their playful antics to their soothing purrs, cats have a special place in our hearts.\"\n  },\n  {\n    \"type\": \"heading2\",\n    \"value\": \"The History of Cats\"\n  },\n  {\n    \"type\": \"paragraph\",\n    \"value\": \"Cats have a rich history, dating back to ancient Egypt where they were revered as sacred animals. Over time, cats have been both worshipped and feared, with their enigmatic presence leaving a lasting impression on cultures around the world.\"\n  },\n  {\n    \"type\": \"heading2\",\n    \"value\": \"The Unique Personalities of Cats\"\n  },\n  {\n    \"type\": \"paragraph\",\n    \"value\": \"One of the most fascinating aspects of cats is their diverse personalities. From the adventurous explorer to the laid-back cuddler, each cat has its own distinct character that brings joy and companionship to their human families.\"\n  },\n  {\n    \"type\": \"heading2\",\n    \"value\": \"Caring for Your Feline Friend\"\n  },\n  {\n    \"type\": \"paragraph\",\n    \"value\": \"Caring for a cat involves providing a safe and stimulating environment, regular veterinary care, and plenty of love and attention. Understanding a cat's unique needs and behaviors is essential for building a strong and fulfilling bond.\"\n  }\n]"
+// );
+
+const testPreviewContent: ContentNode[] = JSON.parse(JSON.stringify([{
+  type: 'paragraph',
+  value: '====This is a test==='
+}]))
 
 const DEFAULT_VALUE = {
   STEP_OUTPUT: {
     [Step.PreviewGeneration]: testPreviewContent,
   },
-  STEP: Step.PreviewGeneration,
-  // STEP: Step.SelectMenuItem,
+  // STEP: Step.PreviewGeneration,
+  STEP: Step.SelectMenuItem,
 };
 
 export const LexicalAITypeaheadProvider: React.FC<
@@ -97,7 +102,6 @@ export const LexicalAITypeaheadProvider: React.FC<
   const handleClose = (params?: HandleCloseParams) => {
     onClose();
     if (params?.dontRestoreSelection) {
-      console.log("Not restoring selection")
       return;
     }
     tryRestoreSelection();
@@ -119,7 +123,7 @@ export const LexicalAITypeaheadProvider: React.FC<
         const lexSelection = $getSelection();
         if (!lexSelection) return;
         const selectionNodes = lexSelection.getNodes();
-        const rangeSelection = lexSelection.isCollapsed()
+        const rangeSelectionKeys = lexSelection.isCollapsed()
           ? undefined
           : {
               selectedText: lexSelection.getTextContent() || '',
@@ -134,7 +138,7 @@ export const LexicalAITypeaheadProvider: React.FC<
             selection: lexSelection,
             cursorPosition: position,
             lastNodeKey: selectionNodes[selectionNodes.length - 1].getKey(),
-            rangeSelection,
+            rangeSelection: rangeSelectionKeys,
           });
         });
       });

@@ -3,6 +3,7 @@ import {
   $createNodeSelection,
   $getNodeByKey,
   $insertNodes,
+  $setSelection,
   LexicalEditor,
   LexicalNode,
 } from 'lexical';
@@ -22,27 +23,19 @@ export const useInsertContentNode = (params: InsertContentNodeParams) => {
   const { editor, parser } = params;
   const { selection } = useContext(LexicalAITypeaheadContext);
 
-  const shouldAddLineBreak = (
-    starterNode: LexicalNode,
-    parentNode?: LexicalNode
-  ) => {
-    // If parent is an empty paragraph, we should not add a line break
-    if (
-      parentNode &&
-      parentNode.__type === 'paragraph' &&
-      parentNode.getTextContent().length === 0
-    ) {
-      console.log('Parent is an empty paragraph');
-      return false;
+  const insertAfterLastNode = (nodes: LexicalNode[], lastNode: LexicalNode) => {
+    let parentNode = lastNode;
+    parentNode.selectStart();
+    parentNode.selectEnd();
+    if (lastNode.getTextContent().length === 0) {
+      // If last node is empty, we should not add a line break
+      $insertNodes(nodes);
+      return;
     }
-    if (
-      starterNode.__type === 'heading' &&
-      (parentNode?.__type === 'text' || parentNode?.__type === 'paragraph')
-    ) {
-      console.log('Starter is a heading and parent is a text or paragraph');
-      return true;
-    }
-    return true;
+    nodes.forEach((node) => {
+      parentNode.insertAfter(node);
+      parentNode = node;
+    });
   };
 
   const insertContentBelowSelection = async (contentNodes: ContentNode[]) => {
@@ -55,19 +48,12 @@ export const useInsertContentNode = (params: InsertContentNodeParams) => {
       }
       const lastNode = $getNodeByKey(selection.lastNodeKey);
       if (!lastNode) {
-        throw new Error('Last node not found');
+        throw new Error('Selection not set');
       }
-      const insertNodeList = [];
-      console.log(lastNode);
-      if (
-        nodes.length > 0 &&
-        shouldAddLineBreak(nodes[0], lastNode || undefined)
-      ) {
-        insertNodeList.push($createLineBreakNode());
-      }
-      insertNodeList.push(...nodes);
-      console.log('Inserting nodes', insertNodeList);
-      $insertNodes(insertNodeList);
+      insertAfterLastNode(nodes, lastNode);
+      nodes[nodes.length - 1].selectStart();
+      nodes[nodes.length - 1].selectEnd();
+      return;
     });
   };
 
@@ -82,8 +68,10 @@ export const useInsertContentNode = (params: InsertContentNodeParams) => {
       rangeSelection.selectionKeys.forEach((key) => {
         nodeSelection.add(key);
       });
+      $setSelection(nodeSelection);
       const nodes = parser(contentNodes);
       nodeSelection.insertNodes([$createLineBreakNode(), ...nodes]);
+      // let parentNode = $getNodeByKey(rangeSelection.selectionKeys[0]);
     });
   };
 
