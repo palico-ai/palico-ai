@@ -1,0 +1,52 @@
+{
+  "name": "lexical",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/lexical/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/rollup:rollup",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "main": "packages/lexical/src/index.ts",
+        "outputPath": "dist/packages/lexical",
+        "tsConfig": "packages/lexical/tsconfig.lib.json",
+        "compiler": "tsc",
+        "project": "packages/lexical/package.json",
+        "format": ["esm", "cjs"],
+        "generateExportsField": true,
+        "external": ["react", "react-dom"],
+        "assets": [
+          {
+            "glob": "packages/lexical/README.md",
+            "input": ".",
+            "output": "."
+          }
+        ]
+      },
+      "configurations": {
+        "production": {
+          "optimization": true,
+          "sourceMap": false,
+          "namedChunks": false,
+          "extractLicenses": true,
+          "vendorChunk": false
+        }
+      }
+    },
+    "publish-local": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["build"],
+      "options": {
+        "cwd": "dist/packages/lexical",
+        "commands": [
+          "npm unpublish --force --registry http://localhost:4873",
+          "npm publish --registry http://localhost:4873"
+        ],
+        "parallel": false
+      }
+    }
+  }
+}

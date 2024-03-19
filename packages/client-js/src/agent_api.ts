@@ -36,14 +36,28 @@ export type AgentRequestHandler = (
   request: AgentRequest
 ) => Promise<AgentCallResponse>;
 
-export const createNextJSAPIAgentRequestHandler = (
-  route: string
+export interface ProxyRequestHandlerParams {
+  headers?: Record<string, string>;
+}
+
+/**
+ * This function creates a request handler that sends the request to a proxy route
+ * You can use this to send requests to your own server, which then forwards the request to the agent API
+ * This is useful if you want to add custom logic such as auth checks, rate limiting, etc.
+ * @param proxyRoute 
+ * @param params 
+ * @returns 
+ */
+export const createProxyRequestHandler = (
+  proxyRoute: string,
+  params?: ProxyRequestHandlerParams
 ): AgentRequestHandler => {
   return async (request: AgentRequest): Promise<AgentCallResponse> => {
-    const response = await fetch(route, {
+    const response = await fetch(proxyRoute, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        ...params?.headers,
       },
       body: JSON.stringify(request),
     });
@@ -56,7 +70,7 @@ export const createNextJSAPIAgentRequestHandler = (
   };
 };
 
-export const createProxyAPIAgentRequestHandler = (
+export const createRequestHandler = (
   agentAPIURL: string,
   serviceKey: string
 ): AgentRequestHandler => {
