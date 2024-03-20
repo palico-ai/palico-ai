@@ -21,7 +21,7 @@
         "@nx/dependency-checks": [
           "error",
           {
-            "ignoredDependencies": ["pg", "pg-hstore"]
+            "ignoredDependencies": ["pg", "pg-hstore", "configstore"]
           }
         ]
       }
