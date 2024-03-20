@@ -67,7 +67,7 @@ interface ListContentNode {
 }
 
 const agentRequestHandler = createRequestHandler(
-  'http://localhost:8000',
+  "https://ph3rbxp8a2.execute-api.us-east-1.amazonaws.com/prod",
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkZXBsb3ltZW50SWQiOi0xLCJpYXQiOjE3MDk0MDIzMTJ9.2ttpybL5p9aQHzk-utoFgitA7AGF6yBA8-M95WSbpfc'
 );
 
