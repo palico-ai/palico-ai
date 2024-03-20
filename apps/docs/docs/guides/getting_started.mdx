@@ -1,0 +1,104 @@
+---
+sidebar_label: Getting Started
+sidebar_position: 1
+---
+
+import { SimpleCard } from "@site/src/components/card/index.tsx";
+import NextStepsCTA from "@site/src/components/cta/next_steps.tsx";
+import { Grid } from "@mui/material";
+import {
+  CREATE_COPILOT_GUIDE,
+  CREATE_TRANSLATOR_GUIDE,
+} from "@site/src/constants/routes.ts";
+
+# Getting Started
+
+## Requirements
+- [Docker](https://www.docker.com/products/docker-desktop)
+- [Node.js](https://nodejs.org/en/download/)
+
+
+## Setup Server-Sided Agent
+
+### Create a new Project
+
+```bash
+npx palico init <project-name>
+```
+
+<details>
+<summary>Understanding Directory Structure</summary>
+
+This will create a new directory with the name `<project-name>` and initialize a new Palico project for your.
+The project will have a similar directory structure
+
+```
+<project-name>
+├── src
+│   ├── index.ts
+|   ├── prompt_builder.ts
+|   |── toolset.ts
+├── .gitignore
+├── .env
+├── Dockerfile
+├── docker-compose.yml
+├── package.json
+├── palico.json
+|── tsconfig.json
+└── README.md
+```
+
+- `src/index.ts` - This is the entry point for your server-side agent. You can define the various components of your agent here, 
+such as your model config, how to generate prompts, what are the actions your agent can perform, etc.
+- `src/prompt_builder.ts` - This is where you define your prompt. You can use the `PromptBuilder` class to define your prompt.
+- `src/toolset.ts` - This is where you define the actions your agent can take. You can use the `Toolset` class to define your actions.
+- `palico.json` - This is a configuration file on how to build and run your server-side agent. This is used by palico cli tools to
+build, run, and deploy your server-side agent.
+
+</details>
+
+### Setting OpenAI Configuration
+
+Open the `.env` file in the root of your project and update your OpenAI configs.
+You can get your OpenAI API key from the [OpenAI Dashboard](https://platform.openai.com/api-keys).
+
+```
+OPENAI_API_KEY=<your-openai-api-key>
+OPENAI_MODEL=gpt-3.5-turbo-0125
+```
+
+### Start your Server-Side Agent
+
+```bash
+npm start
+```
+
+You should see a message like the following:
+
+```
+Server is running on port 8000
+Service key: <some-long-string>
+```
+
+Keep the service key handy, you will need it to talk to the server-side agent.
+
+
+## Next Steps
+
+That's all you need to setup your server-side agent. Next, checkout the following guides to 
+create use-case specific agents for your frontend.
+
+<NextStepsCTA
+  steps={[
+    {
+      title: "Create a Copilot Chatbot",
+      description: "Learn how to create a copilot chatbot that can take actions on frontend on behalf of the user.",
+      link: CREATE_COPILOT_GUIDE,
+    },
+    {
+      title: "Create a Translator",
+      description: "Learn how you can create features like translation, summarization, generation, etc.",
+      link: CREATE_TRANSLATOR_GUIDE,
+    },
+  ]}
+/>
