@@ -10,7 +10,20 @@ export const aiActions: AIAction[] = [
     name: 'extract_insights',
     label: 'Extract Insights',
     requiresRangeSelection: true,
-    promptForFreeText: true,
+    options: [
+      {
+        label: "Create an outline",
+        value: "create_outline",
+      },
+      {
+        label: "Create an abstract",
+        value: "create_abstract",
+      },
+      {
+        label: "Create Action Items",
+        value: "create_action_items",
+      }
+    ]
   },
   {
     name: 'fix_grammar_and_spelling',

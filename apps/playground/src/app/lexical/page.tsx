@@ -22,10 +22,7 @@ import ListMaxIndentLevelPlugin from './plugins/ListMaxIndentLevelPlugin';
 import CodeHighlightPlugin from './plugins/CodeHighlightPlugin';
 import AutoLinkPlugin from './plugins/AutoLinkPlugin';
 import './styles.css';
-import {
-  LexicalAIPlugin,
-  ContentNodeParserFN,
-} from '@palico-ai/lexical';
+import { LexicalAIPlugin, ContentNodeParserFN } from '@palico-ai/lexical';
 import { Container } from '@mui/material';
 import HotKeyPlugin from './plugins/hotkey_plugin';
 import { $createTextNode } from 'lexical';
@@ -66,10 +63,13 @@ interface ListContentNode {
   value: string[];
 }
 
-const agentRequestHandler = createRequestHandler(
-  "https://ph3rbxp8a2.execute-api.us-east-1.amazonaws.com/prod",
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkZXBsb3ltZW50SWQiOi0xLCJpYXQiOjE3MDk0MDIzMTJ9.2ttpybL5p9aQHzk-utoFgitA7AGF6yBA8-M95WSbpfc'
-);
+const agentAPIURL =
+  process.env.NEXT_PUBLIC_LEXICAL_AI_URL ?? 'http://localhost:8000';
+const serviceKey =
+  process.env.NEXT_PUBLIC_LEXICAL_AI_SERVICE_KEY ??
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkZXBsb3ltZW50SWQiOi0xLCJpYXQiOjE3MDk0MDIzMTJ9.2ttpybL5p9aQHzk-utoFgitA7AGF6yBA8-M95WSbpfc';
+
+const agentRequestHandler = createRequestHandler(agentAPIURL, serviceKey);
 
 export default function Editor() {
   const parseBulletListNode: ContentNodeParserFN = (entry) => {
