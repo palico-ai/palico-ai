@@ -14,8 +14,8 @@
     "access": "public"
   },
   "dependencies": {
-    "@palico-ai/client-js": "1.12.4",
     "lexical": "^0.13.1",
+    "@palico-ai/client-js": "1.12.4",
     "@lexical/react": "^0.13.1",
     "@mui/icons-material": "^5.15.12",
     "@mui/material": "^5.15.12",
