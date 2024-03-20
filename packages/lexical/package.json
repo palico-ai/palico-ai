@@ -1,6 +1,6 @@
 {
   "name": "@palico-ai/lexical",
-  "version": "1.12.0",
+  "version": "1.12.3",
   "typings": "./src/index.d.ts",
   "bugs": {
     "url": "https://github.com/palico-ai/palico-main/issues"
@@ -14,7 +14,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@palico-ai/client-js": "1.12.0",
+    "@palico-ai/client-js": "1.12.3",
     "lexical": "^0.13.1",
     "@lexical/react": "^0.13.1",
     "@mui/icons-material": "^5.15.12",
