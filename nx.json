@@ -14,7 +14,8 @@
       "packages/client-js",
       "packages/palico-app",
       "packages/react-client",
-      "packages/cli"
+      "packages/cli",
+      "packages/lexical"
     ],
     "changelog": {
       "workspaceChangelog": {
