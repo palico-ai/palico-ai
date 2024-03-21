@@ -47,12 +47,14 @@ const PromptSelectAIAction: React.FC<PromptSelectAIActionProps> = ({
       return [
         <MenuItem
           key={'back'}
+          disabled={loading}
           onClick={() => setNestedActionSelected(undefined)}
         >
           Back
         </MenuItem>,
         nestedActionSelected.options.map((option) => (
           <MenuItem
+            disabled={loading}
             key={option.value}
             onClick={() =>
               handleSelectAction(nestedActionSelected, {
@@ -65,6 +67,7 @@ const PromptSelectAIAction: React.FC<PromptSelectAIActionProps> = ({
         )),
       ];
     }
+
     const availableActions = actions
       .filter((action) => {
         if (!isRangeSelection && action.requiresRangeSelection) {
@@ -82,22 +85,35 @@ const PromptSelectAIAction: React.FC<PromptSelectAIActionProps> = ({
         return 0;
       });
 
-    return availableActions.map((action) => (
-      <MenuItem
-        disabled={loading}
-        key={action.name}
-        onClick={() => {
-          if (action.options) {
-            setNestedActionSelected(action);
-            return;
-          }
-          handleSelectAction(action);
-        }}
-      >
-        {action.label || action.name}
-      </MenuItem>
-    ));
-  }, [actions, handleSelectAction, isRangeSelection, loading, nestedActionSelected]);
+    return availableActions.map((action, index) => {
+      const shouldAddDivider =
+        index < availableActions.length - 1 &&
+        availableActions[index + 1].requiresRangeSelection !==
+          action.requiresRangeSelection;
+      return (
+        <MenuItem
+          divider={shouldAddDivider}
+          disabled={loading}
+          key={action.name}
+          onClick={() => {
+            if (action.options) {
+              setNestedActionSelected(action);
+              return;
+            }
+            handleSelectAction(action);
+          }}
+        >
+          {action.label || action.name}
+        </MenuItem>
+      );
+    });
+  }, [
+    actions,
+    handleSelectAction,
+    isRangeSelection,
+    loading,
+    nestedActionSelected,
+  ]);
 
   return (
     <FloatingContainer x={cursorPosition?.x} y={cursorPosition?.y}>

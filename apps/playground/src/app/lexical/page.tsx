@@ -27,7 +27,6 @@ import { Container } from '@mui/material';
 import HotKeyPlugin from './plugins/hotkey_plugin';
 import { $createTextNode } from 'lexical';
 import { createRequestHandler } from '@palico-ai/client-js';
-import TreeViewPlugin from './plugins/TreeViewPlugin';
 import { aiActions } from './constants';
 
 function Placeholder() {
@@ -105,7 +104,7 @@ export default function Editor() {
             />
             <HotKeyPlugin />
             <HistoryPlugin />
-            <TreeViewPlugin />
+            {/* <TreeViewPlugin /> */}
             <AutoFocusPlugin />
             <CodeHighlightPlugin />
             <ListPlugin />

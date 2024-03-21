@@ -7,23 +7,17 @@ export const aiActions: AIAction[] = [
     promptForFreeText: true,
   },
   {
-    name: 'extract_insights',
-    label: 'Extract Insights',
-    requiresRangeSelection: true,
-    options: [
-      {
-        label: "Create an outline",
-        value: "create_outline",
-      },
-      {
-        label: "Create an abstract",
-        value: "create_abstract",
-      },
-      {
-        label: "Create Action Items",
-        value: "create_action_items",
-      }
-    ]
+    name: 'ask_ai_to_write',
+    label: 'Ask AI to write',
+    promptForFreeText: true,
+  },
+  {
+    name: "create_pricing_proposal",
+    label: "Create a pricing proposal",
+  },
+  {
+    name: "create_product_brief",
+    label: "Create product brief template",
   },
   {
     name: 'fix_grammar_and_spelling',
@@ -78,12 +72,26 @@ export const aiActions: AIAction[] = [
       {
         label: 'Assertive',
         value: 'assertive',
-      }
+      },
     ],
   },
   {
-    name: 'ask_ai_to_write',
-    label: 'Ask AI to write',
-    promptForFreeText: true,
-  },
+    name: 'extract_insights',
+    label: 'More Options',
+    requiresRangeSelection: true,
+    options: [
+      {
+        label: 'Create an outline',
+        value: 'create_outline',
+      },
+      {
+        label: 'Create an abstract',
+        value: 'create_abstract',
+      },
+      {
+        label: 'Create Action Items',
+        value: 'create_action_items',
+      },
+    ],
+  }
 ];
