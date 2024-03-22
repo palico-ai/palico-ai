@@ -1,0 +1,10 @@
+{
+  "label": "Lexical AI",
+  "position": 2,
+  "collapsible": true,
+  "collapsed": true,
+  "link": {
+    "type": "generated-index",
+    "description": "Learn how to setup Notion-AI on Lexical Editor"
+  }
+}
