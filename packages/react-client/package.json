@@ -1,6 +1,6 @@
 {
   "name": "@palico-ai/react",
-  "version": "1.12.6",
+  "version": "1.12.7",
   "typings": "./src/index.d.ts",
   "bugs": {
     "url": "https://github.com/palico-ai/palico-main/issues"
