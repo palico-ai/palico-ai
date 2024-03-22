@@ -1,0 +1,255 @@
+---
+sidebar_label: Installation
+sidebar_position: 1
+---
+
+import { SimpleCard } from "@site/src/components/card/index.tsx";
+import NextStepsCTA from "@site/src/components/cta/next_steps.tsx";
+import { Grid } from "@mui/material";
+import {
+  CREATE_COPILOT_GUIDE,
+  CREATE_TRANSLATOR_GUIDE,
+} from "@site/src/constants/routes.ts";
+
+# Getting Started
+
+## Requirements
+- [Docker](https://www.docker.com/products/docker-desktop)
+- [Node.js](https://nodejs.org/en/download/)
+
+
+## Setup Server-Sided Agent
+
+### Create a new Project
+
+```bash
+npx palico init <project-name> --template=lexical
+```
+
+<details>
+<summary>Understanding Directory Structure</summary>
+
+This will create a new directory with the name `<project-name>` and initialize a new Palico project for your.
+The project will have a similar directory structure
+
+```
+<project-name>
+├── src
+|   ├── prompt
+│   │   ├── action_prompts.ts
+│   │   ├── editor_nodes.ts
+│   │   ├── index.ts
+│   │   ├── rules.ts
+│   │   ├── types.ts
+│   │   ├── utils.ts
+│   ├── index.ts
+├── .gitignore
+├── .env
+├── Dockerfile
+├── docker-compose.yml
+├── package.json
+├── palico.json
+|── tsconfig.json
+└── README.md
+```
+
+- `src/index.ts` - This is the entry point for your server-side agent. You can define the various components of your agent here, 
+such as your model config, how to generate prompts, what are the actions your agent can perform, etc.
+- `src/prompt` - This directory has various components that are used to build the prompt for your module
+- `src/prompt/index.ts` - The main file where you define the prompt for your Agent. This makes use of other components like `action_prompts.ts`, `editor_nodes.ts`, `rules.ts`, etc.
+- `src/prompt/action_prompts.ts` - This file contains how to build the user prompt for a given action from your lexical editor. For example, if you have an action for "Summarize", you would define how to build the prompt for that action here.
+- `src/prompt/editor_nodes.ts` - This file contains the various Lexical nodes you want your LLM Agent to be able to generate. For example, header, paragraph, bullet points, etc.
+- `src/prompt/rules.ts` - This file contains strict rules you want your LLM Agent to follow. This is injected into the system prompt
+- `src/prompt/types.ts` - Contains shared types
+- `src/prompt/utils.ts` - Contains utility functions
+- `palico.json` - This is a configuration file on how to build and run your server-side agent. This is used by palico cli tools to build, run, and deploy your server-side agent.
+
+</details>
+
+### Setting OpenAI Configuration
+
+Open the `.env` file in the root of your project and update your OpenAI configs.
+You can get your OpenAI API key from the [OpenAI Dashboard](https://platform.openai.com/api-keys).
+
+```
+OPENAI_API_KEY=<your-openai-api-key>
+OPENAI_MODEL=gpt-3.5-turbo-0125
+```
+
+### Start your Server-Side Agent
+
+```bash
+npm start
+```
+
+You should see a message like the following:
+
+```
+Server is running on port 8000
+Service key: <some-long-string>
+```
+
+Keep the service key handy, you will need it to talk to the server-side agent.
+
+## Connect to your React App
+### Install Dependencies
+From your react app, install the following dependencies:
+```bash
+npm install @palico-ai/lexical @palico-ai/client-js
+```
+
+### Define your LLM Actions
+Define the different LLM actions that want your users to be able to take from their Lexical Editor. This should reflect your `src/prompt/action_prompts.ts` file. If you want to use the default actions provided, you can set your actions as the following:
+<details>
+<summary>Example Default Action</summary>
+```
+import { AIAction } from '@palico-ai/lexical';
+
+export const aiActions: AIAction[] = [
+  {
+    name: 'create_blog_post',
+    label: 'Create a blog post',
+    promptForFreeText: true,
+  },
+  {
+    name: 'ask_ai_to_write',
+    label: 'Ask AI to write',
+    promptForFreeText: true,
+  },
+  {
+    name: 'fix_grammar_and_spelling',
+    label: 'Fix Grammar and Spelling',
+    requiresRangeSelection: true,
+  },
+  {
+    name: 'generate_summary',
+    label: 'Generate Summary',
+    requiresRangeSelection: true,
+  },
+  {
+    name: 'translate_section',
+    label: 'Translate Section',
+    requiresRangeSelection: true,
+    options: [
+      {
+        label: 'Spanish',
+        value: 'spanish',
+      },
+      {
+        label: 'French',
+        value: 'french',
+      },
+      {
+        label: 'German',
+        value: 'german',
+      },
+      {
+        label: 'Chinese',
+        value: 'chinese',
+      },
+      {
+        label: 'Japanese',
+        value: 'japanese',
+      },
+    ],
+  },
+];
+```
+</details>
+
+### Initialize the Client
+In your React app, initialize the client with the service key you got from the server-side agent.
+
+```javascript title="src/components/editor.tsx"
+import { createRequestHandler } from '@palico-ai/client-js';
+
+// highlight-start
+const agentRequestHandler = useMemo(() => {
+  if (!serviceKey) throw new Error('Service key is required');
+  return createRequestHandler(agentAPIURL, serviceKey);
+}, []);
+// highlight-end
+
+const Editor: React.FC = () => {
+  // Your Lexical Editor Component
+}
+```
+
+### Add Lexical AI Plugin to your Editor
+Add the LexicalAI Plugin inside your `LexicalComposer Component`.
+
+```javascript title="src/components/editor.tsx"
+import { LexicalAIPlugin, ContentNodeParserFN } from '@palico-ai/lexical';
+
+const Editor: React.FC = () => {
+  return (
+    <LexicalComposer initialConfig={editorConfig}>
+      // highlight-start
+      <LexicalAIPlugin
+        requestHandler={agentRequestHandler}
+        actions={aiActions}
+        editorTheme={ExampleTheme} // Your lexical editors theme
+      />
+      // highlight-end
+    </LexicalComposer>
+  )
+}
+```
+
+### Add trigger for opening your Lexical AI
+You can use the `OPEN_ASK_AI_COMMAND` dispatch command to open the Lexical AI Plugin within the editor. Here's an example of how to do that using a hot key:
+```javascript title="src/components/editor.tsx"
+import { OPEN_ASK_AI_COMMAND } from '@palico-ai/lexical';
+import { useHotkeys } from 'react-hotkeys-hook';
+
+// highlight-start
+const HotKeyPlugin: React.FC = () => {
+  useHotkeys(
+    'ctrl+i',
+    () => {
+      editor.dispatchCommand(OPEN_ASK_AI_COMMAND, {});
+    },
+    [editor],
+    { enableOnContentEditable: true }
+  );
+
+  return null;
+}
+// highlight-end
+
+const Editor: React.FC = () => {
+  return (
+    <LexicalComposer initialConfig={editorConfig}>
+      <LexicalAIPlugin
+        requestHandler={agentRequestHandler}
+        actions={aiActions}
+        editorTheme={ExampleTheme} // Your lexical editors theme
+      />
+      // highlight-next-line
+      <HotKeyPlugin />
+    </LexicalComposer>
+  )
+}
+
+```
+
+
+## Next Steps
+
+That's all you need to setup your server-side agent. Next, checkout the following guides to 
+create use-case specific agents for your frontend.
+
+<NextStepsCTA
+  steps={[
+    {
+      title: "Create a Copilot Chatbot",
+      description: "Learn how to create a copilot chatbot that can take actions on frontend on behalf of the user.",
+      link: CREATE_COPILOT_GUIDE,
+    },
+    {
+      title: "Create a Translator",
+      description: "Learn how you can create features like translation, summarization, generation, etc.",
+      link: CREATE_TRANSLATOR_GUIDE,
+    },
+  ]}
+/>
