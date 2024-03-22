@@ -23,3 +23,11 @@ export const copyDirectory = async (src: string, dest: string): Promise<void> =>
     }
   }
 }
+export const readFile = async (path: string): Promise<string> => {
+  const content = await fs.promises.readFile(path, 'utf-8') 
+  return content
+}
+
+export const setFileContent = async (path: string, content: string): Promise<void> => {
+  await fs.promises.writeFile(path, content)
+}

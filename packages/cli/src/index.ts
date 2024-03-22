@@ -1,13 +1,15 @@
 #!/usr/bin/env node
 
-import { Command } from 'commander'
-import { InitHandler } from './init'
+import { Command } from 'commander';
+import { InitHandler } from './init';
 
-const root = new Command()
+const root = new Command();
 
-root.command('init').
-  description('Initializes a project')
-  .argument('<projectName>', 'Name of the project').
-  action(InitHandler)
+root
+  .command('init')
+  .description('Initializes a project')
+  .argument('<projectName>', 'Name of the project')
+  .option('-t, --template <template>', 'Template to use')
+  .action(InitHandler);
 
-root.parse()
+root.parse();
