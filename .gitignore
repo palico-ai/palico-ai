@@ -45,3 +45,8 @@ Thumbs.db
 .next
 out
 .vercel
+
+# Generated Docusaurus files
+.docusaurus/
+.cache-loader/
+build/

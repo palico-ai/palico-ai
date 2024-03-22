@@ -1,0 +1,369 @@
+---
+sidebar_label: Creating a Copilot Chatbot
+sidebar_position: 2
+---
+
+import NextStepsCTA from "@site/src/components/cta/next_steps.tsx";
+import { AUTHORIZE_USER_REQUEST_GUIDE } from "@site/src/constants/routes.ts";
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+# Creating a Copilot (Chatbot) in React
+
+## Video Tutorial
+
+If you prefer a video tutorial on how to create a Copilot in React, you can watch the video below.
+
+<div
+  style={{
+    position: "relative",
+    paddingBottom: "56.25%" /* 16:9 */,
+    paddingTop: 25,
+    height: 0,
+  }}
+>
+  <iframe
+    style={{
+      position: "absolute",
+      top: 0,
+      left: 0,
+      width: "100%",
+      height: "100%",
+    }}
+    width="560"
+    height="315"
+    src="https://www.youtube.com/embed/QTpBP5x_0Qg?si=GUUaEqKpB605CuVv"
+    title="YouTube video player"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    allowfullscreen
+  ></iframe>
+</div>
+
+The code for the video tutorial can be found [here](https://github.com/palico-ai/demo-copilot-darkmode/tree/starter)
+
+## Prerequisites
+
+- [Setup a Server-Side Agent](./getting_started.mdx)
+
+## Connecting AgentAPI with React
+
+### Install Palico Client Dependencies
+
+From your React app, install the following package:
+
+```bash title="Terminal"
+npm install @palico-ai/client-js @palico-ai/react
+```
+
+The `@palico-ai/client-js` package is used to talk to your agent, and the `@palico-ai/react`
+package provides a set of React components and tools to make it easy to integrate your agent
+into your app.
+
+### Connect to Server-Side Agent
+
+#### Create a Context Provider
+
+From within React, we can use the `PalicoContextProvider` to connect to our agent and send messages to it.
+This context provider will handle communicating with the server-side agent and running client-sided tools.
+Below is an example of how to add this context provider to your app.
+
+:::note
+Replace `<your-service-key>` with the service key you received when you started your server-side agent.
+:::
+
+```tsx title="[React]/context/copilot_provider.tsx"
+import { createProxyAPIAgentRequestHandler } from "@palico-ai/client-js";
+import { PalicoContextProvider } from "@palico-ai/react";
+
+const proxyRequestHandler = createProxyAPIAgentRequestHandler(
+  "http://localhost:8000",
+  "<your-service-key>"
+);
+
+type Props = {
+  children: React.ReactNode;
+};
+
+export const CopilotProvider: React.FC<Props> = ({ children }) => {
+  return (
+    <PalicoContextProvider requestHandler={proxyRequestHandler} tools={{}}>
+      {children}
+    </PalicoContextProvider>
+  );
+};
+```
+
+If you are using the example above, remember to wrap your app with the `CopilotProvider` component.
+
+```tsx title="[React]/app.tsx"
+import { CopilotProvider } from "./context/copilot_provider";
+
+const App: React.FC = () => {
+  return <CopilotProvider>{/* your existing code */}</CopilotProvider>;
+};
+```
+
+### Creating a Chat UI
+
+You can either create your own UI to interact with the Copilot, or use the `ChatWidget` component
+provided by the `@palico-ai/react` package. For quickly getting started and testing your integrations
+with your agent, we recommend using the ChatWidget
+component. Below are examples of how to use the ChatWidget component and how to build your own UI.
+
+<Tabs>
+  <TabItem label="Built-in Chat Widget" value="chatwidget" default>
+    The following example shows you can can create a button that opens the `ChatWidget` component
+    when clicked.
+    ```tsx title="[React]/component/copilot_button.tsx"
+    import { Button } from "@mui/material";
+    import { ChatWidget } from "@palico-ai/react";
+    import { useState } from "react";
+
+    const CopilotButton: React.FC = () => {
+      const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+      const [open, setOpen] = useState(false);
+
+      const handleClick = () => {
+        setOpen(true);
+      };
+
+      const handleClose = () => {
+        setOpen(false);
+      };
+
+      return (
+        <div>
+          <Button
+            variant="contained"
+            sx={{
+              position: "fixed",
+              bottom: 16,
+              right: 16,
+            }}
+            ref={setAnchorEl}
+            onClick={handleClick}
+          >
+            Copilot
+          </Button>
+          <ChatWidget
+            width="400px"
+            height="600px"
+            headerTitle="Chatbot"
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleClose}
+          />
+        </div>
+      );
+    };
+
+    export default CopilotButton;
+    ```
+    Then you can add the `CopilotButton` component to your app.
+    ```tsx title="[React]/app.tsx"
+    import CopilotButton from "./component/copilot_button";
+
+    const App: React.FC = () => {
+      return (
+        <div>
+          {/* your existing code */}
+          // highlight-next-line
+          <CopilotButton />
+        </div>
+      );
+    };
+    ```
+
+  </TabItem>
+  <TabItem label="Build your own UI" value="BYOU">
+    You can also build your own UI to interact with the Copilot. 
+    The `PalicoContext` provides a `sendMessage()` function that allows you to send a message to your agent
+    and a `conversationHistory` array that contains the conversation history.
+    Here's an example of how you can build your own UI to interact with the Copilot.
+    ```tsx title="[React]/component/custom_chat_ui.tsx"
+    const CustomChatUI: React.FC = () => {
+      // highlight-next-line
+      const { conversationHistory, sendMessage } = useContext(PalicoContext)
+      
+      const handleSendMessage = async (userInput: string) => {
+        // highlight-start
+        const response = await sendMessage(userInput, {/* context */});
+        // highlight-end
+      };
+
+      return (
+        <div>
+          {/* your ui logic*/}
+        </div>
+      )
+    }
+    ```
+
+  </TabItem>
+</Tabs>
+
+---
+
+### Testing
+
+You should now have a working Chatbot UI that connects to your Server-sided Agent. Test your chatbot by
+sending some messages and see how it responds.
+
+## Adding Tools to your Copilot
+
+The power of a copilot is that it can understand the users intent and take actions on behalf of the user. Tools
+are the actions that the copilot can take, such as running a function on the frontend. For Palico, tools
+are defined in the server-side agent and implemented in the client-side app.
+Here's how you can add tools to your copilot.
+
+### Add tool definitions
+
+From your server-sided agent, navigate to your toolset file (`src/toolset.ts` by default) and define
+the inputs and outputs for your tools. Here's an example of a tool that turns on dark mode and subscribes
+to a newsletter.
+
+```ts title="[Agent]/src/toolset.ts"
+export const AppToolset: Toolset = {
+  name: "webapp_toolset",
+  tools: [
+    {
+      name: "turn-on-dark-mode",
+      description: "Turns on dark mode for the app",
+      input: z.object({
+        titles: z.array(z.string()),
+      }),
+      // No output is needed for this tool
+      executionEnvironment: ToolExecutionEnvironment.Client,
+    },
+    {
+      name: "subscribe-to-newsletter",
+      description:
+        "Subscribes to newsletter. The options are: 'weekly', 'monthly', 'never'",
+      input: z.object({
+        frequency: z.enum(["weekly", "monthly", "never"]),
+      }),
+      output: z.object({
+        success: z.boolean(),
+      }),
+      executionEnvironment: ToolExecutionEnvironment.Client,
+    },
+  ],
+};
+```
+
+### Connect the tools to your UI
+
+Now from your React app, we want to set the implementation for these tools. Go back to where
+defined the `PalicoContextProvider` (in `copilot-provider.tsx`), and add the tool implementations.
+
+```tsx title="[React]/context/copilot_provider.tsx"
+type SubscribeToNewsletterParams = {
+  frequency: "weekly" | "monthly" | "never";
+};
+
+export const CopilotProvider: React.FC<Props> = ({ children }) => {
+  const turnOnDarkMode = async () => {
+    // ... your implementation to turn on dark mode
+  };
+
+  const subscribeToNewsletter = async (params: SubscribeToNewsletterParams) => {
+    // ... your implementation to subscribe to newsletter
+  };
+
+  // highlight-start
+  const tools = {
+    "turn-on-dark-mode": turnOnDarkMode,
+    "subscribe-to-newsletter": subscribeToNewsletter,
+  };
+  // highlight-end
+
+  return (
+    <PalicoContextProvider
+      // highlight-next-line
+      tools={tools}
+      requestHandler={proxyRequestHandler}
+    >
+      {children}
+    </PalicoContextProvider>
+  );
+};
+```
+
+Now if a user asks to turn on dark mode, the `turnOnDarkMode` function will be called.
+
+## Improving the Prompt
+
+Based on which LLM model you're using, you might not see the result you expect from your Agent. In
+this case, you can experiment with the prompt to get better results.
+
+The `PalicoContext` exposes a `sendMessage(message: string, context: Record<string, unknown>)`
+function that allows you to send a message to your agent. You can set anything in the `context` object to
+be passed to your agent. You will have access to this message and context in your agent's `PromptBuilder`
+(`[Agent]/src/prompt_builder.ts`).
+
+If you are using the `ChatWidget` component, you can set the `getSendMessageParams(userInput: string)` to transform
+the user input and setting a context before sending it to the agent.
+
+### Changing the System Prompt
+
+Let's change the system prompt to be more strict on how to use tools.
+
+```ts title="[Agent]/src/prompt_builder.ts
+export class AppPromptBuilder implements PromptBuilder {
+  async getSystemPrompt(params: PromptParamsCommon): Promise<string> {
+    return `You're a helpful assistant. You help users accomplish tasks on a website. 
+    You have access to tools like "turn on dark mode" and "subscribe to newsletter".
+    Once you understand the user's request, you can take actions on their behalf.
+    --- RULES TO FOLLOW ---
+    - Never make assumptions about the user's intent.
+    - Always ask for confirmation before taking any action.
+    `;
+  }
+}
+```
+
+With this change, we can enforce how the how the agent interacts with the user.
+
+### Changing the User Prompt
+
+Let's transform the user's input with more context.
+
+NOTE: This is just an example of how you can modify the prompt.
+You can make your prompt a lot more complex and dynamic based on your use case.
+
+```ts title="[Agent]/src/prompt_builder.ts
+export class AppPromptBuilder implements PromptBuilder {
+  async getPromptForQuery(query: string, params: PromptParamsCommon): Promise<string>  {
+    return `
+      You are asked the following question:
+      ================================
+        ${query}
+      ================================
+      ${/* Use Vector Database to retrieve relavant info */}
+      You are also given the following context about the state of the website:
+        ${params.context}
+    `;
+  }
+}
+```
+
+## Trial and Error
+
+Getting the right prompt can be a trial and error process.
+You might need to experiment with different prompts to get the best results.
+It's recommend finding a systematic way to test and improve your prompts.
+We will provide more guidance on this in the future.
+
+## Next Steps
+
+<NextStepsCTA
+  steps={[
+    {
+      title: "Authorizing User Requests",
+      description:
+        "Learn how to authorize client-sided user requests to your Agent.",
+      link: AUTHORIZE_USER_REQUEST_GUIDE,
+    },
+  ]}
+/>
