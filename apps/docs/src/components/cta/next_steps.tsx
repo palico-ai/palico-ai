@@ -20,7 +20,7 @@ const NextStepsCTA: React.FC<NextStepCTAProps> = ({ steps }) => {
     if (steps.length === 2) {
       return 6;
     }
-    return 2;
+    return 4;
   }, [steps])
 
   return (
