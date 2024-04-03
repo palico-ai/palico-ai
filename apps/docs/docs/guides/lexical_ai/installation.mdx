@@ -1,5 +1,5 @@
 ---
-sidebar_label: Installation
+sidebar_label: Getting Started
 sidebar_position: 1
 ---
 
@@ -16,12 +16,12 @@ import {
 ## Requirements
 - [Docker](https://www.docker.com/products/docker-desktop)
 - [Node.js](https://nodejs.org/en/download/)
-
+### Lexical Text Editor
+We are built on top of Lexical, which is a text editor framework. If you do not have a Lexical Text Editor setup, you can quickly set one up in your React app by following follow the [getting started](https://lexical.dev/docs/getting-started/react) GUIDES.
 
 ## Setup Server-Sided Agent
 
 ### Create a new Project
-
 ```bash
 npx palico init <project-name> --template=lexical
 ```
@@ -165,8 +165,7 @@ import { createRequestHandler } from '@palico-ai/client-js';
 
 // highlight-start
 const agentRequestHandler = useMemo(() => {
-  if (!serviceKey) throw new Error('Service key is required');
-  return createRequestHandler(agentAPIURL, serviceKey);
+  return createRequestHandler("http://localhost:8000", "<service-key>");
 }, []);
 // highlight-end
 
@@ -233,6 +232,10 @@ const Editor: React.FC = () => {
 
 ```
 
+## Wrap up
+In this guide, we went over how to setup a basic Lexical AI plugin. You can customize your AI plugin further by following more advanced guides in the next steps section.
+
+For a reference to the full working example with code for this guide, you can check out this [github repo](https://github.com/palico-ai/lexical-code-reference)
 
 ## Next Steps
 
@@ -242,14 +245,19 @@ create use-case specific agents for your frontend.
 <NextStepsCTA
   steps={[
     {
-      title: "Create a Copilot Chatbot",
-      description: "Learn how to create a copilot chatbot that can take actions on frontend on behalf of the user.",
+      title: "Adding custom actions",
+      description: "Learn to add custom action, like change tone, fix grammar, etc.",
       link: CREATE_COPILOT_GUIDE,
     },
     {
-      title: "Create a Translator",
-      description: "Learn how you can create features like translation, summarization, generation, etc.",
+      title: "Adding custom nodes",
+      description: "Learn to add custom nodes, like checkboxes, images, etc.",
       link: CREATE_TRANSLATOR_GUIDE,
     },
+    {
+      title: "Authorization",
+      description: "Learn to secure your Palico Agent behind a server-side API.",
+      link: CREATE_COPILOT_GUIDE,
+    }
   ]}
 />
