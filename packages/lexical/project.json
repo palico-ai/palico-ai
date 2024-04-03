@@ -17,7 +17,14 @@
         "project": "packages/lexical/package.json",
         "format": ["esm", "cjs"],
         "generateExportsField": true,
-        "external": ["react", "react-dom"],
+        "external": [
+          "react",
+          "react-dom",
+          "lexical",
+          "@lexical/react",
+          "@lexical/rich-text",
+          "@lexical/utils"
+        ],
         "assets": [
           {
             "glob": "packages/lexical/README.md",

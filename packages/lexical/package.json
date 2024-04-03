@@ -14,9 +14,7 @@
     "access": "public"
   },
   "dependencies": {
-    "lexical": "^0.13.1",
     "@palico-ai/client-js": "1.12.8",
-    "@lexical/react": "^0.13.1",
     "@mui/icons-material": "^5.15.12",
     "@mui/material": "^5.15.12",
     "@emotion/styled": "^11.11.0",
@@ -24,6 +22,10 @@
   },
   "peerDependencies": {
     "react": "^18.0.0",
-    "react-dom": "^18.0.0"
+    "react-dom": "^18.0.0",
+    "lexical": "^0.13.1",
+    "@lexical/react": "^0.13.1",
+    "@lexical/rich-text": "^0.13.1",
+    "@lexical/utils": "^0.13.1"
   }
 }
