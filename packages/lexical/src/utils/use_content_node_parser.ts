@@ -54,7 +54,6 @@ export type UseParseContentNodeParams = {
   setParsers?: ParserOverrideProps["contentParsers"];
   setInvalidTypeParser: ParserOverrideProps["setInvalidTypeParser"];
   customParsers?: ParserOverrideProps["additionalContentParsers"];
-
 }
 
 export type LexicalContentNodeParser = (content: ContentNode[]) => LexicalNode[];
