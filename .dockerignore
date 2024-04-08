@@ -1,0 +1,16 @@
+node_modules
+dist
+Dockerfile
+**/Dockerfile
+.dockerignore
+**/.dockerignore
+npm-debug.log
+README.md
+.next
+**/.next
+docker
+.git
+.nx
+.vercel
+.vscode
+tmp

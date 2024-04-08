@@ -1,0 +1,9 @@
+version: '3.8'
+
+services:
+  studio:
+    build:
+      context: ../..
+      dockerfile: apps/studio/Dockerfile
+    ports:
+      - 3000:3000

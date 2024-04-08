@@ -1,0 +1,45 @@
+{
+  "name": "studio",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/studio",
+  "projectType": "application",
+  "targets": {
+    "docker:build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": ".",
+        "command": "docker build -f apps/studio/Dockerfile -t studio:latest ."
+      }
+    },
+    "docker:start": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "docker/dev",
+        "command": "docker compose up"
+      }
+    },
+    "docker:start:clean": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "docker/dev",
+        "command": "docker compose up --force-recreate --build"
+      }
+    },
+    "docker:stop": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "docker/dev",
+        "command": "docker compose down"
+      }
+    },
+    "build": {
+      "dependsOn": [
+        "^build"
+      ]
+    },
+    "start": {
+      "dependsOn": []
+    }
+  },
+  "tags": []
+}
