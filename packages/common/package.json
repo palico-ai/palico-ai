@@ -1,10 +1,21 @@
 {
   "name": "@palico-ai/common",
-  "version": "1.12.9",
-  "dependencies": {
-    "jsonwebtoken": "^9.0.2"
-  },
+  "version": "1.12.10",
   "type": "commonjs",
   "main": "./src/index.js",
-  "typings": "./src/index.d.ts"
+  "typings": "./src/index.d.ts",
+  "bugs": {
+    "url": "https://github.com/palico-ai/palico-main/issues"
+  },
+  "homepage": "https://github.com/palico-ai/palico-main#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/palico-ai/palico-main"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "jsonwebtoken": "^9.0.2"
+  }
 }

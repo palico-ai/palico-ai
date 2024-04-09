@@ -22,7 +22,7 @@
     "palico-app": "src/cli/index.js"
   },
   "dependencies": {
-    "@palico-ai/common": "1.12.9",
+    "@palico-ai/common": "1.12.10",
     "archiver": "^6.0.1",
     "aws-serverless-express": "^3.4.0",
     "axios": "^1.6.3",

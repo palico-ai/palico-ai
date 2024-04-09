@@ -15,6 +15,7 @@
       "packages/palico-app",
       "packages/react-client",
       "packages/cli",
+      "packages/common",
       "packages/lexical"
     ],
     "changelog": {
