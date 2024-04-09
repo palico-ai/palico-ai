@@ -1,7 +1,6 @@
 {
   "name": "@palico-ai/common",
   "version": "1.12.11",
-  "type": "commonjs",
   "main": "./src/index.js",
   "typings": "./src/index.d.ts",
   "bugs": {
