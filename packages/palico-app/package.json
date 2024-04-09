@@ -22,6 +22,7 @@
     "palico-app": "src/cli/index.js"
   },
   "dependencies": {
+    "@palico-ai/common": "1.12.9",
     "archiver": "^6.0.1",
     "aws-serverless-express": "^3.4.0",
     "axios": "^1.6.3",
@@ -35,7 +36,6 @@
     "pg": "^8.11.3",
     "pg-hstore": "^2.3.4",
     "find-up": "^5.0.0",
-    "jsonwebtoken": "^9.0.2",
     "nodemon": "^3.0.3",
     "openai": "^4.24.1",
     "sequelize": "^6.36.0",
