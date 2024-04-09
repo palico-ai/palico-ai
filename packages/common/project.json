@@ -1,0 +1,55 @@
+{
+  "name": "common",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/common/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/rollup:rollup",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "main": "packages/common/src/index.ts",
+        "outputPath": "dist/packages/common",
+        "tsConfig": "packages/common/tsconfig.lib.json",
+        "compiler": "tsc",
+        "generateExportsField": true,
+        "project": "packages/common/package.json",
+        "format": ["esm", "cjs"],
+        "assets": [
+          {
+            "glob": "packages/common/README.md",
+            "input": ".",
+            "output": "."
+          }
+        ]
+      },
+      "configurations": {
+        "production": {
+          "optimization": true,
+          "sourceMap": false,
+          "namedChunks": false,
+          "extractLicenses": true,
+          "vendorChunk": false
+        }
+      }
+    },
+    "publish": {
+      "command": "node tools/scripts/publish.mjs common {args.ver} {args.tag}",
+      "dependsOn": ["build"]
+    },
+    "publish-local": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["build"],
+      "options": {
+        "cwd": "dist/packages/common",
+        "commands": [
+          "npm unpublish --force --registry http://localhost:4873",
+          "npm publish --registry http://localhost:4873"
+        ],
+        "parallel": false
+      }
+    }
+  },
+  "tags": []
+}

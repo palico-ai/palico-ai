@@ -17,10 +17,11 @@
     "paths": {
       "@palico-ai/app": ["packages/palico-app/src/index.ts"],
       "@palico-ai/client-js": ["packages/client-js/src/index.ts"],
-      "@palico-ai/lexical": ["packages/lexical/src/index.ts"],
-      "@palico-ai/react": ["packages/react-client/src/index.ts"],
+      "@palico-ai/common": ["packages/common/src/index.ts"],
       "@palico-ai/components": ["packages/components/src/index.ts"],
       "@palico-ai/components/server": ["packages/components/src/server.ts"],
+      "@palico-ai/lexical": ["packages/lexical/src/index.ts"],
+      "@palico-ai/react": ["packages/react-client/src/index.ts"],
       "palico": ["packages/cli/src/index.ts"]
     }
   },
