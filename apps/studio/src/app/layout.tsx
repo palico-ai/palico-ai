@@ -1,3 +1,7 @@
+import { Box } from '@mui/material';
+import Topbar from '../components/layout/topbar';
+import Sidebar from '../components/layout/sidebar';
+import { ThemeProvider } from '@palico-ai/components';
 import './global.css';
 
 export const metadata = {
@@ -12,7 +16,31 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <ThemeProvider>
+          <Box sx={{ display: 'flex', backgroundColor: 'background.default' }}>
+            <Sidebar />
+            <Box
+              sx={{
+                flexGrow: 1,
+                display: 'flex',
+                flexDirection: 'column',
+                height: '100vh',
+              }}
+            >
+              <Topbar />
+              <Box
+                sx={{
+                  flex: 1,
+                  overflow: 'auto',
+                }}
+              >
+                {children}
+              </Box>
+            </Box>
+          </Box>
+        </ThemeProvider>
+      </body>
     </html>
   );
 }
