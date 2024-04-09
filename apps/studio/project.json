@@ -22,7 +22,7 @@
       "executor": "nx:run-commands",
       "options": {
         "cwd": "docker/dev",
-        "command": "docker compose up --force-recreate --build"
+        "command": "docker compose up --build"
       }
     },
     "docker:stop": {

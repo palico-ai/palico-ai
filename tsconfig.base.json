@@ -19,6 +19,8 @@
       "@palico-ai/client-js": ["packages/client-js/src/index.ts"],
       "@palico-ai/lexical": ["packages/lexical/src/index.ts"],
       "@palico-ai/react": ["packages/react-client/src/index.ts"],
+      "@palico-ai/components": ["packages/components/src/index.ts"],
+      "@palico-ai/components/server": ["packages/components/src/server.ts"],
       "palico": ["packages/cli/src/index.ts"]
     }
   },
