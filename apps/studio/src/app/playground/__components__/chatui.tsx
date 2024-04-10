@@ -1,29 +1,32 @@
-'use client'
+'use client';
 
-import { Box, Divider, Stack } from '@mui/material'
-import React from 'react'
-import { ChatHistory, ChatMessage } from './chat_history'
-import { ChatInput } from './chat_input'
+import { Box, Divider, Stack } from '@mui/material';
+import React, { useContext } from 'react';
+import { ChatHistory } from './chat_history';
+import { ChatInput } from './chat_input';
+import { ConversationContext } from '../../../context/conversation';
 
-const placeholderHistory : ChatMessage[] = [
-  {
-    role: 'assistant',
-    content: 'Hello! How can I help you today?'
-  },
-  {
-    role: 'user',
-    content: 'I need help with my order'
-  },
-  {
-    role: 'assistant',
-    content: 'Sure thing! What is your order number?'
-  }
-]
+// const placeholderHistory : ChatMessage[] = [
+//   {
+//     role: 'assistant',
+//     content: 'Hello! How can I help you today?'
+//   },
+//   {
+//     role: 'user',
+//     content: 'I need help with my order'
+//   },
+//   {
+//     role: 'assistant',
+//     content: 'Sure thing! What is your order number?'
+//   }
+// ]
 
 const ChatUI: React.FC = () => {
-  const handleSend = async () => {
-    console.log('send')
-  }
+  const { history, loading, sendMessage } = useContext(ConversationContext);
+
+  const handleSend = async (message: string) => {
+    await sendMessage(message, {});
+  };
 
   return (
     <Stack
@@ -36,18 +39,18 @@ const ChatUI: React.FC = () => {
         height: '100%',
         px: 4,
         py: 2,
-        boxSizing: 'border-box'
+        boxSizing: 'border-box',
       }}
     >
       <Box
         sx={{
           flexGrow: 1,
-          overflowY: 'auto'
+          overflowY: 'auto',
         }}
       >
         <ChatHistory
-          initialMessage={"Welcome to the chat!"}
-          history={placeholderHistory}
+          initialMessage={'Welcome to the chat!'}
+          history={history}
         />
       </Box>
       {/* {errorMessage && (
@@ -58,13 +61,14 @@ const ChatUI: React.FC = () => {
       <Divider />
       <Box>
         <ChatInput
-          placeholder={"Begin by typing a message"}
+          disabled={loading}
+          placeholder={'Begin by typing a message'}
           // disabled={errorMessage !== null || loading}
           onSend={handleSend}
         />
       </Box>
     </Stack>
-  )
-}
+  );
+};
 
-export default ChatUI
+export default ChatUI;

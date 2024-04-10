@@ -1,6 +1,7 @@
 import axios from 'axios'
 import config from '../../config.js'
 
+// @deprecated
 export class ClientAPIService {
   static async instance (): Promise<ClientAPIService> {
     return new ClientAPIService('')

@@ -2,6 +2,7 @@
 
 import React, { useEffect } from 'react';
 import { Box, Typography } from '@mui/material';
+import { ConversationHistoryItem } from '../../../context/conversation';
 
 export interface ChatMessage {
   role: 'user' | 'assistant';
@@ -10,16 +11,15 @@ export interface ChatMessage {
 
 export interface ChatHistoryProps {
   initialMessage?: string;
-  history: ChatMessage[];
+  history: ConversationHistoryItem[];
 }
 
-interface ChatListItemProps extends ChatMessage {
+interface ChatListItemProps extends ConversationHistoryItem {
   itemRef?: React.Ref<unknown> | undefined;
 }
 
 const ChatListItem: React.FC<ChatListItemProps> = ({
-  role,
-  content,
+  message: { role, content },
   itemRef: ref,
 }) => {
   return (
@@ -32,10 +32,14 @@ const ChatListItem: React.FC<ChatListItemProps> = ({
         py: 1,
       }}
     >
-      <Typography variant="body1" fontWeight={"bold"} sx={{ color: 'text.secondary' }}>
+      <Typography
+        variant="body1"
+        fontWeight={'bold'}
+        sx={{ color: 'text.secondary' }}
+      >
         {role === 'user' ? 'You' : 'Assistant'}
       </Typography>
-      <Typography variant="body1">{content}</Typography>
+      <Typography variant="body1">{content as string}</Typography>
     </Box>
   );
 };
@@ -61,10 +65,8 @@ export const ChatHistory: React.FC<ChatHistoryProps> = ({
     <Box>
       {history.length === 0 && initialMessage && (
         <ChatListItem
-          // eslint-disable-next-line jsx-a11y/aria-role
-          role="assistant"
-          content={initialMessage}
-          itemRef={setLastMessageEl}
+          message={{ role: 'assistant', content: initialMessage }}
+          finishReason={'stop'}
         />
       )}
       {history.map((conversation, index) => {
@@ -72,9 +74,8 @@ export const ChatHistory: React.FC<ChatHistoryProps> = ({
         return (
           <ChatListItem
             key={index}
-            role={conversation.role}
-            content={conversation.content ?? 'Invalid message'}
             itemRef={isLastMessage ? setLastMessageEl : undefined}
+            {...conversation}
           />
         );
       })}

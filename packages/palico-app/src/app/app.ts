@@ -1,6 +1,7 @@
 import { type ModelConfig, type PromptBuilder, type Tool } from './types'
 import { type StorageService } from '../storage/types'
-import { type ReplyAsUserParams, type AgentResponse, IterativeAgent, type ReplyAsToolParams } from '../agent/iterative_agent'
+import { type ReplyAsUserParams, IterativeAgent, type ReplyAsToolParams } from '../agent/iterative_agent'
+import { AgentResponse } from '@palico-ai/common'
 
 export interface ApplicationAPIParams {
   storage: StorageService
