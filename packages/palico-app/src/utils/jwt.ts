@@ -1,5 +1,4 @@
-import { JWTAuthenticator } from "@palico-ai/common"
-import config from "../config"
+import { JWTAuthenticator, commonConfig } from "@palico-ai/common"
 import { PreferenceStore } from "./preference_store"
 
 interface AuthorizationTokenParams {
@@ -9,12 +8,12 @@ interface AuthorizationTokenParams {
 
 export const getServiceKey = async (): Promise<string> => {
   const preferenceKey = 'JWTAuth'
-  const secret = process.env["JWT_SECRET"] ?? config.DefaultLocalSecret
+  const secret = commonConfig.getSecretKey()
   const currentAuth = await PreferenceStore.get<AuthorizationTokenParams>(preferenceKey)
   if (!currentAuth?.serviceKey) {
     console.log("Service Key doesn't exist...")
     console.log('Creating new service key')
-    const serviceKey = await JWTAuthenticator.generateAPIJWT({ deploymentId: -1 }, secret)
+    const serviceKey = await JWTAuthenticator.generateAPIJWT({ role: "admin" }, secret)
     await PreferenceStore.set(preferenceKey, {
       currentSecret: secret,
       serviceKey
@@ -25,7 +24,7 @@ export const getServiceKey = async (): Promise<string> => {
   if (currentAuth?.currentSecret !== secret) {
     console.log('JWT Secret has changed')
     console.log('Creating new JWT Secret')
-    const serviceKey = await JWTAuthenticator.generateAPIJWT({ deploymentId: -1 }, secret)
+    const serviceKey = await JWTAuthenticator.generateAPIJWT({ role: "admin" }, secret)
     await PreferenceStore.set<AuthorizationTokenParams>(preferenceKey, {
       currentSecret: secret,
       serviceKey

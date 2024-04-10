@@ -4,22 +4,8 @@ import { type ModelConfig, type Tool, type PromptBuilder } from '../app/types'
 import { type ChatCompletionTool } from 'openai/resources'
 import zodToJsonSchema from 'zod-to-json-schema'
 import { type ConversationService } from '../storage/types'
-import type OpenAI from 'openai'
+import { AgentResponse } from '@palico-ai/common'
 
-export interface AgentCallResponse {
-  finishReason: OpenAI.Chat.ChatCompletion.Choice['finish_reason']
-  message: AgentMessage
-}
-
-export interface AgentMessage {
-  role: OpenAI.Chat.ChatCompletionMessageParam['role']
-  content: OpenAI.Chat.ChatCompletionMessageParam['content']
-  toolCalls?: OpenAI.Chat.ChatCompletionMessage['tool_calls']
-}
-
-export type AgentResponse = AgentCallResponse & {
-  conversationId: number
-}
 
 export interface ReplyAsUserParams {
   message: string
