@@ -14,3 +14,7 @@ export interface AgentCallResponse {
 export type AgentResponse = AgentCallResponse & {
   conversationId: number
 }
+
+// TODO: Update tool_calls to be toolCalls
+// TODO: Update this to be more generic
+export type OpenAIMessage = OpenAI.Chat.ChatCompletionMessageParam

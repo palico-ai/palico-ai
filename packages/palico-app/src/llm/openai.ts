@@ -1,11 +1,7 @@
 import { OpenAI } from 'openai'
 import { type ChatCompletionTool } from 'openai/resources/chat/completions'
 import { TagLogger } from '../utils/logger'
-import { AgentCallResponse } from '@palico-ai/common'
-
-export type OpenAIMessage = OpenAI.Chat.ChatCompletionMessageParam & {
-  function_call?: OpenAI.Chat.ChatCompletionMessage['function_call']
-}
+import { AgentCallResponse, OpenAIMessage } from '@palico-ai/common'
 
 interface ConversationThreadConstructor {
   history?: OpenAIMessage[]
@@ -35,7 +31,7 @@ export default class OpenAIConversationThread {
         role: 'system',
         content:
           "Don't make assumptions about what values to plug into functions. Ask the user for clarification if a user request is ambiguous."
-      }
+      },
     ]
     this.tools = params.tools?.length ? params.tools : undefined
     this.model = params.model

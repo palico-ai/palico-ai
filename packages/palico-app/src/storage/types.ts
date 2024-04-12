@@ -1,5 +1,5 @@
+import { OpenAIMessage } from '@palico-ai/common'
 import { ChatCompletionTool } from 'openai/resources'
-import { OpenAIMessage } from '../llm/openai'
 
 export interface CreateConversationParams {
   tools: ChatCompletionTool[]
