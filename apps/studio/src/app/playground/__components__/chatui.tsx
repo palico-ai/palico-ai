@@ -1,32 +1,34 @@
 'use client';
 
 import { Box, Divider, Stack } from '@mui/material';
-import React, { useContext } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { ChatHistory } from './chat_history';
 import { ChatInput } from './chat_input';
 import { ConversationContext } from '../../../context/conversation';
-
-// const placeholderHistory : ChatMessage[] = [
-//   {
-//     role: 'assistant',
-//     content: 'Hello! How can I help you today?'
-//   },
-//   {
-//     role: 'user',
-//     content: 'I need help with my order'
-//   },
-//   {
-//     role: 'assistant',
-//     content: 'Sure thing! What is your order number?'
-//   }
-// ]
+import ToolExecutionInput from './tool_execution_input';
+import { ReplyToToolCallParams } from '@palico-ai/client-js';
 
 const ChatUI: React.FC = () => {
-  const { history, loading, sendMessage } = useContext(ConversationContext);
+  const { history, loading, sendMessage, replyToToolCall } = useContext(ConversationContext);
 
   const handleSend = async (message: string) => {
     await sendMessage(message, {});
   };
+
+  const handleSubmitToolOutput = async (
+    output: ReplyToToolCallParams['toolOutputs']
+  ) => {
+    await replyToToolCall(output);
+  };
+
+  const requiredToolCalls = useMemo(() => {
+    const lastMessage = history[history.length - 1];
+    if (!lastMessage) {
+      return
+    }
+    return lastMessage.role === 'assistant' && lastMessage.tool_calls;
+
+  }, [history]);
 
   return (
     <Stack
@@ -37,8 +39,7 @@ const ChatUI: React.FC = () => {
       sx={{
         width: '100%',
         height: '100%',
-        px: 4,
-        py: 2,
+        p: 4,
         boxSizing: 'border-box',
       }}
     >
@@ -60,12 +61,18 @@ const ChatUI: React.FC = () => {
       )} */}
       <Divider />
       <Box>
-        <ChatInput
-          disabled={loading}
-          placeholder={'Begin by typing a message'}
-          // disabled={errorMessage !== null || loading}
-          onSend={handleSend}
-        />
+        {requiredToolCalls ? (
+          <ToolExecutionInput
+            toolCalls={requiredToolCalls}
+            handleSubmit={handleSubmitToolOutput}
+          />
+        ) : (
+          <ChatInput
+            disabled={loading}
+            placeholder={'Begin by typing a message'}
+            onSend={handleSend}
+          />
+        )}
       </Box>
     </Stack>
   );
