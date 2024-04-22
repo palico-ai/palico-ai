@@ -1,4 +1,4 @@
-import { PromptParamsCommon, PromptBuilder } from "@palico-ai/app";
+import { PromptParamsCommon, PromptBuilder } from "@palico-ai/app/src/__old";
 
 export class AppPromptBuilder implements PromptBuilder {
   async getSystemPrompt(params: PromptParamsCommon): Promise<string> {

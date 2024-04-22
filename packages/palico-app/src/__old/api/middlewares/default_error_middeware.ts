@@ -1,8 +1,7 @@
 import { type ErrorRequestHandler } from 'express'
-import { APIError } from '../../errors'
+import { APIError } from '../apierror'
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const defaultErrorMiddleware: ErrorRequestHandler = (err, _, res, __) => {
+export const defaultErrorMiddleware: ErrorRequestHandler = (err, req, res, next) => {
   console.error('Error in request', err)
   if (err instanceof APIError) {
     return res.status(err.statusCode).json({ error: err.message })

@@ -1,4 +1,4 @@
-import { SimpleApplicationConfig } from "@palico-ai/app";
+import { SimpleApplicationConfig } from "@palico-ai/app/src/__old";
 import { AppPromptBuilder } from "./prompt_builder";
 import { AppToolset } from "./toolset";
 import * as dotenv from "dotenv";

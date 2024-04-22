@@ -1,4 +1,4 @@
-import { ToolExecutionEnvironment, Toolset } from "@palico-ai/app";
+import { ToolExecutionEnvironment, Toolset } from "@palico-ai/app/src/__old";
 // import * as z from "zod";
 
 // The following is an example of a toolset for Trello.
