@@ -20,6 +20,7 @@ import { useInsertContentNode } from './utils/use_insert_content_node';
 export interface LexicalAITypeaheadProps
   extends PreviewUIOverrideProps,
     PreviewLexicalEditorOverrides {
+  agentId: string
   lexicalContentNodeParser: LexicalContentNodeParser;
   requestHandler: AgentRequestHandler;
 }
@@ -33,6 +34,7 @@ export const LexicalAITypeahead: React.FC<LexicalAITypeaheadProps> = ({
   lexicalContentNodeParser: parseContentNode,
   editorTheme,
   lexicalNodes,
+  agentId,
 }) => {
   const {
     isOpen,
@@ -58,11 +60,12 @@ export const LexicalAITypeahead: React.FC<LexicalAITypeaheadProps> = ({
       const response = await requestHandler({
         type: AgentRequestType.NewConversation,
         payload: {
-          message: params.message,
+          agentId: params.agentId,
+          userMessage: params.message,
           context: params.context,
         },
       });
-      const content = response?.message.content;
+      const content = response.message;
       if (!content) {
         throw new Error('Invalid response from agent');
       }
@@ -98,6 +101,7 @@ export const LexicalAITypeahead: React.FC<LexicalAITypeaheadProps> = ({
         return;
       } else {
         const requestBody = await getRequestParamForAction({
+          agentId,
           action,
           selectedOptionValue: params.selectedOptionValue,
           selectedText: selection?.rangeSelection?.selectedText,
@@ -105,13 +109,7 @@ export const LexicalAITypeahead: React.FC<LexicalAITypeaheadProps> = ({
         await callAgentAndShowPreview(requestBody);
       }
     },
-    [
-      callAgentAndShowPreview,
-      selection?.rangeSelection?.selectedText,
-      setStep,
-      setStepOutput,
-      stepOutput,
-    ]
+    [agentId, callAgentAndShowPreview, selection?.rangeSelection?.selectedText, setStep, setStepOutput, stepOutput]
   );
 
   const handleSubmitFreetext = useCallback(
@@ -127,6 +125,7 @@ export const LexicalAITypeahead: React.FC<LexicalAITypeaheadProps> = ({
       const selectedOption = stepOutput[Step.SelectMenuItem];
       try {
         const params = await getRequestParamForAction({
+          agentId,
           action: selectedOption.action,
           selectedOptionValue: selectedOption.optionValue,
           freeText: text,
@@ -141,7 +140,7 @@ export const LexicalAITypeahead: React.FC<LexicalAITypeaheadProps> = ({
         showErrorMessage(message);
       }
     },
-    [callAgentAndShowPreview, handleClose, selection?.rangeSelection?.selectedText, showErrorMessage, stepOutput]
+    [agentId, callAgentAndShowPreview, handleClose, selection?.rangeSelection?.selectedText, showErrorMessage, stepOutput]
   );
 
   const handleInsertBelowSelection = useCallback(async () => {

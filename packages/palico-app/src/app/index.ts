@@ -2,7 +2,7 @@ import { LLMAgent } from "../agent";
 
 interface AgentItem {
   agent: LLMAgent;
-  route: string;
+  id: string;
 }
 
 export class PalicoApp {
@@ -12,7 +12,7 @@ export class PalicoApp {
     this.agents = []
   }
 
-  addAgent(route: string, agent: LLMAgent, ) {
-    this.agents.push({ agent, route })
+  addAgent(id: string, agent: LLMAgent, ) {
+    this.agents.push({ agent, id })
   }
 }

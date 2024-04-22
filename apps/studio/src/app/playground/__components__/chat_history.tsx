@@ -105,34 +105,35 @@ export const ChatHistory: React.FC<ChatHistoryProps> = ({
       if (item.role === 'user') {
         reformattedHistory.push({
           role: 'user',
-          message: item.content as string,
+          message: item.message as string,
         });
       }
       if (item.role === 'assistant') {
         reformattedHistory.push({
           role: 'assistant',
-          message: item.content as string | undefined,
-          toolCalls: item.tool_calls?.map((toolCall) => {
-            return {
-              id: toolCall.id,
-              functionName: toolCall.function.name,
-              arguments: JSON.parse(toolCall.function.arguments),
-            };
-          }),
+          message: item.message,
+          // toolCalls: item.tool_calls?.map((toolCall) => {
+          //   return {
+          //     id: toolCall.id,
+          //     functionName: toolCall.function.name,
+          //     arguments: JSON.parse(toolCall.function.arguments),
+          //   };
+          // }),
         });
       } else if (item.role === 'tool') {
-        const lastAssistantMessage =
-          reformattedHistory[reformattedHistory.length - 1];
-        if (lastAssistantMessage.toolCalls === undefined) {
-          throw new Error('Tool call without assistant message');
-        }
-        const toolItem = lastAssistantMessage.toolCalls.find(
-          (toolCall) => toolCall.id === item.tool_call_id
-        );
-        if (!toolItem) {
-          throw new Error('Tool call not found');
-        }
-        toolItem.result = JSON.parse(item.content as string);
+        throw new Error("Toolcall not supported")
+        // const lastAssistantMessage =
+        //   reformattedHistory[reformattedHistory.length - 1];
+        // if (lastAssistantMessage.toolCalls === undefined) {
+        //   throw new Error('Tool call without assistant message');
+        // }
+        // const toolItem = lastAssistantMessage.toolCalls.find(
+        //   (toolCall) => toolCall.id === item.tool_call_id
+        // );
+        // if (!toolItem) {
+        //   throw new Error('Tool call not found');
+        // }
+        // toolItem.result = JSON.parse(item.content as string);
       }
     });
     return reformattedHistory;

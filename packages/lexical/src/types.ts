@@ -24,6 +24,7 @@ export interface DefaultRichTextEditorContext<
 export interface AskAgentRequestParams<
   PromptContext extends ConversationContextParams = DefaultRichTextEditorContext
 > {
+  agentId: string
   message: string;
   context: PromptContext;
 }

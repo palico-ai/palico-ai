@@ -1,32 +1,18 @@
-import type OpenAI from 'openai'
-
-export type OpenAIMessage = OpenAI.Chat.ChatCompletionMessageParam & {
-  function_call?: OpenAI.Chat.ChatCompletionMessage['function_call']
-}
-
-export interface AgentMessage {
-  role: OpenAI.Chat.ChatCompletionMessageParam['role']
-  content: OpenAI.Chat.ChatCompletionMessageParam['content']
-  toolCalls?: OpenAI.Chat.ChatCompletionMessage['tool_calls']
-}
-
-export interface AgentCallResponse {
-  finishReason: OpenAI.Chat.ChatCompletion.Choice['finish_reason']
-  message: AgentMessage
-  conversationId: number
-}
+import { AgentNewConversationParams, AgentReplyToConversationParams, AgentResponse } from '@palico-ai/common'
 
 export type ConversationContextParams = Record<string, unknown>
 
 export interface NewConversationParams {
-  message: string
+  agentId: string
+  userMessage: string
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   context?: ConversationContextParams
 }
 
 export interface ReplyAsUserParams {
+  agentId: string
   conversationId: number
-  message: string
+  userMessage: string
   context?: ConversationContextParams
 }
 
@@ -41,12 +27,34 @@ export interface ReplyToToolCallParams {
   toolOutputs: ToolExecutionMessage[]
 }
 
-export type ClientNewConversationFN = (params: NewConversationParams) => Promise<AgentCallResponse>
-export type ClientReplyAsUserFN = (params: ReplyAsUserParams) => Promise<AgentCallResponse>
-export type ClientReplyToToolCallFN = (params: ReplyToToolCallParams) => Promise<AgentCallResponse>
+export interface NewConversationParams extends AgentNewConversationParams {
+  agentId: string
+}
 
-export interface IPalicoClient {
+export interface ReplyToConversationParams extends AgentReplyToConversationParams {
+  agentId: string
+  conversationId: number
+}
+
+export type ClientNewConversationFN = (params: NewConversationParams) => Promise<AgentResponse>
+export type ClientReplyAsUserFN = (params: ReplyToConversationParams) => Promise<AgentResponse>
+export type ClientReplyToToolCallFN = (params: ReplyToToolCallParams) => Promise<AgentResponse>
+
+export interface PalicoAgentClient {
   newConversation: ClientNewConversationFN
   replyAsUser: ClientReplyAsUserFN
   replyToToolCall: ClientReplyToToolCallFN
+}
+
+export interface AgentMetadata {
+  id: string
+}
+
+export interface AgentsMetadata {
+  getAgentsMetadata: () => Promise<AgentMetadata[]>
+}
+
+export interface IPalicoClient {
+  agents: PalicoAgentClient
+  metadata: AgentsMetadata
 }

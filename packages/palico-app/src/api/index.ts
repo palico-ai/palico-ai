@@ -4,6 +4,7 @@ import * as bodyParser from 'body-parser';
 import * as cors from 'cors';
 import { defaultRequestAuthorizer } from './middlewares/local_authorizer';
 import { createAgentConversationRouter } from './routes/conversation';
+import { createMetadataRoutes } from './routes/metadata';
 
 export interface PalicoAPICreateParams {
   app: PalicoApp;
@@ -28,13 +29,14 @@ export class PalicoAPI {
       res.send('Palico API is running');
     });
     this.buildAgentRoutes();
+    this.expressAPI.use("/metadata", createMetadataRoutes(this.app))
   }
 
   private buildAgentRoutes() {
     this.app.agents.forEach((item) => {
-      const agentRoute = item.route.startsWith('/')
-        ? item.route.slice(1)
-        : item.route;
+      const agentRoute = item.id.startsWith('/')
+        ? item.id.slice(1)
+        : item.id;
 
       this.expressAPI.use(
         `/agent/${agentRoute}`,

@@ -78,6 +78,7 @@ export const LexicalAIPlugin: React.FC<LexicalAIPluginProps> = ({
     >
       <ToastContainer />
       <LexicalAITypeahead
+        agentId='v1'
         requestHandler={requestHandler}
         lexicalNodes={lexicalNodes}
         editorTheme={editorTheme}

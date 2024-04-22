@@ -1,10 +1,13 @@
 'use client';
 
 import { ReplyToToolCallParams, createClient } from '@palico-ai/client-js';
-import { AgentResponse, OpenAIMessage } from '@palico-ai/common';
+import { AgentResponse } from '@palico-ai/common';
 import React, { useMemo, useState } from 'react';
 
-export type ConversationHistoryItem = OpenAIMessage;
+export type ConversationHistoryItem = {
+  role: 'user' | 'assistant' | 'tool';
+  message: string
+};
 
 export type ConversationContextParams = {
   loading: boolean;
@@ -90,13 +93,12 @@ export const ConversationContextProvider: React.FC<
   const agentResponseToHistoryItem = (
     response: AgentResponse
   ): ConversationHistoryItem => {
-    if (response.message.role !== 'assistant') {
-      throw new Error('Agent responses must be from the assistant');
+    if(!response.message) {
+      throw new Error("Message is required -- we only support conversations")
     }
     return {
-      role: response.message.role,
-      content: response.message.content as string | undefined,
-      tool_calls: response.message.toolCalls,
+      role: response.message ? "assistant" : "tool",
+      message: response.message
     };
   };
 
@@ -104,26 +106,30 @@ export const ConversationContextProvider: React.FC<
     message: string,
     context: Record<string, unknown>
   ): Promise<void> => {
+    // TODO: This this as an input
+    const agentId = "v1"
     console.log(apiURL, serviceKey);
     setLoading(true);
     setHistory([
       ...history,
       {
         role: 'user',
-        content: message,
+        message,
       },
     ]);
     try {
       let response: AgentResponse;
       if (conversationId) {
-        response = await client.replyAsUser({
-          message,
+        response = await client.agents.replyAsUser({
+          agentId,
+          userMessage: message,
           context,
           conversationId,
         });
       } else {
-        response = await client.newConversation({
-          message,
+        response = await client.agents.newConversation({
+          agentId,
+          userMessage: message,
           context,
         });
         setConversationId(response.conversationId);
@@ -141,27 +147,29 @@ export const ConversationContextProvider: React.FC<
     outputs: ReplyToToolCallParams['toolOutputs']
   ): Promise<void> => {
     setLoading(true);
-    const toolMessages: ConversationHistoryItem[] = outputs.map((item) => {
-      return {
-        role: 'tool',
-        tool_call_id: item.toolId,
-        name: item.functionName,
-        content: item.output ? JSON.stringify(item.output) : 'action completed',
-      };
-    });
-    setHistory([...history, ...toolMessages]);
+    throw new Error("Not yet implemented")
+    // const toolMessages: ConversationHistoryItem[] = outputs.map((item) => {
+    //   return {
+    //     role: 'tool',
+    //     tool_call_id: item.toolId,
+    //     name: item.functionName,
+    //     content: item.output ? JSON.stringify(item.output) : 'action completed',
+    //   };
+    // });
+    // setHistory([...history, ...toolMessages]);
     try {
-      if (!conversationId) {
-        throw new Error('No conversation ID');
-      }
-      const response = await client.replyToToolCall({
-        conversationId,
-        toolOutputs: outputs,
-      });
-      setHistory((current) => [
-        ...current,
-        agentResponseToHistoryItem(response),
-      ]);
+      // if (!conversationId) {
+      //   throw new Error('No conversation ID');
+      // }
+      // const response = await client.replyToToolCall({
+      //   agentId: "v1",
+      //   conversationId,
+      //   toolOutputs: outputs,
+      // });
+      // setHistory((current) => [
+      //   ...current,
+      //   agentResponseToHistoryItem(response),
+      // ]);
     } finally {
       setLoading(false);
     }

@@ -13,7 +13,7 @@
     "access": "public"
   },
   "dependencies": {
-    "openai": "^4.28.4"
+    "@palico-ai/common": "1.12.11"
   },
   "type": "commonjs",
   "main": "./src/index.js",
