@@ -7,7 +7,7 @@ interface PageContent {
   topbarRightNavs?: React.ReactNode;
 }
 
-const PageContent = ({ children }: PageContent) => {
+const PageContent = ({ children, topbarRightNavs }: PageContent) => {
   return (
     <Box
     sx={{
@@ -17,7 +17,7 @@ const PageContent = ({ children }: PageContent) => {
       height: '100vh',
     }}
   >
-    <Topbar />
+    <Topbar rightNavItems={topbarRightNavs} />
     <Box
       sx={{
         flex: 1,

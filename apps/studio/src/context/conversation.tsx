@@ -2,16 +2,18 @@
 
 import { ReplyToToolCallParams, createClient } from '@palico-ai/client-js';
 import { AgentResponse } from '@palico-ai/common';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 export type ConversationHistoryItem = {
   role: 'user' | 'assistant' | 'tool';
-  message: string
+  message: string;
 };
 
 export type ConversationContextParams = {
   loading: boolean;
   history: ConversationHistoryItem[];
+  agentId?: string;
+  setAgentId: (id: string) => void;
   sendMessage: (
     message: string,
     context: Record<string, unknown>
@@ -28,6 +30,10 @@ export const ConversationContext =
     sendMessage: async () => {
       return;
     },
+    agentId: '',
+    setAgentId: () => {
+      return;
+    },
     replyToToolCall: async () => {
       return;
     },
@@ -37,6 +43,7 @@ export interface ConversationContextProviderProps {
   children: React.ReactNode;
   apiURL: string;
   serviceKey: string;
+  agentId?: string;
 }
 
 // const placeholderHistory: ConversationHistoryItem[] = [
@@ -76,12 +83,18 @@ export interface ConversationContextProviderProps {
 
 export const ConversationContextProvider: React.FC<
   ConversationContextProviderProps
-> = ({ children, apiURL, serviceKey }) => {
+> = ({ children, apiURL, serviceKey, agentId: defaultAgentId }) => {
   const [loading, setLoading] = React.useState(false);
+  const [agentId, setAgentId] = useState<string | undefined>(defaultAgentId);
   const [history, setHistory] = React.useState<ConversationHistoryItem[]>([]);
   // const [history, setHistory] =
   //   React.useState<ConversationHistoryItem[]>(placeholderHistory);
   const [conversationId, setConversationId] = useState<number>();
+
+  useEffect(() => {
+    setHistory([]);
+    setConversationId(undefined);
+  }, [agentId])
 
   const client = useMemo(() => {
     return createClient({
@@ -93,12 +106,12 @@ export const ConversationContextProvider: React.FC<
   const agentResponseToHistoryItem = (
     response: AgentResponse
   ): ConversationHistoryItem => {
-    if(!response.message) {
-      throw new Error("Message is required -- we only support conversations")
+    if (!response.message) {
+      throw new Error('Message is required -- we only support conversations');
     }
     return {
-      role: response.message ? "assistant" : "tool",
-      message: response.message
+      role: response.message ? 'assistant' : 'tool',
+      message: response.message,
     };
   };
 
@@ -107,8 +120,9 @@ export const ConversationContextProvider: React.FC<
     context: Record<string, unknown>
   ): Promise<void> => {
     // TODO: This this as an input
-    const agentId = "v1"
-    console.log(apiURL, serviceKey);
+    if (!agentId) {
+      throw new Error('AgentID not set');
+    }
     setLoading(true);
     setHistory([
       ...history,
@@ -147,7 +161,7 @@ export const ConversationContextProvider: React.FC<
     outputs: ReplyToToolCallParams['toolOutputs']
   ): Promise<void> => {
     setLoading(true);
-    throw new Error("Not yet implemented")
+    throw new Error('Not yet implemented');
     // const toolMessages: ConversationHistoryItem[] = outputs.map((item) => {
     //   return {
     //     role: 'tool',
@@ -177,7 +191,14 @@ export const ConversationContextProvider: React.FC<
 
   return (
     <ConversationContext.Provider
-      value={{ loading, history, sendMessage, replyToToolCall }}
+      value={{
+        loading,
+        history,
+        sendMessage,
+        replyToToolCall,
+        agentId,
+        setAgentId,
+      }}
     >
       {children}
     </ConversationContext.Provider>

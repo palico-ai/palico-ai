@@ -29,7 +29,7 @@ export const createClient = (config: ClientConfig): IPalicoClient => {
   }
 
   const replyAsUser: ClientReplyAsUserFN = async (params) => {
-    const response = await fetch(`${apiURL}/agent/${params.agentId}/${params.conversationId}/reply`, {
+    const response = await fetch(`${apiURL}/agent/${params.agentId}/conversation/${params.conversationId}/reply`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
