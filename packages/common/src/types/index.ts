@@ -6,15 +6,20 @@ export interface AgentMessage {
   toolCalls?: OpenAI.Chat.ChatCompletionMessage['tool_calls']
 }
 
-export interface AgentCallResponse {
-  finishReason: OpenAI.Chat.ChatCompletion.Choice['finish_reason']
-  message: AgentMessage
+export interface AgentResponse<Data = Record<string, unknown>> {
+  conversationId: number;
+  message?: string;
+  // toolCalls?: ToolCallParams[];
+  data?: Data;
 }
 
-export type AgentResponse = AgentCallResponse & {
-  conversationId: number
+export interface AgentNewConversationParams {
+  userMessage: string;
+  context?: Record<string, unknown>;
 }
 
-// TODO: Update tool_calls to be toolCalls
-// TODO: Update this to be more generic
-export type OpenAIMessage = OpenAI.Chat.ChatCompletionMessageParam
+export type AgentReplyToConversationParams = {
+  userMessage?: string;
+  toolOutputs?: Record<string, unknown>;
+  context?: Record<string, unknown>;
+}

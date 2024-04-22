@@ -9,30 +9,20 @@
 //   result: Record<string, unknown>;
 // }
 
-export interface AgentResponse<Data = Record<string, unknown>> {
-  conversationId: number;
-  message?: string;
-  // toolCalls?: ToolCallParams[];
-  data?: Data;
-}
 
-export interface ChatCompletionMessageInput {
-  userMessage: string;
-  context?: Record<string, unknown>;
-}
 
-export type ReplyToConversationParams = {
-  userMessage?: string;
-  toolOutputs?: Record<string, unknown>;
-  context?: Record<string, unknown>;
-}
+import {
+  AgentResponse,
+  AgentNewConversationParams,
+  AgentReplyToConversationParams
+} from "@palico-ai/common"
 
 export interface LLMAgent {
   newConversation: (
-    params: ChatCompletionMessageInput
+    params: AgentNewConversationParams
   ) => Promise<AgentResponse>;
   replyToConversation: (
     conversationId: number,
-    params: ReplyToConversationParams
+    params: AgentReplyToConversationParams
   ) => Promise<AgentResponse>;
 }

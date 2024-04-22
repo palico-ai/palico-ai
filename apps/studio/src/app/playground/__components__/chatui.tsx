@@ -22,13 +22,14 @@ const ChatUI: React.FC = () => {
   };
 
   const requiredToolCalls = useMemo(() => {
-    const lastMessage = history[history.length - 1];
-    if (!lastMessage) {
-      return
-    }
-    return lastMessage.role === 'assistant' && lastMessage.tool_calls;
+    return false
+    // const lastMessage = history[history.length - 1];
+    // if (!lastMessage) {
+    //   return
+    // }
+    // return lastMessage.role === 'assistant' && lastMessage.tool_calls;
 
-  }, [history]);
+  }, []);
 
   return (
     <Stack
@@ -63,7 +64,8 @@ const ChatUI: React.FC = () => {
       <Box>
         {requiredToolCalls ? (
           <ToolExecutionInput
-            toolCalls={requiredToolCalls}
+            // toolCalls={requiredToolCalls}
+            toolCalls={[]}
             handleSubmit={handleSubmitToolOutput}
           />
         ) : (

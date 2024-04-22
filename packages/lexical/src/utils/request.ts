@@ -1,6 +1,7 @@
 import { AIAction, AskAgentRequestParams } from "../types";
 
 export interface DefaultRequestParams {
+  agentId: string
   action: AIAction
   selectedOptionValue?: string
   selectedText?: string
@@ -9,6 +10,7 @@ export interface DefaultRequestParams {
 
 export const getDefaultRequestParams = (params: DefaultRequestParams) : AskAgentRequestParams => {
   return {
+    agentId: params.agentId,
     message: params.freeText || "",
     context: {
       action: params.action.name,
