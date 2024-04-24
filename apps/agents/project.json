@@ -1,0 +1,62 @@
+{
+  "name": "agents",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/agents/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/esbuild:esbuild",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "platform": "node",
+        "outputPath": "dist/apps/agents",
+        "format": ["cjs"],
+        "bundle": false,
+        "main": "apps/agents/src/main.ts",
+        "tsConfig": "apps/agents/tsconfig.app.json",
+        "assets": ["apps/agents/src/assets"],
+        "generatePackageJson": true,
+        "esbuildOptions": {
+          "sourcemap": true,
+          "outExtension": {
+            ".js": ".js"
+          }
+        }
+      },
+      "configurations": {
+        "development": {},
+        "production": {
+          "esbuildOptions": {
+            "sourcemap": false,
+            "outExtension": {
+              ".js": ".js"
+            }
+          }
+        }
+      }
+    },
+    "dev": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "ts-node --project apps/agents/tsconfig.app.json apps/agents/src/main.ts"
+      }
+    },
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "agents:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "agents:build:development"
+        },
+        "production": {
+          "buildTarget": "agents:build:production"
+        }
+      }
+    }
+  },
+  "tags": []
+}
