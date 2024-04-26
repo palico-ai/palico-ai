@@ -7,19 +7,19 @@ export interface AgentMessage {
 }
 
 export interface AgentResponse<Data = Record<string, unknown>> {
-  conversationId: number;
+  conversationId: string;
   message?: string;
   // toolCalls?: ToolCallParams[];
   data?: Data;
 }
 
-export interface AgentNewConversationParams {
+export interface AgentNewConversationRequestBody {
   userMessage: string;
-  context?: Record<string, unknown>;
+  payload?: Record<string, unknown>;
 }
 
-export type AgentReplyToConversationParams = {
+export type AgentReplyToConversationRequestBody = {
   userMessage?: string;
   toolOutputs?: Record<string, unknown>;
-  context?: Record<string, unknown>;
+  payload?: Record<string, unknown>;
 }

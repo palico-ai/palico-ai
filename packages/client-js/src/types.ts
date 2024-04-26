@@ -1,4 +1,4 @@
-import { AgentNewConversationParams, AgentReplyToConversationParams, AgentResponse } from '@palico-ai/common'
+import { AgentNewConversationRequestBody, AgentReplyToConversationRequestBody, AgentResponse } from '@palico-ai/common'
 
 export type ConversationContextParams = Record<string, unknown>
 
@@ -6,12 +6,12 @@ export interface NewConversationParams {
   agentId: string
   userMessage: string
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  context?: ConversationContextParams
+  payload?: ConversationContextParams
 }
 
 export interface ReplyAsUserParams {
   agentId: string
-  conversationId: number
+  conversationId: string
   userMessage: string
   context?: ConversationContextParams
 }
@@ -23,17 +23,17 @@ export interface ToolExecutionMessage {
 }
 
 export interface ReplyToToolCallParams {
-  conversationId: number
+  conversationId: string
   toolOutputs: ToolExecutionMessage[]
 }
 
-export interface NewConversationParams extends AgentNewConversationParams {
+export interface NewConversationParams extends AgentNewConversationRequestBody {
   agentId: string
 }
 
-export interface ReplyToConversationParams extends AgentReplyToConversationParams {
+export interface ReplyToConversationParams extends AgentReplyToConversationRequestBody {
   agentId: string
-  conversationId: number
+  conversationId: string
 }
 
 export type ClientNewConversationFN = (params: NewConversationParams) => Promise<AgentResponse>
