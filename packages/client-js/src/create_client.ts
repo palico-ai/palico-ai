@@ -17,7 +17,7 @@ export const createClient = (config: ClientConfig): IPalicoClient => {
       },
       body: JSON.stringify({
         userMessage: params.userMessage,
-        context: params.context
+        context: params.payload
       })
     })
     const data = await response.json()
@@ -37,7 +37,7 @@ export const createClient = (config: ClientConfig): IPalicoClient => {
       },
       body: JSON.stringify({
         userMessage: params.userMessage,
-        context: params.context
+        context: params.payload
       })
     })
     const data = await response.json()

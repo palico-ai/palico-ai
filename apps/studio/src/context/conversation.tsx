@@ -89,7 +89,7 @@ export const ConversationContextProvider: React.FC<
   const [history, setHistory] = React.useState<ConversationHistoryItem[]>([]);
   // const [history, setHistory] =
   //   React.useState<ConversationHistoryItem[]>(placeholderHistory);
-  const [conversationId, setConversationId] = useState<number>();
+  const [conversationId, setConversationId] = useState<string>();
 
   useEffect(() => {
     setHistory([]);
@@ -137,14 +137,14 @@ export const ConversationContextProvider: React.FC<
         response = await client.agents.replyAsUser({
           agentId,
           userMessage: message,
-          context,
+          payload: context,
           conversationId,
         });
       } else {
         response = await client.agents.newConversation({
           agentId,
           userMessage: message,
-          context,
+          payload: context,
         });
         setConversationId(response.conversationId);
       }

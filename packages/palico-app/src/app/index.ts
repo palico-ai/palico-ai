@@ -1,6 +1,6 @@
 import { LLMAgent } from "../agent";
 
-interface AgentItem {
+export interface AgentItem {
   agent: LLMAgent;
   id: string;
 }

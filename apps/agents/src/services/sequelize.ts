@@ -11,7 +11,7 @@ dotenv.config()
 export const sequelize = new Sequelize(process.env["DB_URL"] ?? 'sqlite::memory:')
 
 export interface ConversationAttributes {
-  id: number
+  id: string
   historyJSON: string
   agentId: string
   createdAt: string
@@ -27,11 +27,10 @@ export const ConversationTable: ModelDefined<
 ConversationAttributes,
 ConversationCreationAttributes
 > = sequelize.define(
-  'Conversation',
+  'conversation_history',
   {
     id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
+      type: DataTypes.STRING,
       primaryKey: true
     },
     historyJSON: {

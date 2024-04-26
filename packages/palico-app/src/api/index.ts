@@ -3,18 +3,19 @@ import * as express from 'express';
 import * as bodyParser from 'body-parser';
 import * as cors from 'cors';
 import { defaultRequestAuthorizer } from './middlewares/local_authorizer';
-import { createAgentConversationRouter } from './routes/conversation';
+import agentRouter from './routes/agent';
 import { createMetadataRoutes } from './routes/metadata';
 
 export interface PalicoAPICreateParams {
   app: PalicoApp;
 }
 
-export class PalicoAPI {
-  private app: PalicoApp;
-  readonly expressAPI: express.Application;
+export class PalicoAPIServer {
+  readonly app: PalicoApp;
+  private readonly expressAPI: express.Application;
+  private static instance: PalicoAPIServer;
 
-  constructor(params: PalicoAPICreateParams) {
+  private constructor(params: PalicoAPICreateParams) {
     this.app = params.app;
     this.expressAPI = express();
     this.expressAPI.use(cors());
@@ -28,20 +29,28 @@ export class PalicoAPI {
     this.expressAPI.route('/').get((_, res) => {
       res.send('Palico API is running');
     });
-    this.buildAgentRoutes();
-    this.expressAPI.use("/metadata", createMetadataRoutes(this.app))
+    this.expressAPI.use('/agent', agentRouter);
+    this.expressAPI.use('/metadata', createMetadataRoutes(this.app));
   }
 
-  private buildAgentRoutes() {
-    this.app.agents.forEach((item) => {
-      const agentRoute = item.id.startsWith('/')
-        ? item.id.slice(1)
-        : item.id;
+  public static create(params: PalicoAPICreateParams): PalicoAPIServer {
+    if (PalicoAPIServer.instance) {
+      throw new Error('PalicoAPIService already created');
+    }
+    PalicoAPIServer.instance = new PalicoAPIServer(params);
+    return PalicoAPIServer.instance;
+  }
 
-      this.expressAPI.use(
-        `/agent/${agentRoute}`,
-        createAgentConversationRouter(item.agent)
-      );
+  public static getInstance(): PalicoAPIServer {
+    if (!PalicoAPIServer.instance) {
+      throw new Error('PalicoAPIService not created');
+    }
+    return PalicoAPIServer.instance;
+  }
+
+  public start(port: number) {
+    this.expressAPI.listen(port, () => {
+      console.log('Server started on port ' + port);
     });
   }
 }

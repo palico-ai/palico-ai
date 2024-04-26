@@ -62,7 +62,7 @@ export const LexicalAITypeahead: React.FC<LexicalAITypeaheadProps> = ({
         payload: {
           agentId: params.agentId,
           userMessage: params.message,
-          context: params.context,
+          payload: params.context,
         },
       });
       const content = response.message;

@@ -13,16 +13,27 @@
 
 import {
   AgentResponse,
-  AgentNewConversationParams,
-  AgentReplyToConversationParams
+  AgentNewConversationRequestBody,
+  AgentReplyToConversationRequestBody
 } from "@palico-ai/common"
+
+export interface RequestContext {
+  requestId: string
+  otel: {
+    traceId: string
+  },
+  featureFlags: Record<string, boolean>
+}
 
 export interface LLMAgent {
   newConversation: (
-    params: AgentNewConversationParams
+    conversationId: string,
+    body: AgentNewConversationRequestBody,
+    requestContext: RequestContext
   ) => Promise<AgentResponse>;
   replyToConversation: (
-    conversationId: number,
-    params: AgentReplyToConversationParams
+    conversationId: string,
+    body: AgentReplyToConversationRequestBody,
+    requestContext: RequestContext
   ) => Promise<AgentResponse>;
 }
