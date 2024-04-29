@@ -1,33 +1,35 @@
 import { Box } from '@mui/material';
-import React from 'react'
+import React from 'react';
 import Topbar from './topbar';
 
 interface PageContent {
   children: React.ReactNode;
   topbarRightNavs?: React.ReactNode;
+  removeTopbar?: boolean;
 }
 
-const PageContent = ({ children, topbarRightNavs }: PageContent) => {
+const PageContent = ({ children, topbarRightNavs, removeTopbar }: PageContent) => {
   return (
     <Box
-    sx={{
-      flexGrow: 1,
-      display: 'flex',
-      flexDirection: 'column',
-      height: '100vh',
-    }}
-  >
-    <Topbar rightNavItems={topbarRightNavs} />
-    <Box
       sx={{
-        flex: 1,
-        overflow: 'auto',
+        flexGrow: 1,
+        display: 'flex',
+        flexDirection: 'column',
+        height: '100vh',
       }}
     >
-      {children}
+      {!removeTopbar && <Topbar rightNavItems={topbarRightNavs} />}
+      <Box
+        sx={{
+          flex: 1,
+          overflow: 'auto',
+          width: '100%',
+        }}
+      >
+        {children}
+      </Box>
     </Box>
-  </Box>
-  )
-}
+  );
+};
 
-export default PageContent
+export default PageContent;

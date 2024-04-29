@@ -17,9 +17,17 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <ThemeProvider>
-          <Box sx={{ display: 'flex', backgroundColor: 'background.default' }}>
+          <Box
+            sx={{
+              display: 'flex',
+              backgroundColor: 'background.default',
+            }}
+          >
             <Sidebar />
-            {children}
+            <Box sx={{
+              width: '100%',
+              overflow: 'auto',
+            }}>{children}</Box>
           </Box>
         </ThemeProvider>
       </body>

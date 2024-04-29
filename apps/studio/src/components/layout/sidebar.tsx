@@ -1,12 +1,40 @@
 'use client';
 
-import { Box, Drawer, Toolbar } from '@mui/material';
+import { Box, Divider, Drawer, Typography } from '@mui/material';
 import { Button } from '@palico-ai/components';
 import { usePathname } from 'next/navigation';
 import React, { useMemo } from 'react';
 import { Link } from '@palico-ai/components';
 
 const drawerWidth = 240;
+
+interface SidebarNavItemParams {
+  label: string;
+  path: string;
+}
+
+const SIDEBAR_ITEMS: SidebarNavItemParams[] = [
+  {
+    label: 'Chat',
+    path: '/playground',
+  },
+  {
+    label: 'Comparator',
+    path: '/compare',
+  },
+  {
+    label: "Tracing",
+    path: "/tracing",
+  },
+  {
+    label: "Evaluations",
+    path: "/evaluation",
+  },
+  {
+    label: "Settings",
+    path: "/settings",
+  }
+];
 
 interface SidebarItemProps {
   label: string;
@@ -31,6 +59,9 @@ const SidebarItem: React.FC<SidebarItemProps> = ({ label: text, path }) => {
     >
       <Button
         fullWidth
+        sx={{
+          mb: 1,
+        }}
         variant={isActive ? 'contained' : 'text'}
         color={isActive ? 'primary' : 'inherit'}
       >
@@ -44,16 +75,29 @@ const Sidebar: React.FC = () => {
   return (
     <Drawer
       variant="permanent"
-      anchor='left'
+      anchor="left"
       sx={{
         width: drawerWidth,
         flexShrink: 0,
         [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: 'border-box' },
       }}
     >
-      <Toolbar />
-      <Box sx={{ overflow: 'auto', mt: 1 }}>
-        <SidebarItem label="Playground" path="/playground" />
+      <Typography
+        variant="h5"
+        textAlign={'center'}
+        sx={{
+          my: 3,
+        }}
+      >
+        Palico Studio
+      </Typography>
+      <Divider sx={{
+        mb: 2,
+      }} />
+      <Box sx={{ overflow: 'auto' }}>
+        {SIDEBAR_ITEMS.map((item, key) => (
+          <SidebarItem key={key} label={item.label} path={item.path} />
+        ))}
       </Box>
     </Drawer>
   );

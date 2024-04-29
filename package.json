@@ -21,6 +21,8 @@
     "@opentelemetry/sdk-metrics": "^1.24.0",
     "@opentelemetry/sdk-node": "^0.51.0",
     "@opentelemetry/sdk-trace-node": "^1.24.0",
+    "ag-grid-community": "^31.2.1",
+    "ag-grid-react": "^31.2.1",
     "archiver": "^6.0.1",
     "aws-serverless-express": "^3.4.0",
     "axios": "^1.6.3",
