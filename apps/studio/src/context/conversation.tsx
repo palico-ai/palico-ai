@@ -1,8 +1,9 @@
 'use client';
 
-import { ReplyToToolCallParams, createClient } from '@palico-ai/client-js';
+import { ReplyToToolCallParams } from '@palico-ai/client-js';
 import { AgentResponse } from '@palico-ai/common';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { usePalicoClient } from '../hooks/use_palico_client';
 
 export type ConversationHistoryItem = {
   role: 'user' | 'assistant' | 'tool';
@@ -41,49 +42,12 @@ export const ConversationContext =
 
 export interface ConversationContextProviderProps {
   children: React.ReactNode;
-  apiURL: string;
-  serviceKey: string;
   agentId?: string;
 }
 
-// const placeholderHistory: ConversationHistoryItem[] = [
-//   {
-//     role: 'user',
-//     content: 'Whats the weather in NYC?',
-//   },
-//   {
-//     role: 'assistant',
-//     content: null,
-//     tool_calls: [
-//       {
-//         id: 'call_SsJDEHzPOB95Gw4Y1pWHE6Pc',
-//         type: 'function',
-//         function: {
-//           name: 'get_weather_for_city',
-//           arguments: '{"city":"NYC"}',
-//         },
-//       },
-//     ],
-//   },
-//   {
-//     role: 'tool',
-//     tool_call_id: 'call_SsJDEHzPOB95Gw4Y1pWHE6Pc',
-//     content: '"{\\n    \\"weather\\": \\"60\\"\\n}"',
-//   },
-//   {
-//     role: 'tool',
-//     tool_call_id: 'call_SsJDEHzPOB95Gw4Y1pWHE6Pc',
-//     content: '"{\\n    \\"weather\\": \\"60\\"\\n}"',
-//   },
-//   {
-//     role: 'assistant',
-//     content: 'The weather in NYC is 60°F.',
-//   },
-// ];
-
 export const ConversationContextProvider: React.FC<
   ConversationContextProviderProps
-> = ({ children, apiURL, serviceKey, agentId: defaultAgentId }) => {
+> = ({ children, agentId: defaultAgentId }) => {
   const [loading, setLoading] = React.useState(false);
   const [agentId, setAgentId] = useState<string | undefined>(defaultAgentId);
   const [history, setHistory] = React.useState<ConversationHistoryItem[]>([]);
@@ -94,14 +58,9 @@ export const ConversationContextProvider: React.FC<
   useEffect(() => {
     setHistory([]);
     setConversationId(undefined);
-  }, [agentId])
+  }, [agentId]);
 
-  const client = useMemo(() => {
-    return createClient({
-      apiURL,
-      serviceKey,
-    });
-  }, [apiURL, serviceKey]);
+  const client = usePalicoClient();
 
   const agentResponseToHistoryItem = (
     response: AgentResponse

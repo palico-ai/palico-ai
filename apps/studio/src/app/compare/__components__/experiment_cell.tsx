@@ -11,14 +11,11 @@ import {
 import { MenuButton } from '@palico-ai/components';
 import OptionMenuIcon from '@mui/icons-material/MoreVert';
 import RunIcon from '@mui/icons-material/PlayCircleFilledWhite';
+import { useExperiment } from './hooks';
 
-export type ExperimentParams = {
-  label: string;
-  agentId: string;
-};
-
-export interface ExperimentConfigProps extends ExperimentParams {
+export interface ExperimentCellProps {
   agentIdList: string[];
+  experimentId: string;
 }
 
 const HEIGHT = '175px';
@@ -28,12 +25,20 @@ interface CellHeaderProps {
   agentIdList: string[];
   label: string;
   agentId: string;
+  onClickRun: () => void;
+  onClickDelete: () => void;
+  onChangeLabel: (label: string) => void;
+  onChangeAgentId: (agentId: string) => void;
 }
 
 const CellHeader: React.FC<CellHeaderProps> = ({
   agentIdList,
   agentId,
   label,
+  onChangeLabel,
+  onClickRun,
+  onClickDelete,
+  onChangeAgentId,
 }) => {
   return (
     <Box
@@ -46,14 +51,15 @@ const CellHeader: React.FC<CellHeaderProps> = ({
     >
       <TextField
         sx={{
-          minWidth: "100px",
+          minWidth: '100px',
           marginLeft: 0,
           marginRight: 1,
         }}
         select
         size="small"
         variant="outlined"
-        defaultValue={agentId}
+        value={agentId}
+        onChange={(e) => onChangeAgentId(e.target.value)}
       >
         {agentIdList.map((agentId, key) => (
           <MenuItem key={key} value={agentId}>
@@ -64,12 +70,13 @@ const CellHeader: React.FC<CellHeaderProps> = ({
       <TextField
         size="small"
         defaultValue={label}
+        onChange={(e) => onChangeLabel(e.target.value)}
         placeholder="Feature Name"
         variant="standard"
         fullWidth
         InputProps={{
           endAdornment: (
-            <IconButton size="small" color="success">
+            <IconButton size="small" color="success" onClick={onClickRun}>
               <RunIcon />
             </IconButton>
           ),
@@ -80,9 +87,9 @@ const CellHeader: React.FC<CellHeaderProps> = ({
           {
             label: 'Delete',
             onClick: () => {
-              console.log('Selected Delete');
+              onClickDelete();
             },
-          }
+          },
         ]}
         icon={<OptionMenuIcon />}
       />
@@ -90,11 +97,23 @@ const CellHeader: React.FC<CellHeaderProps> = ({
   );
 };
 
-const ExperimentCell: React.FC<ExperimentConfigProps> = ({
+const ExperimentCell: React.FC<ExperimentCellProps> = ({
   agentIdList,
-  label,
-  agentId,
+  experimentId,
 }) => {
+  const {
+    experiment,
+    runTests,
+    handleChangeExperimentLabel,
+    handleChangeExperimentAgent,
+    handleRemoveExperiment,
+    handleChangeExperimentFeatureFlag,
+  } = useExperiment(experimentId);
+
+  if (!experiment) {
+    throw new Error('Experiment not found');
+  }
+
   return (
     <th
       scope="col"
@@ -104,7 +123,15 @@ const ExperimentCell: React.FC<ExperimentConfigProps> = ({
       }}
     >
       <Paper sx={{ p: 1 }}>
-        <CellHeader label={label} agentIdList={agentIdList} agentId={agentId} />
+        <CellHeader
+          onChangeLabel={handleChangeExperimentLabel}
+          onChangeAgentId={handleChangeExperimentAgent}
+          label={experiment.label}
+          agentIdList={agentIdList}
+          agentId={experiment.agentId}
+          onClickDelete={handleRemoveExperiment}
+          onClickRun={runTests}
+        />
         <Divider
           sx={{
             mb: 1,
@@ -119,12 +146,13 @@ const ExperimentCell: React.FC<ExperimentConfigProps> = ({
           <Editor
             theme="vs-dark"
             height={HEIGHT}
+            value={experiment.featureFlagJSON}
+            onChange={(value) => handleChangeExperimentFeatureFlag(value)}
             defaultLanguage="json"
             options={{
               ariaLabel: 'User Message',
               scrollBeyondLastColumn: 0,
             }}
-            defaultValue={`{\n  "key": "value"\n}`}
           />
         </Box>
       </Paper>

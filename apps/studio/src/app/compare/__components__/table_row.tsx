@@ -1,21 +1,22 @@
 import React from 'react';
 import TestCaseCell from './test_case_cell';
 import ResultCell from './result_cell';
+import { LabTestCaseModel } from './data.context';
 
 interface TestCaseAndResultRow {
-  featureCount: number;
-  testCase: string;
+  experimentIds: string[];
+  testCase: LabTestCaseModel;
 }
 
 const TestCaseAndResultRow: React.FC<TestCaseAndResultRow> = ({
-  featureCount: agentCount,
+  experimentIds,
   testCase,
 }) => {
   return (
     <tr style={{height: "1px"}}>
-      <TestCaseCell label={testCase} />
-      {Array.from({ length: agentCount }).map((_, index) => (
-        <ResultCell key={index} result='Pass' />
+      <TestCaseCell testCaseId={testCase.id} />
+      {experimentIds.map((experimentId) => (
+        <ResultCell key={experimentId} experimentId={experimentId} testId={testCase.id} />
       ))}
     </tr>
   );

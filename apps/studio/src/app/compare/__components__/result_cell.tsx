@@ -1,12 +1,15 @@
-import { Box, IconButton, Paper, Typography } from '@mui/material';
+import { Box, IconButton, Paper, Skeleton, Typography } from '@mui/material';
 import React from 'react';
 import RunIcon from '@mui/icons-material/PlayCircleFilledWhite';
+import { useExpTestResult } from './hooks';
 
 interface ResultCellParams {
-  result: string;
+  experimentId: string;
+  testId: string;
 }
 
-const ResultCell: React.FC<ResultCellParams> = ({ result }) => {
+const ResultCell: React.FC<ResultCellParams> = ({ experimentId, testId }) => {
+  const { result, runTest } = useExpTestResult(experimentId, testId);
   return (
     <td
       style={{
@@ -32,7 +35,22 @@ const ResultCell: React.FC<ResultCellParams> = ({ result }) => {
             flex: 1,
           }}
         >
-          <Typography variant="body2">{result}</Typography>
+          {result?.status === 'RUNNING' && (
+            <Box
+              sx={{
+                width: '100%',
+              }}
+            >
+              <Skeleton />
+              <Skeleton animation="wave" />
+              <Skeleton animation={false} />
+            </Box>
+          )}
+          {result?.message && (
+            <Typography variant="body2">
+              {result?.message ?? 'Unknown'}
+            </Typography>
+          )}
         </Box>
         <Box
           sx={{
@@ -40,7 +58,12 @@ const ResultCell: React.FC<ResultCellParams> = ({ result }) => {
             justifyContent: 'flex-end',
           }}
         >
-          <IconButton size="small" color="secondary">
+          <IconButton
+            size="small"
+            color="secondary"
+            onClick={runTest}
+            disabled={result?.status === 'RUNNING'}
+          >
             <RunIcon />
           </IconButton>
         </Box>

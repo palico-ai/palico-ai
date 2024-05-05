@@ -53,6 +53,7 @@
     "react-click-away-listener": "^2.2.3",
     "react-dom": "18.2.0",
     "react-hotkeys-hook": "^4.5.0",
+    "react-pro-sidebar": "^1.1.0",
     "react-router-dom": "6.11.2",
     "react-syntax-highlighter": "^15.5.0",
     "react-toastify": "^10.0.4",

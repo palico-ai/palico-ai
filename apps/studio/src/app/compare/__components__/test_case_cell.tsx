@@ -4,15 +4,27 @@ import React from 'react';
 import { MenuButton, TabPanel, TabView } from '@palico-ai/components';
 import OptionMenuIcon from '@mui/icons-material/MoreVert';
 import RunIcon from '@mui/icons-material/PlayCircleFilledWhite';
+import { useTestCase } from './hooks';
 
 interface TestCaseCellParams {
-  label: string;
+  testCaseId: string;
 }
 
-const WIDTH = '400px';
+const WIDTH = '375px';
 const HEIGHT = '175px';
 
-const TestCaseCell: React.FC<TestCaseCellParams> = ({ label }) => {
+const TestCaseCell: React.FC<TestCaseCellParams> = ({ testCaseId }) => {
+  const {
+    testCase,
+    handleChangeTestCaseContext,
+    handleChangeTestCaseLabel,
+    handleChangeTestCaseUserMessage,
+    handleRemoveTestCase,
+    runTests,
+  } = useTestCase(testCaseId);
+  if (!testCase) {
+    throw new Error('Test Case not found');
+  }
   return (
     <th
       scope="row"
@@ -37,10 +49,11 @@ const TestCaseCell: React.FC<TestCaseCellParams> = ({ label }) => {
             fullWidth
             variant="outlined"
             size="small"
-            defaultValue={label}
+            value={testCase.label}
+            onChange={(e) => handleChangeTestCaseLabel(e.target.value)}
             InputProps={{
               endAdornment: (
-                <IconButton size="small" color="success">
+                <IconButton size="small" color="success" onClick={runTests}>
                   <RunIcon />
                 </IconButton>
               ),
@@ -53,7 +66,7 @@ const TestCaseCell: React.FC<TestCaseCellParams> = ({ label }) => {
               {
                 label: 'Delete',
                 onClick: () => {
-                  console.log('Delete');
+                  handleRemoveTestCase();
                 },
               },
             ]}
@@ -78,6 +91,8 @@ const TestCaseCell: React.FC<TestCaseCellParams> = ({ label }) => {
                 maxHeight: HEIGHT,
               }}
               fullWidth
+              value={testCase.userMessage}
+              onChange={(e) => handleChangeTestCaseUserMessage(e.target.value)}
               multiline
               variant="outlined"
               minRows={6}
@@ -89,11 +104,12 @@ const TestCaseCell: React.FC<TestCaseCellParams> = ({ label }) => {
               theme="vs-dark"
               height={HEIGHT}
               defaultLanguage="json"
+              value={testCase.contextJSON}
+              onChange={(value) => handleChangeTestCaseContext(value)}
               options={{
                 ariaLabel: 'User Message',
                 scrollBeyondLastColumn: 0,
               }}
-              defaultValue={`{\n  "key": "value"\n}`}
             />
           </TabPanel>
         </TabView>
