@@ -37,6 +37,16 @@
         }
       }
     },
+    "services": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "docker-compose -f apps/agents/docker-compose.yml up"
+          }
+        ]
+      }
+    },
     "db:sync": {
       "executor": "nx:run-commands",
       "options": {

@@ -36,6 +36,9 @@ jobs:
       - name: Build packages
         run: npx nx run-many -t build
         shell: bash
+        env:
+          PALICO_AGENT_API_URL: 'http://localhost:8000'
+          PALICO_SERVICE_KEY: 'placeholder'
 
       - name: Publish packages
         run: npx nx release publish

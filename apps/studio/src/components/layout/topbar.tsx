@@ -1,7 +1,6 @@
 'use client';
 
-import { AppBar, Box, Toolbar, Typography } from '@mui/material';
-import { Link } from '@palico-ai/components';
+import { AppBar, Box, Toolbar } from '@mui/material';
 import React from 'react';
 
 interface TopbarProps {
@@ -17,11 +16,6 @@ const Topbar: React.FC<TopbarProps> = ({ rightNavItems }) => {
       }}
     >
       <Toolbar>
-        <Link href="/">
-          <Typography variant="h6" noWrap component="div">
-            Palico Studio
-          </Typography>
-        </Link>
         <Box sx={{ flexGrow: 1 }} />
         <Box>{rightNavItems}</Box>
       </Toolbar>
