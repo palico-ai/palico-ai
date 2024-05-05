@@ -34,3 +34,6 @@ jobs:
       - run: npx nx affected -t lint
       - run: npx nx affected -t test --passWithNoTests
       - run: npx nx affected -t build
+        env:
+          PALICO_AGENT_API_URL: 'http://localhost:8000'
+          PALICO_SERVICE_KEY: 'placeholder'

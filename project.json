@@ -13,6 +13,17 @@
     "docker-build": {
       "dependsOn": ["build"],
       "command": "docker build -f Dockerfile . -t palico-ai"
+    },
+    "sanity-check": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "npx nx affected -t lint",
+          "npx nx affected -t test  --passWithNoTests",
+          "npx nx affected -t build"
+        ],
+        "parallel": true
+      }
     }
   }
 }
