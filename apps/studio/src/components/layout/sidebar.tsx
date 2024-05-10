@@ -40,8 +40,8 @@ const SIDEBAR_ITEMS: SidebarNavItemParams[] = [
     icon: <ChatBubbleIcon />,
   },
   {
-    label: 'Quick Lab',
-    path: '/compare',
+    label: 'Labs',
+    path: '/labs',
     icon: <ExperimentIcon />,
   },
   {

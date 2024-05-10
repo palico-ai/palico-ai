@@ -1,8 +1,8 @@
 import { handleProxyRequest } from '@palico-ai/client-js';
-import { PalicoService } from '../../../services/palico';
+import { getPalicoClient } from '../../../services/palico';
 
 export async function POST(request: Request) {
-  const client = PalicoService.getClient();
+  const client = await getPalicoClient();
   const data = await request.json();
   const response = await handleProxyRequest(data, client);
   return Response.json(response);

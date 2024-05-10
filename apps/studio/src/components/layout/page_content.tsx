@@ -1,14 +1,21 @@
 import { Box } from '@mui/material';
 import React from 'react';
 import Topbar from './topbar';
+import { Typography } from '@palico-ai/components';
 
 interface PageContent {
   children: React.ReactNode;
   topbarRightNavs?: React.ReactNode;
+  title?: string;
   removeTopbar?: boolean;
 }
 
-const PageContent = ({ children, topbarRightNavs, removeTopbar }: PageContent) => {
+const PageContent = ({
+  children,
+  title,
+  topbarRightNavs,
+  removeTopbar,
+}: PageContent) => {
   return (
     <Box
       sx={{
@@ -18,7 +25,18 @@ const PageContent = ({ children, topbarRightNavs, removeTopbar }: PageContent) =
         height: '100vh',
       }}
     >
-      {!removeTopbar && <Topbar rightNavItems={topbarRightNavs} />}
+      {!removeTopbar && (
+        <Topbar
+          rightNavItems={topbarRightNavs}
+          leftNavItems={
+            title && (
+              <Box>
+                <Typography variant="h6">{title}</Typography>
+              </Box>
+            )
+          }
+        />
+      )}
       <Box
         sx={{
           flex: 1,

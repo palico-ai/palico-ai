@@ -1,13 +1,23 @@
 'use client';
 
 import { AppBar, Box, Toolbar } from '@mui/material';
+import { Typography } from '@palico-ai/components';
 import React from 'react';
 
 interface TopbarProps {
+  leftNavItems?: React.ReactNode;
   rightNavItems?: React.ReactNode;
 }
 
-const Topbar: React.FC<TopbarProps> = ({ rightNavItems }) => {
+export interface TopbarPageTitleProps {
+  title: string;
+}
+
+export const TopbarPageTitle: React.FC<TopbarPageTitleProps> = ({ title }) => {
+  return <Typography variant="h6">{title}</Typography>;
+};
+
+const Topbar: React.FC<TopbarProps> = ({ leftNavItems, rightNavItems }) => {
   return (
     <AppBar
       position="static"
@@ -16,8 +26,18 @@ const Topbar: React.FC<TopbarProps> = ({ rightNavItems }) => {
       }}
     >
       <Toolbar>
+        <Box>{leftNavItems}</Box>
         <Box sx={{ flexGrow: 1 }} />
-        <Box>{rightNavItems}</Box>
+        <Box
+          sx={{
+            display: 'flex',
+            gap: 2,
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}
+        >
+          {rightNavItems}
+        </Box>
       </Toolbar>
     </AppBar>
   );

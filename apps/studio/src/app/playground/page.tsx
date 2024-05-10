@@ -3,10 +3,10 @@ import ChatUI from './__components__/chatui';
 import { ConversationContextProvider } from '../../context/conversation';
 import PageContent from '../../components/layout/page_content';
 import TopbarActions from './__components__/topbar_actions';
-import { PalicoService } from '../../services/palico';
+import { getPalicoClient } from '../../services/palico';
 
 const PlaygroundPage: React.FC = async () => {
-  const client = PalicoService.getClient();
+  const client = await getPalicoClient();
 
   const agentMetadata = await client.metadata.getAgentsMetadata();
   console.log(agentMetadata);

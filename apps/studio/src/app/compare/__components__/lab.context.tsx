@@ -1,39 +1,20 @@
 'use client';
 
+import { LabExperimentTestResult, LabExperimentModel, LabTestCaseModel } from '@palico-ai/common';
 import { usePalicoClient } from '../../../hooks/use_palico_client';
 import React from 'react';
 import { uuid } from 'uuidv4';
-export interface LabExperimentModel {
-  id: string;
-  agentId: string;
-  label: string;
-  featureFlagJSON?: string;
-}
-
-export interface LabTestCaseModel {
-  id: string;
-  label: string;
-  userMessage: string;
-  contextJSON?: string;
-}
-
-export type ExperimentTestResult = {
-  status: 'RUNNING' | 'SUCCESS' | 'FAILURE';
-  message?: string;
-};
 
 export type AddExperimentParams = Omit<LabExperimentModel, 'id'>;
 export type AddTestCaseParams = Omit<LabTestCaseModel, 'id'>;
 
-export interface ExperimentDataContextParams {
-  viewId: string;
-  viewLabel: string;
+export interface LabContextParams {
   agentIdList: string[];
   experiments: LabExperimentModel[];
   setExperiments: React.Dispatch<React.SetStateAction<LabExperimentModel[]>>;
   testCases: LabTestCaseModel[];
   setTestCases: React.Dispatch<React.SetStateAction<LabTestCaseModel[]>>;
-  experimentTestResults: Record<string, Record<string, ExperimentTestResult>>; // experimentId -> testCaseId -> result
+  experimentTestResults: Record<string, Record<string, LabExperimentTestResult>>; // experimentId -> testCaseId -> result
   addExperiment: (experiment: AddExperimentParams) => void;
   addTestCase: (testCase: AddTestCaseParams) => void;
   runExperimentTest: (experimentId: string, testCaseId: string) => void;
@@ -46,10 +27,8 @@ const NotImplementedFN = () => {
   throw new Error('Not implemented');
 };
 
-export const ExperimentDataContext =
-  React.createContext<ExperimentDataContextParams>({
-    viewId: '',
-    viewLabel: '',
+export const LabContext =
+  React.createContext<LabContextParams>({
     agentIdList: [],
     experiments: [],
     testCases: [],
@@ -64,26 +43,22 @@ export const ExperimentDataContext =
     runExperiment: NotImplementedFN,
   });
 
-export type ExperimentDataContextProviderProps = {
-  viewId: string;
-  viewLabel: string;
+export type LabContextProviderProps = {
   agentIdList: string[];
   initialExperiments: LabExperimentModel[];
   initialTestCases: LabTestCaseModel[];
   initialExperimentTestResults: Record<
     string,
-    Record<string, ExperimentTestResult>
+    Record<string, LabExperimentTestResult>
   >;
   children: React.ReactNode;
 };
 
-export const ExperimentDataContextProvider: React.FC<
-  ExperimentDataContextProviderProps
+export const LabContextProvider: React.FC<
+  LabContextProviderProps
 > = ({
   children,
-  viewId,
   agentIdList,
-  viewLabel,
   initialExperiments,
   initialTestCases,
   initialExperimentTestResults,
@@ -93,7 +68,7 @@ export const ExperimentDataContextProvider: React.FC<
   const [testCases, setTestCases] =
     React.useState<LabTestCaseModel[]>(initialTestCases);
   const [experimentTestResults, setExperimentTestResults] = React.useState<
-    Record<string, Record<string, ExperimentTestResult>>
+    Record<string, Record<string, LabExperimentTestResult>>
   >(initialExperimentTestResults);
   const client = usePalicoClient();
 
@@ -195,10 +170,8 @@ export const ExperimentDataContextProvider: React.FC<
   };
 
   return (
-    <ExperimentDataContext.Provider
+    <LabContext.Provider
       value={{
-        viewId,
-        viewLabel,
         agentIdList,
         experiments,
         setExperiments,
@@ -214,6 +187,6 @@ export const ExperimentDataContextProvider: React.FC<
       }}
     >
       {children}
-    </ExperimentDataContext.Provider>
+    </LabContext.Provider>
   );
 };
