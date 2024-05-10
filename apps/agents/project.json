@@ -7,7 +7,12 @@
     "build": {
       "executor": "@nx/esbuild:esbuild",
       "outputs": ["{options.outputPath}"],
-      "dependsOn": ["^build"],
+      "dependsOn": [
+        {
+          "dependencies": true,
+          "target": "build"
+        }
+      ],
       "defaultConfiguration": "production",
       "options": {
         "platform": "node",

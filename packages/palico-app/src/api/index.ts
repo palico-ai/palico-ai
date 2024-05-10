@@ -4,7 +4,9 @@ import * as bodyParser from 'body-parser';
 import * as cors from 'cors';
 import { defaultRequestAuthorizer } from './middlewares/local_authorizer';
 import agentRouter from './routes/agent';
+import studioRouter from './routes/studio';
 import { createMetadataRoutes } from './routes/metadata';
+import { defaultErrorMiddleware } from './middlewares/default_error_middeware';
 
 export interface PalicoAPICreateParams {
   app: PalicoApp;
@@ -30,7 +32,9 @@ export class PalicoAPIServer {
       res.send('Palico API is running');
     });
     this.expressAPI.use('/agent', agentRouter);
+    this.expressAPI.use('/studio', studioRouter);
     this.expressAPI.use('/metadata', createMetadataRoutes(this.app));
+    this.expressAPI.use(defaultErrorMiddleware);
   }
 
   public static create(params: PalicoAPICreateParams): PalicoAPIServer {

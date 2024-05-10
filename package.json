@@ -8,6 +8,7 @@
     "@docusaurus/core": "3.1.1",
     "@docusaurus/preset-classic": "3.1.1",
     "@docusaurus/theme-mermaid": "^3.1.1",
+    "@dropzone-ui/react": "^7.0.4",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.0",
     "@lexical/react": "^0.13.1",

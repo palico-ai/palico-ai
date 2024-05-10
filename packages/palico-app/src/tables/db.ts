@@ -51,6 +51,49 @@ export const AgentRequestTable: ModelDefined<
   }
 );
 
+export interface StudioLabAttriutes {
+  id: string;
+  name: string;
+  experimentListJSON: string;
+  testCasesJSON: string;
+  experimentTestResultJSON: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type StudioLabCreationAttributes = Optional<
+  StudioLabAttriutes,
+  'id' | 'createdAt' | 'updatedAt'
+>;
+
+export const StuidoLabTable: ModelDefined<
+  StudioLabAttriutes,
+  StudioLabCreationAttributes
+> = sequelize.define(
+  'studio_lab',
+  {
+    id: {
+      type: DataTypes.STRING,
+      primaryKey: true,
+    },
+    name: {
+      type: DataTypes.STRING,
+    },
+    experimentListJSON: {
+      type: DataTypes.JSONB,
+    },
+    testCasesJSON: {
+      type: DataTypes.JSONB,
+    },
+    experimentTestResultJSON: {
+      type: DataTypes.TEXT,
+    },
+  },
+  {
+    timestamps: true,
+  }
+);
+
 sequelize.sync({
   force: false
 })

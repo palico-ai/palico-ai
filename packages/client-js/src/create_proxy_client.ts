@@ -11,6 +11,7 @@ export const createProxyClient = (
   const proxyRequest = async (request: ProxyRequest) => {
     const response = await fetch(`${config.apiURL}`, {
       method: 'POST',
+      cache: 'no-cache',
       headers: {
         'Content-Type': 'application/json',
         ...config.headers,
