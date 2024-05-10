@@ -1,6 +1,11 @@
 'use client';
 
-import { LabExperimentTestResult, LabExperimentModel, LabTestCaseModel } from '@palico-ai/common';
+import {
+  LabExperimentTestResult,
+  LabExperimentModel,
+  LabTestCaseModel,
+  LabMetricResult,
+} from '@palico-ai/common';
 import { usePalicoClient } from '../../../../hooks/use_palico_client';
 import React from 'react';
 import { uuid } from 'uuidv4';
@@ -14,7 +19,10 @@ export interface LabContextParams {
   setExperiments: React.Dispatch<React.SetStateAction<LabExperimentModel[]>>;
   testCases: LabTestCaseModel[];
   setTestCases: React.Dispatch<React.SetStateAction<LabTestCaseModel[]>>;
-  experimentTestResults: Record<string, Record<string, LabExperimentTestResult>>; // experimentId -> testCaseId -> result
+  experimentTestResults: Record<
+    string,
+    Record<string, LabExperimentTestResult>
+  >; // experimentId -> testCaseId -> result
   addExperiment: (experiment: AddExperimentParams) => void;
   addTestCase: (testCase: AddTestCaseParams) => void;
   runExperimentTest: (experimentId: string, testCaseId: string) => void;
@@ -27,21 +35,20 @@ const NotImplementedFN = () => {
   throw new Error('Not implemented');
 };
 
-export const LabContext =
-  React.createContext<LabContextParams>({
-    agentIdList: [],
-    experiments: [],
-    testCases: [],
-    experimentTestResults: {},
-    setExperiments: NotImplementedFN,
-    setTestCases: NotImplementedFN,
-    addExperiment: NotImplementedFN,
-    addTestCase: NotImplementedFN,
-    runExperimentTest: NotImplementedFN,
-    runAllExperiments: NotImplementedFN,
-    runTestCase: NotImplementedFN,
-    runExperiment: NotImplementedFN,
-  });
+export const LabContext = React.createContext<LabContextParams>({
+  agentIdList: [],
+  experiments: [],
+  testCases: [],
+  experimentTestResults: {},
+  setExperiments: NotImplementedFN,
+  setTestCases: NotImplementedFN,
+  addExperiment: NotImplementedFN,
+  addTestCase: NotImplementedFN,
+  runExperimentTest: NotImplementedFN,
+  runAllExperiments: NotImplementedFN,
+  runTestCase: NotImplementedFN,
+  runExperiment: NotImplementedFN,
+});
 
 export type LabContextProviderProps = {
   agentIdList: string[];
@@ -54,9 +61,7 @@ export type LabContextProviderProps = {
   children: React.ReactNode;
 };
 
-export const LabContextProvider: React.FC<
-  LabContextProviderProps
-> = ({
+export const LabContextProvider: React.FC<LabContextProviderProps> = ({
   children,
   agentIdList,
   initialExperiments,
@@ -100,6 +105,12 @@ export const LabContextProvider: React.FC<
         userMessage: testCase.userMessage,
         payload: JSON.parse(testCase.contextJSON || '{}'),
       });
+      // TODO: Use actual metrics
+      const metrics: LabMetricResult[] =
+        testCase.metrics?.map((metric) => ({
+          name: metric,
+          value: `${parseInt(`${Math.random() * 100}`)}%`,
+        })) ?? [];
       setExperimentTestResults((currentResult) => ({
         ...currentResult,
         [experimentId]: {
@@ -107,6 +118,7 @@ export const LabContextProvider: React.FC<
           [testCaseId]: {
             status: 'SUCCESS',
             message: response.message ?? 'No message',
+            metricResults: metrics,
           },
         },
       }));
