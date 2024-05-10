@@ -9,12 +9,19 @@ export interface LabTestCaseModel {
   id: string;
   label: string;
   userMessage: string;
+  metrics?: string[];
   contextJSON?: string;
+}
+
+export interface LabMetricResult {
+  name: string;
+  value: string;
 }
 
 export type LabExperimentTestResult = {
   status: 'RUNNING' | 'SUCCESS' | 'FAILURE';
   message?: string;
+  metricResults?: LabMetricResult[];
 };
 
 export interface StudioLabModel {

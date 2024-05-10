@@ -1,41 +1,55 @@
-import { Editor } from '@monaco-editor/react';
 import { Box, IconButton, Paper, TextField } from '@mui/material';
 import React from 'react';
-import { MenuButton, TabPanel, TabView } from '@palico-ai/components';
+import { MenuButton } from '@palico-ai/components';
 import OptionMenuIcon from '@mui/icons-material/MoreVert';
 import RunIcon from '@mui/icons-material/PlayCircleFilledWhite';
-import { useTestCase } from './hooks';
+import { useTestCase } from '../hooks';
+import FullscreenIcon from '@mui/icons-material/Fullscreen';
+import EditTestCaseCell from './edit_cell';
+import LabItemViewConfig from '../constants';
+import TestCellPreview from './preview';
 
 interface TestCaseCellParams {
   testCaseId: string;
 }
 
-const WIDTH = '375px';
-const HEIGHT = '175px';
-
 const TestCaseCell: React.FC<TestCaseCellParams> = ({ testCaseId }) => {
+  const [detailedView, setDetailedView] = React.useState(false);
   const {
     testCase,
-    handleChangeTestCaseContext,
     handleChangeTestCaseLabel,
-    handleChangeTestCaseUserMessage,
     handleRemoveTestCase,
     runTests,
   } = useTestCase(testCaseId);
   if (!testCase) {
     throw new Error('Test Case not found');
   }
+
+  const handleClickShowDetails = () => {
+    setDetailedView(!detailedView);
+  };
+
   return (
     <th
       scope="row"
       style={{
-        minWidth: WIDTH,
-        maxWidth: WIDTH,
+        minWidth: LabItemViewConfig.TEST_PREVIEW_WIDTH,
+        maxWidth: LabItemViewConfig.TEST_PREVIEW_WIDTH,
+        height: 'inherit',
       }}
     >
+      <EditTestCaseCell
+        isOpen={detailedView}
+        onClose={handleClickShowDetails}
+        testCaseId={testCaseId}
+      />
       <Paper
         sx={{
           p: 1,
+          boxSizing: 'border-box',
+          height: '100%',
+          display: 'flex',
+          flexDirection: 'column',
         }}
       >
         <Box
@@ -60,6 +74,9 @@ const TestCaseCell: React.FC<TestCaseCellParams> = ({ testCaseId }) => {
             }}
             placeholder="Test Case Name"
           />
+          <IconButton onClick={handleClickShowDetails} sx={{ ml: 1 }}>
+            <FullscreenIcon />
+          </IconButton>
           <MenuButton
             icon={<OptionMenuIcon />}
             menuItems={[
@@ -72,47 +89,7 @@ const TestCaseCell: React.FC<TestCaseCellParams> = ({ testCaseId }) => {
             ]}
           />
         </Box>
-        <TabView
-          tabs={[
-            {
-              label: 'User Message',
-              value: 'user_message',
-            },
-            {
-              label: 'Context',
-              value: 'context_json',
-            },
-          ]}
-        >
-          <TabPanel value="user_message">
-            <TextField
-              sx={{
-                overflowY: 'auto',
-                maxHeight: HEIGHT,
-              }}
-              fullWidth
-              value={testCase.userMessage}
-              onChange={(e) => handleChangeTestCaseUserMessage(e.target.value)}
-              multiline
-              variant="outlined"
-              minRows={6}
-              placeholder="Message...."
-            />
-          </TabPanel>
-          <TabPanel value="context_json">
-            <Editor
-              theme="vs-dark"
-              height={HEIGHT}
-              defaultLanguage="json"
-              value={testCase.contextJSON}
-              onChange={(value) => handleChangeTestCaseContext(value)}
-              options={{
-                ariaLabel: 'User Message',
-                scrollBeyondLastColumn: 0,
-              }}
-            />
-          </TabPanel>
-        </TabView>
+        <TestCellPreview {...testCase} />
       </Paper>
     </th>
   );

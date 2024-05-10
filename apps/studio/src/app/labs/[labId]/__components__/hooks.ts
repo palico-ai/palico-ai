@@ -39,11 +39,20 @@ export const useTestCase = (testCaseId: string) => {
     );
   }
 
+  const handleChangeMetrics = (metrics: string[]) => {
+    setTestCases((currentTestCases) =>
+      currentTestCases.map((tc) =>
+        tc.id === testCaseId ? { ...tc, metrics } : tc
+      )
+    );
+  }
+
   return {
     testCase,
     handleChangeTestCaseLabel,
     handleChangeTestCaseUserMessage,
     handleChangeTestCaseContext,
+    handleChangeMetrics,
     handleRemoveTestCase,
     runTests: () => {
       runTestCase(testCaseId);

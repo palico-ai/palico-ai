@@ -12,6 +12,7 @@ import { MenuButton } from '@palico-ai/components';
 import OptionMenuIcon from '@mui/icons-material/MoreVert';
 import RunIcon from '@mui/icons-material/PlayCircleFilledWhite';
 import { useExperiment } from './hooks';
+import LabItemViewConfig from './constants';
 
 export interface ExperimentCellProps {
   agentIdList: string[];
@@ -19,7 +20,7 @@ export interface ExperimentCellProps {
 }
 
 const HEIGHT = '175px';
-const WIDTH = '400px';
+const WIDTH = LabItemViewConfig.EXPERIMENT_CELL_WIDTH;
 
 interface CellHeaderProps {
   agentIdList: string[];
