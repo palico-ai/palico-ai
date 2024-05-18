@@ -9,6 +9,7 @@ import {
 import { usePalicoClient } from '../../../../hooks/use_palico_client';
 import React from 'react';
 import { uuid } from 'uuidv4';
+import { getTraceIdsForConversation } from '../../../../services/telemetry';
 
 export type AddExperimentParams = Omit<LabExperimentModel, 'id'>;
 export type AddTestCaseParams = Omit<LabTestCaseModel, 'id'>;
@@ -111,6 +112,7 @@ export const LabContextProvider: React.FC<LabContextProviderProps> = ({
           name: metric,
           value: `${parseInt(`${Math.random() * 100}`)}%`,
         })) ?? [];
+      const traceResponse = await getTraceIdsForConversation(response.conversationId);
       setExperimentTestResults((currentResult) => ({
         ...currentResult,
         [experimentId]: {
@@ -119,6 +121,10 @@ export const LabContextProvider: React.FC<LabContextProviderProps> = ({
             status: 'SUCCESS',
             message: response.message ?? 'No message',
             metricResults: metrics,
+            metadata: {
+              conversationId: response.conversationId,
+              traceId: traceResponse.traceIds[0] ?? undefined,
+            }
           },
         },
       }));

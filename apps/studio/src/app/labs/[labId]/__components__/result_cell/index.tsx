@@ -1,9 +1,16 @@
-import { Box, Grid, IconButton, Paper, Skeleton, Typography } from '@mui/material';
+import {
+  Box,
+  Grid,
+  IconButton,
+  Paper,
+  Skeleton,
+  Typography,
+} from '@mui/material';
 import React, { useMemo } from 'react';
 import RunIcon from '@mui/icons-material/PlayCircleFilledWhite';
 import { useExpTestResult } from '../hooks';
 import { LabExperimentTestResult } from '@palico-ai/common';
-import { TabPanel, TabView, Chip } from '@palico-ai/components';
+import { TabPanel, TabView, Chip, Link } from '@palico-ai/components';
 import LabItemViewConfig from '../constants';
 
 interface ResultCellParams {
@@ -75,7 +82,7 @@ const ResultDetails: React.FC<LabExperimentTestResult> = ({
               gap: 1,
             }}
           >
-            <Grid container direction={"column"} spacing={1}>
+            <Grid container direction={'column'} spacing={1}>
               {metricResults.map((metric) => (
                 <Grid item key={metric.name}>
                   <Chip label={`${metric.name}: ${metric.value}`} />
@@ -125,8 +132,18 @@ const ResultCell: React.FC<ResultCellParams> = ({ experimentId, testId }) => {
           sx={{
             display: 'flex',
             justifyContent: 'flex-end',
+            alignItems: 'center',
+            gap: 1,
           }}
         >
+          {result?.metadata?.traceId && (
+            <Link
+              href={'http://localhost:16686/trace/' + result.metadata.traceId}
+              target="_blank"
+            >
+              <Chip size="small" label="Traces" />
+            </Link>
+          )}
           <IconButton
             size="small"
             color="secondary"

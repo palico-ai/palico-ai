@@ -18,8 +18,14 @@ export interface LabMetricResult {
   value: string;
 }
 
+export interface LabExperimentTestResultMetadata {
+  conversationId: string;
+  traceId?: string;
+}
+
 export type LabExperimentTestResult = {
   status: 'RUNNING' | 'SUCCESS' | 'FAILURE';
+  metadata?: LabExperimentTestResultMetadata;
   message?: string;
   metricResults?: LabMetricResult[];
 };

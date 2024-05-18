@@ -5,6 +5,7 @@ import * as cors from 'cors';
 import { defaultRequestAuthorizer } from './middlewares/local_authorizer';
 import agentRouter from './routes/agent';
 import studioRouter from './routes/studio';
+import telemetryRouter from './routes/telemetry';
 import { createMetadataRoutes } from './routes/metadata';
 import { defaultErrorMiddleware } from './middlewares/default_error_middeware';
 
@@ -33,6 +34,7 @@ export class PalicoAPIServer {
     });
     this.expressAPI.use('/agent', agentRouter);
     this.expressAPI.use('/studio', studioRouter);
+    this.expressAPI.use("/telemetry", telemetryRouter)
     this.expressAPI.use('/metadata', createMetadataRoutes(this.app));
     this.expressAPI.use(defaultErrorMiddleware);
   }
