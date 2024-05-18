@@ -5,6 +5,7 @@ interface AgentMetadata {
   id: string;
 }
 
+// TODO: this doesn't need to be a function
 export const createMetadataRoutes = (app: PalicoApp) => {
   const router = express.Router({
     mergeParams: true,
