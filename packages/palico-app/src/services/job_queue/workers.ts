@@ -18,14 +18,14 @@ const runTestCase = async (
 ): Promise<ExperimentTestCaseResult> => {
   const response = await AgentRequestExecutor.chat({
     agentId,
-    content: testCase.agentInput,
+    content: testCase.input,
     featureFlags: {},
   });
   const metrics = await Promise.all(
-    testCase.metrics.map(async (item) => {
-      const result = await item.metric.evaluate(testCase.agentInput, response);
+    testCase.metrics.map(async (metric) => {
+      const result = await metric.evaluate(testCase.input, response);
       return {
-        name: item.label,
+        name: metric.label,
         value: result,
       };
     })
@@ -35,7 +35,8 @@ const runTestCase = async (
     metricsReport[metric.name] = metric.value;
   });
   return {
-    input: testCase.agentInput,
+    input: testCase.input,
+    tags: testCase.tags,
     output: response,
     metrics: metricsReport,
   };
