@@ -4,7 +4,7 @@ import {
   StudioLabModelMetadata,
   UpdateStudioLabParams,
 } from '@palico-ai/common';
-import { StudioLabAttriutes, StuidoLabTable } from './db';
+import { StudioLabAttriutes, StuidoLabTable } from '../services/db';
 import { uuid } from 'uuidv4';
 import { trace } from '@opentelemetry/api';
 

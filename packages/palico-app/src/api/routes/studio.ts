@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { trace } from '@opentelemetry/api';
-import { StudioLab } from '../../tables/studio_lab';
-import { recordRequestErrorSpan } from '../utils';
+import { StudioLab } from '../../models/studio_lab';
+import { recordRequestErrorSpan } from '../../utils/api';
 import { APIError } from '../../errors';
 
 const tracer = trace.getTracer('studio-router');

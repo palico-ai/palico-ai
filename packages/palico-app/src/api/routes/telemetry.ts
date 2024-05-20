@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { SpanStatusCode, trace } from '@opentelemetry/api';
 import { APIError } from '../../errors';
-import { AgentRequest } from '../../tables/agent_request';
+import { AgentRequestExecutor } from '../../models/agent';
 // import { AgentRequest } from '@palico-ai/common';
 
 const tracer = trace.getTracer('telemetry-router');
@@ -14,7 +14,7 @@ router.route('/conversation/:conversationId').get(async (req, res) => {
     async (requestSpan) => {
       requestSpan.setAttribute('requestId', req.params.conversationId);
       const conversationId = req.params.conversationId;
-      const traceIds = await AgentRequest.getTracesByConversationId(
+      const traceIds = await AgentRequestExecutor.getTracesByConversationId(
         conversationId
       );
       if (!traceIds) {

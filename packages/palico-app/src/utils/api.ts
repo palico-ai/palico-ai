@@ -1,6 +1,6 @@
 import { Span, SpanStatusCode } from '@opentelemetry/api';
 import { PalicoAPIServer } from '..';
-import { APIError } from '../../errors';
+import { APIError } from '../errors';
 
 export const getAgentById = (id: string) => {
   const agent = PalicoAPIServer.getInstance().app.agents.find(

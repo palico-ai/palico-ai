@@ -12,6 +12,8 @@ const tracer = trace.getTracer('conversational-agent');
 export type AgentResponseData = Record<string, unknown>;
 
 export class ConversationalAgent implements LLMAgent {
+  static agentId = "v1"
+
   async newConversation(
     conversationId: string,
     params: AgentNewConversationRequestBody,
