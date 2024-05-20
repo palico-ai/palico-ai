@@ -1,9 +1,9 @@
-import OpenAI from "openai"
+import OpenAI from 'openai';
 
 export interface AgentMessage {
-  role: OpenAI.Chat.ChatCompletionMessageParam['role']
-  content: OpenAI.Chat.ChatCompletionMessageParam['content']
-  toolCalls?: OpenAI.Chat.ChatCompletionMessage['tool_calls']
+  role: OpenAI.Chat.ChatCompletionMessageParam['role'];
+  content: OpenAI.Chat.ChatCompletionMessageParam['content'];
+  toolCalls?: OpenAI.Chat.ChatCompletionMessage['tool_calls'];
 }
 
 export interface AgentResponse<Data = Record<string, unknown>> {
@@ -13,15 +13,9 @@ export interface AgentResponse<Data = Record<string, unknown>> {
   data?: Data;
 }
 
-export interface AgentNewConversationRequestBody {
-  userMessage: string;
-  payload?: Record<string, unknown>;
-}
-
-export type AgentReplyToConversationRequestBody = {
+export interface AgentRequestContent<Payload = Record<string, unknown>> {
   userMessage?: string;
-  toolOutputs?: Record<string, unknown>;
-  payload?: Record<string, unknown>;
+  payload?: Payload;
 }
 
 export * from './studio';

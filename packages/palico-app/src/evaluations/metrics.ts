@@ -1,5 +1,5 @@
 import {
-  AgentNewConversationRequestBody,
+  AgentRequestContent,
   AgentResponse,
 } from '@palico-ai/common';
 import { EvalMetric, EvalMetricOutput } from './types';
@@ -16,7 +16,7 @@ export class ExactMatchEvalMetric implements EvalMetric {
   }
 
   async evaluate(
-    _: AgentNewConversationRequestBody,
+    _: AgentRequestContent,
     response: AgentResponse,
   ): Promise<EvalMetricOutput> {
     if (response.message !== this.params.expected.message) {
