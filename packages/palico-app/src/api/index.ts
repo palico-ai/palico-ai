@@ -6,17 +6,22 @@ import { defaultRequestAuthorizer } from './middlewares/local_authorizer';
 import agentRouter from './routes/agent';
 import studioRouter from './routes/studio';
 import telemetryRouter from './routes/telemetry';
+import workspaceRouter from './routes/workspace';
+import devRouter from './routes/dev';
 import { createMetadataRoutes } from './routes/metadata';
 import { defaultErrorMiddleware } from './middlewares/default_error_middeware';
+import JobQueue from '../services/job_queue';
 
 export interface PalicoAPICreateParams {
   app: PalicoApp;
+  enableDevMode?: boolean;
 }
 
 export class PalicoAPIServer {
   readonly app: PalicoApp;
   private readonly expressAPI: express.Application;
   private static instance: PalicoAPIServer;
+  private enableDevMode = false;
 
   private constructor(params: PalicoAPICreateParams) {
     this.app = params.app;
@@ -34,12 +39,19 @@ export class PalicoAPIServer {
     });
     this.expressAPI.use('/agent', agentRouter);
     this.expressAPI.use('/studio', studioRouter);
-    this.expressAPI.use("/telemetry", telemetryRouter)
+    this.expressAPI.use('/telemetry', telemetryRouter);
     this.expressAPI.use('/metadata', createMetadataRoutes(this.app));
+    this.expressAPI.use('/workspace', workspaceRouter);
+    if (params.enableDevMode) {
+      this.enableDevMode = true;
+      this.expressAPI.use('/dev', devRouter);
+    }
     this.expressAPI.use(defaultErrorMiddleware);
   }
 
-  public static create(params: PalicoAPICreateParams): PalicoAPIServer {
+  public static create(
+    params: PalicoAPICreateParams
+  ): PalicoAPIServer {
     if (PalicoAPIServer.instance) {
       throw new Error('PalicoAPIService already created');
     }
@@ -54,7 +66,10 @@ export class PalicoAPIServer {
     return PalicoAPIServer.instance;
   }
 
-  public start(port: number) {
+  public async start(port: number) {
+    if (this.enableDevMode) {
+      await JobQueue.start();
+    }
     this.expressAPI.listen(port, () => {
       console.log('Server started on port ' + port);
     });

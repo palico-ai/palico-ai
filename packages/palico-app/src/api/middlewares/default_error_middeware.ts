@@ -12,6 +12,7 @@ export const defaultErrorMiddleware: ErrorRequestHandler = (
   __
 ) => {
   tracer.startActiveSpan('defaultErrorMiddleware', (span) => {
+    console.log('Error:', err);
     if (!(err instanceof Error)) {
       span.end();
       return res.status(500).json({ error: 'An unknown error occurred' });
