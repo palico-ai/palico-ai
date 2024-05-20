@@ -1,7 +1,4 @@
-import {
-  AgentRequestContent,
-  AgentResponse,
-} from '@palico-ai/common';
+import { AgentRequestContent, AgentResponse } from '@palico-ai/common';
 import { EvalMetric, EvalMetricOutput } from './types';
 
 export interface ExactMatchParams {
@@ -10,6 +7,7 @@ export interface ExactMatchParams {
 
 export class ExactMatchEvalMetric implements EvalMetric {
   private params: ExactMatchParams;
+  label = 'exact-match';
 
   constructor(params: ExactMatchParams) {
     this.params = params;
@@ -17,7 +15,7 @@ export class ExactMatchEvalMetric implements EvalMetric {
 
   async evaluate(
     _: AgentRequestContent,
-    response: AgentResponse,
+    response: AgentResponse
   ): Promise<EvalMetricOutput> {
     if (response.message !== this.params.expected.message) {
       return false;
@@ -30,7 +28,7 @@ export class ExactMatchEvalMetric implements EvalMetric {
 }
 
 export class ProfessionalismEvalMetric implements EvalMetric {
-  name = 'professionalism';
+  label = 'professionalism';
 
   async evaluate(): Promise<EvalMetricOutput> {
     const random = Math.random() * 100;

@@ -1,4 +1,4 @@
-import { Dataset } from '../evaluations';
+import { Dataset } from '../types';
 import OS from '../utils/os';
 import PalicoWorkspace from '../utils/workspace';
 
