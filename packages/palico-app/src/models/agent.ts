@@ -1,4 +1,4 @@
-import { AgentNewConversationRequestBody, AgentResponse } from '@palico-ai/common';
+import { AgentRequestContent, AgentResponse } from '@palico-ai/common';
 import { AgentRequestCreateParams, AgentRequestTable } from '../services/db';
 import { uuid } from '../utils/common';
 import { trace } from '@opentelemetry/api';
@@ -8,7 +8,8 @@ const tracer = trace.getTracer('AgentRequestExecutor');
 
 export interface AgentExecutorNewConversation {
   agentId: string;
-  body: AgentNewConversationRequestBody;
+  content: AgentRequestContent;
+  conversationId?: string; // For grouping a conversation
   featureFlags?: Record<string, unknown>;
   traceId?: string;
 }
@@ -35,54 +36,58 @@ export class AgentRequestExecutor {
     return results.map((result) => result.dataValues.requestTraceId);
   }
 
-  static async newConversation(params: AgentExecutorNewConversation) : Promise<AgentResponse> {
-    const result = await tracer.startActiveSpan('Agent Executor New Conversation', async (span) => {
-      const {
-        agentId,
-        body,
-        featureFlags = {},
-        traceId = span.spanContext().traceId,
-      } = params;
-      const { agent } = getAgentById(agentId);
-      const requestId = uuid();
-      const conversationId = requestId;
-      try {
-        const agentResponse = await tracer.startActiveSpan(
-          'Executing User Agent',
-          async (agentCallerSpan) => {
-            const response = await agent.newConversation(conversationId, body, {
-              requestId,
-              otel: {
-                traceId: traceId,
-              },
-              featureFlags,
-            });
-            agentCallerSpan.end();
-            return response;
-          }
-        );
-        await this.logRequest({
-          id: requestId,
+  static async chat(
+    params: AgentExecutorNewConversation
+  ): Promise<AgentResponse> {
+    const result = await tracer.startActiveSpan(
+      'AgentRequestExecutor->chat',
+      async (span) => {
+        const requestId = uuid();
+        const {
           agentId,
-          conversationId,
-          requestTraceId: traceId,
-        });
-        span.setAttribute('conversationId', conversationId);
-        span.end();
-        return {
-          ...agentResponse,
-          conversationId,
-        };
-      } catch (e) {
-        const message = e instanceof Error ? e.message : 'An error occurred';
-        span.setStatus({
-          code: 1,
-          message: message,
-        });
-        span.end();
-        throw e;
+          content,
+          featureFlags = {},
+          conversationId = requestId,
+          traceId = span.spanContext().traceId,
+        } = params;
+        const { agent } = getAgentById(agentId);
+        try {
+          const agentResponse = await tracer.startActiveSpan(
+            'Executing User Agent',
+            async (agentCallerSpan) => {
+              const response = await agent.chat(conversationId, content, {
+                requestId,
+                otel: {
+                  traceId: traceId,
+                },
+                featureFlags,
+              });
+              agentCallerSpan.end();
+              return response;
+            }
+          );
+          await this.logRequest({
+            id: requestId,
+            agentId,
+            conversationId,
+            requestTraceId: traceId,
+          });
+          span.end();
+          return {
+            ...agentResponse,
+            conversationId,
+          };
+        } catch (e) {
+          const message = e instanceof Error ? e.message : 'An error occurred';
+          span.setStatus({
+            code: 1,
+            message: message,
+          });
+          span.end();
+          throw e;
+        }
       }
-    });
+    );
     return result;
   }
 }

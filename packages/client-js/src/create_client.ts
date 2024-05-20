@@ -19,8 +19,11 @@ export const createClient = (config: ClientConfig): IPalicoClient => {
     return await apiFetch(`/agent/${params.agentId}/conversation`, {
       method: 'POST',
       body: JSON.stringify({
-        userMessage: params.userMessage,
-        context: params.payload,
+        content: {
+          userMessage: params.userMessage,
+          payload: params.payload,
+        },
+        featureFlags: params.featureFlags,
       }),
     });
   };
@@ -31,8 +34,11 @@ export const createClient = (config: ClientConfig): IPalicoClient => {
       {
         method: 'POST',
         body: JSON.stringify({
-          userMessage: params.userMessage,
-          context: params.payload,
+          content: {
+            userMessage: params.userMessage,
+            payload: params.payload,
+          },
+          featureFlags: params.featureFlags,
         }),
       }
     );

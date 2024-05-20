@@ -1,6 +1,6 @@
 import {
-  AgentNewConversationRequestBody,
+  AgentRequestContent,
   AgentResponse,
 } from '@palico-ai/common';
 
-export { AgentNewConversationRequestBody, AgentResponse };
+export { AgentRequestContent, AgentResponse };

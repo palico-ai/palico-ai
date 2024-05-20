@@ -11,11 +11,10 @@
 
 import {
   AgentResponse,
-  AgentNewConversationRequestBody,
-  AgentReplyToConversationRequestBody,
+  AgentRequestContent,
 } from '@palico-ai/common';
 
-export interface RequestContext {
+export interface AgentRequestContext {
   requestId: string;
   otel: {
     traceId: string;
@@ -28,15 +27,13 @@ export type LLMAgentResponse<D = Record<string, unknown>> = Omit<
   'conversationId'
 >;
 
-export interface LLMAgent {
-  newConversation: (
+export interface LLMAgent<
+  RequestBody = Record<string, unknown>,
+  Response = Record<string, unknown>
+> {
+  chat: (
     conversationId: string,
-    body: AgentNewConversationRequestBody,
-    requestContext: RequestContext
-  ) => Promise<LLMAgentResponse>;
-  replyToConversation: (
-    conversationId: string,
-    body: AgentReplyToConversationRequestBody,
-    requestContext: RequestContext
-  ) => Promise<LLMAgentResponse>;
+    content: AgentRequestContent<RequestBody>,
+    context: AgentRequestContext
+  ) => Promise<LLMAgentResponse<Response>>;
 }

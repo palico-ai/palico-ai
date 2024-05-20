@@ -1,5 +1,5 @@
 import {
-  AgentNewConversationRequestBody,
+  AgentRequestContent,
   AgentResponse,
 } from '@palico-ai/common';
 
@@ -7,7 +7,7 @@ export type EvalMetricOutput = boolean | number | string;
 
 export interface EvalMetric {
   evaluate: (
-    input: AgentNewConversationRequestBody,
+    input: AgentRequestContent,
     response: AgentResponse,
   ) => Promise<EvalMetricOutput>;
 }
@@ -15,7 +15,7 @@ export interface EvalMetric {
 export type ExperimentTestResultMetricValue = Record<string, EvalMetricOutput>;
 
 export interface ExperimentTestCaseResult {
-  input: AgentNewConversationRequestBody;
+  input: AgentRequestContent;
   output: AgentResponse;
   metrics: Record<string, EvalMetricOutput>;
 }
@@ -26,7 +26,7 @@ export type ExperimentTestCaseTag = {
 };
 
 export interface ExperimentTestCaseDataset {
-  agentInput: AgentNewConversationRequestBody;
+  agentInput: AgentRequestContent;
   tags: ExperimentTestCaseTag[];
   metrics: {
     label: string;

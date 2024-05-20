@@ -16,9 +16,9 @@ const runTestCase = async (
   testCase: ExperimentTestCaseDataset,
   agentId: string
 ): Promise<ExperimentTestCaseResult> => {
-  const response = await AgentRequestExecutor.newConversation({
+  const response = await AgentRequestExecutor.chat({
     agentId,
-    body: testCase.agentInput,
+    content: testCase.agentInput,
     featureFlags: {},
   });
   const metrics = await Promise.all(

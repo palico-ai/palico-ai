@@ -1,8 +1,4 @@
-import {
-  AgentNewConversationRequestBody,
-  AgentReplyToConversationRequestBody,
-  AgentResponse,
-} from '@palico-ai/common';
+import { AgentRequestContent, AgentResponse } from '@palico-ai/common';
 
 export type ConversationContextParams = Record<string, unknown>;
 
@@ -31,14 +27,15 @@ export interface ReplyToToolCallParams {
   toolOutputs: ToolExecutionMessage[];
 }
 
-export interface NewConversationParams extends AgentNewConversationRequestBody {
+export interface NewConversationParams extends AgentRequestContent {
   agentId: string;
+  featureFlags?: Record<string, unknown>;
 }
 
-export interface ReplyToConversationParams
-  extends AgentReplyToConversationRequestBody {
+export interface ReplyToConversationParams extends AgentRequestContent {
   agentId: string;
   conversationId: string;
+  featureFlags?: Record<string, unknown>;
 }
 
 export type ClientNewConversationFN = (
