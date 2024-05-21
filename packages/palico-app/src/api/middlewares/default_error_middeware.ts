@@ -1,5 +1,5 @@
 import { type ErrorRequestHandler } from 'express';
-import { APIError } from '../../errors';
+import { APIError } from '../error';
 import { trace } from '@opentelemetry/api';
 
 const tracer = trace.getTracer('conversation-router');

@@ -4,7 +4,7 @@ import {
   StudioLabModelMetadata,
   UpdateStudioLabParams,
 } from '@palico-ai/common';
-import { StudioLabAttriutes, StuidoLabTable } from '../services/db';
+import { StudioLabAttriutes, StudioLabTable } from '../services/database/tables';
 import { uuid } from 'uuidv4';
 import { trace } from '@opentelemetry/api';
 
@@ -12,7 +12,7 @@ const tracer = trace.getTracer('studio-lab');
 
 export class StudioLab {
   static async create(params: CreateStudioLabParams): Promise<StudioLabModel> {
-    const response = await StuidoLabTable.create({
+    const response = await StudioLabTable.create({
       id: uuid(),
       name: params.name,
       experimentListJSON: JSON.stringify(params.experiments),
@@ -24,7 +24,7 @@ export class StudioLab {
 
   static async get(id: string): Promise<StudioLabModel | null> {
     return await tracer.startActiveSpan('Get Studio Lab By ID', async (span) => {
-      const response = await StuidoLabTable.findByPk(id);
+      const response = await StudioLabTable.findByPk(id);
       if (!response) {
         return null;
       }
@@ -38,7 +38,7 @@ export class StudioLab {
 
   static async findAll(): Promise<StudioLabModelMetadata[]> {
     return await tracer.startActiveSpan('Find All Studio Labs', async (span) => {
-      const response = await StuidoLabTable.findAll({
+      const response = await StudioLabTable.findAll({
         attributes: ['id', 'name'],
       });
       span.addEvent('Labs found', {
@@ -70,7 +70,7 @@ export class StudioLab {
         'updatedValues',
         JSON.stringify(updatedValues, null, 2)
       );
-      await StuidoLabTable.update(updatedValues, {
+      await StudioLabTable.update(updatedValues, {
         where: {
           id,
         },
@@ -80,7 +80,7 @@ export class StudioLab {
   }
 
   static async remove(id: string) {
-    await StuidoLabTable.destroy({
+    await StudioLabTable.destroy({
       where: {
         id,
       },

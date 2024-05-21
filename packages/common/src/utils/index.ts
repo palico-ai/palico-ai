@@ -1,1 +1,2 @@
-export * from './jwt'
+export * from './jwt';
+export * from './validators';

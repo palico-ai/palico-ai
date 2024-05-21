@@ -1,12 +1,12 @@
 import { WorkHandler } from 'pg-boss';
-import ExperimentModel from '../../models/experiments';
-import DatasetModel from '../../models/datasets';
+import ExperimentModel from '../../experiments/model';
 import {
   EvalMetricOutput,
   ExperimentTestCaseDataset,
   ExperimentTestCaseResult,
-} from '../../evaluations';
-import { AgentRequestExecutor } from '../../models/agent';
+} from '../../experiments';
+import { AgentExecutor } from '../../agent/executor';
+import { Application } from '../../app';
 
 export interface ExperimentTestRunnerData {
   filePath: string;
@@ -16,8 +16,8 @@ const runTestCase = async (
   testCase: ExperimentTestCaseDataset,
   agentId: string
 ): Promise<ExperimentTestCaseResult> => {
-  const response = await AgentRequestExecutor.chat({
-    agentId,
+  const response = await AgentExecutor.chat({
+    agentName: agentId,
     content: testCase.input,
     featureFlags: {},
   });
@@ -51,11 +51,9 @@ export const ExperimentTestRunner: WorkHandler<
       status: 'active',
     });
     const test = await ExperimentModel.readTestJSON(input.data.filePath);
-    const datasetFetcher =
-      await DatasetModel.getDatasetByName<ExperimentTestCaseDataset>(
-        test.testCaseDatasetName
-      );
-    const dataset = await datasetFetcher.fetch();
+    const dataset = await Application.fetchDataset<ExperimentTestCaseDataset>(
+      test.testCaseDatasetName
+    );
     const results = await Promise.all(
       dataset.map((testCase) => runTestCase(testCase, test.agentId))
     );

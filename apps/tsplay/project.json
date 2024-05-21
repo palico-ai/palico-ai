@@ -1,0 +1,56 @@
+{
+  "name": "tsplay",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/tsplay/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/esbuild:esbuild",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "platform": "node",
+        "outputPath": "dist/apps/tsplay",
+        "format": ["cjs"],
+        "bundle": false,
+        "main": "apps/tsplay/src/main.ts",
+        "tsConfig": "apps/tsplay/tsconfig.app.json",
+        "assets": ["apps/tsplay/src/assets"],
+        "generatePackageJson": true,
+        "esbuildOptions": {
+          "sourcemap": true,
+          "outExtension": {
+            ".js": ".js"
+          }
+        }
+      },
+      "configurations": {
+        "development": {},
+        "production": {
+          "esbuildOptions": {
+            "sourcemap": false,
+            "outExtension": {
+              ".js": ".js"
+            }
+          }
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "tsplay:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "tsplay:build:development"
+        },
+        "production": {
+          "buildTarget": "tsplay:build:production"
+        }
+      }
+    }
+  },
+  "tags": []
+}

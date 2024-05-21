@@ -1,46 +1,6 @@
-import { ExperimentTestCaseResult } from '../evaluations';
-import JobQueue, { JobQueueState } from '../services/job_queue';
+import { CreateExperimentParams, ExperimentMetadata, ExperimentTest, ExperimentTestCaseResult, ExperimentTestJSON } from '.';
 import OS from '../utils/os';
-import PalicoWorkspace from '../utils/workspace';
-import DatasetModel from './datasets';
-
-export interface CreateExperimentParams {
-  name: string;
-}
-
-export interface ExperimentMetadata {
-  createdAt: string;
-  directoryName: string;
-  name: string;
-}
-
-export interface ExperimentTestJSON {
-  job: {
-    id?: string;
-    status: JobQueueState;
-    errorMessage?: string;
-  };
-  description?: string;
-  featureFlags?: Record<string, unknown>;
-  agentId: string;
-  testCaseDatasetName: string;
-  createdAt: number;
-  result: ExperimentTestCaseResult[];
-}
-
-export interface ExperimentTest extends ExperimentTestJSON {
-  experimentName: string;
-  testName: string;
-}
-
-export interface CreateNewExperimentTestResult {
-  jobId: string;
-}
-
-export type CreateExperimentTestParams = Omit<
-  ExperimentTest,
-  'createdAt' | 'filePath' | 'job' | 'result'
->;
+import Project from '../utils/project';
 
 export default class ExperimentModel {
   private static readonly DATE_SEPERATOR = '__';
@@ -57,7 +17,7 @@ export default class ExperimentModel {
     if (existingExperiments.find((e) => e.name === name)) {
       throw new Error(`Experiment with name "${name}" already exists`);
     }
-    const expDir = await PalicoWorkspace.getExperimentRootDir();
+    const expDir = await Project.getExperimentRootDir();
     const dirname = Date.now() + ExperimentModel.DATE_SEPERATOR + name;
     const newExpDir = `${expDir}/${dirname}`;
     await OS.createDirectory(newExpDir);
@@ -65,7 +25,7 @@ export default class ExperimentModel {
   }
 
   static async getAllExperiments(): Promise<ExperimentMetadata[]> {
-    const expDir = await PalicoWorkspace.getExperimentRootDir();
+    const expDir = await Project.getExperimentRootDir();
     const dirs = await OS.getDirectories(expDir);
     return dirs.map(this.parseExperimentName);
   }
@@ -77,38 +37,6 @@ export default class ExperimentModel {
       throw new Error(`Experiment with name "${name}" not found`);
     }
     return exp;
-  }
-
-  static async startNewTestRun(
-    params: CreateExperimentTestParams
-  ): Promise<CreateNewExperimentTestResult> {
-    const { testName, experimentName } = params;
-    const exp = await ExperimentModel.findByName(experimentName);
-    const testFilePath = await ExperimentModel.buildTestFilePath(
-      exp.directoryName,
-      testName
-    );
-    if(OS.doesFileExist(testFilePath)) {
-      throw new Error(`Test with name "${testName}" already exists`);
-    }
-    const datasetExists = await DatasetModel.doesDatasetExist(params.testCaseDatasetName);
-    if(!datasetExists) {
-      throw new Error(`Dataset with name "${params.testCaseDatasetName}" does not exist`);
-    }
-    const createdAt = Date.now();
-    const testJSON: ExperimentTestJSON = {
-      ...params,
-      job: {
-        status: 'created',
-      },
-      createdAt,
-      result: [],
-    };
-    await OS.createJsonFile(testFilePath, testJSON);
-    const jobId = await JobQueue.runExperiment({ filePath: testFilePath });
-    return {
-      jobId,
-    };
   }
 
   static async updateTestJobStatus(
@@ -182,7 +110,7 @@ export default class ExperimentModel {
   }
 
   private static async buildExpDirPath(expDirName: string): Promise<string> {
-    const expDir = await PalicoWorkspace.getExperimentRootDir();
+    const expDir = await Project.getExperimentRootDir();
     return `${expDir}/${expDirName}`;
   }
 
@@ -191,7 +119,7 @@ export default class ExperimentModel {
     return `${rootPath}/${this.TEST_DIR}`;
   }
 
-  private static async buildTestFilePath(
+  static async buildTestFilePath(
     expDirName: string,
     testName: string
   ): Promise<string> {

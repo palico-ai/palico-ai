@@ -1,12 +1,12 @@
-import { Dataset } from '../types';
+import { Dataset } from '../experiments';
 import OS from '../utils/os';
-import PalicoWorkspace from '../utils/workspace';
+import Project from '../utils/project';
 
 export default class DatasetModel {
   static readonly datasetFile = 'index.ts';
 
   static async getAllDatasets() {
-    const datasetDirName = await PalicoWorkspace.getDatasetRootDir();
+    const datasetDirName = await Project.getDatasetRootDir();
     const dirs = await OS.getDirectories(datasetDirName);
     const datasets = dirs.filter((dir) =>
       OS.doesFileExist(`${datasetDirName}/${dir}/${DatasetModel.datasetFile}`)
@@ -29,7 +29,7 @@ export default class DatasetModel {
   }
 
   private static async datasetFilePath(name: string) {
-    const datasetDir = await PalicoWorkspace.getDatasetRootDir();
+    const datasetDir = await Project.getDatasetRootDir();
     return `${datasetDir}/${name}/${DatasetModel.datasetFile}`;
   }
 }

@@ -1,25 +1,18 @@
 import * as express from 'express';
-import { PalicoApp } from '../../app';
+import { AgentModel } from '../../agent/model';
 
 interface AgentMetadata {
-  id: string;
+  name: string;
 }
 
-// TODO: this doesn't need to be a function
-export const createMetadataRoutes = (app: PalicoApp) => {
-  const router = express.Router({
-    mergeParams: true,
+const router = express.Router();
+
+router.route('/agents').get(async (_, res) => {
+  const agentList = await AgentModel.getAllAgents();
+  const agents: AgentMetadata[] = agentList.map((agentName) => {
+    return { name: agentName };
   });
+  return res.status(200).json(agents);
+});
 
-  router.route('/agents').get((_, res) => {
-    const agents: AgentMetadata[] = app.agents.map((agent) => {
-      return {
-        id: agent.id,
-      };
-    });
-    return res.status(200).json(agents);
-  });
-
-  return router;
-};
-
+export default router;

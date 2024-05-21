@@ -1,6 +1,6 @@
 import { type RequestHandler } from 'express';
 import { JWTAuthenticator, commonConfig } from '@palico-ai/common';
-import { APIError } from '../../errors';
+import { APIError } from '../error';
 
 export const defaultRequestAuthorizer: RequestHandler = async (
   req,

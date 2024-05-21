@@ -43,6 +43,8 @@
     "json-schema": "^0.4.0",
     "jsonwebtoken": "^9.0.2",
     "lexical": "^0.13.1",
+    "lodash.get": "^4.4.2",
+    "lodash.set": "^4.3.2",
     "mysql2": "^3.9.1",
     "next": "14.0.4",
     "openai": "^4.28.4",
@@ -63,7 +65,7 @@
     "sqlite3": "^5.1.7",
     "uuidv4": "^6.2.13",
     "zip-a-folder": "^3.1.5",
-    "zod": "^3.22.4",
+    "zod": "^3.23.8",
     "zod-to-json-schema": "^3.22.4"
   },
   "devDependencies": {
@@ -101,6 +103,8 @@
     "@types/jest": "^29.4.0",
     "@types/json-schema": "^7.0.15",
     "@types/jsonwebtoken": "^9.0.5",
+    "@types/lodash.get": "^4.4.9",
+    "@types/lodash.set": "^4.3.9",
     "@types/node": "18.16.9",
     "@types/nodemon": "^1.19.6",
     "@types/react": "18.2.33",

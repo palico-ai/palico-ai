@@ -1,26 +1,8 @@
-// export interface ToolCallParams {
-//   toolId: string;
-//   toolName: string;
-//   args: Record<string, unknown>;
-// }
-
-// export interface ToolCallResult {
-//   toolId: string;
-//   result: Record<string, unknown>;
-// }
-
 import {
   AgentResponse,
-  AgentRequestContent,
+  ConversationRequestContent,
+  ConversationContext
 } from '@palico-ai/common';
-
-export interface AgentRequestContext {
-  requestId: string;
-  otel: {
-    traceId: string;
-  };
-  featureFlags: Record<string, unknown>;
-}
 
 export type LLMAgentResponse<D = Record<string, unknown>> = Omit<
   AgentResponse<D>,
@@ -33,7 +15,9 @@ export interface LLMAgent<
 > {
   chat: (
     conversationId: string,
-    content: AgentRequestContent<RequestBody>,
-    context: AgentRequestContext
+    content: ConversationRequestContent<RequestBody>,
+    context: ConversationContext
   ) => Promise<LLMAgentResponse<Response>>;
 }
+
+export { ConversationRequestContent as AgentRequestContent, AgentResponse as AgentResponse, ConversationContext as AgentRequestContext };
