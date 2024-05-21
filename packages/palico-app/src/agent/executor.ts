@@ -1,56 +1,35 @@
-import { AgentRequestContent, AgentResponse } from '@palico-ai/common';
-import { AgentRequestCreateParams, AgentRequestTable } from '../services/db';
+import { ConversationRequestContent, AgentResponse } from '@palico-ai/common';
 import { uuid } from '../utils/common';
 import { trace } from '@opentelemetry/api';
-import { getAgentById } from '../utils/api';
+import { AgentModel } from './model';
 
-const tracer = trace.getTracer('AgentRequestExecutor');
+const tracer = trace.getTracer('agent-executor');
 
-export interface AgentExecutorNewConversation {
-  agentId: string;
-  content: AgentRequestContent;
+export interface AgentExecutorChatParams {
+  agentName: string;
+  content: ConversationRequestContent;
   conversationId?: string; // For grouping a conversation
   featureFlags?: Record<string, unknown>;
   traceId?: string;
 }
 
-export class AgentRequestExecutor {
-  static async logRequest(params: AgentRequestCreateParams) {
-    const response = await AgentRequestTable.create({
-      id: params.id,
-      agentId: params.agentId,
-      conversationId: params.conversationId,
-      requestTraceId: params.requestTraceId,
-    });
-    return response.dataValues;
-  }
-
-  static async getTracesByConversationId(
-    conversationId: string
-  ): Promise<string[]> {
-    const results = await AgentRequestTable.findAll({
-      where: {
-        conversationId,
-      },
-    });
-    return results.map((result) => result.dataValues.requestTraceId);
-  }
+export class AgentExecutor {
 
   static async chat(
-    params: AgentExecutorNewConversation
+    params: AgentExecutorChatParams
   ): Promise<AgentResponse> {
     const result = await tracer.startActiveSpan(
       'AgentRequestExecutor->chat',
       async (span) => {
         const requestId = uuid();
         const {
-          agentId,
+          agentName,
           content,
           featureFlags = {},
           conversationId = requestId,
           traceId = span.spanContext().traceId,
         } = params;
-        const { agent } = getAgentById(agentId);
+        const agent = await AgentModel.getAgentByName(agentName);
         try {
           const agentResponse = await tracer.startActiveSpan(
             'Executing User Agent',
@@ -66,9 +45,9 @@ export class AgentRequestExecutor {
               return response;
             }
           );
-          await this.logRequest({
+          await AgentModel.logRequest({
             id: requestId,
-            agentId,
+            agentId: agentName,
             conversationId,
             requestTraceId: traceId,
           });

@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { trace } from '@opentelemetry/api';
 import { StudioLab } from '../../models/studio_lab';
 import { recordRequestErrorSpan } from '../../utils/api';
-import { APIError } from '../../errors';
+import { APIError } from '../error';
 
 const tracer = trace.getTracer('studio-router');
 
@@ -19,11 +19,12 @@ router
           id: lab.id,
           name: lab.name,
         });
-        requestSpan.end();
         return res.status(200).json(lab);
       } catch (error) {
         recordRequestErrorSpan(error, requestSpan);
         return next(error);
+      } finally {
+        requestSpan.end();
       }
     });
   })
@@ -34,11 +35,12 @@ router
         requestSpan.addEvent('Labs found', {
           count: labs.length,
         });
-        requestSpan.end();
         return res.status(200).json(labs);
       } catch (error) {
         recordRequestErrorSpan(error, requestSpan);
         return next(error);
+      } finally {
+        requestSpan.end();
       }
     });
   });
@@ -57,11 +59,12 @@ router
           id: lab.id,
           name: lab.name,
         });
-        requestSpan.end();
         return res.status(200).json(lab);
       } catch (error) {
         recordRequestErrorSpan(error, requestSpan);
         return next(error);
+      } finally {
+        requestSpan.end();
       }
     });
   })
@@ -74,11 +77,12 @@ router
         requestSpan.addEvent('Lab updated', {
           id: req.params.id,
         });
-        requestSpan.end();
         return res.status(200).json({ message: 'Lab updated successfully' });
       } catch (error) {
         recordRequestErrorSpan(error, requestSpan);
         return next(error);
+      } finally {
+        requestSpan.end();
       }
     });
   })
@@ -90,11 +94,12 @@ router
         requestSpan.addEvent('Lab removed', {
           id: req.params.id,
         });
-        requestSpan.end();
         return res.status(200).json({ message: 'Lab removed successfully' });
       } catch (error) {
         recordRequestErrorSpan(error, requestSpan);
         return next(error);
+      } finally {
+        requestSpan.end();
       }
     });
   });

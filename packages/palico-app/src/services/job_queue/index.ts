@@ -1,4 +1,4 @@
-import * as PgBoss from 'pg-boss';
+import PgBoss from 'pg-boss';
 import { ExperimentTestRunner, ExperimentTestRunnerData } from './workers';
 
 export type JobQueueState = PgBoss.Worker['state'];

@@ -1,6 +1,7 @@
-import * as findup from 'find-up'
+import findup from 'find-up'
 
-export default class PalicoWorkspace {
+// This class is used to work with the file system of the project from package.json level
+export default class Project {
   private static projectPath: string
 
   static async getWorkspaceRootDir (): Promise<string> {
@@ -29,5 +30,15 @@ export default class PalicoWorkspace {
   static async metricsRootDir(): Promise<string> {
     const root = await this.getWorkspaceRootDir()
     return `${root}/src/metrics`
+  }
+
+  static async getWorkflowRootDir(): Promise<string> {
+    const root = await this.getWorkspaceRootDir()
+    return `${root}/src/workflows`
+  }
+
+  static async getAgentRootDir(): Promise<string> {
+    const root = await this.getWorkspaceRootDir()
+    return `${root}/src/agents`
   }
 }

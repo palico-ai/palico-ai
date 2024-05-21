@@ -1,6 +1,7 @@
 import { RequestHandler } from 'express';
-import ExperimentModel from '../../../models/experiments';
+import ExperimentModel from '../../../experiments/model';
 import JobQueue from '../../../services/job_queue';
+import { ExperimentExecutor } from '../../../experiments/executor';
 
 export const createNewExperimentHandler: RequestHandler = async (
   req,
@@ -43,7 +44,7 @@ export const createTestForExperimentHandler: RequestHandler = async (
       agentId,
       testCaseDatasetName,
     } = req.body;
-    const test = await ExperimentModel.startNewTestRun({
+    const test = await ExperimentExecutor.startNewTestRun({
       experimentName: expName,
       testName,
       description,

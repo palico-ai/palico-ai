@@ -66,7 +66,7 @@ export type StudioLabCreationAttributes = Optional<
   'id' | 'createdAt' | 'updatedAt'
 >;
 
-export const StuidoLabTable: ModelDefined<
+export const StudioLabTable: ModelDefined<
   StudioLabAttriutes,
   StudioLabCreationAttributes
 > = sequelize.define(
