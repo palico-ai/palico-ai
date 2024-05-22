@@ -1,7 +1,8 @@
 import {
   AgentResponse,
   ConversationRequestContent,
-  ConversationContext
+  ConversationContext,
+  ConversationResponse
 } from '@palico-ai/common';
 
 export type LLMAgentResponse<D = Record<string, unknown>> = Omit<
@@ -20,4 +21,9 @@ export interface LLMAgent<
   ) => Promise<LLMAgentResponse<Response>>;
 }
 
-export { ConversationRequestContent as AgentRequestContent, AgentResponse as AgentResponse, ConversationContext as AgentRequestContext };
+export {
+  ConversationRequestContent as AgentRequestContent,
+  AgentResponse,
+  ConversationResponse,
+  ConversationContext,
+};

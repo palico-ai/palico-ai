@@ -1,5 +1,4 @@
-import { ConversationRequestContent, AgentResponse } from '@palico-ai/common';
-import { JobQueueState } from '../services/job_queue';
+import { ConversationRequestContent, ConversationResponse } from '@palico-ai/common';
 
 export type EvalMetricOutput = boolean | number | string;
 
@@ -8,7 +7,7 @@ export interface EvalMetric {
 
   evaluate: (
     input: ConversationRequestContent,
-    response: AgentResponse
+    response: ConversationResponse
   ) => Promise<EvalMetricOutput>;
 }
 
@@ -17,7 +16,7 @@ export type ExperimentTestResultMetricValue = Record<string, EvalMetricOutput>;
 export interface ExperimentTestCaseResult {
   input: ConversationRequestContent;
   tags: ExperimentTestCaseTag;
-  output: AgentResponse;
+  output: ConversationResponse;
   metrics: Record<string, EvalMetricOutput>;
 }
 
@@ -42,15 +41,23 @@ export interface ExperimentMetadata {
   name: string;
 }
 
+export enum ExperimentTestStatus {
+  CREATED = 'created',
+  ACTIVE = 'active',
+  FAILED = 'failed',
+  SUCCESS = 'success',
+}
+
 export interface ExperimentTestJSON {
-  job: {
-    id?: string;
-    status: JobQueueState;
-    errorMessage?: string;
+  status: {
+    state: ExperimentTestStatus;
+    message?: string;
   };
+  jobId?: string;
   description?: string;
   featureFlags?: Record<string, unknown>;
-  agentId: string;
+  agentName?: string;
+  workflowName?: string;
   testCaseDatasetName: string;
   createdAt: number;
   result: ExperimentTestCaseResult[];
@@ -61,6 +68,16 @@ export interface ExperimentTest extends ExperimentTestJSON {
   testName: string;
 }
 
+export interface CreateTestConfigResult {
+  filePath: string;
+  test: ExperimentTest;
+}
+
 export interface CreateNewExperimentTestResult {
   jobId: string;
 }
+
+export type CreateExperimentTestParams = Omit<
+  ExperimentTest,
+  'createdAt' | 'filePath' | 'jobId' | 'result' | "status"
+>;

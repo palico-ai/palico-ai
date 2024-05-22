@@ -1,4 +1,12 @@
-import { CreateExperimentParams, ExperimentMetadata, ExperimentTest, ExperimentTestCaseResult, ExperimentTestJSON } from '.';
+import {
+  CreateExperimentParams,
+  CreateExperimentTestParams,
+  CreateTestConfigResult,
+  ExperimentMetadata,
+  ExperimentTest,
+  ExperimentTestJSON,
+  ExperimentTestStatus,
+} from '.';
 import OS from '../utils/os';
 import Project from '../utils/project';
 
@@ -30,6 +38,51 @@ export default class ExperimentModel {
     return dirs.map(this.parseExperimentName);
   }
 
+  static async createTest(
+    params: CreateExperimentTestParams
+  ): Promise<CreateTestConfigResult> {
+    const { testName, experimentName } = params;
+    const exp = await ExperimentModel.findByName(experimentName);
+    const testFilePath = await ExperimentModel.buildTestFilePath(
+      exp.directoryName,
+      testName
+    );
+    if (OS.doesFileExist(testFilePath)) {
+      throw new Error(`Test with name "${testName}" already exists`);
+    }
+    const createdAt = Date.now();
+    const testJSON: ExperimentTestJSON = {
+      ...params,
+      status: {
+        state: ExperimentTestStatus.CREATED,
+      },
+      createdAt,
+      result: [],
+    };
+    await OS.createJsonFile(testFilePath, testJSON);
+    return {
+      filePath: testFilePath,
+      test: {
+        ...testJSON,
+        testName,
+        experimentName: exp.name,
+      }
+    };
+  }
+
+  static async updateTest(
+    path: string,
+    content: Partial<ExperimentTestJSON>
+  ): Promise<ExperimentTestJSON> {
+    const currentContent = await OS.readJsonFile(path);
+    const updatedTest: ExperimentTestJSON = {
+      ...currentContent,
+      ...content,
+    };
+    await OS.createJsonFile(path, updatedTest);
+    return updatedTest;
+  }
+
   static async findByName(name: string): Promise<ExperimentMetadata> {
     const experiments = await this.getAllExperiments();
     const exp = experiments.find((e) => e.name === name);
@@ -37,28 +90,6 @@ export default class ExperimentModel {
       throw new Error(`Experiment with name "${name}" not found`);
     }
     return exp;
-  }
-
-  static async updateTestJobStatus(
-    path: string,
-    job: Partial<ExperimentTestJSON['job']>
-  ): Promise<void> {
-    const content: ExperimentTestJSON = await OS.readJsonFile(path);
-    await OS.createJsonFile(path, {
-      ...content,
-      job: {
-        ...content.job,
-        ...job,
-      },
-    });
-  }
-
-  static async setTestResult(path: string, result: ExperimentTestCaseResult[]): Promise<void> {
-    const content: ExperimentTestJSON = await OS.readJsonFile(path);
-    await OS.createJsonFile(path, {
-      ...content,
-      result,
-    });
   }
 
   static async getAllTests(experimentName: string): Promise<ExperimentTest[]> {
