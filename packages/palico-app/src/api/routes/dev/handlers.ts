@@ -41,15 +41,17 @@ export const createTestForExperimentHandler: RequestHandler = async (
       testName,
       description,
       featureFlags,
-      agentId,
+      agentName,
+      workflowName,
       testCaseDatasetName,
     } = req.body;
-    const test = await ExperimentExecutor.startNewTestRun({
+    const test = await ExperimentExecutor.startTestJob({
       experimentName: expName,
       testName,
       description,
       featureFlags,
-      agentId,
+      agentName,
+      workflowName,
       testCaseDatasetName,
     });
     return res.status(200).json(test);
