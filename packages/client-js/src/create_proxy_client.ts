@@ -43,14 +43,7 @@ export const createProxyClient = (
       replyToToolCall: async () => {
         throw new Error('Not yet implemented');
       },
-    },
-    metadata: {
-      getAgentsMetadata: async () => {
-        return await proxyRequest({
-          action: ProxyAction.GetAgenstMetadata,
-        });
-      },
-    },
+    }
   };
 };
 
@@ -75,8 +68,6 @@ export const handleProxyRequest = async (
       return await client.agents.newConversation(request.params);
     case ProxyAction.ReplyAsUser:
       return await client.agents.replyAsUser(request.params);
-    case ProxyAction.GetAgenstMetadata:
-      return await client.metadata.getAgentsMetadata();
     default:
       throw new Error(`Unknown action: ${request.action}`);
   }

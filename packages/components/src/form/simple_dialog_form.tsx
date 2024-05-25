@@ -1,13 +1,17 @@
-import React from 'react'
-import { Dialog, DialogContent, DialogTitle } from '../dialog'
-import FormBuilder, { FormBuilderProps } from './form_builder'
+import React from 'react';
+import { Dialog, DialogContent, DialogTitle } from '../dialog';
+import FormBuilder, { FormBuilderProps } from './form_builder';
+import { DialogProps } from '@mui/material';
 
-export type SimpleDialogFormOnSubmitHandler = (data: Record<string, string>) => Promise<void>
+export type SimpleDialogFormOnSubmitHandler = (
+  data: Record<string, string>
+) => Promise<void>;
 
 interface SimpleDialogFormProps extends FormBuilderProps {
-  title: string
-  isOpen: boolean
-  closeForm: () => void
+  title: string;
+  isOpen: boolean;
+  closeForm: () => void;
+  maxWidth?: DialogProps['maxWidth'];
 }
 
 export const SimpleDialogForm: React.FC<SimpleDialogFormProps> = ({
@@ -15,15 +19,23 @@ export const SimpleDialogForm: React.FC<SimpleDialogFormProps> = ({
   isOpen,
   closeForm,
   onSubmit,
+  maxWidth,
   ...formBuilderProps
 }) => {
-  const handleFormSubmit = async (data: Record<string, string>): Promise<void> => {
-    await onSubmit(data)
-    closeForm()
-  }
+  const handleFormSubmit = async (
+    data: Record<string, string>
+  ): Promise<void> => {
+    await onSubmit(data);
+    closeForm();
+  };
 
   return (
-    <Dialog fullWidth={true} open={isOpen} onClose={closeForm}>
+    <Dialog
+      fullWidth={true}
+      maxWidth={maxWidth}
+      open={isOpen}
+      onClose={closeForm}
+    >
       <DialogTitle>
         {title}
         {/* <Typography variant="h5">{title}</Typography>
@@ -37,5 +49,5 @@ export const SimpleDialogForm: React.FC<SimpleDialogFormProps> = ({
         <FormBuilder onSubmit={handleFormSubmit} {...formBuilderProps} />
       </DialogContent>
     </Dialog>
-  )
-}
+  );
+};

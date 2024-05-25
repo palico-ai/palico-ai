@@ -2,6 +2,7 @@ import { RequestHandler } from 'express';
 import ExperimentModel from '../../../experiments/model';
 import JobQueue from '../../../services/job_queue';
 import { ExperimentExecutor } from '../../../experiments/executor';
+import { APIError } from '../../error';
 
 export const createNewExperimentHandler: RequestHandler = async (
   req,
@@ -60,6 +61,20 @@ export const createTestForExperimentHandler: RequestHandler = async (
   }
 };
 
+export const getExperimentByNameHandler: RequestHandler = async (
+  req,
+  res,
+  next
+) => {
+  try {
+    const { expName } = req.params;
+    const experiment = await ExperimentModel.findByName(expName);
+    return res.status(200).json(experiment);
+  } catch (error) {
+    return next(error);
+  }
+};
+
 export const getJobStatusHandler: RequestHandler = async (req, res, next) => {
   try {
     const { jobId } = req.params;
@@ -86,3 +101,16 @@ export const getAllTestForExperimentHandler: RequestHandler = async (
     return next(error);
   }
 };
+
+export const getTestStatusHandler: RequestHandler = async (req, res, next) => {
+  try {
+    const { testName, expName } = req.params;
+    const test = await ExperimentModel.findTest(expName, testName);
+    if(!test) {
+      throw APIError.notFound('Test not found');
+    }
+    return res.status(200).json(test.status);
+  } catch (error) {
+    return next(error);
+  }
+}

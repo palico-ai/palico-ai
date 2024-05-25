@@ -5,14 +5,17 @@ import {
   ExperimentMetadata,
   ExperimentTest,
   ExperimentTestJSON,
+  ExperimentTestMetadata,
   ExperimentTestStatus,
 } from '.';
 import OS from '../utils/os';
 import Project from '../utils/project';
+import omit from 'lodash/omit';
 
 export default class ExperimentModel {
   private static readonly DATE_SEPERATOR = '__';
   private static readonly TEST_DIR = 'tests';
+  private static readonly TEST_FILE_NAME = 'test.json';
 
   static async createNewExperiment(
     params: CreateExperimentParams
@@ -66,7 +69,7 @@ export default class ExperimentModel {
         ...testJSON,
         testName,
         experimentName: exp.name,
-      }
+      },
     };
   }
 
@@ -92,17 +95,24 @@ export default class ExperimentModel {
     return exp;
   }
 
-  static async getAllTests(experimentName: string): Promise<ExperimentTest[]> {
+  static async getAllTests(
+    experimentName: string
+  ): Promise<ExperimentTestMetadata[]> {
     const exp = await ExperimentModel.findByName(experimentName);
     const testDir = await ExperimentModel.buildTestDirPath(exp.directoryName);
     const files = await OS.getFiles(testDir);
-    const tests = await Promise.all(
-      files.map(async (file) => {
-        const content = await OS.readJsonFile(`${testDir}/${file}`);
+    const testFiles = files.filter((file) =>
+      file.endsWith(`.${ExperimentModel.TEST_FILE_NAME}`)
+    );
+    const tests: ExperimentTestMetadata[] = await Promise.all(
+      testFiles.map(async (file) => {
+        const content = await OS.readJsonFile<ExperimentTestJSON>(
+          `${testDir}/${file}`
+        );
         return {
-          ...content,
+          ...omit(content, 'result'),
           experimentName: exp.name,
-          testName: file.replace(/\.json$/, ''),
+          testName: file.replace(`.${ExperimentModel.TEST_FILE_NAME}`, ''),
         };
       })
     );
@@ -155,6 +165,6 @@ export default class ExperimentModel {
     testName: string
   ): Promise<string> {
     const rootPath = await ExperimentModel.buildTestDirPath(expDirName);
-    return `${rootPath}/${testName}.json`;
+    return `${rootPath}/${testName}.${ExperimentModel.TEST_FILE_NAME}`;
   }
 }

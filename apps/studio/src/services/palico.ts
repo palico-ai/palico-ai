@@ -20,12 +20,13 @@ export async function getPalicoClient(params?: PalicoGetClientParams) {
   });
 }
 
-export async function palicoFetch(path: string, fetchOptions: RequestInit) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function palicoFetch<Response=any>(path: string, fetchOptions: RequestInit) : Promise<Response> {
   const agentAPIURL = process.env.PALICO_AGENT_API_URL;
   const serviceKey = process.env.PALICO_SERVICE_KEY;
   if (!agentAPIURL || !serviceKey) {
     throw new Error('Missing Palico environment variables');
   }
   const fetcher = createAgentAPIFetcher({ rootURL: agentAPIURL, serviceKey });
-  return await fetcher(path, fetchOptions);
+  return await fetcher<Response>(path, fetchOptions);
 }

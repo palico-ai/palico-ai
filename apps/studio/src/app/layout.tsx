@@ -2,6 +2,8 @@ import { Box } from '@mui/material';
 import Sidebar from '../components/layout/sidebar';
 import { ThemeProvider } from '@palico-ai/components';
 import './global.css';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export const metadata = {
   title: 'Palico Studio',
@@ -23,6 +25,7 @@ export default function RootLayout({
             }}
           >
             <Sidebar />
+            <ToastContainer position='bottom-left' />
             <Box
               sx={{
                 width: '100%',

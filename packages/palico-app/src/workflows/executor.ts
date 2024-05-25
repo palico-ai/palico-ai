@@ -2,8 +2,7 @@ import { ConversationContext, ConversationRequestContent, ConversationResponseSc
 import { SpanStatusCode, trace } from "@opentelemetry/api";
 import { uuid } from "../utils/common";
 import { ChainNode } from "./types";
-import objGet from 'lodash.get';
-import objSet from 'lodash.set';
+import {get as objGet, set as objSet} from 'lodash';
 import WorkflowModel from "../models/workflow";
 
 export interface RunWorkflowParams {

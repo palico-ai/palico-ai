@@ -23,11 +23,12 @@ export class ExperimentExecutor {
   static async startTestJob(
     params: CreateExperimentTestParams
   ): Promise<CreateNewExperimentTestResult> {
-    const { filePath } = await ExperimentModel.createTest(params);
+    const { filePath, test } = await ExperimentModel.createTest(params);
     // TODO: Move run experiment to here
     const jobId = await JobQueue.runExperiment({ filePath });
     return {
       jobId,
+      test
     };
   }
 

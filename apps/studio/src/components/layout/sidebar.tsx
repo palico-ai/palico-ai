@@ -25,7 +25,9 @@ import ChatBubbleIcon from '@mui/icons-material/Textsms';
 import ExperimentIcon from '@mui/icons-material/Science';
 import TracerIcon from '@mui/icons-material/MonitorHeart';
 import EvaluationIcon from '@mui/icons-material/Assessment';
+import LabIcon from '@mui/icons-material/Compare';
 import SettingsIcon from '@mui/icons-material/Settings';
+import { RoutePath } from '../../utils/route_path';
 
 interface SidebarNavItemParams {
   label: string;
@@ -41,22 +43,27 @@ const SIDEBAR_ITEMS: SidebarNavItemParams[] = [
   },
   {
     label: 'Labs',
-    path: '/labs',
+    path: RoutePath.labList(),
+    icon: <LabIcon />,
+  },
+  {
+    label: 'Experiments',
+    path: RoutePath.experimentList(),
     icon: <ExperimentIcon />,
   },
   {
     label: 'Tracing',
-    path: '/tracing',
+    path: RoutePath.tracing(),
     icon: <TracerIcon />,
   },
   {
     label: 'Evaluations',
-    path: '/evaluation',
+    path: RoutePath.evaluation(),
     icon: <EvaluationIcon />,
   },
   {
     label: 'Settings',
-    path: '/settings',
+    path: RoutePath.settings(),
     icon: <SettingsIcon />,
   },
 ];
