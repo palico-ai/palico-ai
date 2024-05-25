@@ -31,3 +31,7 @@ export const Button: React.FC<ButtonProps> = ({
     </MUIButton>
   );
 };
+
+export {
+  IconButton,
+} from "@mui/material"

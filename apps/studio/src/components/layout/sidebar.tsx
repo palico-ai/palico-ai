@@ -4,7 +4,6 @@ import {
   Box,
   CSSObject,
   Divider,
-  IconButton,
   List,
   ListItem,
   Drawer as MUIDrawer,
@@ -15,11 +14,9 @@ import {
   ListItemText,
   Typography,
 } from '@mui/material';
-import OpenDrawerIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
-import CloseDrawerIcon from '@mui/icons-material/ChevronLeft';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import React, { useMemo } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { Link } from '@palico-ai/components';
 import ChatBubbleIcon from '@mui/icons-material/Textsms';
 import ExperimentIcon from '@mui/icons-material/Science';
@@ -28,6 +25,7 @@ import EvaluationIcon from '@mui/icons-material/Assessment';
 import LabIcon from '@mui/icons-material/Compare';
 import SettingsIcon from '@mui/icons-material/Settings';
 import { RoutePath } from '../../utils/route_path';
+import { DashboardLayoutContext } from '../../context/dashboard_layout';
 
 interface SidebarNavItemParams {
   label: string;
@@ -169,15 +167,7 @@ const SidebarItem: React.FC<SidebarListItemProps> = ({
 };
 
 const Sidebar: React.FC = () => {
-  const [open, setOpen] = React.useState(false);
-
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
-
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
+  const { sidebarOpen: open } = useContext(DashboardLayoutContext);
 
   return (
     <Drawer variant="permanent" anchor="left" open={open}>
@@ -205,11 +195,6 @@ const Sidebar: React.FC = () => {
                 Palico AI
               </Typography>
             </Box>
-            <Box>
-              <IconButton onClick={handleDrawerClose}>
-                <CloseDrawerIcon />
-              </IconButton>
-            </Box>
           </Box>
         ) : (
           <Box
@@ -236,24 +221,6 @@ const Sidebar: React.FC = () => {
           />
         ))}
       </List>
-      {!open && (
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-          }}
-        >
-          <Divider />
-          <IconButton
-            onClick={handleDrawerOpen}
-            sx={{
-              borderRadius: 0,
-            }}
-          >
-            <OpenDrawerIcon />
-          </IconButton>
-        </Box>
-      )}
     </Drawer>
   );
 };

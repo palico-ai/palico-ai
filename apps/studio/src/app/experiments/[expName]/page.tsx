@@ -7,6 +7,7 @@ import {
 import { ExperimentItemChildPage } from '../../../types/component_types';
 import React from 'react';
 import TestList from './test_list';
+import { RoutePath } from '../../../utils/route_path';
 
 const ExperimentItemPage: React.FC<ExperimentItemChildPage> = async (props) => {
   const currentExp = await getExperimentByName(props.params.expName);
@@ -16,7 +17,12 @@ const ExperimentItemPage: React.FC<ExperimentItemChildPage> = async (props) => {
   });
   console.log(tests);
   return (
-    <PageContent title={`Experiment - ${currentExp.name}`}>
+    <PageContent
+      breadcrumb={[
+        { label: 'Experiments', href: RoutePath.experimentList() },
+        { label: currentExp.name },
+      ]}
+    >
       <Box sx={{ m: 4 }}>
         <TestList initialTests={sortedTests} />
       </Box>

@@ -4,6 +4,7 @@ import { ThemeProvider } from '@palico-ai/components';
 import './global.css';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import DashboardLayoutContextProvider from '../context/dashboard_layout';
 
 export const metadata = {
   title: 'Palico Studio',
@@ -18,23 +19,25 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <ThemeProvider>
-          <Box
-            sx={{
-              display: 'flex',
-              backgroundColor: 'background.default',
-            }}
-          >
-            <Sidebar />
-            <ToastContainer position='bottom-left' />
+          <DashboardLayoutContextProvider>
             <Box
               sx={{
-                width: '100%',
-                overflow: 'auto',
+                display: 'flex',
+                backgroundColor: 'background.default',
               }}
             >
-              {children}
+              <Sidebar />
+              <ToastContainer position="bottom-left" />
+              <Box
+                sx={{
+                  width: '100%',
+                  overflow: 'auto',
+                }}
+              >
+                {children}
+              </Box>
             </Box>
-          </Box>
+          </DashboardLayoutContextProvider>
         </ThemeProvider>
       </body>
     </html>
