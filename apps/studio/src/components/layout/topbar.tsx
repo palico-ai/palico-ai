@@ -1,6 +1,6 @@
 'use client';
 
-import { AppBar, Box, Toolbar } from '@mui/material';
+import { AppBar, Box, Paper, Toolbar } from '@mui/material';
 import { Typography } from '@palico-ai/components';
 import React from 'react';
 
@@ -21,9 +21,10 @@ const Topbar: React.FC<TopbarProps> = ({ leftNavItems, rightNavItems }) => {
   return (
     <AppBar
       position="static"
-      sx={{
+      sx={theme => ({
         zIndex: (theme) => theme.zIndex.drawer + 1,
-      }}
+        backgroundColor: theme.palette.common.black,
+      })}
     >
       <Toolbar>
         <Box>{leftNavItems}</Box>
