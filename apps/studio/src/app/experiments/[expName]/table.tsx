@@ -28,6 +28,8 @@ import {
   TableRow,
 } from '@mui/material';
 import { Typography } from '@palico-ai/components';
+import { useRouter } from 'next/navigation';
+import { RoutePath } from '../../../utils/route_path';
 
 interface TestListProps {
   data: ExperimentTestMetadata[];
@@ -51,6 +53,7 @@ const TestTable: React.FC<TestListProps> = ({ data }) => {
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
+  const router = useRouter();
 
   useEffect(() => {
     console.log('Data Changed in table', data);
@@ -106,7 +109,7 @@ const TestTable: React.FC<TestListProps> = ({ data }) => {
     debugColumns: false,
   });
 
-  const { pageSize, pageIndex } = table.getState().pagination
+  const { pageSize, pageIndex } = table.getState().pagination;
 
   return (
     <Box>
@@ -136,7 +139,12 @@ const TestTable: React.FC<TestListProps> = ({ data }) => {
                     cursor: 'pointer',
                   }}
                   onClick={() => {
-                    console.log('Row Clicked', row.original);
+                    router.push(
+                      RoutePath.experimentTestItem({
+                        experimentName: row.original.experimentName,
+                        testName: row.original.testName,
+                      })
+                    );
                   }}
                 >
                   {row.getVisibleCells().map((cell) => {
@@ -146,11 +154,14 @@ const TestTable: React.FC<TestListProps> = ({ data }) => {
                         <TableCell key={cell.id}>
                           <Chip
                             size="small"
-                            label={(
-                              <Typography variant="caption" textTransform={"lowercase"}>
+                            label={
+                              <Typography
+                                variant="caption"
+                                textTransform={'lowercase'}
+                              >
                                 {status}
                               </Typography>
-                            )}
+                            }
                             variant="outlined"
                             color={
                               status === ExperimentTestStatus.SUCCESS
@@ -194,11 +205,11 @@ const TestTable: React.FC<TestListProps> = ({ data }) => {
           },
         }}
         onPageChange={(_, page) => {
-          table.setPageIndex(page)
+          table.setPageIndex(page);
         }}
-        onRowsPerPageChange={e => {
-          const size = e.target.value ? Number(e.target.value) : 10
-          table.setPageSize(size)
+        onRowsPerPageChange={(e) => {
+          const size = e.target.value ? Number(e.target.value) : 10;
+          table.setPageSize(size);
         }}
       />
     </Box>

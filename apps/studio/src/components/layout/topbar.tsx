@@ -1,6 +1,6 @@
 'use client';
 
-import { AppBar, Box, Paper, Toolbar } from '@mui/material';
+import { AppBar, Box, Toolbar } from '@mui/material';
 import { Typography } from '@palico-ai/components';
 import React from 'react';
 

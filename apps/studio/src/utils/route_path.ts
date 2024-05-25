@@ -1,41 +1,49 @@
 export interface RequireLabId {
-  labId: string
+  labId: string;
 }
 
 export interface RequireExperimentName {
-  experimentName: string
+  experimentName: string;
+}
+
+export interface RequireTestName {
+  testName: string;
 }
 
 export class RoutePath {
   static playground() {
-    return '/playground'
+    return '/playground';
   }
 
   static labItem(params: RequireLabId) {
-    return `/labs/${params.labId}`
+    return `/labs/${params.labId}`;
   }
 
   static labList() {
-    return '/labs'
+    return '/labs';
   }
 
   static experimentList() {
-    return '/experiments'
+    return '/experiments';
   }
 
   static experimentItem(params: RequireExperimentName) {
-    return `${RoutePath.experimentList()}/${params.experimentName}`
+    return `${RoutePath.experimentList()}/${params.experimentName}`;
+  }
+
+  static experimentTestItem(params: RequireExperimentName & RequireTestName) {
+    return `${RoutePath.experimentItem(params)}/${params.testName}`;
   }
 
   static tracing() {
-    return '/tracing'
+    return '/tracing';
   }
 
   static evaluation() {
-    return '/evaluation'
+    return '/evaluation';
   }
 
   static settings() {
-    return '/settings'
+    return '/settings';
   }
 }
