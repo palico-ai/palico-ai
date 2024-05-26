@@ -19,6 +19,7 @@ export function HeaderCell<Data>(
     if (!showSearch) {
       header.column.setFilterValue('');
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showSearch]);
 
   const sortDirection = header.column.getIsSorted();
