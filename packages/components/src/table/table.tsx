@@ -11,6 +11,7 @@ import {
 } from '@mui/material';
 import { Cell, Table as TANTable, flexRender } from '@tanstack/react-table';
 import { useMemo } from 'react';
+import { HeaderCell } from './header_cell';
 
 export type RenderCellFN<Data> = (cell: Cell<Data, unknown>) => React.ReactNode;
 
@@ -37,12 +38,7 @@ export function Table<Data>(props: TableParams<Data>): React.ReactElement {
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
-                  <TableCell key={header.id}>
-                    {flexRender(
-                      header.column.columnDef.header,
-                      header.getContext()
-                    )}
-                  </TableCell>
+                  <HeaderCell key={header.id} header={header} />
                 ))}
               </TableRow>
             ))}

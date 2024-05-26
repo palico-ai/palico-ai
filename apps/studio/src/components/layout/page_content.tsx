@@ -26,7 +26,7 @@ const PageContent = ({
 }: PageContent) => {
   const breadcrumbUI = useMemo(() => {
     return breadcrumb?.map((item, index) => {
-      const text = <Typography key={index}>{item.label}</Typography>;
+      const text = <Typography key={index}>{decodeURI(item.label)}</Typography>;
       if (item.href) {
         return (
           <Link key={index} href={item.href}>
