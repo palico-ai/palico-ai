@@ -34,7 +34,7 @@
       "executor": "nx:run-commands",
       "options": {
         "cwd": "packages/palico-app",
-        "command": "typedoc --out typedoc --tsconfig tsconfig.lib.json src/index.ts"
+        "command": "typedoc --out ../../dist/typedoc/palico-app --tsconfig tsconfig.lib.json src/index.ts"
       }
     }
   },

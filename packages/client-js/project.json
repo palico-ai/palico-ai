@@ -54,7 +54,7 @@
       "executor": "nx:run-commands",
       "options": {
         "cwd": "packages/client-js",
-        "command": "typedoc --out typedoc --tsconfig tsconfig.lib.json src/index.ts"
+        "command": "typedoc --out ../../dist/typedoc/client-js --tsconfig tsconfig.lib.json src/index.ts"
       }
     }
   },
