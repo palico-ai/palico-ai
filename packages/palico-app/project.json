@@ -29,6 +29,13 @@
         ],
         "parallel": false
       }
+    },
+    "typedoc": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "packages/palico-app",
+        "command": "typedoc --out ../../dist/typedoc/palico-app --tsconfig tsconfig.lib.json src/index.ts"
+      }
     }
   },
   "tags": []

@@ -22,3 +22,5 @@ export interface ConversationContext {
 }
 
 export * from './studio';
+export * from './experiment';
+export * from './api';

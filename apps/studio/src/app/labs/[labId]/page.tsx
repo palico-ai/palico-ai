@@ -2,25 +2,24 @@ import React from 'react';
 import { LabItemChildPage } from '../../../types/component_types';
 import { LabContextProvider } from './__components__/lab.context';
 import { getLabView } from '../../../services/studio';
-import { getPalicoClient } from '../../../services/palico';
 import PageContent from '../../../components/layout/page_content';
 import QuicklabTopbarNav from './__components__/topbar_menu';
 import AgentFeatureTestGrid from './__components__/grid';
+import { getAllAgents } from '../../../services/metadata';
 
-export const dynamic = 'force-dynamic'
+export const dynamic = 'force-dynamic';
 
 const LabItemPage: React.FC<LabItemChildPage> = async ({
   params: { labId },
 }) => {
-  const client = await getPalicoClient();
   const labData = await getLabView(labId);
-  const agentMetadata = await client.metadata.getAgentsMetadata();
+  const agentMetadata = await getAllAgents();
 
-  console.log("labData", labData.testCases);
+  console.log('labData', labData.testCases);
 
   return (
     <LabContextProvider
-      agentIdList={agentMetadata.map((agent) => agent.id)}
+      agentIdList={agentMetadata.map((agent) => agent.name)}
       initialExperiments={labData.experiments ?? []}
       initialTestCases={labData.testCases ?? []}
       initialExperimentTestResults={labData.experimentTestResults ?? {}}

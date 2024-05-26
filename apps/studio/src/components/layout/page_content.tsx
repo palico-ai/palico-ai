@@ -1,21 +1,43 @@
-import { Box } from '@mui/material';
-import React from 'react';
+import { Box, Breadcrumbs } from '@mui/material';
+import React, { useMemo } from 'react';
 import Topbar from './topbar';
-import { Typography } from '@palico-ai/components';
+import { Typography, Link } from '@palico-ai/components';
+import TopbarSidebarMenu from './sidebar_menu';
+
+export interface BreadcrumbItem {
+  label: string;
+  href?: string;
+}
 
 interface PageContent {
   children: React.ReactNode;
   topbarRightNavs?: React.ReactNode;
   title?: string;
+  breadcrumb?: BreadcrumbItem[];
   removeTopbar?: boolean;
 }
 
 const PageContent = ({
   children,
   title,
+  breadcrumb,
   topbarRightNavs,
   removeTopbar,
 }: PageContent) => {
+  const breadcrumbUI = useMemo(() => {
+    return breadcrumb?.map((item, index) => {
+      const text = <Typography key={index}>{decodeURI(item.label)}</Typography>;
+      if (item.href) {
+        return (
+          <Link key={index} href={item.href}>
+            {text}
+          </Link>
+        );
+      }
+      return text;
+    });
+  }, [breadcrumb]);
+
   return (
     <Box
       sx={{
@@ -29,11 +51,24 @@ const PageContent = ({
         <Topbar
           rightNavItems={topbarRightNavs}
           leftNavItems={
-            title && (
-              <Box>
-                <Typography variant="h6">{title}</Typography>
-              </Box>
-            )
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
+              <TopbarSidebarMenu />
+              {title && (
+                <Box>
+                  <Typography variant="h6">{title}</Typography>
+                </Box>
+              )}
+              {breadcrumbUI && (
+                <Breadcrumbs aria-label="breadcrumb">
+                  {breadcrumbUI}
+                </Breadcrumbs>
+              )}
+            </Box>
           }
         />
       )}
@@ -42,6 +77,8 @@ const PageContent = ({
           flex: 1,
           overflow: 'auto',
           width: '100%',
+          p: 3,
+          boxSizing: 'border-box',
         }}
       >
         {children}

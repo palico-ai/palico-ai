@@ -68,20 +68,11 @@ export const createClient = (config: ClientConfig): IPalicoClient => {
     return data;
   };
 
-  const getAgentsMetadata = async () => {
-    return await apiFetch('/metadata/agents', {
-      method: 'GET',
-    });
-  };
-
   return {
     agents: {
       newConversation,
       replyAsUser,
       replyToToolCall,
-    },
-    metadata: {
-      getAgentsMetadata,
     },
   };
 };

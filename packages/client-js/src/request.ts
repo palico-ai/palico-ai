@@ -5,7 +5,8 @@ export interface APIRequestOptions {
 
 export const createAgentAPIFetcher =
   (options: APIRequestOptions) =>
-  async (path: string, fetchOptions: RequestInit) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async<Response=any> (path: string, fetchOptions: RequestInit) : Promise<Response> => {
     const response = await fetch(`${options.rootURL}${path}`, {
       cache: 'no-store',
       headers: {
@@ -19,5 +20,5 @@ export const createAgentAPIFetcher =
       console.error(data);
       throw new Error(JSON.stringify(data, null, 2));
     }
-    return data;
+    return data as Response;
   };

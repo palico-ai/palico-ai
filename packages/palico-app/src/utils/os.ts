@@ -43,7 +43,8 @@ export default class OS {
     await writeFile(path, JSON.stringify(content, null, 2), 'utf-8');
   }
 
-  static async readJsonFile(path: string) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  static async readJsonFile<T=any>(path: string) : Promise<T> {
     // Read a JSON file and parse its content
     const content = await readFile(path, 'utf-8');
     return JSON.parse(content);

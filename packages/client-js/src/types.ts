@@ -54,15 +54,6 @@ export interface PalicoAgentClient {
   replyToToolCall: ClientReplyToToolCallFN;
 }
 
-export interface AgentMetadata {
-  id: string;
-}
-
-export interface AgentsMetadataClient {
-  getAgentsMetadata: () => Promise<AgentMetadata[]>;
-}
-
 export interface IPalicoClient {
   agents: PalicoAgentClient;
-  metadata: AgentsMetadataClient;
 }

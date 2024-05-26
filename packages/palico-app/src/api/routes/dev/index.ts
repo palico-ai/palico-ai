@@ -4,7 +4,10 @@ import {
   createTestForExperimentHandler,
   getAllExperimentsHandler,
   getAllTestForExperimentHandler,
+  getExperimentByNameHandler,
   getJobStatusHandler,
+  getTestByNameHandler,
+  getTestStatusHandler,
 } from './handlers';
 
 const router = Router();
@@ -20,9 +23,17 @@ router
   .post(createNewExperimentHandler)
   .get(getAllExperimentsHandler);
 
+router.route('/experiments/:expName').get(getExperimentByNameHandler);
+
 router
-  .route('/experiments/:expName/test')
+  .route('/experiments/:expName/tests')
   .get(getAllTestForExperimentHandler)
   .post(createTestForExperimentHandler);
+
+router.route('/experiments/:expName/tests/:testName').get(getTestByNameHandler);
+
+router
+  .route('/experiments/:expName/tests/:testName/status')
+  .get(getTestStatusHandler);
 
 export default router;
