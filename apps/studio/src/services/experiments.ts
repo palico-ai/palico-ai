@@ -6,6 +6,7 @@ import {
   CreateExperimentTestJobResponse,
   ExperimentMetadata,
   ExperimentTestMetadata,
+  ExperimentTest,
 } from '@palico-ai/common';
 import { verifySession } from './auth';
 import { palicoFetch } from './palico';
@@ -69,6 +70,16 @@ export const runExperimentTest = async (params: CreateExperimentTestParams) => {
     }
   );
 };
+
+export const getTestByName = async (expName: string, testName: string) => {
+  await verifySession();
+  return await palicoFetch<ExperimentTest>(
+    `/dev/experiments/${expName}/tests/${testName}`,
+    {
+      method: 'GET',
+    }
+  );
+}
 
 export const getTestStatus = async (expName: string, testName: string) => {
   await verifySession();

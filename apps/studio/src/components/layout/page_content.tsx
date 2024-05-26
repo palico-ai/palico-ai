@@ -77,6 +77,8 @@ const PageContent = ({
           flex: 1,
           overflow: 'auto',
           width: '100%',
+          p: 3,
+          boxSizing: 'border-box',
         }}
       >
         {children}

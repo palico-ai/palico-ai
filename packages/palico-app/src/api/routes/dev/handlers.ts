@@ -102,15 +102,25 @@ export const getAllTestForExperimentHandler: RequestHandler = async (
   }
 };
 
+export const getTestByNameHandler: RequestHandler = async (req, res, next) => {
+  try {
+    const { expName, testName } = req.params;
+    const test = await ExperimentModel.findTest(expName, testName);
+    return res.status(200).json(test);
+  } catch (error) {
+    return next(error);
+  }
+};
+
 export const getTestStatusHandler: RequestHandler = async (req, res, next) => {
   try {
     const { testName, expName } = req.params;
     const test = await ExperimentModel.findTest(expName, testName);
-    if(!test) {
+    if (!test) {
       throw APIError.notFound('Test not found');
     }
     return res.status(200).json(test.status);
   } catch (error) {
     return next(error);
   }
-}
+};

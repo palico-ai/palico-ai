@@ -32,7 +32,7 @@ export class RoutePath {
   }
 
   static experimentTestItem(params: RequireExperimentName & RequireTestName) {
-    return `${RoutePath.experimentItem(params)}/${params.testName}`;
+    return `${RoutePath.experimentItem(params)}/tests/${params.testName}`;
   }
 
   static tracing() {

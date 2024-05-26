@@ -1,4 +1,3 @@
-import { Box } from '@mui/material';
 import PageContent from '../../../components/layout/page_content';
 import {
   getExperimentByName,
@@ -23,9 +22,7 @@ const ExperimentItemPage: React.FC<ExperimentItemChildPage> = async (props) => {
         { label: currentExp.name },
       ]}
     >
-      <Box sx={{ m: 4 }}>
         <TestList initialTests={sortedTests} />
-      </Box>
     </PageContent>
   );
 };

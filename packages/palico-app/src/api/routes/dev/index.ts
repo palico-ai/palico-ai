@@ -6,6 +6,7 @@ import {
   getAllTestForExperimentHandler,
   getExperimentByNameHandler,
   getJobStatusHandler,
+  getTestByNameHandler,
   getTestStatusHandler,
 } from './handlers';
 
@@ -28,6 +29,8 @@ router
   .route('/experiments/:expName/tests')
   .get(getAllTestForExperimentHandler)
   .post(createTestForExperimentHandler);
+
+router.route('/experiments/:expName/tests/:testName').get(getTestByNameHandler);
 
 router
   .route('/experiments/:expName/tests/:testName/status')
