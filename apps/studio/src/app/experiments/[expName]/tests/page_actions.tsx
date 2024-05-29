@@ -9,11 +9,11 @@ import {
   getAllAgents,
   getAllDatasets,
   getAllWorkflows,
-} from '../../../services/metadata';
+} from '../../../../services/metadata';
 import React, { useMemo } from 'react';
 import { CreateExperimentTestJobResponse } from '@palico-ai/common';
-import { runExperimentTest } from '../../../services/experiments';
-import { useExperimentName } from '../../../hooks/use_params';
+import { runExperimentTest } from '../../../../services/experiments';
+import { useExperimentName } from '../../../../hooks/use_params';
 
 export interface TestListTableHeaderProps {
   onTestCreated: (test: CreateExperimentTestJobResponse) => void;
@@ -114,7 +114,7 @@ const TestListTableHeader: React.FC<TestListTableHeaderProps> = ({
   };
 
   return (
-    <Box mb={2}>
+    <Box>
       <SimpleDialogForm
         title="Create New Test"
         isOpen={isOpen}

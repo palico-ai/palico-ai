@@ -10,8 +10,8 @@ const LabListPage: React.FC = async () => {
   const labList = await getAllLabViews();
 
   return (
-    <PageContent title='Labs'>
-      <Box sx={{m: 4}}>
+    <PageContent breadcrumb={[{ label: 'Labs' }]}>
+      <Box>
         <LabList initialLabItems={labList} />
       </Box>
     </PageContent>

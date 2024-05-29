@@ -28,8 +28,9 @@ interface TabItemProps {
 
 interface TabViewProps {
   tabs: TabItemProps[];
-  children: React.ReactNode;
+  children?: React.ReactNode;
   textColor?: TabsProps['textColor'];
+  onTabChange?: (value: string) => void;
   indicatorColor?: TabsProps['indicatorColor'];
 }
 
@@ -37,12 +38,16 @@ export const TabView: React.FC<TabViewProps> = ({
   textColor = 'inherit',
   indicatorColor = 'primary',
   tabs,
+  onTabChange,
   children,
 }) => {
   const [activeTab, setActiveTab] = React.useState(tabs[0].value);
 
   const handleChangeTab = (_: React.SyntheticEvent, newValue: string) => {
     setActiveTab(newValue);
+    if (onTabChange) {
+      onTabChange(newValue);
+    }
   };
 
   return (
@@ -54,6 +59,7 @@ export const TabView: React.FC<TabViewProps> = ({
           }}
           value={activeTab}
           onChange={handleChangeTab}
+          variant="fullWidth"
           textColor={textColor}
           indicatorColor={indicatorColor}
         >
@@ -66,3 +72,8 @@ export const TabView: React.FC<TabViewProps> = ({
     </TabContext.Provider>
   );
 };
+
+export {
+  Tabs,
+  Tab,
+} from '@mui/material'
