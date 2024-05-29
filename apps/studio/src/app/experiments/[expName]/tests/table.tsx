@@ -18,7 +18,7 @@ import {
 } from '@tanstack/react-table';
 import { useRouter } from 'next/navigation';
 import { Chip, RenderCellFN, Table, Typography } from '@palico-ai/components';
-import { RoutePath } from '../../../utils/route_path';
+import { RoutePath } from '../../../../utils/route_path';
 
 interface TestListProps {
   data: ExperimentTestMetadata[];

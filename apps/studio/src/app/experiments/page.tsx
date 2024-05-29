@@ -10,8 +10,8 @@ const ExperimentListPage: React.FC = async () => {
   const experiments = await getExperimentList();
 
   return (
-    <PageContent title="Experiments">
-      <Box sx={{ m: 4 }}>
+    <PageContent breadcrumb={[{ label: 'Experiments' }]}>
+      <Box>
         <ExperimentList initialExpItems={experiments} />
       </Box>
     </PageContent>

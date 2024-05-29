@@ -6,14 +6,16 @@ import {
   ExperimentTestStatus,
 } from '@palico-ai/common';
 import React, { useEffect } from 'react';
-import { Card, CardContent } from '@palico-ai/components';
 import TestTable from './table';
-import TestListTableHeader from './header';
-import { Divider } from '@mui/material';
+import TopbarAction from './page_actions';
 import { cloneDeep, size } from 'lodash';
 import { useInterval } from 'usehooks-ts';
-import { useExperimentName } from '../../../hooks/use_params';
-import { getTestStatus } from '../../../services/experiments';
+import { useExperimentName } from '../../../../hooks/use_params';
+import { getTestStatus } from '../../../../services/experiments';
+import { RoutePath } from '../../../../utils/route_path';
+import { ExperimentItemPageTabItemList } from '../../../../constants/ui';
+import PageContent from '../../../../components/layout/page_content';
+import { Paper } from '@mui/material';
 
 interface TestListProps {
   initialTests: ExperimentTestMetadata[];
@@ -85,13 +87,19 @@ const TestList: React.FC<TestListProps> = ({ initialTests }) => {
   };
 
   return (
-    <Card elevation={2}>
-      <CardContent>
-        <TestListTableHeader onTestCreated={handleTestCreated} />
-        <Divider />
+    <PageContent
+      breadcrumb={[
+        { label: 'Experiments', href: RoutePath.experimentList() },
+        { label: expName },
+        { label: 'Tests' },
+      ]}
+      navItems={ExperimentItemPageTabItemList(expName)}
+      actions={<TopbarAction onTestCreated={handleTestCreated} />}
+    >
+      <Paper sx={{ p: 2 }}>
         <TestTable data={data} />
-      </CardContent>
-    </Card>
+      </Paper>
+    </PageContent>
   );
 };
 

@@ -9,7 +9,8 @@ import ToolExecutionInput from './tool_execution_input';
 import { ReplyToToolCallParams } from '@palico-ai/client-js';
 
 const ChatUI: React.FC = () => {
-  const { history, loading, sendMessage, replyToToolCall } = useContext(ConversationContext);
+  const { history, loading, sendMessage, replyToToolCall } =
+    useContext(ConversationContext);
 
   const handleSend = async (message: string) => {
     await sendMessage(message, {});
@@ -22,13 +23,12 @@ const ChatUI: React.FC = () => {
   };
 
   const requiredToolCalls = useMemo(() => {
-    return false
+    return false;
     // const lastMessage = history[history.length - 1];
     // if (!lastMessage) {
     //   return
     // }
     // return lastMessage.role === 'assistant' && lastMessage.tool_calls;
-
   }, []);
 
   return (
@@ -40,7 +40,6 @@ const ChatUI: React.FC = () => {
       sx={{
         width: '100%',
         height: '100%',
-        p: 4,
         boxSizing: 'border-box',
       }}
     >

@@ -6,14 +6,14 @@ import TopbarActions from './__components__/topbar_actions';
 import { getAllAgents } from '../../services/metadata';
 
 const PlaygroundPage: React.FC = async () => {
-
-  const agentMetadata = await getAllAgents()
+  const agentMetadata = await getAllAgents();
   console.log(agentMetadata);
 
   return (
     <ConversationContextProvider agentId={agentMetadata[0].name}>
       <PageContent
-        topbarRightNavs={
+        breadcrumb={[{ label: 'Chat Playground' }]}
+        actions={
           <TopbarActions agentIds={agentMetadata.map((agent) => agent.name)} />
         }
       >

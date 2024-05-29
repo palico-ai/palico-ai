@@ -31,8 +31,16 @@ export class RoutePath {
     return `${RoutePath.experimentList()}/${params.experimentName}`;
   }
 
+  static experimentTestList(params: RequireExperimentName) {
+    return `${RoutePath.experimentItem(params)}/tests`;
+  }
+
   static experimentTestItem(params: RequireExperimentName & RequireTestName) {
-    return `${RoutePath.experimentItem(params)}/tests/${params.testName}`;
+    return `${RoutePath.experimentTestList(params)}/${params.testName}`;
+  }
+
+  static experimentReportItem(params: RequireExperimentName) {
+    return `${RoutePath.experimentItem(params)}/reports`;
   }
 
   static tracing() {

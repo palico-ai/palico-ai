@@ -1,30 +1,16 @@
-import PageContent from '../../../components/layout/page_content';
-import {
-  getExperimentByName,
-  getTestsForExperiments,
-} from '../../../services/experiments';
 import { ExperimentItemChildPage } from '../../../types/component_types';
-import React from 'react';
-import TestList from './test_list';
 import { RoutePath } from '../../../utils/route_path';
+import { redirect } from 'next/navigation';
+import React from 'react';
 
-const ExperimentItemPage: React.FC<ExperimentItemChildPage> = async (props) => {
-  const currentExp = await getExperimentByName(props.params.expName);
-  const tests = await getTestsForExperiments(props.params.expName);
-  const sortedTests = tests.sort((a, b) => {
-    return a.createdAt > b.createdAt ? -1 : 1;
-  });
-  console.log(tests);
-  return (
-    <PageContent
-      breadcrumb={[
-        { label: 'Experiments', href: RoutePath.experimentList() },
-        { label: currentExp.name },
-      ]}
-    >
-        <TestList initialTests={sortedTests} />
-    </PageContent>
+const ExperimentPage: React.FC<ExperimentItemChildPage> = ({
+  params: { expName },
+}) => {
+  return redirect(
+    RoutePath.experimentTestList({
+      experimentName: expName,
+    })
   );
 };
 
-export default ExperimentItemPage;
+export default ExperimentPage;

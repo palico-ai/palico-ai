@@ -1,8 +1,9 @@
 import { Box, Breadcrumbs } from '@mui/material';
-import React, { useMemo } from 'react';
-import Topbar from './topbar';
+import React from 'react';
+import Topbar, { TopbarNavItem, TopbarProps } from './topbar';
 import { Typography, Link } from '@palico-ai/components';
 import TopbarSidebarMenu from './sidebar_menu';
+import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 
 export interface BreadcrumbItem {
   label: string;
@@ -11,33 +12,41 @@ export interface BreadcrumbItem {
 
 interface PageContent {
   children: React.ReactNode;
-  topbarRightNavs?: React.ReactNode;
-  title?: string;
+  actions?: TopbarProps['actions'];
+  navItems?: TopbarNavItem[];
   breadcrumb?: BreadcrumbItem[];
   removeTopbar?: boolean;
 }
 
+const BreadcrumbUI: React.FC<{ breadcrumb: BreadcrumbItem[] }> = ({
+  breadcrumb,
+}) => {
+  return (
+    <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />}>
+      {breadcrumb.map((item, index) => {
+        const text = (
+          <Typography key={index}>{decodeURI(item.label)}</Typography>
+        );
+        if (item.href) {
+          return (
+            <Link key={index} href={item.href}>
+              {text}
+            </Link>
+          );
+        }
+        return text;
+      })}
+    </Breadcrumbs>
+  );
+};
+
 const PageContent = ({
   children,
-  title,
   breadcrumb,
-  topbarRightNavs,
+  navItems,
+  actions,
   removeTopbar,
 }: PageContent) => {
-  const breadcrumbUI = useMemo(() => {
-    return breadcrumb?.map((item, index) => {
-      const text = <Typography key={index}>{decodeURI(item.label)}</Typography>;
-      if (item.href) {
-        return (
-          <Link key={index} href={item.href}>
-            {text}
-          </Link>
-        );
-      }
-      return text;
-    });
-  }, [breadcrumb]);
-
   return (
     <Box
       sx={{
@@ -49,25 +58,18 @@ const PageContent = ({
     >
       {!removeTopbar && (
         <Topbar
-          rightNavItems={topbarRightNavs}
-          leftNavItems={
+          actions={actions}
+          navItems={navItems}
+          left={
             <Box
               sx={{
                 display: 'flex',
                 alignItems: 'center',
+                justifyContent: 'space-between',
               }}
             >
               <TopbarSidebarMenu />
-              {title && (
-                <Box>
-                  <Typography variant="h6">{title}</Typography>
-                </Box>
-              )}
-              {breadcrumbUI && (
-                <Breadcrumbs aria-label="breadcrumb">
-                  {breadcrumbUI}
-                </Breadcrumbs>
-              )}
+              {breadcrumb && <BreadcrumbUI breadcrumb={breadcrumb} />}
             </Box>
           }
         />

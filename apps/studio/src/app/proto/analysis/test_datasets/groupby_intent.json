@@ -1,0 +1,58 @@
+[
+  {
+    "tags.intent": "math",
+    "input.userMessage": [ "What is 2 + 2?", "What is 3 + 3?", "What is 4 + 4?" ],
+    "input.payload": [ "", "", "" ],
+    "output.message": [ "2 + 2 equals 4.", "3 + 3 equals 6.", "4 + 4 equals 8." ],
+    "output.data": [ "", "", "" ],
+    "output.conversationId": [
+      "20fadbac-480a-46e5-8106-172de056856c",
+      "5fb51e3f-c4e8-4c48-ae42-2df78ee11e14",
+      "90a65e06-7424-45a3-ad4a-5172e905e650"
+    ],
+    "metrics.professionalism": [ "", "", "" ],
+    "metrics.exact-match": [ "false", "false", "false" ],
+    "metrics.factuality": [ "", "", "" ],
+    "metrics.contains": [ "", "", "" ]
+  },
+  {
+    "tags.intent": "greeting",
+    "input.userMessage": [ "Hello", "Goodbye", "Hello", "Goodbye" ],
+    "input.payload": [ "", "", "", "" ],
+    "output.message": [
+      "Hello! How can I assist you today?",
+      "Goodbye! If you have any more questions in the future, feel free to ask. Have a great day!",
+      "Hello! How can I assist you today?",
+      "Goodbye! If you have any more questions in the future, feel free to ask. Have a great day!"
+    ],
+    "output.data": [ "", "", "", "" ],
+    "output.conversationId": [
+      "96db8924-b37a-4229-bbae-e7c1440bd2b7",
+      "c63222b0-994f-4ae4-8fb5-3b2f52147b53",
+      "3b93ef30-ab72-4fd9-9fa7-117d04c14574",
+      "402531ac-308f-4e6a-95ec-aaa8f82ecdea"
+    ],
+    "metrics.professionalism": [ "27", "27", "60", "5" ],
+    "metrics.exact-match": [ "", "", "", "" ],
+    "metrics.factuality": [ "", "", "", "" ],
+    "metrics.contains": [ "", "", "", "" ]
+  },
+  {
+    "tags.intent": "",
+    "input.userMessage": [ "Who is the president of the United States?", "What's my name?" ],
+    "input.payload": [ "", "" ],
+    "output.message": [
+      "As of September 2021, the President of the United States is Joe Biden.",
+      "I'm sorry, but I don't have access to your personal information, including your name. How can I assit"
+    ],
+    "output.data": [ "", "" ],
+    "output.conversationId": [
+      "caaa9838-e891-439b-82d4-8a4572283be5",
+      "c4055edc-360c-45f8-9856-fad6be905cc8"
+    ],
+    "metrics.professionalism": [ "", "" ],
+    "metrics.exact-match": [ "", "" ],
+    "metrics.factuality": [ "false", "" ],
+    "metrics.contains": [ "", "false" ]
+  }
+]
