@@ -8,10 +8,11 @@ import CollapseCellIcon from '@mui/icons-material/UnfoldLess';
 export interface TableRowParams<Data> {
   row: Row<Data>;
   onClickRow?: TableParams<Data>['onClickRow'];
+  renderCell?: TableParams<Data>['renderCell'];
 }
 
 function TableRow<D>(props: TableRowParams<D>): React.ReactElement {
-  const { row, onClickRow } = props;
+  const { row, onClickRow, renderCell } = props;
 
   useEffect(() => {
     console.log('row changed');
@@ -20,6 +21,13 @@ function TableRow<D>(props: TableRowParams<D>): React.ReactElement {
   // useEffect(() => {
   //   console.log('row expanded changed');
   // }, [isRowExpanded]);
+
+  const handleRenderCellValue = (cell: Cell<D, unknown>) => {
+    if (renderCell) {
+      return renderCell(cell);
+    }
+    return flexRender(cell.column.columnDef.cell, cell.getContext());
+  };
 
   const renderCellContent = (cell: Cell<D, unknown>) => {
     const isRowExpanded = row.getIsExpanded();
@@ -40,7 +48,7 @@ function TableRow<D>(props: TableRowParams<D>): React.ReactElement {
             }}
             onClick={row.getToggleExpandedHandler()}
           />
-          {flexRender(cell.column.columnDef.cell, cell.getContext())}
+          {handleRenderCellValue(cell)}
         </Box>
       );
     }
@@ -53,7 +61,7 @@ function TableRow<D>(props: TableRowParams<D>): React.ReactElement {
     if (cell.getIsPlaceholder()) {
       return null;
     }
-    return flexRender(cell.column.columnDef.cell, cell.getContext());
+    return handleRenderCellValue(cell);
   };
 
   return (

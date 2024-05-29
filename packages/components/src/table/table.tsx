@@ -18,10 +18,11 @@ export type RenderCellFN<Data> = (cell: Cell<Data, unknown>) => React.ReactNode;
 export interface TableParams<Data> {
   table: TANTable<Data>;
   onClickRow?: (row: Data) => void;
+  renderCell?: RenderCellFN<Data>;
 }
 
 export function Table<Data>(props: TableParams<Data>): React.ReactElement {
-  const { table, onClickRow } = props;
+  const { table, onClickRow, renderCell } = props;
   const { pageSize, pageIndex } = table.getState().pagination;
 
   return (
@@ -40,7 +41,12 @@ export function Table<Data>(props: TableParams<Data>): React.ReactElement {
           <TableBody>
             {table.getRowModel().rows.map((row) => {
               return (
-                <TableRow key={row.id} onClickRow={onClickRow} row={row} />
+                <TableRow
+                  key={row.id}
+                  onClickRow={onClickRow}
+                  row={row}
+                  renderCell={renderCell}
+                />
               );
             })}
           </TableBody>
