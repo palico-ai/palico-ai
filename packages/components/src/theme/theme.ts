@@ -15,6 +15,7 @@ const palette : ThemeOptions['palette'] = {
   mode: "dark",
   background: {
     default: '#08070B',
+    paper:"#08070B"
   },
   text: {
     primary: color.white,

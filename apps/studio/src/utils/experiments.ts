@@ -43,7 +43,7 @@ export const getColumnsForFlattenData = (data: Record<string, unknown>[]) => {
   data.forEach((item) => {
     Object.keys(item).forEach((key) => columnNames.add(key));
   });
-  const columnDefs = Array.from(columnNames).map((key) => ({
+  const columnDefs: ColumnDef<unknown, unknown>[] = Array.from(columnNames).map((key) => ({
     accessorKey: key,
     header: key,
   }));

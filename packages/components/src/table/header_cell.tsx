@@ -2,7 +2,6 @@
 import React, { useEffect } from 'react';
 import { Box, TableCell, TableSortLabel } from '@mui/material';
 import { Header, flexRender } from '@tanstack/react-table';
-import FilterListIcon from '@mui/icons-material/FilterList';
 import GroupColumnIcon from '@mui/icons-material/MergeType';
 import UngroupColumnIcon from '@mui/icons-material/CallSplit';
 import { TextField } from '../form';
@@ -26,7 +25,6 @@ export function HeaderCell<Data>(
 
   const sortDirection = header.column.getIsSorted();
   const canBeGrouped = header.column.getCanGroup();
-  const fitlerable = header.column.getCanFilter();
   const GroupIcon = header.column.getIsGrouped()
     ? UngroupColumnIcon
     : GroupColumnIcon;
@@ -45,18 +43,6 @@ export function HeaderCell<Data>(
         >
           {flexRender(header.column.columnDef.header, header.getContext())}
         </TableSortLabel>
-        {fitlerable && (
-          <FilterListIcon
-            fontSize="small"
-            sx={{
-              ml: 1,
-              cursor: 'pointer',
-            }}
-            onClick={() => {
-              setShowSearch(!showSearch);
-            }}
-          />
-        )}
         {canBeGrouped && (
           <GroupIcon
             fontSize="small"
