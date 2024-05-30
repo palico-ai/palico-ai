@@ -8,75 +8,86 @@ import {
   TableBody,
   TablePagination,
 } from '@mui/material';
-import { Cell, Table as TANTable } from '@tanstack/react-table';
+import { Cell, ColumnDef, Table as TANTable } from '@tanstack/react-table';
 import { HeaderCell } from './header_cell';
 import TableRow from './row';
-import { useMemo } from 'react';
+import TableControlPanel from './control_panel';
+import { TableContextParams, TableContextProvider } from './table.contex';
+import { useEffect, useState } from 'react';
 
 export type RenderCellFN<Data> = (cell: Cell<Data, unknown>) => React.ReactNode;
 
 export interface TableParams<Data> {
   table: TANTable<Data>;
+  onChangeColumns?: (columns: ColumnDef<Data>[]) => void;
   onClickRow?: (row: Data) => void;
   renderCell?: RenderCellFN<Data>;
 }
 
 export function Table<Data>(props: TableParams<Data>): React.ReactElement {
-  const { table, onClickRow, renderCell } = props;
+  const { table, onClickRow, renderCell, onChangeColumns } = props;
   const { pageSize, pageIndex } = table.getState().pagination;
 
   return (
     <Box>
-      <TableContainer>
-        <MUITable>
-          <TableHead>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <MUITableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                  <HeaderCell key={header.id} header={header} />
-                ))}
-              </MUITableRow>
-            ))}
-          </TableHead>
-          <TableBody>
-            {table.getRowModel().rows.map((row) => {
-              return (
-                <TableRow
-                  key={row.id}
-                  onClickRow={onClickRow}
-                  row={row}
-                  renderCell={renderCell}
-                />
-              );
-            })}
-          </TableBody>
-        </MUITable>
-      </TableContainer>
-      <TablePagination
-        rowsPerPageOptions={[
-          5,
-          10,
-          25,
-          { label: 'All', value: table.getFilteredRowModel().rows.length },
-        ]}
-        component={Box}
-        count={table.getFilteredRowModel().rows.length}
-        rowsPerPage={pageSize}
-        page={pageIndex}
-        slotProps={{
-          select: {
-            inputProps: { 'aria-label': 'rows per page' },
-            native: true,
-          },
-        }}
-        onPageChange={(_, page) => {
-          table.setPageIndex(page);
-        }}
-        onRowsPerPageChange={(e) => {
-          const size = e.target.value ? Number(e.target.value) : 10;
-          table.setPageSize(size);
-        }}
-      />
+      <TableContextProvider
+        table={table}
+        onChangeColumns={
+          onChangeColumns as TableContextParams['onChangeColumns']
+        }
+      >
+        <TableControlPanel table={table} />
+        <TableContainer>
+          <MUITable>
+            <TableHead>
+              {table.getHeaderGroups().map((headerGroup) => (
+                <MUITableRow key={headerGroup.id}>
+                  {headerGroup.headers.map((header) => (
+                    <HeaderCell key={header.id} header={header} />
+                  ))}
+                </MUITableRow>
+              ))}
+            </TableHead>
+            <TableBody>
+              {table.getRowModel().rows.map((row) => {
+                return (
+                  <TableRow
+                    key={row.id}
+                    onClickRow={onClickRow}
+                    row={row}
+                    renderCell={renderCell}
+                  />
+                );
+              })}
+            </TableBody>
+          </MUITable>
+        </TableContainer>
+        <TablePagination
+          rowsPerPageOptions={[
+            5,
+            10,
+            25,
+            { label: 'All', value: table.getRowCount() },
+          ]}
+          component={Box}
+          count={table.getFilteredRowModel().rows.length}
+          rowsPerPage={pageSize}
+          page={pageIndex}
+          slotProps={{
+            select: {
+              inputProps: { 'aria-label': 'rows per page' },
+              native: true,
+            },
+          }}
+          onPageChange={(_, page) => {
+            table.setPageIndex(page);
+          }}
+          onRowsPerPageChange={(e) => {
+            const size = e.target.value ? Number(e.target.value) : 10;
+            table.setPageSize(size);
+          }}
+        />
+      </TableContextProvider>
     </Box>
   );
 }

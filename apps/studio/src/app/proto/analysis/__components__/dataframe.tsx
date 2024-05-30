@@ -2,7 +2,7 @@ import { Box, Paper } from '@mui/material';
 import { Button, Typography } from '@palico-ai/components';
 import React from 'react';
 import { Dataframe } from '../analysis.context';
-import DatasetTabPanel from './dataset';
+import DatasetTabPanel from './dataset_table';
 
 export interface DataframeViewParams {
   dataframe: Dataframe;
