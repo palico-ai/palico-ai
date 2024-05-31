@@ -103,7 +103,7 @@ export function Table<Data>(props: TableParams<Data>): React.ReactElement {
             { label: 'All', value: table.getRowCount() },
           ]}
           component={Box}
-          count={table.getFilteredRowModel().rows.length}
+          count={table.getRowCount()}
           rowsPerPage={pageSize}
           page={pageIndex}
           slotProps={{
