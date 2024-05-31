@@ -25,24 +25,38 @@ export function HeaderCell<Data>(
 
   const sortDirection = header.column.getIsSorted();
   const canBeGrouped = header.column.getCanGroup();
+  const canBeSorted = header.column.getCanSort();
+  if (!canBeSorted) {
+    console.log('canBeSorted', header.column.columnDef, canBeSorted);
+  } else {
+    console.log('canBeSorted', header.column.columnDef, canBeSorted);
+  }
   const GroupIcon = header.column.getIsGrouped()
     ? UngroupColumnIcon
     : GroupColumnIcon;
   return (
-    <TableCell key={header.id} sortDirection={sortDirection}>
+    <TableCell
+      key={header.id}
+      sortDirection={sortDirection}
+      colSpan={header.colSpan}
+    >
       <Box
         sx={{
           display: 'flex',
           alignItems: 'center',
         }}
       >
-        <TableSortLabel
-          active={header.column.getIsSorted() !== false}
-          direction={sortDirection === false ? undefined : sortDirection}
-          onClick={header.column.getToggleSortingHandler()}
-        >
-          {flexRender(header.column.columnDef.header, header.getContext())}
-        </TableSortLabel>
+        {canBeSorted ? (
+          <TableSortLabel
+            active={header.column.getIsSorted() !== false}
+            direction={sortDirection === false ? undefined : sortDirection}
+            onClick={header.column.getToggleSortingHandler()}
+          >
+            {flexRender(header.column.columnDef.header, header.getContext())}
+          </TableSortLabel>
+        ) : (
+          flexRender(header.column.columnDef.header, header.getContext())
+        )}
         {canBeGrouped && (
           <GroupIcon
             fontSize="small"

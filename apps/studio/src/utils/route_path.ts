@@ -10,6 +10,10 @@ export interface RequireTestName {
   testName: string;
 }
 
+export interface RequireTestReportName {
+  testReportName: string;
+}
+
 export class RoutePath {
   static playground() {
     return '/playground';
@@ -41,6 +45,14 @@ export class RoutePath {
 
   static experimentReportItem(params: RequireExperimentName) {
     return `${RoutePath.experimentItem(params)}/reports`;
+  }
+
+  static experimentNewReportItem(params: RequireExperimentName) {
+    return `${RoutePath.experimentReportItem(params)}/new`;
+  }
+
+  static experimentTestReportItem(params: RequireExperimentName & RequireTestReportName) {
+    return `${RoutePath.experimentTestList(params)}/${params.testReportName}`;
   }
 
   static tracing() {

@@ -68,12 +68,14 @@ function TableControlPanel<Data>(props: TableControlPanelProps<Data>) {
       {activeGroups.length > 0 && (
         <DataDisplay
           label="Group By"
-          items={activeGroups}
+          items={activeGroups.map(
+            (g) => table.getColumn(g)?.columnDef.header?.toString() ?? g
+          )}
           handleDelete={handleRemoveGrouping}
         />
       )}
       <Box sx={{ flexGrow: 1 }} />
-      <GroupingSettings table={table} />
+      {table.options.enableGrouping && <GroupingSettings table={table} />}
       <SelectColumnControl table={table} />
       <TextField
         value={table.getState().globalFilter}

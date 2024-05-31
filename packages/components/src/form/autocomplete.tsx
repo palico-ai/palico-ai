@@ -1,78 +1,64 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import Autocomplete from '@mui/material/Autocomplete';
 import { TextField } from './textfield';
 import { PropsOf } from '@emotion/react';
-import { Checkbox } from '@mui/material';
+import { Checkbox, ListItem } from '@mui/material';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 
 export interface SimpleAutocompleteOption {
   label: string;
-  value: string;
+  value: any;
 }
-
-export interface SimpleTextfieldAutocompleteProps {
-  options: SimpleAutocompleteOption[];
-  label: string;
-  value: string;
-  onChange: (value: string) => void;
-  textfieldProps?: PropsOf<typeof TextField>;
-}
-
-export const SimpleTextfieldAutocomplete: React.FC<
-  SimpleTextfieldAutocompleteProps
-> = ({ options, label, value, onChange, textfieldProps }) => {
-  return (
-    <Autocomplete
-      options={options}
-      getOptionLabel={(option) => option.label}
-      value={options.find((option) => option.value === value)}
-      onChange={(_, newValue) => {
-        if (newValue) {
-          onChange(newValue.value);
-        }
-      }}
-      renderInput={(params) => (
-        <TextField {...params} label={label} {...textfieldProps} />
-      )}
-    />
-  );
-};
 
 export interface CheckboxAutocompleteProps {
   options: SimpleAutocompleteOption[];
-  value?: string[];
-  onChange?: (value: string[]) => void;
+  value?: any[];
+  onChange?: (value: any[]) => void;
+  groupBy?: (option: SimpleAutocompleteOption) => string;
   inputProps?: PropsOf<typeof TextField>;
 }
 
 export const CheckboxAutocomplete: React.FC<CheckboxAutocompleteProps> = ({
   options,
   value,
+  groupBy,
   onChange,
   inputProps,
 }) => {
+  console.log('checkbox value', value);
   return (
     <Autocomplete
       multiple
       options={options}
+      groupBy={groupBy}
       getOptionLabel={(option) => option.label}
       disableCloseOnSelect
       value={
         value
-          ? options.filter((option) => value.includes(option.value))
+          ? options.filter((option) => {
+              const optionValueString = JSON.stringify(option.value).trim();
+              const match = value.some((value) => {
+                const valueString = JSON.stringify(value).trim();
+                return valueString === optionValueString;
+              });
+              return match;
+            })
           : undefined
       }
-      renderOption={(props, option, { selected }) => (
-        <li {...props}>
-          <Checkbox
-            icon={<CheckBoxOutlineBlankIcon fontSize="small" />}
-            checkedIcon={<CheckBoxIcon fontSize="small" />}
-            style={{ marginRight: 8 }}
-            checked={selected}
-          />
-          {option.label}
-        </li>
-      )}
+      renderOption={(props, option, { selected }) => {
+        return (
+          <ListItem {...props}>
+            <Checkbox
+              icon={<CheckBoxOutlineBlankIcon fontSize="small" />}
+              checkedIcon={<CheckBoxIcon fontSize="small" />}
+              style={{ marginRight: 8 }}
+              checked={selected}
+            />
+            {option.label}
+          </ListItem>
+        );
+      }}
       onChange={(_, newValue) => {
         if (onChange) {
           onChange(newValue.map((option) => option.value));

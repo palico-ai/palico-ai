@@ -8,12 +8,23 @@ import {
   TableBody,
   TablePagination,
 } from '@mui/material';
-import { Cell, ColumnDef, Table as TANTable } from '@tanstack/react-table';
+import {
+  Cell,
+  ColumnDef,
+  Table as TANTable,
+  TableOptions,
+  getCoreRowModel,
+  getExpandedRowModel,
+  getFilteredRowModel,
+  getGroupedRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useReactTable as useTanTable,
+} from '@tanstack/react-table';
 import { HeaderCell } from './header_cell';
 import TableRow from './row';
 import TableControlPanel from './control_panel';
 import { TableContextParams, TableContextProvider } from './table.contex';
-import { useEffect, useState } from 'react';
 
 export type RenderCellFN<Data> = (cell: Cell<Data, unknown>) => React.ReactNode;
 
@@ -22,6 +33,28 @@ export interface TableParams<Data> {
   onChangeColumns?: (columns: ColumnDef<Data>[]) => void;
   onClickRow?: (row: Data) => void;
   renderCell?: RenderCellFN<Data>;
+}
+
+export type UseTableOptions<Data> = Pick<
+  TableOptions<Data>,
+  'data' | 'columns'
+> & {
+  enableGrouping?: boolean;
+};
+
+export function useTableModel<Data>(options: UseTableOptions<Data>) {
+  const enableGrouping = options.enableGrouping ?? false;
+  const table = useTanTable<Data>({
+    ...options,
+    getFilteredRowModel: getFilteredRowModel(),
+    enableGrouping,
+    getGroupedRowModel: enableGrouping ? getGroupedRowModel() : undefined,
+    getExpandedRowModel: getExpandedRowModel(),
+    getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+  });
+  return table;
 }
 
 export function Table<Data>(props: TableParams<Data>): React.ReactElement {
