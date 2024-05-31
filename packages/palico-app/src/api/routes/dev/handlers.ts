@@ -95,7 +95,7 @@ export const getAllTestForExperimentHandler: RequestHandler = async (
 ) => {
   try {
     const { expName } = req.params;
-    const tests = await ExperimentModel.getAllTests(expName);
+    const tests = await ExperimentModel.getTestsInExperiment(expName);
     return res.status(200).json({ tests });
   } catch (error) {
     return next(error);

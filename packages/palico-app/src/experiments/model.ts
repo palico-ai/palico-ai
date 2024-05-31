@@ -1,3 +1,4 @@
+import { TestNameWithExperiment } from '@palico-ai/common';
 import {
   CreateExperimentParams,
   CreateExperimentTestParams,
@@ -95,7 +96,24 @@ export default class ExperimentModel {
     return exp;
   }
 
-  static async getAllTests(
+  static async getAllTests(): Promise<TestNameWithExperiment[]> {
+    const allExperiments = await this.getAllExperiments();
+    const tests = await Promise.all(
+      allExperiments.map(async (exp) => {
+        const testDir = await ExperimentModel.buildTestDirPath(exp.directoryName);
+        const files = await OS.getFiles(testDir);
+        return files
+          .filter((file) => file.endsWith(`.${ExperimentModel.TEST_FILE_NAME}`))
+          .map((file) => ({
+            experimentName: exp.name,
+            testName: ExperimentModel.parseTestName(file),
+          }));
+      })
+    );
+    return tests.flat();
+  }
+
+  static async getTestsInExperiment(
     experimentName: string
   ): Promise<ExperimentTestMetadata[]> {
     const exp = await ExperimentModel.findByName(experimentName);
@@ -112,7 +130,7 @@ export default class ExperimentModel {
         return {
           ...omit(content, 'result'),
           experimentName: exp.name,
-          testName: file.replace(`.${ExperimentModel.TEST_FILE_NAME}`, ''),
+          testName: ExperimentModel.parseTestName(file),
         };
       })
     );
@@ -166,5 +184,9 @@ export default class ExperimentModel {
   ): Promise<string> {
     const rootPath = await ExperimentModel.buildTestDirPath(expDirName);
     return `${rootPath}/${testName}.${ExperimentModel.TEST_FILE_NAME}`;
+  }
+
+  private static parseTestName(testFileName: string): string {
+    return testFileName.replace(`.${ExperimentModel.TEST_FILE_NAME}`, '');
   }
 }

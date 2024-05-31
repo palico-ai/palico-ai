@@ -1,6 +1,6 @@
 'use server';
 
-import { GetAgentMetadataResponse, GetDatasetMetadataResponse, GetWorkflowMetadataResponse } from '@palico-ai/common';
+import { GetAgentMetadataResponse, GetAllTestsResponse, GetDatasetMetadataResponse, GetWorkflowMetadataResponse } from '@palico-ai/common';
 import { verifySession } from './auth';
 import { palicoFetch } from './palico';
 
@@ -35,4 +35,15 @@ export const getAllDatasets = async () => {
     }
   );
   return response.datasets;
+}
+
+export const getAllTests = async () => {
+  await verifySession();
+  const response = await palicoFetch<GetAllTestsResponse>(
+    '/metadata/tests',
+    {
+      method: 'GET',
+    }
+  );
+  return response.tests;
 }

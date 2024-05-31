@@ -80,3 +80,12 @@ export interface CreateExperimentTestJobResponse {
   jobId: string;
   test: ExperimentTest;
 }
+
+export interface TestNameWithExperiment {
+  experimentName: string;
+  testName: string;
+}
+
+export interface GetAllTestsResponse {
+  tests: TestNameWithExperiment[];
+}

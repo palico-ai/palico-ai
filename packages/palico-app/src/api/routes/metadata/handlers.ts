@@ -2,7 +2,8 @@ import { RequestHandler } from 'express';
 import { AgentModel } from '../../..//agent/model';
 import WorkflowModel from '../../../models/workflow';
 import DatasetModel from '../../../models/datasets';
-import { GetAgentMetadataResponse, GetDatasetMetadataResponse, GetWorkflowMetadataResponse, MetadataListItemCommon } from '@palico-ai/common';
+import { GetAgentMetadataResponse, GetAllTestsResponse, GetDatasetMetadataResponse, GetWorkflowMetadataResponse, MetadataListItemCommon } from '@palico-ai/common';
+import ExperimentModel from '../../../experiments/model';
 
 export const getAgentMetadataHandler: RequestHandler<unknown, GetAgentMetadataResponse> = async (_, res, next) => {
   try {
@@ -47,3 +48,16 @@ export const getDatasetMetadataHandler: RequestHandler<unknown, GetDatasetMetada
     return next(error);
   }
 };
+
+export const getAllTestsHandler: RequestHandler<unknown, GetAllTestsResponse>= async (
+  _,
+  res,
+  next
+) => {
+  try {
+    const tests = await ExperimentModel.getAllTests();
+    return res.status(200).json({ tests });
+  } catch (error) {
+    return next(error);
+  }
+}

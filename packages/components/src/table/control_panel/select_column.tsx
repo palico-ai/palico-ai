@@ -34,6 +34,7 @@ function SelectColumnControl<D>(props: SelectColumnProps<D>) {
       </Typography>
       {table.getAllLeafColumns().map((column) => (
         <FormControlLabel
+          key={column.id}
           label={<Typography variant="body2">{column.id}</Typography>}
           control={
             <Checkbox

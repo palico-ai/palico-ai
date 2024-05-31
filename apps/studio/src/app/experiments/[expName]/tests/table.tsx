@@ -5,19 +5,15 @@ import {
   ExperimentTestStatus,
 } from '@palico-ai/common';
 import React from 'react';
-import {
-  Cell,
-  ColumnDef,
-  ColumnFiltersState,
-  flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  useReactTable,
-} from '@tanstack/react-table';
+import { Cell, ColumnDef, flexRender } from '@tanstack/react-table';
 import { useRouter } from 'next/navigation';
-import { Chip, RenderCellFN, Table, Typography } from '@palico-ai/components';
+import {
+  Chip,
+  RenderCellFN,
+  Table,
+  Typography,
+  useTableModel,
+} from '@palico-ai/components';
 import { RoutePath } from '../../../../utils/route_path';
 
 interface TestListProps {
@@ -70,22 +66,10 @@ const columns: ColumnDef<ExperimentTestMetadata, unknown>[] = [
 ];
 
 const TestTable: React.FC<TestListProps> = ({ data }) => {
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  );
   const router = useRouter();
-
-  const table = useReactTable({
+  const table = useTableModel({
     data,
     columns,
-    state: {
-      columnFilters,
-    },
-    onColumnFiltersChange: setColumnFilters,
-    getCoreRowModel: getCoreRowModel(),
-    getFilteredRowModel: getFilteredRowModel(), //client side filtering
-    getSortedRowModel: getSortedRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
   });
 
   const handleRowClick = (row: ExperimentTestMetadata) => {
