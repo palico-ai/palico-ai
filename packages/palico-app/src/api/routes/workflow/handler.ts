@@ -9,7 +9,7 @@ export const runWorkflowHandler: RequestHandler = async (req, res, next) => {
     await ConversationRequestContentSchema.parseAsync(content);
     const result = await Application.runWorkflow({
       workflowName,
-      input: content,
+      content: content,
       featureFlags,
     });
     return res.status(200).json(result);

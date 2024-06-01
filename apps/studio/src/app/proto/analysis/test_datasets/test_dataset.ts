@@ -4,7 +4,7 @@ import t2 from './t2.test.json';
 import { ExperimentTestJSON } from '@palico-ai/common';
 
 const test1 = t1 as ExperimentTestJSON;
-const test2 = t2 as unknown as ExperimentTestJSON;
+const test2 = t2 as ExperimentTestJSON;
 
 export const TestDataset: Dataframe[] = [
   {

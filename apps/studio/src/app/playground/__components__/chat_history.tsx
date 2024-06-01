@@ -1,13 +1,18 @@
 'use client';
 
 import React, { useEffect, useMemo } from 'react';
-import { Box, Typography } from '@mui/material';
-import { ConversationHistoryItem } from '../../../context/conversation';
+import { Box } from '@mui/material';
+import { Typography } from '@palico-ai/components';
 
 export interface ChatMessage {
   role: 'user' | 'assistant';
   content?: string;
 }
+
+export type ConversationHistoryItem = {
+  role: 'user' | 'assistant' | 'tool';
+  message: string;
+};
 
 export interface ChatHistoryProps {
   initialMessage?: string;
@@ -38,11 +43,11 @@ const ChatListItem: React.FC<ChatListItemProps> = (item) => {
     if (role === 'user') {
       return 'User Message';
     }
-    if(toolCalls) {
+    if (toolCalls) {
       return 'Assistant (Tool)';
     }
     return 'Assistant';
-  }, [role, toolCalls])
+  }, [role, toolCalls]);
 
   const contentUI = useMemo(() => {
     if (message) {
@@ -112,16 +117,9 @@ export const ChatHistory: React.FC<ChatHistoryProps> = ({
         reformattedHistory.push({
           role: 'assistant',
           message: item.message,
-          // toolCalls: item.tool_calls?.map((toolCall) => {
-          //   return {
-          //     id: toolCall.id,
-          //     functionName: toolCall.function.name,
-          //     arguments: JSON.parse(toolCall.function.arguments),
-          //   };
-          // }),
         });
       } else if (item.role === 'tool') {
-        throw new Error("Toolcall not supported")
+        throw new Error('Toolcall not supported');
         // const lastAssistantMessage =
         //   reformattedHistory[reformattedHistory.length - 1];
         // if (lastAssistantMessage.toolCalls === undefined) {
@@ -141,7 +139,7 @@ export const ChatHistory: React.FC<ChatHistoryProps> = ({
 
   useEffect(() => {
     if (lastMessageEl) {
-      console.log('Scrolling to last message')
+      console.log('Scrolling to last message');
       lastMessageEl.scrollIntoView({
         behavior: 'smooth',
         block: 'end',

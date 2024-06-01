@@ -16,6 +16,7 @@ interface PageContent {
   navItems?: TopbarNavItem[];
   breadcrumb?: BreadcrumbItem[];
   removeTopbar?: boolean;
+  disablePadding?: boolean;
 }
 
 const BreadcrumbUI: React.FC<{ breadcrumb: BreadcrumbItem[] }> = ({
@@ -46,6 +47,7 @@ const PageContent = ({
   navItems,
   actions,
   removeTopbar,
+  disablePadding,
 }: PageContent) => {
   return (
     <Box
@@ -79,7 +81,7 @@ const PageContent = ({
           flex: 1,
           overflow: 'auto',
           width: '100%',
-          p: 3,
+          padding: disablePadding ? 0 : 3,
           boxSizing: 'border-box',
         }}
       >

@@ -1,4 +1,4 @@
-import { ConversationRequestContent, AgentResponse } from '@palico-ai/common';
+import { ConversationRequestContent, ConversationResponse } from '@palico-ai/common';
 
 export type ConversationContextParams = Record<string, unknown>;
 
@@ -40,13 +40,13 @@ export interface ReplyToConversationParams extends ConversationRequestContent {
 
 export type ClientNewConversationFN = (
   params: NewConversationParams
-) => Promise<AgentResponse>;
+) => Promise<ConversationResponse>;
 export type ClientReplyAsUserFN = (
   params: ReplyToConversationParams
-) => Promise<AgentResponse>;
+) => Promise<ConversationResponse>;
 export type ClientReplyToToolCallFN = (
   params: ReplyToToolCallParams
-) => Promise<AgentResponse>;
+) => Promise<ConversationResponse>;
 
 export interface PalicoAgentClient {
   newConversation: ClientNewConversationFN;

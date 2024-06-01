@@ -1,5 +1,6 @@
 import PgBoss from 'pg-boss';
 import { ExperimentTestRunner, ExperimentTestRunnerData } from './workers';
+import config from '../../config';
 
 export type JobQueueState = PgBoss.Worker['state'];
 
@@ -22,10 +23,11 @@ export default class JobQueue {
 
   static boss() {
     if (!JobQueue._instance) {
-      if (!process.env['DB_URL']) {
-        throw new Error('DB_URL not set');
+      const dbURL = config.getSQLDatabaseURL();
+      if (!dbURL) {
+        throw new Error('Missing SQL Database URL');
       }
-      JobQueue._instance = new PgBoss(process.env['DB_URL']);
+      JobQueue._instance = new PgBoss(dbURL);
       JobQueue._instance.work(
         QueueName.ExprimentTestRunner,
         ExperimentTestRunner
