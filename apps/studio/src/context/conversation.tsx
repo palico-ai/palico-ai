@@ -1,14 +1,10 @@
 'use client';
 
 import { ReplyToToolCallParams } from '@palico-ai/client-js';
-import { AgentResponse } from '@palico-ai/common';
+import { ConversationResponse } from '@palico-ai/common';
 import React, { useEffect, useState } from 'react';
 import { usePalicoClient } from '../hooks/use_palico_client';
-
-export type ConversationHistoryItem = {
-  role: 'user' | 'assistant' | 'tool';
-  message: string;
-};
+import { ConversationHistoryItem } from '../app/playground/__components__/chat_history';
 
 export type ConversationContextParams = {
   loading: boolean;
@@ -63,7 +59,7 @@ export const ConversationContextProvider: React.FC<
   const client = usePalicoClient();
 
   const agentResponseToHistoryItem = (
-    response: AgentResponse
+    response: ConversationResponse
   ): ConversationHistoryItem => {
     if (!response.message) {
       throw new Error('Message is required -- we only support conversations');
@@ -91,7 +87,7 @@ export const ConversationContextProvider: React.FC<
       },
     ]);
     try {
-      let response: AgentResponse;
+      let response: ConversationResponse;
       if (conversationId) {
         response = await client.agents.replyAsUser({
           agentId,

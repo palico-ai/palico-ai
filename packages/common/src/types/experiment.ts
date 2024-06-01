@@ -1,4 +1,4 @@
-import { AgentResponse, ConversationRequestContent, ConversationResponse } from ".";
+import { ConversationRequestContent, ConversationResponse } from ".";
 
 export interface CreateExperimentParams {
   name: string;
@@ -10,7 +10,7 @@ export interface ExperimentMetadata {
   name: string;
 }
 
-export type EvalMetricOutput = boolean | number | string;
+export type EvalMetricOutput = boolean | number | string | undefined;
 
 export interface EvalMetric {
   label: string;
@@ -26,7 +26,7 @@ export type ExperimentTestResultMetricValue = Record<string, EvalMetricOutput>;
 export interface ExperimentTestCaseResult {
   input: ConversationRequestContent;
   tags: ExperimentTestCaseTag;
-  output: ConversationResponse | AgentResponse;
+  output: ConversationResponse;
   metrics: Record<string, EvalMetricOutput>;
 }
 

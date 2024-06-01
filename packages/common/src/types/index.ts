@@ -1,11 +1,8 @@
 export interface ConversationResponse<Data = Record<string, unknown>> {
+  conversationId: string;
+  requestId: string;
   message?: string;
   data?: Data;
-}
-
-export interface AgentResponse<Data = Record<string, unknown>>
-  extends ConversationResponse<Data> {
-  conversationId: string;
 }
 
 export interface ConversationRequestContent<Payload = Record<string, unknown>> {
@@ -14,6 +11,7 @@ export interface ConversationRequestContent<Payload = Record<string, unknown>> {
 }
 
 export interface ConversationContext {
+  conversationId: string;
   requestId: string;
   otel: {
     traceId: string;
@@ -24,3 +22,4 @@ export interface ConversationContext {
 export * from './studio';
 export * from './experiment';
 export * from './api';
+export * from './telemetry';

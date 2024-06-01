@@ -1,13 +1,12 @@
 import {
-  AgentResponse,
   ConversationRequestContent,
   ConversationContext,
   ConversationResponse
 } from '@palico-ai/common';
 
 export type LLMAgentResponse<D = Record<string, unknown>> = Omit<
-  AgentResponse<D>,
-  'conversationId'
+  ConversationResponse<D>,
+  'conversationId' | 'requestId'
 >;
 
 export interface LLMAgent<
@@ -15,15 +14,13 @@ export interface LLMAgent<
   Response = Record<string, unknown>
 > {
   chat: (
-    conversationId: string,
     content: ConversationRequestContent<RequestBody>,
     context: ConversationContext
   ) => Promise<LLMAgentResponse<Response>>;
 }
 
 export {
-  ConversationRequestContent as AgentRequestContent,
-  AgentResponse,
+  ConversationRequestContent,
   ConversationResponse,
   ConversationContext,
 };

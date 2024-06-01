@@ -4,7 +4,7 @@ import {
   type ReplyToToolCallParams,
 } from "./types";
 import { createClient } from "./create_client";
-import { AgentResponse } from "@palico-ai/common";
+import { ConversationResponse } from "@palico-ai/common";
 
 export enum AgentRequestType {
   NewConversation = "new-conversation",
@@ -34,7 +34,7 @@ export type AgentRequest =
 
 export type AgentRequestHandler = (
   request: AgentRequest
-) => Promise<AgentResponse>;
+) => Promise<ConversationResponse>;
 
 export interface ProxyRequestHandlerParams {
   headers?: Record<string, string>;
@@ -52,7 +52,7 @@ export const createProxyRequestHandler = (
   proxyRoute: string,
   params?: ProxyRequestHandlerParams
 ): AgentRequestHandler => {
-  return async (request: AgentRequest): Promise<AgentResponse> => {
+  return async (request: AgentRequest): Promise<ConversationResponse> => {
     const response = await fetch(proxyRoute, {
       method: "POST",
       headers: {
@@ -75,7 +75,7 @@ export const createRequestHandler = (
   serviceKey: string
 ): AgentRequestHandler => {
   // Should generally be done on server side
-  return async (request: AgentRequest): Promise<AgentResponse> => {
+  return async (request: AgentRequest): Promise<ConversationResponse> => {
     const client = createClient({ apiURL: agentAPIURL, serviceKey });
     switch (request.type) {
       case AgentRequestType.NewConversation:

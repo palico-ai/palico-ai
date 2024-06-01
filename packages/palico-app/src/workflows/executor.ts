@@ -4,11 +4,14 @@ import { uuid } from "../utils/common";
 import { ChainNode } from "./types";
 import {get as objGet, set as objSet} from 'lodash';
 import WorkflowModel from "../models/workflow";
+import { ConversationTracker } from "../services/database/conversation_tracker";
 
 export interface RunWorkflowParams {
   workflowName: string;
-  input: ConversationRequestContent;
+  content: ConversationRequestContent;
+  conversationId?: string;
   featureFlags?: Record<string, unknown>;
+  traceId?: string;
 }
 
 const tracer = trace.getTracer('chain-workflow-executor');
@@ -86,39 +89,30 @@ export default class ChainWorkflowExecutor {
     });
   }
 
-  private static getFinalOutputMap(currentWorkflowInput: Record<string, unknown>, finalOutputMap?: Record<string, string>) {
-    if(finalOutputMap) {
-      return Object.keys(finalOutputMap).reduce((acc, key) => {
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        const value = objGet(currentWorkflowInput, finalOutputMap[key]);
-        objSet(acc, key, value);
-        return acc;
-      }, {});
-    }
-    return currentWorkflowInput;
-  }
-
   static async run(params: RunWorkflowParams) {
-    const workflow = await WorkflowModel.getWorkflowByName(params.workflowName);
-    const { input, featureFlags } = params;
     return await tracer.startActiveSpan('ChainWorkflow', async (span) => {
       try {
         span.setAttributes({
-          input: JSON.stringify(input, null, 2),
+          input: JSON.stringify(params.content, null, 2),
         });
+        const conversationId = params.conversationId || uuid();
+        const requestId = uuid();
+        const traceId = params.traceId || span.spanContext().traceId;
+        const workflow = await WorkflowModel.getWorkflowByName(params.workflowName);
         const context: ConversationContext = {
-          requestId: uuid(), // TODO: create a table to store requests
-          featureFlags: featureFlags ?? {},
+          conversationId,
+          requestId,
+          featureFlags: params.featureFlags ?? {},
           otel: {
-            traceId: span.spanContext().traceId,
+            traceId,
           },
         };
-        let workflowInput : Record<string, unknown> = input as Record<string, unknown>;
+        let workflowInput : Record<string, unknown> = params.content as Record<string, unknown>;
         let currentNode: ChainNode | undefined = workflow.nodes[0];
         while (currentNode) {
           const newWorkflowInput = await ChainWorkflowExecutor.runNode(
             currentNode,
-            workflowInput as Record<string, unknown>,
+            workflowInput,
             context
           );
           workflowInput = newWorkflowInput;
@@ -130,6 +124,14 @@ export default class ChainWorkflowExecutor {
         // TODO: Validate output is a ConversationResponse using zod
         const finalOutput = await workflow.resultParser(workflowInput, context);
         await ConversationResponseSchema.parseAsync(finalOutput);
+        await ConversationTracker.logRequest({
+          conversationId,
+          requestId,
+          traceId,
+          agentName: params.workflowName,
+          requestInput: params.content,
+          responseOutput: finalOutput,
+        });
         return finalOutput
       } catch (e) {
         console.log(e);

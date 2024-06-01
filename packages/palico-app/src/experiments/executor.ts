@@ -84,7 +84,7 @@ export class ExperimentExecutor {
     }else if(workflowName) {
       response = await Application.runWorkflow({
         workflowName,
-        input: testCase.input,
+        content: testCase.input,
         featureFlags,
       });
     }else {

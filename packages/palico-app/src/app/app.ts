@@ -1,18 +1,19 @@
-import { AgentResponse, ConversationResponse } from '@palico-ai/common';
-import { AgentExecutor, AgentExecutorChatParams } from '../agent/executor';
+import { ConversationResponse } from '@palico-ai/common';
 import ChainWorkflowExecutor, {
   RunWorkflowParams,
 } from '../workflows/executor';
 import DatasetModel from '../models/datasets';
-
+import AgentExecutor, { AgentExecutorChatParams } from '../agent/executor';
 
 export class Application {
-  static async chat(params: AgentExecutorChatParams): Promise<AgentResponse> {
+  static async chat(params: AgentExecutorChatParams): Promise<ConversationResponse> {
     const response = await AgentExecutor.chat(params);
     return response;
   }
 
-  static async runWorkflow(params: RunWorkflowParams): Promise<ConversationResponse> {
+  static async runWorkflow(
+    params: RunWorkflowParams
+  ): Promise<ConversationResponse> {
     const result = await ChainWorkflowExecutor.run(params);
     return result;
   }

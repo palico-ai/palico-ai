@@ -1,8 +1,8 @@
-import { ConversationRequestContent, AgentResponse, ConversationResponse } from '@palico-ai/common';
+import { ConversationRequestContent, ConversationResponse } from '@palico-ai/common';
 import { EvalMetric, EvalMetricOutput } from './types';
 
 export interface ExactMatchParams {
-  expected: Pick<AgentResponse, 'message' | 'data'>;
+  expected: Pick<ConversationResponse, 'message' | 'data'>;
 }
 
 export class ExactMatchEvalMetric implements EvalMetric {

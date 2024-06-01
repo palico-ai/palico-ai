@@ -34,7 +34,14 @@ export const flattenExperimentColumns = (result: ExperimentTest['result']): Colu
       header: `Metric: ${metric}`,
     })
   );
-  return staticColumns.concat(tagColumns).concat(metricColumns);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const metadataColumns: ColumnDef<any>[] = [
+    {
+      accessorKey: "output.conversationId",
+      header: "Conversation ID"
+    }
+  ]
+  return staticColumns.concat(tagColumns).concat(metricColumns).concat(metadataColumns);
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

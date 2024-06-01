@@ -21,7 +21,6 @@ import { Link } from '@palico-ai/components';
 import ChatBubbleIcon from '@mui/icons-material/Textsms';
 import ExperimentIcon from '@mui/icons-material/Science';
 import TracerIcon from '@mui/icons-material/MonitorHeart';
-import EvaluationIcon from '@mui/icons-material/Assessment';
 import LabIcon from '@mui/icons-material/Compare';
 import SettingsIcon from '@mui/icons-material/Settings';
 import { RoutePath } from '../../utils/route_path';
@@ -40,7 +39,7 @@ const SIDEBAR_ITEMS: SidebarNavItemParams[] = [
     icon: <ChatBubbleIcon />,
   },
   {
-    label: 'Labs',
+    label: 'Comparator',
     path: RoutePath.labList(),
     icon: <LabIcon />,
   },
@@ -53,11 +52,6 @@ const SIDEBAR_ITEMS: SidebarNavItemParams[] = [
     label: 'Tracing',
     path: RoutePath.tracing(),
     icon: <TracerIcon />,
-  },
-  {
-    label: 'Evaluations',
-    path: RoutePath.evaluation(),
-    icon: <EvaluationIcon />,
   },
   {
     label: 'Settings',

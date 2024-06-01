@@ -1,9 +1,8 @@
 import { trace } from '@opentelemetry/api';
 import { RequestHandler } from 'express';
-import { AgentResponse } from '@palico-ai/common';
 import { recordRequestErrorSpan } from '../../../utils/api';
-import { AgentModel } from '../../../agent/model';
 import { Application } from '../../../app/app';
+import { ConversationResponse } from '@palico-ai/common';
 
 const tracer = trace.getTracer('agent-route-handler');
 
@@ -63,7 +62,7 @@ export const replyToConversationRequestHandler: RequestHandler = async (
           traceId: requestSpan.spanContext().traceId,
         });
         requestSpan.end();
-        const responseJSON: AgentResponse = {
+        const responseJSON: ConversationResponse = {
           ...agentResponse,
           conversationId,
         };
@@ -77,22 +76,3 @@ export const replyToConversationRequestHandler: RequestHandler = async (
     }
   );
 };
-
-export const getConversationTracesRequestHandler: RequestHandler = async (req, res, next) => {
-  return await tracer.startActiveSpan(
-    '(GET) /agent/:agentId/conversation/:conversationId/trace',
-    async (requestSpan) => {
-      const { conversationId } = req.params;
-      requestSpan.setAttribute('conversationId', conversationId);
-      try {
-        const traces = await AgentModel.getTracesByConversationId(conversationId);
-        return res.status(200).json(traces);
-      } catch (error) {
-        recordRequestErrorSpan(error, requestSpan);
-        return next(error);
-      } finally {
-        requestSpan.end();
-      }
-    }
-  );
-}
