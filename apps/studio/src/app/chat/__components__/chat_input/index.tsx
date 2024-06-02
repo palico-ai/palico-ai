@@ -4,9 +4,16 @@ import { Box, Button, InputAdornment, TextField, Tooltip } from '@mui/material';
 import React, { useEffect, useMemo } from 'react';
 import ExpandIcon from '@mui/icons-material/Expand';
 import AdvanceOption from './advance_option';
+import {
+  ConversationContext,
+  ConversationRequestContent,
+} from '@palico-ai/common';
 
 export interface ChatInputProps {
-  onSend: (message: string) => Promise<void>;
+  onSend: (
+    content: ConversationRequestContent,
+    featureFlag: ConversationContext['featureFlags']
+  ) => Promise<void>;
   disabled?: boolean;
   placeholder?: string;
 }
@@ -19,6 +26,9 @@ export const ChatInput: React.FC<ChatInputProps> = ({
   const inputRef = React.useRef<HTMLInputElement | null>(null);
   const [message, setMessage] = React.useState('');
   const [loading, setLoading] = React.useState(false);
+  const [requestPayloadString, setRequestPayloadString] =
+    React.useState<string>();
+  const [featureFlagString, setFeatureFlagString] = React.useState<string>();
 
   const handleFormSubmit = async (
     event: React.FormEvent<HTMLFormElement>
@@ -26,7 +36,13 @@ export const ChatInput: React.FC<ChatInputProps> = ({
     event.preventDefault();
     try {
       setLoading(true);
-      await onSend(message);
+      await onSend(
+        {
+          userMessage: message,
+          payload: JSON.parse(requestPayloadString ?? '{}'),
+        },
+        JSON.parse(featureFlagString ?? '{}')
+      );
       setMessage('');
     } finally {
       setLoading(false);
@@ -47,9 +63,14 @@ export const ChatInput: React.FC<ChatInputProps> = ({
 
   return (
     <form onSubmit={handleFormSubmit}>
-      <AdvanceOption />
+      <AdvanceOption
+        requestPayload={requestPayloadString}
+        onChangeRequestPayload={setRequestPayloadString}
+        featureFlag={featureFlagString}
+        onChangeFeatureFlag={setFeatureFlagString}
+      />
       <TextField
-        sx={{mt: 1}}
+        sx={{ mt: 1 }}
         label="User Message"
         fullWidth
         variant="outlined"

@@ -68,7 +68,7 @@ export const getExperimentByNameHandler: RequestHandler = async (
 ) => {
   try {
     const { expName } = req.params;
-    const experiment = await ExperimentModel.findByName(expName);
+    const experiment = await ExperimentModel.findExperimentByName(expName);
     return res.status(200).json(experiment);
   } catch (error) {
     return next(error);

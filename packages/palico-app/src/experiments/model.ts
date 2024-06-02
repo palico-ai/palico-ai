@@ -1,4 +1,4 @@
-import { TestNameWithExperiment } from '@palico-ai/common';
+import { ExperimentJSON, TestNameWithExperiment } from '@palico-ai/common';
 import {
   CreateExperimentParams,
   CreateExperimentTestParams,
@@ -14,41 +14,61 @@ import Project from '../utils/project';
 import omit from 'lodash/omit';
 
 export default class ExperimentModel {
-  private static readonly DATE_SEPERATOR = '__';
   private static readonly TEST_DIR = 'tests';
   private static readonly TEST_FILE_NAME = 'test.json';
+  private static readonly EXPERIMENT_FILE_NAME = 'experiment.json';
 
   static async createNewExperiment(
     params: CreateExperimentParams
   ): Promise<ExperimentMetadata> {
     const { name } = params;
-    if (name.indexOf(ExperimentModel.DATE_SEPERATOR) !== -1) {
-      throw new Error('Experiment name cannot contain character "__"');
-    }
-    const existingExperiments = await ExperimentModel.getAllExperiments();
-    if (existingExperiments.find((e) => e.name === name)) {
+    const expFilePath = await ExperimentModel.buildExpertimentFilePath(name);
+    if (OS.doesFileExist(expFilePath)) {
       throw new Error(`Experiment with name "${name}" already exists`);
     }
-    const expDir = await Project.getExperimentRootDir();
-    const dirname = Date.now() + ExperimentModel.DATE_SEPERATOR + name;
-    const newExpDir = `${expDir}/${dirname}`;
-    await OS.createDirectory(newExpDir);
-    return this.parseExperimentName(dirname);
+    const createdAt = Date.now();
+    const expJSON: ExperimentJSON = {
+      ...params,
+      createdAt,
+      tags: [],
+    };
+    await OS.createJsonFile(expFilePath, expJSON);
+    return {
+      name,
+      ...expJSON,
+    };
   }
 
   static async getAllExperiments(): Promise<ExperimentMetadata[]> {
     const expDir = await Project.getExperimentRootDir();
     const dirs = await OS.getDirectories(expDir);
-    return dirs.map(this.parseExperimentName);
+    const experimentNames = dirs.filter((dir) => {
+      return OS.doesFileExist(`${expDir}/${dir}/${this.EXPERIMENT_FILE_NAME}`);
+    });
+    const experiments = await Promise.all(
+      experimentNames.map(async (dir) => {
+        const content = await OS.readJsonFile<ExperimentJSON>(
+          `${expDir}/${dir}/${this.EXPERIMENT_FILE_NAME}`
+        );
+        return {
+          ...content,
+          directoryName: dir,
+          name: dir,
+        };
+      })
+    );
+    return experiments.sort((a, b) => {
+      return a.createdAt > b.createdAt ? -1 : 1;
+    });
   }
 
   static async createTest(
     params: CreateExperimentTestParams
   ): Promise<CreateTestConfigResult> {
     const { testName, experimentName } = params;
-    const exp = await ExperimentModel.findByName(experimentName);
+    const exp = await ExperimentModel.findExperimentByName(experimentName);
     const testFilePath = await ExperimentModel.buildTestFilePath(
-      exp.directoryName,
+      experimentName,
       testName
     );
     if (OS.doesFileExist(testFilePath)) {
@@ -87,22 +107,25 @@ export default class ExperimentModel {
     return updatedTest;
   }
 
-  static async findByName(name: string): Promise<ExperimentMetadata> {
-    const experiments = await this.getAllExperiments();
-    const exp = experiments.find((e) => e.name === name);
-    if (!exp) {
+  static async findExperimentByName(name: string): Promise<ExperimentMetadata> {
+    const fileName = await ExperimentModel.buildExpertimentFilePath(name);
+    if (!OS.doesFileExist(fileName)) {
       throw new Error(`Experiment with name "${name}" not found`);
     }
-    return exp;
+    const content = await OS.readJsonFile<ExperimentJSON>(fileName);
+    return {
+      name,
+      ...content,
+    };
   }
 
   static async getAllTests(): Promise<TestNameWithExperiment[]> {
     const allExperiments = await this.getAllExperiments();
     const tests = await Promise.all(
       allExperiments.map(async (exp) => {
-        const testDir = await ExperimentModel.buildTestDirPath(exp.directoryName);
-        const files = await OS.getFiles(testDir);
-        return files
+        const testDir = await ExperimentModel.buildTestDirPath(exp.name);
+        const possibleTestFiles = await OS.getFiles(testDir);
+        return possibleTestFiles
           .filter((file) => file.endsWith(`.${ExperimentModel.TEST_FILE_NAME}`))
           .map((file) => ({
             experimentName: exp.name,
@@ -116,8 +139,7 @@ export default class ExperimentModel {
   static async getTestsInExperiment(
     experimentName: string
   ): Promise<ExperimentTestMetadata[]> {
-    const exp = await ExperimentModel.findByName(experimentName);
-    const testDir = await ExperimentModel.buildTestDirPath(exp.directoryName);
+    const testDir = await ExperimentModel.buildTestDirPath(experimentName);
     const files = await OS.getFiles(testDir);
     const testFiles = files.filter((file) =>
       file.endsWith(`.${ExperimentModel.TEST_FILE_NAME}`)
@@ -129,7 +151,7 @@ export default class ExperimentModel {
         );
         return {
           ...omit(content, 'result'),
-          experimentName: exp.name,
+          experimentName,
           testName: ExperimentModel.parseTestName(file),
         };
       })
@@ -146,31 +168,27 @@ export default class ExperimentModel {
     experimentName: string,
     testName: string
   ): Promise<ExperimentTest> {
-    const exp = await ExperimentModel.findByName(experimentName);
     const testFilePath = await ExperimentModel.buildTestFilePath(
-      exp.directoryName,
+      experimentName,
       testName
     );
     const content = await ExperimentModel.readTestJSON(testFilePath);
     return {
       ...content,
-      experimentName: exp.name,
+      experimentName,
       testName,
     };
   }
-
-  private static parseExperimentName(dirname: string): ExperimentMetadata {
-    const [date, name] = dirname.split(ExperimentModel.DATE_SEPERATOR);
-    return {
-      directoryName: dirname,
-      createdAt: new Date(parseInt(date, 10)).toISOString(),
-      name,
-    };
-  }
-
   private static async buildExpDirPath(expDirName: string): Promise<string> {
     const expDir = await Project.getExperimentRootDir();
     return `${expDir}/${expDirName}`;
+  }
+
+  private static async buildExpertimentFilePath(
+    expDirName: string
+  ): Promise<string> {
+    const rootPath = await ExperimentModel.buildExpDirPath(expDirName);
+    return `${rootPath}/${this.EXPERIMENT_FILE_NAME}`;
   }
 
   private static async buildTestDirPath(expDirName: string): Promise<string> {
@@ -179,10 +197,10 @@ export default class ExperimentModel {
   }
 
   static async buildTestFilePath(
-    expDirName: string,
+    expName: string,
     testName: string
   ): Promise<string> {
-    const rootPath = await ExperimentModel.buildTestDirPath(expDirName);
+    const rootPath = await ExperimentModel.buildTestDirPath(expName);
     return `${rootPath}/${testName}.${ExperimentModel.TEST_FILE_NAME}`;
   }
 

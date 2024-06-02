@@ -6,6 +6,7 @@ import {
   LabExperimentTestResult,
   LabTestCaseModel,
   StudioLabModelMetadata,
+  StudioLabUpdatableFields,
 } from '@palico-ai/common';
 import { updateLabView } from '../../../../services/studio';
 import { Button } from '@palico-ai/components';
@@ -44,40 +45,29 @@ const QuicklabTopbarNav: React.FC<QuicklabTopbarNavProps> = ({
   const [savingInProgress, setSavingInProgress] = React.useState(false);
   const router = useRouter();
 
+  const currentLabState: StudioLabUpdatableFields = {
+    experiments,
+    testCases,
+    experimentTestResults,
+    baselineExperimentId,
+  };
+
   useEffect(() => {
-    const currentUnsavedState = {
-      experiments,
-      testCases,
-      experimentTestResults,
-    };
     if (
       !needsSave &&
-      JSON.stringify(currentUnsavedState) !== JSON.stringify(savedState)
+      JSON.stringify(currentLabState) !== JSON.stringify(savedState)
     ) {
       setNeedsSave(true);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [experiments, testCases, experimentTestResults]);
+  }, [currentLabState]);
 
   const handleSave = async () => {
     try {
       setSavingInProgress(true);
-      const newSaveState = {
-        experiments,
-        testCases,
-        experimentTestResults,
-      };
-      await updateLabView(currentLab.id, {
-        experiments: newSaveState.experiments,
-        testCases: newSaveState.testCases,
-        experimentTestResults: newSaveState.experimentTestResults,
-      });
+      await updateLabView(currentLab.id, currentLabState);
       setNeedsSave(false);
-      setSavedState({
-        experiments,
-        testCases,
-        experimentTestResults,
-      });
+      setSavedState(currentLabState);
       setSavingInProgress(false);
     } catch (e) {
       console.log(e);

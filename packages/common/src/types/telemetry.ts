@@ -1,10 +1,11 @@
-import { ConversationRequestContent, ConversationResponse } from ".";
+import { ConversationContext, ConversationRequestContent, ConversationResponse } from ".";
 
 export interface ConversationRequestTraceItem {
   requestId: string;
   conversationId: string;
   requestInput: ConversationRequestContent;
   responseOutput: ConversationResponse;
+  featureFlag: ConversationContext['featureFlags']
   traceId: string;
   tracePreviewUrl?: string;
   createdAt: string;

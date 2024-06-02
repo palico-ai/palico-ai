@@ -1,7 +1,11 @@
 'use client';
 
 import { ReplyToToolCallParams } from '@palico-ai/client-js';
-import { ConversationResponse } from '@palico-ai/common';
+import {
+  ConversationContext as ConversationContextType,
+  ConversationRequestContent,
+  ConversationResponse,
+} from '@palico-ai/common';
 import React, { useEffect, useState } from 'react';
 import { usePalicoClient } from '../hooks/use_palico_client';
 import { ConversationHistoryItem } from '../app/chat/__components__/chat_history';
@@ -12,8 +16,8 @@ export type ConversationContextParams = {
   agentId?: string;
   setAgentId: (id: string) => void;
   sendMessage: (
-    message: string,
-    context: Record<string, unknown>
+    content: ConversationRequestContent,
+    featureFlag: ConversationContextType['featureFlags']
   ) => Promise<void>;
   replyToToolCall: (
     outputs: ReplyToToolCallParams['toolOutputs']
@@ -71,8 +75,8 @@ export const ConversationContextProvider: React.FC<
   };
 
   const sendMessage = async (
-    message: string,
-    context: Record<string, unknown>
+    content: ConversationRequestContent,
+    featureFlag: ConversationContextType['featureFlags']
   ): Promise<void> => {
     // TODO: This this as an input
     if (!agentId) {
@@ -83,7 +87,7 @@ export const ConversationContextProvider: React.FC<
       ...history,
       {
         role: 'user',
-        message,
+        message: content.userMessage ?? '',
       },
     ]);
     try {
@@ -91,15 +95,17 @@ export const ConversationContextProvider: React.FC<
       if (conversationId) {
         response = await client.agents.replyAsUser({
           agentId,
-          userMessage: message,
-          payload: context,
+          userMessage: content.userMessage,
+          payload: content.payload,
           conversationId,
+          featureFlags: featureFlag,
         });
       } else {
         response = await client.agents.newConversation({
           agentId,
-          userMessage: message,
-          payload: context,
+          userMessage: content.userMessage,
+          payload: content.payload,
+          featureFlags: featureFlag,
         });
         setConversationId(response.conversationId);
       }
