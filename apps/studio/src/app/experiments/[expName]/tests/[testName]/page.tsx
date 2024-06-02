@@ -5,6 +5,7 @@ import { RoutePath } from '../../../../../utils/route_path';
 import { getTestByName } from '../../../../../services/experiments';
 import TestResultTable from './test_result_table';
 import ExperimentTestTopbarAction from './topbar_action';
+import Breadcrumb from '../../../../../utils/breadcrumb';
 
 const ExperimentTestPage: React.FC<ExperimentTestChildPage> = async ({
   params: { expName, testName },
@@ -16,20 +17,13 @@ const ExperimentTestPage: React.FC<ExperimentTestChildPage> = async ({
   return (
     <PageContent
       breadcrumb={[
-        { label: 'Experiments', href: RoutePath.experimentList() },
-        {
-          label: expName,
-          href: RoutePath.experimentItem({
-            experimentName: expName,
-          }),
-        },
-        {
-          label: 'Tests',
-          href: RoutePath.experimentTestList({
-            experimentName: expName,
-          }),
-        },
-        { label: testName },
+        Breadcrumb.experimentList({ includeHref: true }),
+        Breadcrumb.experimentItem({
+          experimentName: expName,
+          includeHref: true,
+        }),
+        Breadcrumb.experimentTestList(),
+        Breadcrumb.experimentTestItem({ testName }),
       ]}
       navItems={[
         {

@@ -1,24 +1,22 @@
-import {
-  Box,
-  Grid,
-  IconButton,
-  Paper,
-  Skeleton,
-  Typography,
-} from '@mui/material';
+import { Box, IconButton, Paper, Skeleton, Typography } from '@mui/material';
 import React, { useMemo } from 'react';
 import RunIcon from '@mui/icons-material/PlayCircleFilledWhite';
-import { useExpTestResult } from '../hooks';
+import { useBaselineTestResult, useExpTestResult } from '../hooks';
 import { LabExperimentTestResult } from '@palico-ai/common';
-import { TabPanel, TabView, Chip, Link } from '@palico-ai/components';
+import {
+  TabPanel,
+  TabView,
+  Chip,
+  Link,
+  Editor,
+  TextDiff,
+} from '@palico-ai/components';
 import LabItemViewConfig from '../constants';
 
 interface ResultCellParams {
   experimentId: string;
   testId: string;
 }
-
-export const MAX_WIDTH = '400px';
 
 const Loading = () => (
   <Box
@@ -36,61 +34,81 @@ const Loading = () => (
   </Box>
 );
 
-const ResultDetails: React.FC<LabExperimentTestResult> = ({
+export interface ResultDetailsProps extends LabExperimentTestResult {
+  baselineResult?: LabExperimentTestResult;
+}
+
+const ResultDetails: React.FC<ResultDetailsProps> = ({
   status,
   message,
-  metricResults,
+  data,
+  baselineResult,
 }) => {
+  const messageContent = useMemo(() => {
+    return (
+      <Box
+        sx={{
+          overflowY: 'auto',
+          height: LabItemViewConfig.TEST_RESULT_CONTENT_MAX_HEIGHT,
+        }}
+      >
+        <Typography variant="body2" whiteSpace={'pre-line'}>
+          {message}
+        </Typography>
+      </Box>
+    );
+  }, [message]);
+
+  const diffContent = useMemo(() => {
+    if (!baselineResult?.message) {
+      return messageContent;
+    }
+    return (
+      <Box
+        sx={{
+          overflowY: 'auto',
+          height: LabItemViewConfig.TEST_RESULT_CONTENT_MAX_HEIGHT,
+        }}
+      >
+        <TextDiff
+          baseline={baselineResult?.message ?? ''}
+          current={message ?? ''}
+          variant="body2"
+        />
+      </Box>
+    );
+  }, [baselineResult, message, messageContent]);
+
   if (status === 'RUNNING') {
     return;
   }
+
   return (
     <TabView
       tabs={[
+        {
+          label: 'Compare',
+          value: 'diff',
+        },
         {
           label: 'Message',
           value: 'message',
         },
         {
-          label: 'Metrics',
-          value: 'metrics',
+          label: 'Data',
+          value: 'data',
         },
       ]}
     >
-      <TabPanel value="message">
-        <Box
-          sx={{
-            minHeight: LabItemViewConfig.TEST_RESULT_CONTENT_MAX_HEIGHT,
-            maxHeight: LabItemViewConfig.TEST_RESULT_CONTENT_MAX_HEIGHT,
-            overflowY: 'auto',
-          }}
-        >
-          <Typography variant="body2" whiteSpace={'pre-line'}>
-            {message}
-          </Typography>
-        </Box>
-      </TabPanel>
-      <TabPanel value="metrics">
-        {metricResults && (
-          <Box
-            sx={{
-              minHeight: LabItemViewConfig.TEST_RESULT_CONTENT_MAX_HEIGHT,
-              maxHeight: LabItemViewConfig.TEST_RESULT_CONTENT_MAX_HEIGHT,
-              overflowY: 'auto',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 1,
-            }}
-          >
-            <Grid container direction={'column'} spacing={1}>
-              {metricResults.map((metric) => (
-                <Grid item key={metric.name}>
-                  <Chip label={`${metric.name}: ${metric.value}`} />
-                </Grid>
-              ))}
-            </Grid>
-          </Box>
-        )}
+      <TabPanel value="message">{messageContent}</TabPanel>
+      <TabPanel value="diff">{diffContent}</TabPanel>
+      <TabPanel value="data">
+        <Editor
+          language="json"
+          options={{ readOnly: true }}
+          height={LabItemViewConfig.TEST_RESULT_CONTENT_MAX_HEIGHT}
+          value={JSON.stringify(data, null, 2)}
+        />
       </TabPanel>
     </TabView>
   );
@@ -98,22 +116,23 @@ const ResultDetails: React.FC<LabExperimentTestResult> = ({
 
 const ResultCell: React.FC<ResultCellParams> = ({ experimentId, testId }) => {
   const { result, runTest } = useExpTestResult(experimentId, testId);
+  const baselineTestResult = useBaselineTestResult(testId);
 
   const contentJSX = useMemo(() => {
     if (result?.status === 'RUNNING') {
       return <Loading />;
     }
     if (result?.message) {
-      return <ResultDetails {...result} />;
+      return <ResultDetails {...result} baselineResult={baselineTestResult} />;
     }
     return;
-  }, [result]);
+  }, [baselineTestResult, result]);
 
   return (
     <td
       style={{
         height: 'inherit',
-        maxWidth: MAX_WIDTH,
+        maxWidth: LabItemViewConfig.TEST_RESULT_CONTENT_MAX_WIDTH,
         overflow: 'auto',
       }}
     >
@@ -127,7 +146,9 @@ const ResultCell: React.FC<ResultCellParams> = ({ experimentId, testId }) => {
           boxSizing: 'border-box',
         }}
       >
-        <Box px={1}>{contentJSX}</Box>
+        <Box flexGrow={1} px={1}>
+          {contentJSX}
+        </Box>
         <Box
           sx={{
             display: 'flex',
@@ -136,11 +157,8 @@ const ResultCell: React.FC<ResultCellParams> = ({ experimentId, testId }) => {
             gap: 1,
           }}
         >
-          {result?.metadata?.traceId && (
-            <Link
-              href={'http://localhost:16686/trace/' + result.metadata.traceId}
-              target="_blank"
-            >
+          {result?.metadata?.tracePreviewUrl && (
+            <Link href={result.metadata.tracePreviewUrl} target="_blank">
               <Chip size="small" label="Traces" />
             </Link>
           )}

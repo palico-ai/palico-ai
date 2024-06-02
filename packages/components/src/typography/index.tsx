@@ -1,16 +1,51 @@
-import React from 'react'
-import { Typography as MuiTypography, TypographyProps as MuiTypographyProps } from '@mui/material'
+import React, { useMemo } from 'react';
+import {
+  Typography as MuiTypography,
+  TypographyProps as MuiTypographyProps,
+} from '@mui/material';
+import { diffWords } from 'diff';
 
 export interface TypographyProps extends MuiTypographyProps {
-  children: React.ReactNode
+  children: React.ReactNode;
 }
 
-export const Typography: React.FC<TypographyProps> = ({ children, ...rest }) => {
+export const Typography: React.FC<TypographyProps> = ({
+  children,
+  ...rest
+}) => {
+  return <MuiTypography {...rest}>{children}</MuiTypography>;
+};
+
+export interface TextDiffProps {
+  baseline: string;
+  current: string;
+  variant?: MuiTypographyProps['variant'];
+}
+
+export const TextDiff: React.FC<TextDiffProps> = ({
+  baseline,
+  current,
+  variant,
+}) => {
+  const diff = useMemo(() => {
+    return diffWords(baseline, current);
+  }, [baseline, current]);
+
   return (
-    <MuiTypography {...rest}>
-      {children}
-    </MuiTypography>
-  )
-}
+    <>
+      {diff.map((part, index) => (
+        <Typography
+          key={index}
+          display={'inline'}
+          whiteSpace={'pre-line'}
+          variant={variant}
+          color={part.added ? 'lime' : part.removed ? 'orange' : 'initial'}
+        >
+          {part.value}
+        </Typography>
+      ))}
+    </>
+  );
+};
 
-export default Typography
+export default Typography;

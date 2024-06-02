@@ -1,3 +1,5 @@
+import { ConversationRequestContent, ConversationResponse } from ".";
+
 export interface LabExperimentModel {
   id: string;
   agentId: string;
@@ -8,26 +10,21 @@ export interface LabExperimentModel {
 export interface LabTestCaseModel {
   id: string;
   label: string;
-  userMessage: string;
-  metrics?: string[];
-  contextJSON?: string;
-}
-
-export interface LabMetricResult {
-  name: string;
-  value: string;
+  userMessage: ConversationRequestContent['userMessage'];
+  payloadString?: string;
 }
 
 export interface LabExperimentTestResultMetadata {
   conversationId: string;
-  traceId?: string;
+  requestId: string;
+  tracePreviewUrl?: string;
 }
 
 export type LabExperimentTestResult = {
   status: 'RUNNING' | 'SUCCESS' | 'FAILURE';
   metadata?: LabExperimentTestResultMetadata;
-  message?: string;
-  metricResults?: LabMetricResult[];
+  message?: ConversationResponse['message'];
+  data?: ConversationResponse['data'];
 };
 
 export interface StudioLabModel {

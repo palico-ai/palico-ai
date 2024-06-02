@@ -4,17 +4,14 @@ import { MenuButton } from '@palico-ai/components';
 import OptionMenuIcon from '@mui/icons-material/MoreVert';
 import RunIcon from '@mui/icons-material/PlayCircleFilledWhite';
 import { useTestCase } from '../hooks';
-import FullscreenIcon from '@mui/icons-material/Fullscreen';
-import EditTestCaseCell from './edit_cell';
 import LabItemViewConfig from '../constants';
-import TestCellPreview from './preview';
+import TestCaseCellContent from './content';
 
 interface TestCaseCellParams {
   testCaseId: string;
 }
 
 const TestCaseCell: React.FC<TestCaseCellParams> = ({ testCaseId }) => {
-  const [detailedView, setDetailedView] = React.useState(false);
   const {
     testCase,
     handleChangeTestCaseLabel,
@@ -25,10 +22,6 @@ const TestCaseCell: React.FC<TestCaseCellParams> = ({ testCaseId }) => {
     throw new Error('Test Case not found');
   }
 
-  const handleClickShowDetails = () => {
-    setDetailedView(!detailedView);
-  };
-
   return (
     <th
       scope="row"
@@ -38,11 +31,6 @@ const TestCaseCell: React.FC<TestCaseCellParams> = ({ testCaseId }) => {
         height: 'inherit',
       }}
     >
-      <EditTestCaseCell
-        isOpen={detailedView}
-        onClose={handleClickShowDetails}
-        testCaseId={testCaseId}
-      />
       <Paper
         sx={{
           p: 1,
@@ -74,9 +62,6 @@ const TestCaseCell: React.FC<TestCaseCellParams> = ({ testCaseId }) => {
             }}
             placeholder="Test Case Name"
           />
-          <IconButton onClick={handleClickShowDetails} sx={{ ml: 1 }}>
-            <FullscreenIcon />
-          </IconButton>
           <MenuButton
             icon={<OptionMenuIcon />}
             menuItems={[
@@ -89,7 +74,7 @@ const TestCaseCell: React.FC<TestCaseCellParams> = ({ testCaseId }) => {
             ]}
           />
         </Box>
-        <TestCellPreview {...testCase} />
+        <TestCaseCellContent testCaseId={testCaseId} />
       </Paper>
     </th>
   );

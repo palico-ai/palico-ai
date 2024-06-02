@@ -18,6 +18,7 @@ export interface QuicklabTopbarNavProps {
 type SavedState = {
   experiments: LabExperimentModel[];
   testCases: LabTestCaseModel[];
+  baselineExperimentId?: string;
   experimentTestResults: Record<
     string,
     Record<string, LabExperimentTestResult>
@@ -25,13 +26,18 @@ type SavedState = {
 };
 
 const QuicklabTopbarNav: React.FC<QuicklabTopbarNavProps> = ({
-  currentLab
+  currentLab,
 }) => {
-  const { experiments, testCases, experimentTestResults } =
-    useContext(LabContext);
+  const {
+    experiments,
+    testCases,
+    experimentTestResults,
+    baselineExperimentId,
+  } = useContext(LabContext);
   const [savedState, setSavedState] = React.useState<SavedState>({
     experiments,
     testCases,
+    baselineExperimentId,
     experimentTestResults,
   });
   const [needsSave, setNeedsSave] = React.useState(false);
@@ -90,9 +96,11 @@ const QuicklabTopbarNav: React.FC<QuicklabTopbarNavProps> = ({
       >
         Save
       </Button>
-      <Button onClick={() => {
-        router.push('/labs');
-      }}>
+      <Button
+        onClick={() => {
+          router.push('/labs');
+        }}
+      >
         Close
       </Button>
     </>

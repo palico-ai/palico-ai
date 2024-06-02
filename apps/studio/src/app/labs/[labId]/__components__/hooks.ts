@@ -25,10 +25,10 @@ export const useTestCase = (testCaseId: string) => {
     );
   }
 
-  const handleChangeTestCaseContext = (contextJSON?: string) => {
+  const handleChangeRequestPayload = (payload?: string) => {
     setTestCases((currentTestCases) =>
       currentTestCases.map((tc) =>
-        tc.id === testCaseId ? { ...tc, contextJSON } : tc
+        tc.id === testCaseId ? { ...tc, payloadString: payload } : tc
       )
     );
   }
@@ -51,7 +51,7 @@ export const useTestCase = (testCaseId: string) => {
     testCase,
     handleChangeTestCaseLabel,
     handleChangeTestCaseUserMessage,
-    handleChangeTestCaseContext,
+    handleChangeRequestPayload,
     handleChangeMetrics,
     handleRemoveTestCase,
     runTests: () => {
@@ -61,7 +61,7 @@ export const useTestCase = (testCaseId: string) => {
 };
 
 export const useExperiment = (experimentId: string) => {
-  const { experiments, setExperiments, runExperiment } = useContext(LabContext);
+  const { experiments, baselineExperimentId, setBaselineExperimentId, setExperiments, runExperiment } = useContext(LabContext);
   const experiment = useMemo(
     () => experiments.find((exp) => exp.id === experimentId),
     [experiments, experimentId]
@@ -99,6 +99,8 @@ export const useExperiment = (experimentId: string) => {
 
   return {
     experiment,
+    baselineExperimentId,
+    setBaselineExperimentId,
     handleChangeExperimentLabel,
     handleChangeExperimentAgent,
     handleChangeExperimentFeatureFlag,
@@ -128,3 +130,12 @@ export const useExpTestResult = (
     },
   };
 };
+
+export const useBaselineTestResult = (testCaseId: string) => {
+  const { baselineExperimentId, experimentTestResults } = useContext(LabContext);
+  console.log(baselineExperimentId)
+  if(!baselineExperimentId) {
+    return
+  }
+  return experimentTestResults[baselineExperimentId]?.[testCaseId]
+}

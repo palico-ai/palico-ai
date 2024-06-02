@@ -1,6 +1,6 @@
 'use server';
 
-import { GetRecentConversationResponse, GetTracesByConversationResponse, PaginationParams } from '@palico-ai/common';
+import { GetRecentConversationResponse, GetTraceForRequestIdResponse, GetTracesByConversationResponse, PaginationParams } from '@palico-ai/common';
 import { verifySession } from './auth';
 import { palicoFetch } from './palico';
 
@@ -33,4 +33,13 @@ export const getRecentConversations = async (pagination: PaginationParams) => {
     }
   );
   return response.conversations;
+}
+
+
+export const getTraceForRequestId = async (requestId: string) => {
+  await verifySession();
+  const response = await palicoFetch<GetTraceForRequestIdResponse>(`/telemetry/traces/request/${requestId}`, {
+    method: 'GET',
+  });
+  return response.request;
 }
