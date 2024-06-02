@@ -27,9 +27,7 @@ export type LabExperimentTestResult = {
   data?: ConversationResponse['data'];
 };
 
-export interface StudioLabModel {
-  id: string;
-  name: string;
+export interface QuickLabContentJSON {
   experiments: LabExperimentModel[];
   testCases: LabTestCaseModel[];
   baselineExperimentId?: string;
@@ -37,17 +35,19 @@ export interface StudioLabModel {
     string,
     Record<string, LabExperimentTestResult>
   >;
-  createdAt: string;
-  updatedAt: string;
 }
 
-export type StudioLabModelMetadata = Pick<StudioLabModel, 'id' | 'name'>;
+export interface QuickLabMetadata {
+  id: string;
+  name: string;
+  createdAt: number;
+}
 
-export type CreateStudioLabParams = Omit<
-  StudioLabModel,
+export interface QuickLab extends QuickLabMetadata, QuickLabContentJSON {}
+
+export type CreateQuickLabParams = Omit<
+  QuickLab,
   'id' | 'createdAt' | 'updatedAt'
 >;
 
-export type StudioLabUpdatableFields = Pick<StudioLabModel, 'experiments' | 'testCases' | 'experimentTestResults' | "baselineExperimentId">;
-
-export type UpdateStudioLabParams = Partial<StudioLabUpdatableFields>;
+export type UpdateStudioLabParams = Partial<QuickLabContentJSON>;

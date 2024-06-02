@@ -39,6 +39,11 @@ export default class ExperimentModel {
     };
   }
 
+  static async removeExperiment(name: string): Promise<void> {
+    const expDir = await ExperimentModel.buildExpDirPath(name);
+    await OS.removeDirectory(expDir);
+  }
+
   static async getAllExperiments(): Promise<ExperimentMetadata[]> {
     const expDir = await Project.getExperimentRootDir();
     const dirs = await OS.getDirectories(expDir);
@@ -179,6 +184,7 @@ export default class ExperimentModel {
       testName,
     };
   }
+
   private static async buildExpDirPath(expDirName: string): Promise<string> {
     const expDir = await Project.getExperimentRootDir();
     return `${expDir}/${expDirName}`;

@@ -1,8 +1,10 @@
 import { existsSync } from 'fs';
-import { mkdir, readFile, readdir, writeFile } from 'fs/promises';
+import { mkdir, readFile, readdir, rmdir, writeFile } from 'fs/promises';
+import Project from './project';
 
 export default class OS {
   static async createDirectory(path: string) {
+    await Project.validatePathWithinProject(path);
     await mkdir(path, { recursive: true });
   }
 
@@ -25,6 +27,7 @@ export default class OS {
 
   static async createFile(path: string, content: string) {
     // check if directory exists
+    await Project.validatePathWithinProject(path);
     const dir = path.substring(0, path.lastIndexOf('/'));
     const dirExists = await this.doesDirectoryExist(dir);
     if (!dirExists) {
@@ -35,43 +38,55 @@ export default class OS {
 
   static async createJsonFile(path: string, content: unknown) {
     // check if directory exists
+    await Project.validatePathWithinProject(path);
     const dir = path.substring(0, path.lastIndexOf('/'));
     const dirExists = await this.doesDirectoryExist(dir);
     if (!dirExists) {
       await this.createDirectory(dir);
     }
-    await writeFile(path, JSON.stringify(content, null, 2), 'utf-8');
+    await writeFile(path, JSON.stringify(content, null, 2), {
+      encoding: 'utf-8',
+      flag: 'w',
+    });
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  static async readJsonFile<T=any>(path: string) : Promise<T> {
+  static async readJsonFile<T = any>(path: string): Promise<T> {
     // Read a JSON file and parse its content
+    await Project.validatePathWithinProject(path);
     const content = await readFile(path, 'utf-8');
     return JSON.parse(content);
   }
 
-  static async getDirectories(path: string) : Promise<string[]> {
-    try{
-    const dirs = await readdir(path, { withFileTypes: true });
-    return dirs.filter(d => d.isDirectory()).map(d => d.name);
-    }catch(error) {
-      if(OS.isDirDoesntExistError(error)) {
+  static async getDirectories(path: string): Promise<string[]> {
+    try {
+      await Project.validatePathWithinProject(path);
+      const dirs = await readdir(path, { withFileTypes: true });
+      return dirs.filter((d) => d.isDirectory()).map((d) => d.name);
+    } catch (error) {
+      if (OS.isDirDoesntExistError(error)) {
         return [];
       }
       throw error;
     }
   }
 
-  static async getFiles(path: string) : Promise<string[]> {
-    try{
-    const files = await readdir(path, { withFileTypes: true });
-    return files.filter(f => f.isFile()).map(f => f.name);
-    } catch(error) {
-      if(OS.isDirDoesntExistError(error)) {
+  static async getFiles(path: string): Promise<string[]> {
+    try {
+      await Project.validatePathWithinProject(path);
+      const files = await readdir(path, { withFileTypes: true });
+      return files.filter((f) => f.isFile()).map((f) => f.name);
+    } catch (error) {
+      if (OS.isDirDoesntExistError(error)) {
         return [];
       }
       throw error;
     }
+  }
+
+  static async removeDirectory(path: string) {
+    await Project.validatePathWithinProject(path);
+    await rmdir(path, { recursive: true });
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

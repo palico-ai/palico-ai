@@ -8,6 +8,7 @@ import {
   getJobStatusHandler,
   getTestByNameHandler,
   getTestStatusHandler,
+  removeExperimentHandler,
 } from './handlers';
 
 const router = Router();
@@ -23,7 +24,10 @@ router
   .post(createNewExperimentHandler)
   .get(getAllExperimentsHandler);
 
-router.route('/experiments/:expName').get(getExperimentByNameHandler);
+router
+  .route('/experiments/:expName')
+  .get(getExperimentByNameHandler)
+  .delete(removeExperimentHandler);
 
 router
   .route('/experiments/:expName/tests')

@@ -19,19 +19,19 @@ export default class Project {
 
   static async getExperimentRootDir(): Promise<string> {
     const root = await this.getWorkspaceRootDir()
-    return `${root}/src/experiments`
+    return `${root}/appdata/experiments`
+  }
+
+  static async getQuickLabRootDir(): Promise<string> {
+    const root = await this.getWorkspaceRootDir()
+    return `${root}/appdata/quicklabs`
   }
 
   static async getDatasetRootDir(): Promise<string> {
     const root = await this.getWorkspaceRootDir()
     return `${root}/src/datasets`
   }
-
-  static async metricsRootDir(): Promise<string> {
-    const root = await this.getWorkspaceRootDir()
-    return `${root}/src/metrics`
-  }
-
+  
   static async getWorkflowRootDir(): Promise<string> {
     const root = await this.getWorkspaceRootDir()
     return `${root}/src/workflows`
@@ -40,5 +40,12 @@ export default class Project {
   static async getAgentRootDir(): Promise<string> {
     const root = await this.getWorkspaceRootDir()
     return `${root}/src/agents`
+  }
+
+  static async validatePathWithinProject(path: string): Promise<void> {
+    const root = await this.getWorkspaceRootDir()
+    if (!path.startsWith(root)) {
+      throw new Error(`Path ${path} is not within the project`)
+    }
   }
 }

@@ -124,3 +124,13 @@ export const getTestStatusHandler: RequestHandler = async (req, res, next) => {
     return next(error);
   }
 };
+
+export const removeExperimentHandler: RequestHandler = async (req, res, next) => {
+  try {
+    const { expName } = req.params;
+    await ExperimentModel.removeExperiment(expName);
+    return res.status(200).json({ message: 'Experiment removed' });
+  } catch (error) {
+    return next(error);
+  }
+}

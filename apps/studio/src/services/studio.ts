@@ -1,8 +1,8 @@
 'use server';
 
 import {
-  CreateStudioLabParams,
-  StudioLabModel,
+  CreateQuickLabParams,
+  QuickLab,
   UpdateStudioLabParams,
 } from '@palico-ai/common';
 import { verifySession } from './auth';
@@ -15,14 +15,14 @@ export const getAllLabViews = async () => {
   });
 };
 
-export const getLabView = async (id: string): Promise<StudioLabModel> => {
+export const getLabView = async (id: string): Promise<QuickLab> => {
   await verifySession();
   return await palicoFetch(`/studio/lab/${id}`, {
     method: 'GET',
   });
 };
 
-export const createLabView = async (params: CreateStudioLabParams) => {
+export const createLabView = async (params: CreateQuickLabParams) => {
   await verifySession();
   return await palicoFetch('/studio/lab', {
     method: 'POST',

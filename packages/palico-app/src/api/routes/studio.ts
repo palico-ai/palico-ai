@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { trace } from '@opentelemetry/api';
-import { StudioLab } from '../../models/studio_lab';
+import StudioLab from '../../quick_lab/model';
 import { recordRequestErrorSpan } from '../../utils/api';
 import { APIError } from '../error';
 
@@ -51,7 +51,7 @@ router
     tracer.startActiveSpan('(GET) /lab/:id', async (requestSpan) => {
       requestSpan.setAttribute('id', req.params.id);
       try {
-        const lab = await StudioLab.get(req.params.id);
+        const lab = await StudioLab.getByName(req.params.id);
         if (!lab) {
           throw APIError.notFound(`Lab with id ${req.params.id} not found`);
         }
