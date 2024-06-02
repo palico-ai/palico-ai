@@ -15,7 +15,7 @@ import {
 import React from 'react';
 import { RoutePath } from '../../utils/route_path';
 import { Box, Divider, Grid } from '@mui/material';
-import { StudioLabModel, StudioLabModelMetadata } from '@palico-ai/common';
+import { QuickLab, QuickLabMetadata } from '@palico-ai/common';
 import { createLabView, deleteLabView } from '../../services/studio';
 import { useRouter } from 'next/navigation';
 
@@ -28,7 +28,7 @@ const CreateLabFormField: FormField[] = [
 ];
 
 export interface LabListHeaderProps {
-  onCreateLab: (item: StudioLabModel) => void;
+  onCreateLab: (item: QuickLab) => void;
 }
 
 const LabListHeader: React.FC<LabListHeaderProps> = ({ onCreateLab }) => {
@@ -118,16 +118,19 @@ const LabCard: React.FC<LabCardProps> = ({ id, title, onClickDelete }) => {
 };
 
 interface LabListProps {
-  initialLabItems: StudioLabModelMetadata[];
+  initialLabItems: QuickLabMetadata[];
 }
 
 const LabList: React.FC<LabListProps> = ({ initialLabItems }) => {
   const [labItems, setLabItems] =
-    React.useState<StudioLabModelMetadata[]>(initialLabItems);
+    React.useState<QuickLabMetadata[]>(initialLabItems);
   const router = useRouter();
 
-  const handleCreateLab = (item: StudioLabModel) => {
-    setLabItems([...labItems, { id: item.id, name: item.name }]);
+  const handleCreateLab = (item: QuickLab) => {
+    setLabItems([
+      ...labItems,
+      { id: item.id, name: item.name, createdAt: item.createdAt },
+    ]);
     router.push(RoutePath.labItem({ labId: item.id }));
   };
 

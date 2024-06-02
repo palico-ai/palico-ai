@@ -5,15 +5,15 @@ import {
   LabExperimentModel,
   LabExperimentTestResult,
   LabTestCaseModel,
-  StudioLabModelMetadata,
-  StudioLabUpdatableFields,
+  QuickLabContentJSON,
+  QuickLabMetadata,
 } from '@palico-ai/common';
 import { updateLabView } from '../../../../services/studio';
 import { Button } from '@palico-ai/components';
 import { useRouter } from 'next/navigation';
 
 export interface QuicklabTopbarNavProps {
-  currentLab: StudioLabModelMetadata;
+  currentLab: QuickLabMetadata;
 }
 
 type SavedState = {
@@ -45,7 +45,7 @@ const QuicklabTopbarNav: React.FC<QuicklabTopbarNavProps> = ({
   const [savingInProgress, setSavingInProgress] = React.useState(false);
   const router = useRouter();
 
-  const currentLabState: StudioLabUpdatableFields = {
+  const currentLabState: QuickLabContentJSON = {
     experiments,
     testCases,
     experimentTestResults,
