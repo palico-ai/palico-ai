@@ -35,11 +35,11 @@ interface SidebarNavItemParams {
 const SIDEBAR_ITEMS: SidebarNavItemParams[] = [
   {
     label: 'Chat',
-    path: '/playground',
+    path: RoutePath.chat(),
     icon: <ChatBubbleIcon />,
   },
   {
-    label: 'Comparator',
+    label: 'Quick Lab',
     path: RoutePath.labList(),
     icon: <LabIcon />,
   },

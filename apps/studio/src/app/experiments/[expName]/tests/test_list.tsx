@@ -12,10 +12,10 @@ import { cloneDeep, size } from 'lodash';
 import { useInterval } from 'usehooks-ts';
 import { useExperimentName } from '../../../../hooks/use_params';
 import { getTestStatus } from '../../../../services/experiments';
-import { RoutePath } from '../../../../utils/route_path';
 import { ExperimentItemPageTabItemList } from '../../../../constants/ui';
 import PageContent from '../../../../components/layout/page_content';
 import { Paper } from '@mui/material';
+import Breadcrumb from '../../../../utils/breadcrumb';
 
 interface TestListProps {
   initialTests: ExperimentTestMetadata[];
@@ -89,9 +89,12 @@ const TestList: React.FC<TestListProps> = ({ initialTests }) => {
   return (
     <PageContent
       breadcrumb={[
-        { label: 'Experiments', href: RoutePath.experimentList() },
-        { label: expName },
-        { label: 'Tests' },
+        Breadcrumb.experimentList({ includeHref: true }),
+        Breadcrumb.experimentItem({
+          experimentName: expName,
+          includeHref: true,
+        }),
+        Breadcrumb.experimentTestList(),
       ]}
       navItems={ExperimentItemPageTabItemList(expName)}
       actions={<TopbarAction onTestCreated={handleTestCreated} />}

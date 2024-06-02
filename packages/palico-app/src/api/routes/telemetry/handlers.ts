@@ -5,8 +5,9 @@ import {
   GetTracesByConversationResponse,
   GetConversationRequestTraces,
   GetRecentConversationResponse,
+  GetTraceForRequestIdResponse,
 } from '@palico-ai/common';
-import { ConversationIDRequired } from '../../types';
+import { ConversationIDRequired, RequestIDRequired } from '../../types';
 
 export const getTracesByConversationId: RequestHandler<
   ConversationIDRequired,
@@ -63,3 +64,21 @@ export const getRecentConversations: RequestHandler<
     return next(error);
   }
 };
+
+export const getTraceForRequestId: RequestHandler<
+  RequestIDRequired,
+  GetTraceForRequestIdResponse
+> = async (req, res, next) => {
+  try {
+    const requestId = req.params['requestId'];
+    const trace = await ConversationTracker.getTraceForRequestId(requestId);
+    if (!trace) {
+      throw APIError.notFound('Trace not found');
+    }
+    return res.status(200).json({
+      request: trace,
+    });
+  } catch (error) {
+    return next(error);
+  }
+}

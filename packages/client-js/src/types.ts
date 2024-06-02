@@ -2,13 +2,6 @@ import { ConversationRequestContent, ConversationResponse } from '@palico-ai/com
 
 export type ConversationContextParams = Record<string, unknown>;
 
-export interface NewConversationParams {
-  agentId: string;
-  userMessage: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  payload?: ConversationContextParams;
-}
-
 export interface ReplyAsUserParams {
   agentId: string;
   conversationId: string;

@@ -101,6 +101,16 @@ export class ConversationTracker {
     );
   }
 
+  static async getTraceForRequestId(
+    requestId: string
+  ): Promise<ConversationRequestTraceItem> {
+    const request = await ConversationRequestTracingTable.findByPk(requestId);
+    if (!request) {
+      throw new Error('Request not found');
+    }
+    return ConversationTracker.parseRequesTraceItem(request.dataValues);
+  }
+
   private static parseRequesTraceItem(
     request: ConversationRequestTraceTableSchema
   ): ConversationRequestTraceItem {

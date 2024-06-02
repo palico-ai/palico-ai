@@ -4,16 +4,17 @@ import {
   LabExperimentTestResult,
   LabExperimentModel,
   LabTestCaseModel,
-  LabMetricResult,
 } from '@palico-ai/common';
 import { usePalicoClient } from '../../../../hooks/use_palico_client';
 import React from 'react';
 import { uuid } from 'uuidv4';
+import { getTraceForRequestId } from '../../../../services/telemetry';
 
 export type AddExperimentParams = Omit<LabExperimentModel, 'id'>;
 export type AddTestCaseParams = Omit<LabTestCaseModel, 'id'>;
 
 export interface LabContextParams {
+  baselineExperimentId?: string;
   agentIdList: string[];
   experiments: LabExperimentModel[];
   setExperiments: React.Dispatch<React.SetStateAction<LabExperimentModel[]>>;
@@ -23,6 +24,7 @@ export interface LabContextParams {
     string,
     Record<string, LabExperimentTestResult>
   >; // experimentId -> testCaseId -> result
+  setBaselineExperimentId: (experimentId?: string) => void;
   addExperiment: (experiment: AddExperimentParams) => void;
   addTestCase: (testCase: AddTestCaseParams) => void;
   runExperimentTest: (experimentId: string, testCaseId: string) => void;
@@ -36,10 +38,12 @@ const NotImplementedFN = () => {
 };
 
 export const LabContext = React.createContext<LabContextParams>({
+  baselineExperimentId: undefined,
   agentIdList: [],
   experiments: [],
   testCases: [],
   experimentTestResults: {},
+  setBaselineExperimentId: NotImplementedFN,
   setExperiments: NotImplementedFN,
   setTestCases: NotImplementedFN,
   addExperiment: NotImplementedFN,
@@ -76,6 +80,9 @@ export const LabContextProvider: React.FC<LabContextProviderProps> = ({
     Record<string, Record<string, LabExperimentTestResult>>
   >(initialExperimentTestResults);
   const client = usePalicoClient();
+  const [baselineExperimentId, setBaselineExperimentId] = React.useState<
+    string | undefined
+  >(undefined);
 
   // Runs a single test case for a single experiment
   const runExperimentTest = async (
@@ -102,15 +109,15 @@ export const LabContextProvider: React.FC<LabContextProviderProps> = ({
       }
       const response = await client.agents.newConversation({
         agentId: experiment.agentId,
+        featureFlags: experiment.featureFlagJSON
+          ? JSON.parse(experiment.featureFlagJSON)
+          : undefined,
         userMessage: testCase.userMessage,
-        payload: JSON.parse(testCase.contextJSON || '{}'),
+        payload: testCase.payloadString
+          ? JSON.parse(testCase.payloadString)
+          : undefined,
       });
-      // TODO: Use actual metrics
-      const metrics: LabMetricResult[] =
-        testCase.metrics?.map((metric) => ({
-          name: metric,
-          value: `${parseInt(`${Math.random() * 100}`)}%`,
-        })) ?? [];
+      const trace = await getTraceForRequestId(response.requestId);
       setExperimentTestResults((currentResult) => ({
         ...currentResult,
         [experimentId]: {
@@ -118,10 +125,11 @@ export const LabContextProvider: React.FC<LabContextProviderProps> = ({
           [testCaseId]: {
             status: 'SUCCESS',
             message: response.message ?? 'No message',
-            metricResults: metrics,
+            data: response.data,
             metadata: {
               conversationId: response.conversationId,
-              traceId: undefined,
+              requestId: response.requestId,
+              tracePreviewUrl: trace.tracePreviewUrl,
             },
           },
         },
@@ -172,6 +180,7 @@ export const LabContextProvider: React.FC<LabContextProviderProps> = ({
       },
       ...experiments,
     ]);
+    if (!baselineExperimentId) setBaselineExperimentId(id);
   };
 
   const addTestCase = (testCase: Omit<LabTestCaseModel, 'id'>) => {
@@ -188,6 +197,8 @@ export const LabContextProvider: React.FC<LabContextProviderProps> = ({
   return (
     <LabContext.Provider
       value={{
+        baselineExperimentId,
+        setBaselineExperimentId,
         agentIdList,
         experiments,
         setExperiments,

@@ -1,22 +1,8 @@
-export interface RequireLabId {
-  labId: string;
-}
-
-export interface RequireExperimentName {
-  experimentName: string;
-}
-
-export interface RequireTestName {
-  testName: string;
-}
-
-export interface RequireTestReportName {
-  testReportName: string;
-}
+import { RequireExperimentName, RequireLabId, RequireTestName, RequireTestReportName } from "../types/common";
 
 export class RoutePath {
-  static playground() {
-    return '/playground';
+  static chat() {
+    return '/chat';
   }
 
   static labItem(params: RequireLabId) {

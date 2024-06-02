@@ -6,6 +6,7 @@ import {
   MenuItem,
   Paper,
   TextField,
+  Tooltip,
   Typography,
 } from '@mui/material';
 import { MenuButton } from '@palico-ai/components';
@@ -13,6 +14,7 @@ import OptionMenuIcon from '@mui/icons-material/MoreVert';
 import RunIcon from '@mui/icons-material/PlayCircleFilledWhite';
 import { useExperiment } from './hooks';
 import LabItemViewConfig from './constants';
+import StarIcon from '@mui/icons-material/Star';
 
 export interface ExperimentCellProps {
   agentIdList: string[];
@@ -23,9 +25,11 @@ const HEIGHT = '175px';
 const WIDTH = LabItemViewConfig.EXPERIMENT_CELL_WIDTH;
 
 interface CellHeaderProps {
+  isBaseline: boolean;
   agentIdList: string[];
   label: string;
   agentId: string;
+  onClickSetBaseline: () => void;
   onClickRun: () => void;
   onClickDelete: () => void;
   onChangeLabel: (label: string) => void;
@@ -34,8 +38,10 @@ interface CellHeaderProps {
 
 const CellHeader: React.FC<CellHeaderProps> = ({
   agentIdList,
+  isBaseline,
   agentId,
   label,
+  onClickSetBaseline,
   onChangeLabel,
   onClickRun,
   onClickDelete,
@@ -83,6 +89,15 @@ const CellHeader: React.FC<CellHeaderProps> = ({
           ),
         }}
       />
+      <Tooltip title="Set as baseline">
+        <IconButton
+          size="small"
+          color={isBaseline ? 'primary' : 'default'}
+          onClick={onClickSetBaseline}
+        >
+          <StarIcon />
+        </IconButton>
+      </Tooltip>
       <MenuButton
         menuItems={[
           {
@@ -104,6 +119,8 @@ const ExperimentCell: React.FC<ExperimentCellProps> = ({
 }) => {
   const {
     experiment,
+    baselineExperimentId,
+    setBaselineExperimentId,
     runTests,
     handleChangeExperimentLabel,
     handleChangeExperimentAgent,
@@ -125,6 +142,14 @@ const ExperimentCell: React.FC<ExperimentCellProps> = ({
     >
       <Paper sx={{ p: 1 }}>
         <CellHeader
+          isBaseline={baselineExperimentId === experimentId}
+          onClickSetBaseline={() => {
+            if (baselineExperimentId === experimentId) {
+              setBaselineExperimentId();
+            } else {
+              setBaselineExperimentId(experimentId);
+            }
+          }}
           onChangeLabel={handleChangeExperimentLabel}
           onChangeAgentId={handleChangeExperimentAgent}
           label={experiment.label}

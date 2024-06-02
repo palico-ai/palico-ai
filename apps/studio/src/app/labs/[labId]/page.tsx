@@ -6,7 +6,7 @@ import PageContent from '../../../components/layout/page_content';
 import QuicklabTopbarNav from './__components__/topbar_menu';
 import AgentFeatureTestGrid from './__components__/grid';
 import { getAllAgents } from '../../../services/metadata';
-import { RoutePath } from '../../../utils/route_path';
+import Breadcrumb from '../../../utils/breadcrumb';
 
 export const dynamic = 'force-dynamic';
 
@@ -15,9 +15,6 @@ const LabItemPage: React.FC<LabItemChildPage> = async ({
 }) => {
   const labData = await getLabView(labId);
   const agentMetadata = await getAllAgents();
-
-  console.log('labData', labData.testCases);
-
   return (
     <LabContextProvider
       agentIdList={agentMetadata.map((agent) => agent.name)}
@@ -27,8 +24,8 @@ const LabItemPage: React.FC<LabItemChildPage> = async ({
     >
       <PageContent
         breadcrumb={[
-          { label: 'Labs', href: RoutePath.labList() },
-          { label: labData.name },
+          Breadcrumb.quickLab({ includeHref: true }),
+          Breadcrumb.quickLabItem({ labName: labData.name }),
         ]}
         actions={<QuicklabTopbarNav currentLab={labData} />}
       >

@@ -4,7 +4,7 @@ import { ReplyToToolCallParams } from '@palico-ai/client-js';
 import { ConversationResponse } from '@palico-ai/common';
 import React, { useEffect, useState } from 'react';
 import { usePalicoClient } from '../hooks/use_palico_client';
-import { ConversationHistoryItem } from '../app/playground/__components__/chat_history';
+import { ConversationHistoryItem } from '../app/chat/__components__/chat_history';
 
 export type ConversationContextParams = {
   loading: boolean;
