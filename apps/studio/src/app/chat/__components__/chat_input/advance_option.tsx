@@ -1,87 +1,65 @@
 import { Editor } from '@monaco-editor/react';
-import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  Divider,
-  Stack,
-  TextField,
-  Typography,
-} from '@mui/material';
+import { Card, CardContent } from '@mui/material';
+import { TabPanel, TabView } from '@palico-ai/components';
 import React from 'react';
 
-const AdvanceOption: React.FC = () => {
+export interface AdvanceOptionProps {
+  requestPayload?: string;
+  onChangeRequestPayload: (payload?: string) => void;
+  featureFlag?: string;
+  onChangeFeatureFlag: (featureFlag?: string) => void;
+}
+
+const AdvanceOption: React.FC<AdvanceOptionProps> = ({
+  requestPayload,
+  onChangeRequestPayload,
+  featureFlag,
+  onChangeFeatureFlag,
+}) => {
   return (
-    <Card
-      sx={{
-        mt: 1,
-      }}
-    >
-      <CardContent>
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: "flex-start",
-            mb: 1,
-          }}
-        >
-          <Typography variant="h6" color={'textSecondary'}>
-            Request Context
-          </Typography>
-          <Box sx={{ flexGrow: 1 }} />
-          <Stack
-            flex={1}
-            direction="row"
-            spacing={1}
-            alignItems={"flex-end"}
-            divider={<Divider orientation="vertical" flexItem />}
-          >
-            <TextField
-              sx={{
-                minWidth: 200,
+    <Card>
+      <TabView
+        tabs={[
+          {
+            label: 'Request Payload',
+            value: 'request_payload',
+          },
+          {
+            label: 'Feature Flag',
+            value: 'feature_flag',
+          },
+        ]}
+      >
+        <CardContent>
+          <TabPanel value="request_payload">
+            <Editor
+              theme="vs-dark"
+              height={200}
+              defaultLanguage="json"
+              value={requestPayload}
+              onChange={(value) => onChangeRequestPayload(value ?? '')}
+              options={{
+                ariaLabel: 'User Message',
+                scrollBeyondLastColumn: 0,
               }}
-              fullWidth
-              size='small'
-              variant="standard"
-              select
-              label="Select Template"
+              defaultValue={JSON.stringify({}, null, 2)}
             />
-            <Button
-              fullWidth
-              color="info"
-              variant="contained"
-            >
-              Update
-            </Button>
-            <Button
-              fullWidth
-              color="info"
-              variant="contained"
-            >
-              Save as
-            </Button>
-            <Button
-              fullWidth
-              color="warning"
-              variant="contained"
-            >
-              Delete
-            </Button>
-          </Stack>
-        </Box>
-        <Editor
-          theme="vs-dark"
-          height="18vh"
-          defaultLanguage="json"
-          options={{
-            ariaLabel: 'User Message',
-            scrollBeyondLastColumn: 0,
-          }}
-          defaultValue={`{\n  "key": "value"\n}`}
-        />
-      </CardContent>
+          </TabPanel>
+          <TabPanel value="feature_flag">
+            <Editor
+              theme="vs-dark"
+              height={200}
+              value={featureFlag}
+              onChange={(value) => onChangeFeatureFlag(value ?? '')}
+              defaultLanguage="json"
+              options={{
+                ariaLabel: 'User Message',
+                scrollBeyondLastColumn: 0,
+              }}
+            />
+          </TabPanel>
+        </CardContent>
+      </TabView>
     </Card>
   );
 };

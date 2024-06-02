@@ -52,9 +52,6 @@ export class StudioLab {
   static async update(id: string, params: UpdateStudioLabParams) {
     await tracer.startActiveSpan('Update Studio Lab', async (span) => {
       const updatedValues: Partial<StudioLabAttriutes> = {};
-      if (params.name) {
-        updatedValues.name = params.name;
-      }
       if (params.experiments) {
         updatedValues.experimentListJSON = JSON.stringify(params.experiments);
       }
@@ -65,6 +62,9 @@ export class StudioLab {
         updatedValues.experimentTestResultJSON = JSON.stringify(
           params.experimentTestResults
         );
+      }
+      if(params.baselineExperimentId) {
+        updatedValues.baselineExperimentId = params.baselineExperimentId;
       }
       span.setAttribute(
         'updatedValues',
@@ -93,6 +93,7 @@ export class StudioLab {
       name: data.name,
       experiments: JSON.parse(data.experimentListJSON),
       testCases: JSON.parse(data.testCasesJSON),
+      baselineExperimentId: data.baselineExperimentId,
       experimentTestResults: JSON.parse(data.experimentTestResultJSON),
       createdAt: data.createdAt,
       updatedAt: data.updatedAt,

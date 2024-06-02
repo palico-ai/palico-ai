@@ -20,6 +20,7 @@ export interface StudioLabAttriutes {
   experimentListJSON: string;
   testCasesJSON: string;
   experimentTestResultJSON: string;
+  baselineExperimentId?: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -29,9 +30,10 @@ export type StudioLabCreationAttributes = Optional<
   'id' | 'createdAt' | 'updatedAt'
 >;
 
-export type ConversationRequestTraceTableSchema = Omit<ConversationRequestTraceItem, 'requestInput' | 'responseOutput'> & {
+export type ConversationRequestTraceTableSchema = Omit<ConversationRequestTraceItem, 'requestInput' | 'responseOutput' | "featureFlag"> & {
   requestInput: string; // JSON stringified
   responseOutput: string; // JSON stringified
+  featureFlag: string; // JSON stringified
 };
 export type CreateConversationRequestTraceParams = Omit<ConversationRequestTraceTableSchema, 'createdAt' | "updatedAt">;
 
@@ -56,6 +58,9 @@ export const ConversationRequestTracingTable: ModelDefined<
     },
     responseOutput: {
       type: DataTypes.JSONB,
+    },
+    featureFlag: {
+      type: DataTypes.STRING,
     },
     traceId: {
       type: DataTypes.STRING,
@@ -113,6 +118,9 @@ export const StudioLabTable: ModelDefined<
     name: {
       type: DataTypes.STRING,
     },
+    baselineExperimentId: {
+      type: DataTypes.STRING,
+    },
     experimentListJSON: {
       type: DataTypes.JSONB,
     },
@@ -129,7 +137,8 @@ export const StudioLabTable: ModelDefined<
 );
 
 sequelize.sync({
-  force: false
+  force: false,
+  alter: true,
 })
 
 // export const syncDB = async (force = false) => {

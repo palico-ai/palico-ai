@@ -3,7 +3,6 @@
 import {
   Link,
   Card,
-  CardContent,
   SimpleListView,
   Typography,
   FormField,
@@ -14,10 +13,8 @@ import {
 } from '@palico-ai/components';
 import React from 'react';
 import { RoutePath } from '../../utils/route_path';
-import { Box, Container, Divider } from '@mui/material';
-import {
-  ExperimentMetadata,
-} from '@palico-ai/common';
+import { Box, CardHeader, Chip, Divider, Stack } from '@mui/material';
+import { ExperimentMetadata } from '@palico-ai/common';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import { createExperiment, deleteExperiment } from '../../services/experiments';
@@ -80,14 +77,12 @@ const ExperimentListHeader: React.FC<ExperimentListHeaderProps> = ({
 };
 
 interface ExperimentCardProps {
-  name: string;
-  title: string;
+  experiment: ExperimentMetadata;
   onClickDelete: () => Promise<void>;
 }
 
 const ExperimentCard: React.FC<ExperimentCardProps> = ({
-  name,
-  title,
+  experiment: { name, tags, createdAt },
   onClickDelete,
 }) => {
   const [loading, setLoading] = React.useState(false);
@@ -98,19 +93,33 @@ const ExperimentCard: React.FC<ExperimentCardProps> = ({
   };
 
   return (
-    <Card sx={{my: 2}}>
-      <Link href={RoutePath.experimentItem({ experimentName:  name})}>
-        <CardContent>
-          <Typography variant="h6">{title}</Typography>
-        </CardContent>
+    <Card>
+      <Link href={RoutePath.experimentItem({ experimentName: name })}>
+        <CardHeader
+          title={<Typography variant="h6">{name}</Typography>}
+          subheader={
+            tags.length > 0
+              ? tags.map((tag) => (
+                  <Stack key={tag} direction="row" spacing={1}>
+                    <Chip label={tag} />
+                  </Stack>
+                ))
+              : undefined
+          }
+        />
       </Link>
       <Divider />
       <CardActions
         sx={{
           display: 'flex',
-          justifyContent: 'flex-end',
+          justifyContent: 'space-between',
+          alignItems: 'center',
         }}
       >
+        <Typography variant="caption" pl={1}>
+          {new Date(createdAt).toDateString()}{' '}
+          {new Date(createdAt).toLocaleTimeString()}
+        </Typography>
         <Button
           loading={loading}
           size="small"
@@ -145,24 +154,27 @@ const ExperimentList: React.FC<ExpListProps> = ({ initialExpItems }) => {
   };
 
   return (
-    <Container maxWidth="lg">
-      <SimpleListView
-        items={expItems}
-        renderHeader={() => (
-          <ExperimentListHeader onCreateExperiment={handleCreateExp} />
-        )}
-        renderItem={(expItem) => (
+    <SimpleListView
+      items={expItems}
+      renderHeader={() => (
+        <ExperimentListHeader onCreateExperiment={handleCreateExp} />
+      )}
+      renderItem={(expItem) => (
+        <Box
+          sx={{
+            mb: 2,
+          }}
+        >
           <ExperimentCard
-            name={expItem.name}
-            title={expItem.name}
+            experiment={expItem}
             onClickDelete={async () => {
               await handleDeleteExp(expItem.name);
             }}
           />
-        )}
-        noItemsMessage={'Get started by creating an experiment!'}
-      />
-    </Container>
+        </Box>
+      )}
+      noItemsMessage={'Get started by creating an experiment!'}
+    />
   );
 };
 

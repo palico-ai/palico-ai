@@ -2,12 +2,16 @@ import { ConversationRequestContent, ConversationResponse } from ".";
 
 export interface CreateExperimentParams {
   name: string;
+  tags?: string[];
 }
 
-export interface ExperimentMetadata {
-  createdAt: string;
-  directoryName: string;
+export interface ExperimentMetadata extends ExperimentJSON {
   name: string;
+}
+
+export interface ExperimentJSON {
+  tags: string[];
+  createdAt: number;
 }
 
 export type EvalMetricOutput = boolean | number | string | undefined;

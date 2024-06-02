@@ -32,6 +32,7 @@ export interface StudioLabModel {
   name: string;
   experiments: LabExperimentModel[];
   testCases: LabTestCaseModel[];
+  baselineExperimentId?: string;
   experimentTestResults: Record<
     string,
     Record<string, LabExperimentTestResult>
@@ -47,6 +48,6 @@ export type CreateStudioLabParams = Omit<
   'id' | 'createdAt' | 'updatedAt'
 >;
 
-export type StudioLabUpdatableFields = Pick<StudioLabModel, 'name' | 'experiments' | 'testCases' | 'experimentTestResults'>;
+export type StudioLabUpdatableFields = Pick<StudioLabModel, 'experiments' | 'testCases' | 'experimentTestResults' | "baselineExperimentId">;
 
 export type UpdateStudioLabParams = Partial<StudioLabUpdatableFields>;

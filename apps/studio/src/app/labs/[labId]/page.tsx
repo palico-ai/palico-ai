@@ -21,6 +21,7 @@ const LabItemPage: React.FC<LabItemChildPage> = async ({
       initialExperiments={labData.experiments ?? []}
       initialTestCases={labData.testCases ?? []}
       initialExperimentTestResults={labData.experimentTestResults ?? {}}
+      initialBaselinedExperimentId={labData.baselineExperimentId}
     >
       <PageContent
         breadcrumb={[

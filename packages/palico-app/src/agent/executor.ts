@@ -47,6 +47,7 @@ export default class AgentExecutor {
           conversationId,
           requestId,
           traceId,
+          featureFlag: params.featureFlags,
           agentName: params.agentName,
           requestInput: params.content,
           responseOutput: output,

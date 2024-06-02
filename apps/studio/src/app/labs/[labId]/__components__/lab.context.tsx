@@ -62,6 +62,7 @@ export type LabContextProviderProps = {
     string,
     Record<string, LabExperimentTestResult>
   >;
+  initialBaselinedExperimentId?: string;
   children: React.ReactNode;
 };
 
@@ -70,6 +71,7 @@ export const LabContextProvider: React.FC<LabContextProviderProps> = ({
   agentIdList,
   initialExperiments,
   initialTestCases,
+  initialBaselinedExperimentId,
   initialExperimentTestResults,
 }) => {
   const [experiments, setExperiments] =
@@ -82,7 +84,7 @@ export const LabContextProvider: React.FC<LabContextProviderProps> = ({
   const client = usePalicoClient();
   const [baselineExperimentId, setBaselineExperimentId] = React.useState<
     string | undefined
-  >(undefined);
+  >(initialBaselinedExperimentId);
 
   // Runs a single test case for a single experiment
   const runExperimentTest = async (

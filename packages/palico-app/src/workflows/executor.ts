@@ -128,6 +128,7 @@ export default class ChainWorkflowExecutor {
           conversationId,
           requestId,
           traceId,
+          featureFlag: params.featureFlags,
           agentName: params.workflowName,
           requestInput: params.content,
           responseOutput: finalOutput,

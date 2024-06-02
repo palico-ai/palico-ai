@@ -7,13 +7,20 @@ import { ChatInput } from './chat_input';
 import { ConversationContext } from '../../../context/conversation';
 import ToolExecutionInput from './tool_execution_input';
 import { ReplyToToolCallParams } from '@palico-ai/client-js';
+import {
+  ConversationContext as ConversationContextType,
+  ConversationRequestContent,
+} from '@palico-ai/common';
 
 const ChatUI: React.FC = () => {
   const { history, loading, sendMessage, replyToToolCall } =
     useContext(ConversationContext);
 
-  const handleSend = async (message: string) => {
-    await sendMessage(message, {});
+  const handleSend = async (
+    content: ConversationRequestContent,
+    featureFlag: ConversationContextType['featureFlags']
+  ) => {
+    await sendMessage(content, featureFlag);
   };
 
   const handleSubmitToolOutput = async (
