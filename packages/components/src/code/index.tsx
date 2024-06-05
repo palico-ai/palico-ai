@@ -1,3 +1,4 @@
+'use client';
 import { Editor as MonacoEditor, EditorProps } from '@monaco-editor/react';
 import React from 'react';
 import Highlight, { SyntaxHighlighterProps } from 'react-syntax-highlighter';
@@ -18,6 +19,7 @@ export const Editor: React.FC<EditorProps> = ({
           vertical: 'auto',
           horizontal: 'auto',
         },
+        scrollBeyondLastLine: false,
         ...restOptions,
       }}
       {...rest}

@@ -1,9 +1,8 @@
 {
-  "name": "docs",
+  "name": "website",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/website",
   "projectType": "application",
-  "sourceRoot": "apps/docs",
-  "targets": {
-  },
+  "targets": {},
   "tags": []
 }
