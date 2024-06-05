@@ -5,5 +5,11 @@ services:
     build:
       context: ../..
       dockerfile: apps/studio/Dockerfile
+      target: production
     ports:
       - 3000:3000
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
+    environment:
+      - PALICO_AGENT_API_URL=http://host.docker.internal:8000
+      - PALICO_SERVICE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MTM4MDg3NzB9.GEskObwga-XXXvTM8V6v2d27RNb9-Y8em0Kim5Zazpg

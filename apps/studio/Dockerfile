@@ -1,6 +1,7 @@
-FROM node:18-alpine AS base
+FROM node:20-slim as base
 FROM base AS deps
-RUN apk add --no-cache libc6-compat
+RUN apt-get update
+RUN apt-get install -y build-essential python3
 WORKDIR /main
 COPY package.json package-lock.json ./
 RUN npm ci
@@ -10,6 +11,14 @@ WORKDIR /main
 COPY --from=deps /main/node_modules ./node_modules
 COPY . .
 RUN npx nx run studio:build
+
+FROM base AS production
+WORKDIR /main
+COPY --from=builder /main/apps/studio/.next/standalone ./
+COPY --from=builder /main/apps/studio/public ./apps/studio/public
+COPY --from=builder /main/apps/studio/.next/static ./apps/studio/.next/static
+
 EXPOSE 3000
 ENV PORT 3000
-CMD npx nx run studio:start
+
+CMD ["node", "/main/apps/studio/server.js"]
