@@ -5,7 +5,6 @@ import { defaultRequestAuthorizer } from './middlewares/local_authorizer';
 import agentRouter from './routes/agent';
 import studioRouter from './routes/studio';
 import telemetryRouter from './routes/telemetry';
-import workspaceRouter from './routes/workspace';
 import devRouter from './routes/dev';
 import workflowRouter from './routes/workflow';
 import metadataRouter from './routes/metadata';
@@ -38,7 +37,6 @@ export class PalicoAPIServer {
     this.expressAPI.use('/studio', studioRouter);
     this.expressAPI.use('/telemetry', telemetryRouter);
     this.expressAPI.use('/metadata', metadataRouter);
-    this.expressAPI.use('/workspace', workspaceRouter);
     this.expressAPI.use('/workflow', workflowRouter)
     if (params.enableDevMode) {
       this.enableDevMode = true;
