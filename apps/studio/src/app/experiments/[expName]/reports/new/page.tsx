@@ -1,4 +1,4 @@
-import { TestNameWithExperiment } from '@palico-ai/common';
+import { ExperimentTestKeyID } from '@palico-ai/common';
 import { getTestByName } from '../../../../../services/experiments';
 import React from 'react';
 import PageContent from '../../../../../components/layout/page_content';
@@ -15,7 +15,7 @@ export interface TestReportItemPageProps extends ExperimentItemChildPage {
 
 const NewTestReportPage: React.FC<TestReportItemPageProps> = async (props) => {
   const { tests: testString } = props.searchParams;
-  const tests = JSON.parse(testString) as TestNameWithExperiment[];
+  const tests = JSON.parse(testString) as ExperimentTestKeyID[];
   const testDatasets = await Promise.all(
     tests.map((test) => getTestByName(test.experimentName, test.testName))
   );

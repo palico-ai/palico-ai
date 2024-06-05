@@ -1,6 +1,7 @@
 import PgBoss from 'pg-boss';
-import { ExperimentTestRunner, ExperimentTestRunnerData } from './workers';
+import { ExperimentTestRunner } from './workers';
 import config from '../../config';
+import { ExperimentTestKeyID } from '@palico-ai/common';
 
 export type JobQueueState = PgBoss.Worker['state'];
 
@@ -36,7 +37,7 @@ export default class JobQueue {
     return JobQueue._instance;
   }
 
-  static async runExperiment(data: ExperimentTestRunnerData) {
+  static async runExperiment(data: ExperimentTestKeyID) {
     const jobId = await JobQueue.boss().send(
       QueueName.ExprimentTestRunner,
       data

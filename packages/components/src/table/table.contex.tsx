@@ -45,18 +45,19 @@ export function useTableColumns<D>() {
   const { table, onChangeColumns } = React.useContext(TableContext);
 
   const changeColumnAggregationFn = (
-    columnId: string,
+    columnDef: ColumnDef<D>,
     fnName: AggregationFnOption<D>
   ) => {
-    console.log('changeColumnAggregationFn', columnId, fnName);
-    const column = table.getColumn(columnId);
-    if (!column || !onChangeColumns) return;
+    console.log('changeColumnAggregationFn', columnDef);
+    if (!onChangeColumns) return;
     const newColumns = cloneDeep(table._getColumnDefs()).map((col) => {
-      if (col.header === columnId) {
+      console.log('col', col.header, columnDef.header);
+      if (col.header !== undefined && col.header === columnDef.header) {
         col.aggregationFn = fnName;
       }
       return col;
     });
+    console.log('newColumns', newColumns);
     onChangeColumns(newColumns);
     table.setGrouping([]);
   };

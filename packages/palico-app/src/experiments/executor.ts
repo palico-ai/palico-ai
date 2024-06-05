@@ -1,4 +1,4 @@
-import { ConversationResponse } from '@palico-ai/common';
+import { ConversationResponse, ExperimentTestKeyID } from '@palico-ai/common';
 import { Application } from '../app';
 import JobQueue from '../services/job_queue';
 import ExperimentModel from './model';
@@ -23,18 +23,21 @@ export class ExperimentExecutor {
   static async startTestJob(
     params: CreateExperimentTestParams
   ): Promise<CreateNewExperimentTestResult> {
-    const { filePath, test } = await ExperimentModel.createTest(params);
+    const { test } = await ExperimentModel.createTest(params);
     // TODO: Move run experiment to here
-    const jobId = await JobQueue.runExperiment({ filePath });
+    const jobId = await JobQueue.runExperiment({ 
+      experimentName: test.experimentName,
+      testName: test.testName,
+     });
     return {
       jobId,
       test,
     };
   }
 
-  static async runTest(filePath: string): Promise<ExperimentTestJSON> {
+  static async runTest(testKey: ExperimentTestKeyID): Promise<ExperimentTestJSON> {
     try {
-      let test = await ExperimentModel.updateTest(filePath, {
+      let test = await ExperimentModel.updateTestJSON(testKey, {
         status: {
           state: ExperimentTestStatus.ACTIVE,
         },
@@ -52,17 +55,19 @@ export class ExperimentExecutor {
           })
         )
       );
-      test = await ExperimentModel.updateTest(filePath, {
-        result: results,
+      test = await ExperimentModel.updateTestJSON(testKey, {
         status: {
           state: ExperimentTestStatus.SUCCESS,
         },
+      });
+      await ExperimentModel.updateTestResultJSON(testKey, {
+        result: results,
       });
       return test;
     } catch (error) {
       console.error(error);
       const message = error instanceof Error ? error.message : 'Unknown error';
-      await ExperimentModel.updateTest(filePath, {
+      await ExperimentModel.updateTestJSON(testKey, {
         status: {
           state: ExperimentTestStatus.FAILED,
           message,

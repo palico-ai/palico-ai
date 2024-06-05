@@ -12,7 +12,6 @@ import { cloneDeep, size } from 'lodash';
 import { useInterval } from 'usehooks-ts';
 import { useExperimentName } from '../../../../hooks/use_params';
 import { getTestStatus } from '../../../../services/experiments';
-import { ExperimentItemPageTabItemList } from '../../../../constants/ui';
 import PageContent from '../../../../components/layout/page_content';
 import { Paper } from '@mui/material';
 import Breadcrumb from '../../../../utils/breadcrumb';
@@ -96,7 +95,6 @@ const TestList: React.FC<TestListProps> = ({ initialTests }) => {
         }),
         Breadcrumb.experimentTestList(),
       ]}
-      navItems={ExperimentItemPageTabItemList(expName)}
       actions={<TopbarAction onTestCreated={handleTestCreated} />}
     >
       <Paper sx={{ p: 2 }}>

@@ -1,16 +1,16 @@
 import { WorkHandler } from 'pg-boss';
 import ExperimentModel from '../../experiments/model';
 import { ExperimentExecutor } from '../../experiments/executor';
-
-export interface ExperimentTestRunnerData {
-  filePath: string;
-}
+import { ExperimentTestKeyID } from '@palico-ai/common';
 
 export const ExperimentTestRunner: WorkHandler<
-  ExperimentTestRunnerData
-> = async (input) => {
-  await ExperimentModel.updateTest(input.data.filePath, {
-    jobId: input.id,
+  ExperimentTestKeyID
+> = async ({
+  id,
+  data: testKey,
+}) => {
+  await ExperimentModel.updateTestJSON(testKey, {
+    jobId: id,
   });
-  await ExperimentExecutor.runTest(input.data.filePath);
+  await ExperimentExecutor.runTest(testKey);
 };

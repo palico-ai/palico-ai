@@ -1,6 +1,6 @@
 'use client';
 
-import { TestNameWithExperiment } from '@palico-ai/common';
+import { ExperimentTestKeyID } from '@palico-ai/common';
 import {
   Button,
   CheckboxAutocomplete,
@@ -21,7 +21,7 @@ export interface NewAnalysisFormProps {
   experimentName: string;
   isOpen: boolean;
   closeForm: () => void;
-  initialTests?: TestNameWithExperiment[];
+  initialTests?: ExperimentTestKeyID[];
 }
 
 const NewAnalysisForm: React.FC<NewAnalysisFormProps> = ({
@@ -41,7 +41,7 @@ const NewAnalysisForm: React.FC<NewAnalysisFormProps> = ({
     task: getAllTests,
   });
   const [selectedTests, setSelectedTests] = React.useState<
-    TestNameWithExperiment[]
+    ExperimentTestKeyID[]
   >(initialTests ?? []);
   const router = useRouter();
 
@@ -54,7 +54,7 @@ const NewAnalysisForm: React.FC<NewAnalysisFormProps> = ({
   const datasetOptions: CheckboxAutocompleteProps['options'] =
     React.useMemo(() => {
       return (
-        allTests?.map((test: TestNameWithExperiment) => ({
+        allTests?.map((test: ExperimentTestKeyID) => ({
           label: test.testName,
           value: test,
         })) ?? []
@@ -77,13 +77,13 @@ const NewAnalysisForm: React.FC<NewAnalysisFormProps> = ({
             label: 'Datasets',
           }}
           groupBy={(option) => {
-            const test = option.value as TestNameWithExperiment;
+            const test = option.value as ExperimentTestKeyID;
             return test.experimentName;
           }}
           value={selectedTests}
           onChange={(values) => {
             setSelectedTests(
-              values.map((value) => value as TestNameWithExperiment)
+              values.map((value) => value as ExperimentTestKeyID)
             );
           }}
           options={datasetOptions}

@@ -12,8 +12,11 @@ export interface TableControlPanelProps<Data> {
 
 export interface DataDisplayProps {
   label: string;
-  items: string[];
-  handleDelete: (item: string) => void;
+  items: {
+    label: string;
+    value: string;
+  }[];
+  handleDelete: (value: string) => void;
 }
 
 const DataDisplay: React.FC<DataDisplayProps> = ({
@@ -34,11 +37,11 @@ const DataDisplay: React.FC<DataDisplayProps> = ({
       <Typography variant="subtitle2">{label}</Typography>
       {items.map((item, index) => (
         <Chip
-          key={`${index}-${item}`}
+          key={`${index}-${item.value}`}
           size="small"
-          label={item}
+          label={item.label}
           onDelete={() => {
-            handleDelete(item);
+            handleDelete(item.value);
           }}
         />
       ))}
@@ -68,9 +71,11 @@ function TableControlPanel<Data>(props: TableControlPanelProps<Data>) {
       {activeGroups.length > 0 && (
         <DataDisplay
           label="Group By"
-          items={activeGroups.map(
-            (g) => table.getColumn(g)?.columnDef.header?.toString() ?? g
-          )}
+          items={activeGroups.map((groupId) => ({
+            label:
+              table.getColumn(groupId)?.columnDef.header?.toString() ?? groupId,
+            value: groupId,
+          }))}
           handleDelete={handleRemoveGrouping}
         />
       )}
