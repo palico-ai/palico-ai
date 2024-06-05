@@ -26,11 +26,6 @@ export function HeaderCell<Data>(
   const sortDirection = header.column.getIsSorted();
   const canBeGrouped = header.column.getCanGroup();
   const canBeSorted = header.column.getCanSort();
-  if (!canBeSorted) {
-    console.log('canBeSorted', header.column.columnDef, canBeSorted);
-  } else {
-    console.log('canBeSorted', header.column.columnDef, canBeSorted);
-  }
   const GroupIcon = header.column.getIsGrouped()
     ? UngroupColumnIcon
     : GroupColumnIcon;

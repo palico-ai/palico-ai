@@ -27,7 +27,7 @@ const aggregationFns = [
 
 function GroupingSettings<D>(props: GroupingSettings<D>) {
   const { table } = props;
-  const { changeColumnAggregationFn } = useTableColumns();
+  const { changeColumnAggregationFn } = useTableColumns<D>();
 
   return (
     <OptionPanel
@@ -62,7 +62,10 @@ function GroupingSettings<D>(props: GroupingSettings<D>) {
               if (!changeColumnAggregationFn) return;
               e.preventDefault();
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              changeColumnAggregationFn(column.id, e.target.value as any);
+              changeColumnAggregationFn(
+                column.columnDef,
+                e.target.value as never
+              );
             }}
             label={column.id}
             select

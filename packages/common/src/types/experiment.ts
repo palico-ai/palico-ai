@@ -65,10 +65,13 @@ export interface ExperimentTestJSON {
   workflowName?: string;
   testCaseDatasetName: string;
   createdAt: number;
+}
+
+export interface TestResultJSON {
   result: ExperimentTestCaseResult[];
 }
 
-export interface ExperimentTest extends ExperimentTestJSON {
+export interface ExperimentTest extends ExperimentTestJSON, TestResultJSON {
   experimentName: string;
   testName: string;
 }
@@ -77,19 +80,19 @@ export type ExperimentTestMetadata = Omit<ExperimentTest, 'result'>;
 
 export type CreateExperimentTestParams = Omit<
   ExperimentTest,
-  'createdAt' | 'filePath' | 'jobId' | 'result' | 'status'
+  'createdAt' | 'jobId' | 'result' | 'status'
 >;
 
 export interface CreateExperimentTestJobResponse {
   jobId: string;
-  test: ExperimentTest;
+  test: ExperimentTestMetadata;
 }
 
-export interface TestNameWithExperiment {
+export interface ExperimentTestKeyID {
   experimentName: string;
   testName: string;
 }
 
 export interface GetAllTestsResponse {
-  tests: TestNameWithExperiment[];
+  tests: ExperimentTestKeyID[];
 }

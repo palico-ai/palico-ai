@@ -1,12 +1,12 @@
 import {
-  ExperimentTest,
+  ExperimentTestMetadata,
 } from '@palico-ai/common';
 
 export { CreateExperimentParams, ExperimentMetadata } from '@palico-ai/common';
 
 export interface CreateTestConfigResult {
-  filePath: string;
-  test: ExperimentTest;
+  testRootDir: string;
+  test: ExperimentTestMetadata;
 }
 
 export {
