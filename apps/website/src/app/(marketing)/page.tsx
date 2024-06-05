@@ -13,7 +13,7 @@ export default function Index() {
    */
   return (
     <Container
-      maxWidth="lg"
+      maxWidth="xl"
       sx={{
         mb: 16,
       }}
