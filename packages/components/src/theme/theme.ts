@@ -1,21 +1,21 @@
-import { ThemeOptions, createTheme } from "@mui/material";
-import typography from "./typography";
+import { ThemeOptions, createTheme } from '@mui/material';
+import typography from './typography';
 
 export const color = {
-  white: "#FFFFFF",
-  primary: "#7434DB",
-  secondary: "#52555A",
-  info: "#1A73E8",
-  success: "#4CAF50",
-  warning: "#fb8c00",
-  error: "#F44335",
-}
+  white: '#FFFFFF',
+  primary: '#7434DB',
+  secondary: '#52555A',
+  info: '#1A73E8',
+  success: '#4CAF50',
+  warning: '#fb8c00',
+  error: '#F44335',
+};
 
-const palette : ThemeOptions['palette'] = {
-  mode: "dark",
+const palette: ThemeOptions['palette'] = {
+  mode: 'dark',
   background: {
     default: '#08070B',
-    paper:"#111111"
+    paper: '#111111',
     // paper:"#2A2A2D"
   },
   text: {
@@ -24,7 +24,7 @@ const palette : ThemeOptions['palette'] = {
   },
 
   primary: {
-    main: color.primary
+    main: color.primary,
   },
 
   secondary: {
@@ -55,13 +55,22 @@ const palette : ThemeOptions['palette'] = {
     600: '#6c757d',
     700: '#495057',
     800: '#343a40',
-    900: '#212529'
+    900: '#212529',
   },
-}
+};
 
 export const theme = createTheme({
   palette,
   typography,
+  breakpoints: {
+    values: {
+      xs: 576,
+      sm: 768,
+      md: 992,
+      lg: 1200,
+      xl: 1400,
+    },
+  },
   components: {
     MuiButton: {
       styleOverrides: {
@@ -70,11 +79,9 @@ export const theme = createTheme({
         },
         text: {
           color: color.white,
-        }
-      }
+        },
+      },
     },
-    MuiTypography: {
-      
-    }
+    MuiTypography: {},
   },
-})
+});
