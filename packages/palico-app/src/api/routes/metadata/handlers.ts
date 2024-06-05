@@ -1,9 +1,9 @@
 import { RequestHandler } from 'express';
 import { AgentModel } from '../../..//agent/model';
 import WorkflowModel from '../../../models/workflow';
-import DatasetModel from '../../../models/datasets';
-import { GetAgentMetadataResponse, GetAllTestsResponse, GetDatasetMetadataResponse, GetWorkflowMetadataResponse, MetadataListItemCommon } from '@palico-ai/common';
+import { GetAgentMetadataResponse, GetAllTestsResponse, GetAllTestSuitesResponse, GetWorkflowMetadataResponse, MetadataListItemCommon } from '@palico-ai/common';
 import ExperimentModel from '../../../experiments/model';
+import TestCaseDatasetModel from '../../../experiments/test_case.model';
 
 export const getAgentMetadataHandler: RequestHandler<unknown, GetAgentMetadataResponse> = async (_, res, next) => {
   try {
@@ -33,17 +33,17 @@ export const getAllWorkflowsMetadataHandler: RequestHandler<unknown, GetWorkflow
   }
 };
 
-export const getDatasetMetadataHandler: RequestHandler<unknown, GetDatasetMetadataResponse>= async (
+export const getAllTestCaseDatasets: RequestHandler<unknown, GetAllTestSuitesResponse>= async (
   _,
   res,
   next
 ) => {
   try {
-    const datasetList = await DatasetModel.getAllDatasets();
-    const datasets: MetadataListItemCommon[] = datasetList.map((name) => {
+    const datasetList = await TestCaseDatasetModel.getAllDatasets();
+    const testSuites: MetadataListItemCommon[] = datasetList.map((name) => {
       return { name };
     });
-    return res.status(200).json({ datasets });
+    return res.status(200).json({ datasets: testSuites });
   } catch (error) {
     return next(error);
   }

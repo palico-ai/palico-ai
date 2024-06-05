@@ -7,7 +7,7 @@ import {
 } from '@palico-ai/components';
 import {
   getAllAgents,
-  getAllDatasets,
+  getAllTestCaseDatasets,
   getAllWorkflows,
 } from '../../../../services/metadata';
 import React, { useMemo } from 'react';
@@ -37,8 +37,9 @@ const TestListTableHeader: React.FC<TestListTableHeaderProps> = ({
       const [agents, workflows, datasets] = await Promise.all([
         getAllAgents(),
         getAllWorkflows(),
-        getAllDatasets(),
+        getAllTestCaseDatasets(),
       ]);
+      console.log(datasets);
       setAgentList(agents.map((agent) => agent.name));
       setWorkflowList(workflows.map((workflow) => workflow.name));
       setDatasetList(datasets.map((dataset) => dataset.name));
@@ -75,8 +76,8 @@ const TestListTableHeader: React.FC<TestListTableHeaderProps> = ({
         required: true,
       },
       {
-        name: 'Dataset',
-        label: 'Dataset',
+        name: 'testCaseDatasetName',
+        label: 'Test Suite',
         type: 'select',
         selectOptions: datasetList.map((dataset) => ({
           label: dataset,
@@ -104,7 +105,7 @@ const TestListTableHeader: React.FC<TestListTableHeaderProps> = ({
       testName: data.name as string,
       description: data.description as string,
       featureFlags: JSON.parse(data.featureFlags as string),
-      testCaseDatasetName: data.Dataset as string,
+      testCaseDatasetName: data.testCaseDatasetName as string,
       ...((data.executor as string).startsWith('agent')
         ? { agentName: (data.executor as string).split(':')[1] }
         : { workflowName: (data.executor as string).split(':')[1] }),

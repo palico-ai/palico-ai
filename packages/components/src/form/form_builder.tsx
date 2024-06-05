@@ -67,7 +67,7 @@ const resetFormInputs = (formFields: FormField[]): Record<string, string> => {
     if (field.initialValue) {
       value = field.initialValue;
     } else if (field.type === 'select' && field.selectOptions) {
-      value = field.selectOptions[0].value;
+      value = field.selectOptions[0]?.value ?? '';
     } else if (field.type === 'file') {
       value = [];
     } else if (field.type === 'code') {

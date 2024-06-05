@@ -12,7 +12,7 @@ export interface GetWorkflowMetadataResponse {
   workflows: MetadataListItemCommon[];
 }
 
-export interface GetDatasetMetadataResponse {
+export interface GetAllTestSuitesResponse {
   datasets: MetadataListItemCommon[];
 }
 

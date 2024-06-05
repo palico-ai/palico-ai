@@ -1,9 +1,9 @@
-import { ConversationResponse } from '@palico-ai/common';
+import { ConversationResponse, ExperimentTestCaseDataset } from '@palico-ai/common';
 import ChainWorkflowExecutor, {
   RunWorkflowParams,
 } from '../workflows/executor';
-import DatasetModel from '../models/datasets';
 import AgentExecutor, { AgentExecutorChatParams } from '../agent/executor';
+import TestCaseDatasetModel from '../experiments/test_case.model';
 
 export class Application {
   static async chat(params: AgentExecutorChatParams): Promise<ConversationResponse> {
@@ -18,9 +18,8 @@ export class Application {
     return result;
   }
 
-  static async fetchDataset<T>(name: string): Promise<T[]> {
-    const datasetFetcher = await DatasetModel.getDatasetByName<T>(name);
-    const dataset = await datasetFetcher.fetch();
+  static async fetchTestDataset(name: string): Promise<ExperimentTestCaseDataset[]> {
+    const dataset = await TestCaseDatasetModel.findByName(name);
     return dataset;
   }
 }

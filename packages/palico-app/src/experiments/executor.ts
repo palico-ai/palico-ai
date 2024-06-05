@@ -28,27 +28,29 @@ export class ExperimentExecutor {
     const jobId = await JobQueue.runExperiment({ filePath });
     return {
       jobId,
-      test
+      test,
     };
   }
 
-  static async runTest(filePath: string) : Promise<ExperimentTestJSON> {
+  static async runTest(filePath: string): Promise<ExperimentTestJSON> {
     try {
       let test = await ExperimentModel.updateTest(filePath, {
         status: {
           state: ExperimentTestStatus.ACTIVE,
         },
       });
-      const dataset = await Application.fetchDataset<ExperimentTestCaseDataset>(
+      const dataset = await Application.fetchTestDataset(
         test.testCaseDatasetName
       );
       const results = await Promise.all(
-        dataset.map((testCase) => ExperimentExecutor.runTestCase({
-          testCase,
-          agentName: test.agentName,
-          workflowName: test.workflowName,
-          featureFlags: test.featureFlags,
-        }))
+        dataset.map((testCase) =>
+          ExperimentExecutor.runTestCase({
+            testCase,
+            agentName: test.agentName,
+            workflowName: test.workflowName,
+            featureFlags: test.featureFlags,
+          })
+        )
       );
       test = await ExperimentModel.updateTest(filePath, {
         result: results,
@@ -74,20 +76,20 @@ export class ExperimentExecutor {
     params: RunTestCaseParams
   ): Promise<ExperimentTestCaseResult> => {
     const { testCase, agentName, workflowName, featureFlags } = params;
-    let response: ConversationResponse
-    if(agentName) {
+    let response: ConversationResponse;
+    if (agentName) {
       response = await Application.chat({
         agentName,
         content: testCase.input,
         featureFlags,
       });
-    }else if(workflowName) {
+    } else if (workflowName) {
       response = await Application.runWorkflow({
         workflowName,
         content: testCase.input,
         featureFlags,
       });
-    }else {
+    } else {
       throw new Error('Either agentName or workflowName is required');
     }
     const metrics = await Promise.all(
