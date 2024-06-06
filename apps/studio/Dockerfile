@@ -10,6 +10,8 @@ FROM base AS builder
 WORKDIR /main
 COPY --from=deps /main/node_modules ./node_modules
 COPY . .
+ENV PALICO_AGENT_API_URL=http://localhost:8000
+ENV PALICO_SERVICE_KEY=123456
 RUN npx nx run studio:build
 
 FROM base AS production
