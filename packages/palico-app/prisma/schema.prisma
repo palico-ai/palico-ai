@@ -1,0 +1,30 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("PALICO_DATABASE_URL")
+}
+
+model conversation_request_tracings {
+  requestId             String                 @id @db.VarChar(255)
+  conversationId        String?                @db.VarChar(255)
+  requestInput          Json?
+  responseOutput        Json?
+  featureFlag           String?                @db.VarChar(255)
+  traceId               String?                @db.VarChar(255)
+  tracePreviewUrl       String?                @db.VarChar(255)
+  createdAt             DateTime               @db.Timestamptz(6)
+  updatedAt             DateTime               @db.Timestamptz(6)
+  conversation_tracings conversation_tracings? @relation(fields: [conversationId], references: [conversationId], onDelete: Cascade)
+}
+
+model conversation_tracings {
+  conversationId                String                          @id @db.VarChar(255)
+  agentName                     String?                         @db.VarChar(255)
+  workflowName                  String?                         @db.VarChar(255)
+  createdAt                     DateTime                        @db.Timestamptz(6)
+  updatedAt                     DateTime                        @db.Timestamptz(6)
+  conversation_request_tracings conversation_request_tracings[]
+}

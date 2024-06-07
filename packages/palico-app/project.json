@@ -11,7 +11,7 @@
         "outputPath": "dist/packages/palico-app",
         "main": "packages/palico-app/src/index.ts",
         "tsConfig": "packages/palico-app/tsconfig.lib.json",
-        "assets": []
+        "assets": ["packages/palico-app/prisma/**/*"]
       }
     },
     "publish": {
