@@ -47,6 +47,7 @@ const createDockerCompose = async () => {
           `POSTGRES_DB=${CONFIG.DATABASE.database}`,
         ],
         ports: ['5432:5432'],
+        volumes: ['./postgres:/var/lib/postgresql/data'],
       },
       jaeger: {
         image: 'jaegertracing/all-in-one:1.56',
@@ -97,8 +98,18 @@ const startDockerCompose = async () => {
 const startServer = async () => {
   const dbURL = await getDatabaseURL();
   const envName = config.getDBEnvName();
-  const command = `${envName}=${dbURL} npm run dev`;
-  const serverPs = exec(command);
+  const envVars = {
+    [envName]: dbURL,
+    ['TRACE_PREVIEW_URL_PREFIX']: 'http://localhost:16686/trace',
+  };
+
+  const command = `npm run dev`;
+  const serverPs = exec(command, {
+    env: {
+      ...process.env,
+      ...envVars,
+    },
+  });
   serverPs.stdout?.pipe(process.stdout);
 };
 
