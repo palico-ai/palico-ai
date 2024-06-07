@@ -32,9 +32,27 @@ const getDockerComposePath = async () => {
   };
 };
 
-const createDockerCompose = async () => {
+interface CreateDockerComposeParams {
+  disableStudio?: boolean;
+}
+
+const createDockerCompose = async (
+  params: CreateDockerComposeParams = {
+    disableStudio: false,
+  }
+) => {
   const secretKey = await getServiceKey();
   const { composeFilePath } = await getDockerComposePath();
+  const studioFragment = {
+    image: `palicoai/studio:main@${CONFIG.STUDIO.digest}`,
+    platform: 'linux/amd64',
+    extra_hosts: ['host.docker.internal:host-gateway'],
+    ports: ['5173:3000'],
+    environment: [
+      'PALICO_AGENT_API_URL=http://host.docker.internal:8000',
+      `PALICO_SERVICE_KEY=${secretKey}`,
+    ],
+  };
   const composeDef = {
     version: '3.8',
     services: {
@@ -71,16 +89,7 @@ const createDockerCompose = async () => {
           '9411:9411',
         ],
       },
-      studio: {
-        image: `palicoai/studio:main@${CONFIG.STUDIO.digest}`,
-        platform: 'linux/amd64',
-        extra_hosts: ['host.docker.internal:host-gateway'],
-        ports: ['5173:3000'],
-        environment: [
-          'PALICO_AGENT_API_URL=http://host.docker.internal:8000',
-          `PALICO_SERVICE_KEY=${secretKey}`,
-        ],
-      },
+      ...(params.disableStudio ? {} : { studio: studioFragment }),
     },
   };
   const data = YAML.stringify(composeDef);
@@ -98,13 +107,14 @@ const startDockerCompose = async () => {
 const startServer = async () => {
   const dbURL = await getDatabaseURL();
   const envName = config.getDBEnvName();
+  const projectRoot = await Project.getWorkspaceRootDir();
   const envVars = {
     [envName]: dbURL,
     ['TRACE_PREVIEW_URL_PREFIX']: 'http://localhost:16686/trace',
   };
-
-  const command = `npm run dev`;
+  const command = `nodemon --exec ts-node src/main.ts`;
   const serverPs = exec(command, {
+    cwd: projectRoot,
     env: {
       ...process.env,
       ...envVars,
@@ -137,10 +147,21 @@ const applyDBMigraiton = async () => {
   await ApplyDBMigraiton({ DB_URL: dbURL });
 };
 
-export const StartPalicoApp = async () => {
-  await createDockerCompose();
+interface StartPalicoAppOptions {
+  studio: boolean;
+}
+
+export const StartPalicoApp = async (options: StartPalicoAppOptions) => {
+  console.log(options);
+  console.log('Creating Containers...');
+  await createDockerCompose({
+    disableStudio: !options.studio,
+  });
+  console.log('Starting Containers...');
   await startDockerCompose();
+  console.log('Applying DB Migrations...');
   await applyDBMigraiton();
+  console.log('Starting Server...');
   await startServer();
   await waitUntilExit();
 };
