@@ -24,7 +24,7 @@ export default class JobQueue {
 
   static boss() {
     if (!JobQueue._instance) {
-      const dbURL = config.getSQLDatabaseURL();
+      const dbURL = config.getDBUrl();
       if (!dbURL) {
         throw new Error('Missing SQL Database URL');
       }
@@ -42,7 +42,7 @@ export default class JobQueue {
       QueueName.ExprimentTestRunner,
       data
     );
-    if(!jobId) {
+    if (!jobId) {
       throw new Error('failed to start job');
     }
     return jobId;

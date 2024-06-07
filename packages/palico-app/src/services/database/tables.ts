@@ -1,18 +1,20 @@
-import {
-  Sequelize,
-  DataTypes,
-  Optional,
-  ModelDefined,
-} from 'sequelize';
+import { Sequelize, DataTypes, Optional, ModelDefined } from 'sequelize';
 import * as dotenv from 'dotenv';
-import { ConversationTraces, ConversationRequestTraceItem } from '@palico-ai/common';
+import {
+  ConversationTraces,
+  ConversationRequestTraceItem,
+} from '@palico-ai/common';
 import config from '../../config';
 
 dotenv.config();
 
-export const sequelize = new Sequelize(
-  config.getSQLDatabaseURL() ?? 'sqlite::memory:'
-);
+const dbURL = config.getDBUrl();
+
+if (!dbURL) {
+  throw new Error('Database URL is not defined');
+}
+
+export const sequelize = new Sequelize(dbURL);
 
 export interface StudioLabAttriutes {
   id: string;
@@ -30,15 +32,27 @@ export type StudioLabCreationAttributes = Optional<
   'id' | 'createdAt' | 'updatedAt'
 >;
 
-export type ConversationRequestTraceTableSchema = Omit<ConversationRequestTraceItem, 'requestInput' | 'responseOutput' | "featureFlag"> & {
+export type ConversationRequestTraceTableSchema = Omit<
+  ConversationRequestTraceItem,
+  'requestInput' | 'responseOutput' | 'featureFlag'
+> & {
   requestInput: string; // JSON stringified
   responseOutput: string; // JSON stringified
   featureFlag: string; // JSON stringified
 };
-export type CreateConversationRequestTraceParams = Omit<ConversationRequestTraceTableSchema, 'createdAt' | "updatedAt">;
+export type CreateConversationRequestTraceParams = Omit<
+  ConversationRequestTraceTableSchema,
+  'createdAt' | 'updatedAt'
+>;
 
-export type ConversationTracingTableSchema = Omit<ConversationTraces, "requests">;
-export type CreateConversationTracingParams = Omit<ConversationTracingTableSchema, 'createdAt' | "updatedAt">;
+export type ConversationTracingTableSchema = Omit<
+  ConversationTraces,
+  'requests'
+>;
+export type CreateConversationTracingParams = Omit<
+  ConversationTracingTableSchema,
+  'createdAt' | 'updatedAt'
+>;
 
 export const ConversationRequestTracingTable: ModelDefined<
   ConversationRequestTraceTableSchema,
@@ -104,45 +118,3 @@ ConversationTracingTable.hasMany(ConversationRequestTracingTable, {
 ConversationRequestTracingTable.belongsTo(ConversationTracingTable, {
   foreignKey: 'conversationId',
 });
-
-export const StudioLabTable: ModelDefined<
-  StudioLabAttriutes,
-  StudioLabCreationAttributes
-> = sequelize.define(
-  'studio_lab',
-  {
-    id: {
-      type: DataTypes.STRING,
-      primaryKey: true,
-    },
-    name: {
-      type: DataTypes.STRING,
-    },
-    baselineExperimentId: {
-      type: DataTypes.STRING,
-    },
-    experimentListJSON: {
-      type: DataTypes.JSONB,
-    },
-    testCasesJSON: {
-      type: DataTypes.JSONB,
-    },
-    experimentTestResultJSON: {
-      type: DataTypes.TEXT,
-    },
-  },
-  {
-    timestamps: true,
-  }
-);
-
-sequelize.sync({
-  force: false,
-  alter: true,
-})
-
-// export const syncDB = async (force = false) => {
-//   await sequelize.sync({
-//     force,
-//   });
-// }

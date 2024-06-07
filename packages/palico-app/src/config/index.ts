@@ -3,8 +3,13 @@ class Config {
     return process.env['TRACE_PREVIEW_URL_PREFIX'];
   }
 
-  getSQLDatabaseURL(): string | undefined{
-    return process.env['DB_URL'];
+  getDBUrl(): string | undefined {
+    const envName = this.getDBEnvName();
+    return process.env[envName];
+  }
+
+  getDBEnvName(): string {
+    return 'PALICO_DATABASE_URL';
   }
 }
 
