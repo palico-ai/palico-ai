@@ -1,6 +1,9 @@
 name: Create and publish a Studio Image
 
-on: workflow_dispatch
+on:
+  push:
+    branches:
+      - release-studio
 
 env:
   REGISTRY: docker.io

@@ -1,10 +1,14 @@
-import { ConversationContext, ConversationRequestContent, ConversationResponseSchema } from "@palico-ai/common";
-import { SpanStatusCode, trace } from "@opentelemetry/api";
-import { uuid } from "../utils/common";
-import { ChainNode } from "./types";
-import {get as objGet, set as objSet} from 'lodash';
-import WorkflowModel from "../models/workflow";
-import { ConversationTracker } from "../services/database/conversation_tracker";
+import {
+  ConversationContext,
+  ConversationRequestContent,
+  ConversationResponseSchema,
+} from '@palico-ai/common';
+import { SpanStatusCode, trace } from '@opentelemetry/api';
+import { uuid } from '../utils/common';
+import { ChainNode } from './types';
+import { get as objGet, set as objSet } from 'lodash';
+import WorkflowModel from '../models/workflow';
+import { ConversationTracker } from '../services/database/conversation_tracker';
 
 export interface RunWorkflowParams {
   workflowName: string;
@@ -60,7 +64,10 @@ export default class ChainWorkflowExecutor {
   ) {
     return await tracer.startActiveSpan(node.name, async (nodeSpan) => {
       try {
-        const nodeInput = ChainWorkflowExecutor.getNodeInput(node, workflowInput);
+        const nodeInput = ChainWorkflowExecutor.getNodeInput(
+          node,
+          workflowInput
+        );
         nodeSpan.setAttributes({
           workflowInput: JSON.stringify(workflowInput, null, 2),
           nodeInput: JSON.stringify(nodeInput, null, 2),
@@ -89,7 +96,7 @@ export default class ChainWorkflowExecutor {
     });
   }
 
-  static async run(params: RunWorkflowParams) {
+  static async execute(params: RunWorkflowParams) {
     return await tracer.startActiveSpan('ChainWorkflow', async (span) => {
       try {
         span.setAttributes({
@@ -98,7 +105,9 @@ export default class ChainWorkflowExecutor {
         const conversationId = params.conversationId || uuid();
         const requestId = uuid();
         const traceId = params.traceId || span.spanContext().traceId;
-        const workflow = await WorkflowModel.getWorkflowByName(params.workflowName);
+        const workflow = await WorkflowModel.getWorkflowByName(
+          params.workflowName
+        );
         const context: ConversationContext = {
           conversationId,
           requestId,
@@ -107,7 +116,10 @@ export default class ChainWorkflowExecutor {
             traceId,
           },
         };
-        let workflowInput : Record<string, unknown> = params.content as Record<string, unknown>;
+        let workflowInput: Record<string, unknown> = params.content as Record<
+          string,
+          unknown
+        >;
         let currentNode: ChainNode | undefined = workflow.nodes[0];
         while (currentNode) {
           const newWorkflowInput = await ChainWorkflowExecutor.runNode(
@@ -133,7 +145,7 @@ export default class ChainWorkflowExecutor {
           requestInput: params.content,
           responseOutput: finalOutput,
         });
-        return finalOutput
+        return finalOutput;
       } catch (e) {
         console.log(e);
         span.setStatus({
