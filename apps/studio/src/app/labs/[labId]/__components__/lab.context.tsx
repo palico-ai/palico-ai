@@ -5,10 +5,11 @@ import {
   LabExperimentModel,
   LabTestCaseModel,
 } from '@palico-ai/common';
-import { usePalicoClient } from '../../../../hooks/use_palico_client';
 import React from 'react';
 import { uuid } from 'uuidv4';
 import { getTraceForRequestId } from '../../../../services/telemetry';
+import { newConversation } from '../../../../services/conversation';
+import { ConversationalEntityType } from '../../../../types/common';
 
 export type AddExperimentParams = Omit<LabExperimentModel, 'id'>;
 export type AddTestCaseParams = Omit<LabTestCaseModel, 'id'>;
@@ -81,7 +82,6 @@ export const LabContextProvider: React.FC<LabContextProviderProps> = ({
   const [experimentTestResults, setExperimentTestResults] = React.useState<
     Record<string, Record<string, LabExperimentTestResult>>
   >(initialExperimentTestResults);
-  const client = usePalicoClient();
   const [baselineExperimentId, setBaselineExperimentId] = React.useState<
     string | undefined
   >(initialBaselinedExperimentId);
@@ -109,16 +109,21 @@ export const LabContextProvider: React.FC<LabContextProviderProps> = ({
       if (!experiment) {
         throw new Error('Experiment not found');
       }
-      const response = await client.agents.newConversation({
-        agentId: experiment.agentId,
-        featureFlags: experiment.featureFlagJSON
-          ? JSON.parse(experiment.featureFlagJSON)
-          : undefined,
-        userMessage: testCase.userMessage,
-        payload: testCase.payloadString
-          ? JSON.parse(testCase.payloadString)
-          : undefined,
-      });
+      const response = await newConversation(
+        {
+          type: ConversationalEntityType.AGENT,
+          name: experiment.agentId,
+        },
+        {
+          featureFlags: experiment.featureFlagJSON
+            ? JSON.parse(experiment.featureFlagJSON)
+            : undefined,
+          userMessage: testCase.userMessage,
+          payload: testCase.payloadString
+            ? JSON.parse(testCase.payloadString)
+            : undefined,
+        }
+      );
       const trace = await getTraceForRequestId(response.requestId);
       setExperimentTestResults((currentResult) => ({
         ...currentResult,

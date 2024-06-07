@@ -17,3 +17,13 @@ export interface RequireTestName {
 export interface RequireTestReportName {
   testReportName: string;
 }
+
+export enum ConversationalEntityType {
+  AGENT = 'agent',
+  WORKFLOW = 'workflow',
+}
+
+export interface ConversationalEntity {
+  name: string;
+  type: ConversationalEntityType;
+}

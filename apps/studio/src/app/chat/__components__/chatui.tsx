@@ -13,8 +13,7 @@ import {
 } from '@palico-ai/common';
 
 const ChatUI: React.FC = () => {
-  const { history, loading, sendMessage, replyToToolCall } =
-    useContext(ConversationContext);
+  const { history, loading, sendMessage } = useContext(ConversationContext);
 
   const handleSend = async (
     content: ConversationRequestContent,
@@ -26,7 +25,8 @@ const ChatUI: React.FC = () => {
   const handleSubmitToolOutput = async (
     output: ReplyToToolCallParams['toolOutputs']
   ) => {
-    await replyToToolCall(output);
+    throw new Error('Not implemented');
+    // await replyToToolCall(output);
   };
 
   const requiredToolCalls = useMemo(() => {

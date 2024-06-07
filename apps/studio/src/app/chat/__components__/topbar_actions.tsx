@@ -3,18 +3,17 @@
 import { Box, MenuItem, TextField } from '@mui/material';
 import { ConversationContext } from '../../../context/conversation';
 import React, { useContext } from 'react';
+import { ConversationalEntity } from '../../../types/common';
 
 export interface TopbarAgentParams {
-  agentIds: string[]
+  conversationEntities: ConversationalEntity[];
 }
 
 const TopbarActions: React.FC<TopbarAgentParams> = ({
-  agentIds
+  conversationEntities,
 }) => {
-  const {
-    agentId,
-    setAgentId
-  } = useContext(ConversationContext)
+  const { conversationEntity: activeEntity, setConversationalEntity } =
+    useContext(ConversationContext);
   return (
     <Box
       sx={{
@@ -24,20 +23,25 @@ const TopbarActions: React.FC<TopbarAgentParams> = ({
       <TextField
         required
         variant="standard"
-        onChange={e => {
-          setAgentId(e.target.value)
+        onChange={(e) => {
+          const stringifiedEntity = e.target.value;
+          if (stringifiedEntity.length === 0) {
+            return;
+          }
+          const entity = JSON.parse(stringifiedEntity);
+          setConversationalEntity(entity);
         }}
         size="small"
         sx={{
           minWidth: '150px',
         }}
         select
-        value={agentId}
+        value={JSON.stringify(activeEntity)}
         label="AgentID"
       >
-        {agentIds.map((id) => (
-          <MenuItem key={id} value={id}>
-            {id}
+        {conversationEntities.map((entity, index) => (
+          <MenuItem key={index} value={JSON.stringify(entity)}>
+            {entity.name}
           </MenuItem>
         ))}
       </TextField>

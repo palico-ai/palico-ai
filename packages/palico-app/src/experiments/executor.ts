@@ -25,17 +25,19 @@ export class ExperimentExecutor {
   ): Promise<CreateNewExperimentTestResult> {
     const { test } = await ExperimentModel.createTest(params);
     // TODO: Move run experiment to here
-    const jobId = await JobQueue.runExperiment({ 
+    const jobId = await JobQueue.runExperiment({
       experimentName: test.experimentName,
       testName: test.testName,
-     });
+    });
     return {
       jobId,
       test,
     };
   }
 
-  static async runTest(testKey: ExperimentTestKeyID): Promise<ExperimentTestJSON> {
+  static async runTest(
+    testKey: ExperimentTestKeyID
+  ): Promise<ExperimentTestJSON> {
     try {
       let test = await ExperimentModel.updateTestJSON(testKey, {
         status: {
@@ -89,7 +91,7 @@ export class ExperimentExecutor {
         featureFlags,
       });
     } else if (workflowName) {
-      response = await Application.runWorkflow({
+      response = await Application.executeWorkflow({
         workflowName,
         content: testCase.input,
         featureFlags,

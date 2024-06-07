@@ -27,7 +27,7 @@ jobs:
         with:
           node-version: 20
           cache: 'npm'
-      - run: npm install
+      - run: npm ci
       - uses: nrwl/nx-set-shas@v4
 
       # - run: npx nx-cloud record -- nx format:check
