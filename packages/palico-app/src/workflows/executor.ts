@@ -110,6 +110,7 @@ export default class ChainWorkflowExecutor {
         );
         const context: ConversationContext = {
           conversationId,
+          isNewConversation: params.conversationId === undefined,
           requestId,
           featureFlags: params.featureFlags ?? {},
           otel: {

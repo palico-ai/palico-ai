@@ -12,7 +12,7 @@ model conversation_request_tracings {
   conversationId        String?                @db.VarChar(255)
   requestInput          Json?
   responseOutput        Json?
-  featureFlag           String?                @db.VarChar(255)
+  featureFlag           Json?
   traceId               String?                @db.VarChar(255)
   tracePreviewUrl       String?                @db.VarChar(255)
   createdAt             DateTime               @db.Timestamptz(6)
@@ -27,4 +27,11 @@ model conversation_tracings {
   createdAt                     DateTime                        @db.Timestamptz(6)
   updatedAt                     DateTime                        @db.Timestamptz(6)
   conversation_request_tracings conversation_request_tracings[]
+}
+
+model simple_chat_histories {
+  conversationId String   @id @db.VarChar(255)
+  messagesJSON   Json?
+  createdAt      DateTime @db.Timestamptz(6)
+  updatedAt      DateTime @db.Timestamptz(6)
 }

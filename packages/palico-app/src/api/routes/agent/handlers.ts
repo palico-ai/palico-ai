@@ -54,6 +54,7 @@ export const replyToConversationRequestHandler: RequestHandler = async (
           conversationId,
           body: JSON.stringify(req.body, null, 2),
         });
+        console.log('Calling Application.chat');
         const agentResponse = await Application.chat({
           conversationId,
           agentName,
@@ -61,11 +62,11 @@ export const replyToConversationRequestHandler: RequestHandler = async (
           featureFlags,
           traceId: requestSpan.spanContext().traceId,
         });
-        requestSpan.end();
         const responseJSON: ConversationResponse = {
           ...agentResponse,
           conversationId,
         };
+        console.log('Returning response', responseJSON);
         return res.status(200).json(responseJSON);
       } catch (error) {
         recordRequestErrorSpan(error, requestSpan);

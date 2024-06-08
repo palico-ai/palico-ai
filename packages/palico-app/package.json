@@ -18,33 +18,34 @@
     "publish:clean": "npm unpublish --force --registry http://localhost:4873",
     "publish:local": "npm publish --registry http://localhost:4873",
     "migrate": "npx prisma migrate deploy",
-    "syncdb": "ts-node scripts/sync_db.ts"
+    "syncdb": "ts-node src/scripts/sync_db.ts"
   },
   "bin": {
     "palico-app": "src/cli/index.js"
   },
   "dependencies": {
+    "@opentelemetry/api": "^1.8.0",
     "@palico-ai/common": "1.12.11",
     "body-parser": "^1.20.2",
     "chalk": "^4.1.2",
     "commander": "^11.1.0",
+    "configstore": "^6.0.0",
     "cors": "^2.8.5",
     "docker-compose": "^0.24.8",
-    "@opentelemetry/api": "^1.8.0",
-    "uuidv4": "^6.2.13",
-    "sequelize": "^6.37.3",
     "dotenv": "^16.4.4",
-    "configstore": "^6.0.0",
     "express": "^4.18.2",
     "find-up": "^5.0.0",
-    "pg-boss": "^9.0.3",
-    "pg": "^8.11.3",
-    "pg-hstore": "^2.3.4",
-    "lodash": "^4.17.21",
     "json-to-pretty-yaml": "^1.2.2",
-    "tslib": "^2.3.0"
+    "lodash": "^4.17.21",
+    "pg": "^8.11.3",
+    "pg-boss": "^9.0.3",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.37.3",
+    "tslib": "^2.3.0",
+    "uuidv4": "^6.2.13"
   },
   "devDependencies": {
+    "prisma": "^5.15.0",
     "ts-node": "^10.9.1"
   }
 }

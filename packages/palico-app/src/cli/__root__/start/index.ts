@@ -1,10 +1,10 @@
-import Project from '../../utils/project';
+import Project from '../../../utils/project';
 import YAML from 'json-to-pretty-yaml';
-import OS from '../../utils/os';
-import { ApplyDBMigraiton, getServiceKey } from '../../utils/scripts';
+import OS from '../../../utils/os';
+import { ApplyDBMigraiton, getServiceKey } from '../../../utils/scripts';
 import { v2 as compose } from 'docker-compose';
 import { exec } from 'child_process';
-import config from '../../config';
+import config from '../../../config';
 
 const CONFIG = {
   DATABASE: {
@@ -13,8 +13,7 @@ const CONFIG = {
     database: 'palicoapp',
   },
   STUDIO: {
-    digest:
-      'sha256:c685a661f406e7d4a2c493a0bbf648b12dd6fa1a363dea8bc6740e54c0065333',
+    digest: config.getStudioDigest(),
   },
 };
 
@@ -42,6 +41,7 @@ const createDockerCompose = async (
   }
 ) => {
   const secretKey = await getServiceKey();
+  const apiPort = config.getAPIPort();
   const { composeFilePath } = await getDockerComposePath();
   const studioFragment = {
     image: `palicoai/studio:main@${CONFIG.STUDIO.digest}`,
@@ -49,7 +49,7 @@ const createDockerCompose = async (
     extra_hosts: ['host.docker.internal:host-gateway'],
     ports: ['5173:3000'],
     environment: [
-      'PALICO_AGENT_API_URL=http://host.docker.internal:8000',
+      `PALICO_AGENT_API_URL=http://host.docker.internal:${apiPort}`,
       `PALICO_SERVICE_KEY=${secretKey}`,
     ],
   };
@@ -152,7 +152,6 @@ interface StartPalicoAppOptions {
 }
 
 export const StartPalicoApp = async (options: StartPalicoAppOptions) => {
-  console.log(options);
   console.log('Creating Containers...');
   await createDockerCompose({
     disableStudio: !options.studio,

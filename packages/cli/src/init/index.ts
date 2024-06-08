@@ -5,8 +5,6 @@ import { createFile } from '../utils/create_file';
 import PackageJSON, { commonPackageJSON } from './package_json';
 
 const ENV_FILE_CONTENT = `OPENAI_API_KEY=""
-OPENAI_MODEL="gpt-3.5-turbo-0125"
-API_PORT=8000
 JWT_SECRET="secret"
 `;
 
@@ -42,7 +40,7 @@ export const InitHandler = async (projectName: string, option: Option) => {
     ...commonPackageJSON.dependencies,
     ...(template === 'lexical' ? lexicalAdditionalDependencies : {}),
   };
-  console.log("Setting up project's dependecies...")
+  console.log("Setting up project's dependecies...");
   const packageJSON = await PackageJSON.init({
     directory: process.cwd(),
     projectName,

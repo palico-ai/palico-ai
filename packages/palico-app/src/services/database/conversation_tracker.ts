@@ -34,7 +34,6 @@ export class ConversationTracker {
       : basePreviewURL
       ? `${basePreviewURL}/${request.traceId}`
       : undefined;
-
     let conversation = await ConversationTracingTable.findByPk(
       request.conversationId
     );
@@ -50,7 +49,9 @@ export class ConversationTracker {
       conversationId: request.conversationId,
       requestInput: JSON.stringify(request.requestInput),
       responseOutput: JSON.stringify(request.responseOutput),
-      featureFlag: request.featureFlag ? JSON.stringify(request.featureFlag) : "{}",
+      featureFlag: request.featureFlag
+        ? JSON.stringify(request.featureFlag)
+        : '{}',
       traceId: request.traceId,
       tracePreviewUrl,
     });

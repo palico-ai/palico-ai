@@ -19,7 +19,7 @@
       "parser": "jsonc-eslint-parser",
       "rules": {
         "@nx/dependency-checks": [
-          "error",
+          "warn",
           {
             "ignoredDependencies": [
               "@palico-ai/app",

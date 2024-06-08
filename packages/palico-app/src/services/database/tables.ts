@@ -74,7 +74,7 @@ export const ConversationRequestTracingTable: ModelDefined<
       type: DataTypes.JSONB,
     },
     featureFlag: {
-      type: DataTypes.STRING,
+      type: DataTypes.JSONB,
     },
     traceId: {
       type: DataTypes.STRING,
@@ -103,6 +103,37 @@ export const ConversationTracingTable: ModelDefined<
     },
     workflowName: {
       type: DataTypes.STRING,
+    },
+  },
+  {
+    timestamps: true,
+  }
+);
+
+export interface SimpleChatHistory {
+  conversationId: string;
+  messagesJSON: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type SimpleChatHistoryCreationAttributes = Optional<
+  SimpleChatHistory,
+  'createdAt' | 'updatedAt'
+>;
+
+export const SimpleChatHistoryTable: ModelDefined<
+  SimpleChatHistory,
+  SimpleChatHistoryCreationAttributes
+> = sequelize.define(
+  'simple_chat_history',
+  {
+    conversationId: {
+      type: DataTypes.STRING,
+      primaryKey: true,
+    },
+    messagesJSON: {
+      type: DataTypes.JSONB,
     },
   },
   {
