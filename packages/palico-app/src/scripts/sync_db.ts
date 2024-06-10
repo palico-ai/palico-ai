@@ -1,4 +1,4 @@
-import { sequelize } from '../src/services/database/tables';
+import { sequelize } from '../services/database/tables';
 
 const forceSync = process.env['FORCE_SYNC'] === 'true';
 

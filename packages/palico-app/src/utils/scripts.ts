@@ -26,7 +26,6 @@ export const getServiceKey = async () => {
       'Secret key not found. Please set JWT_SECRET in your environment variables.'
     );
   }
-  console.log('Generating token...');
   const token = await JWTAuthenticator.generateAPIJWT(
     { role: 'admin' },
     secret

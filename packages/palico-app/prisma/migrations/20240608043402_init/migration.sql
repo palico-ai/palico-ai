@@ -4,7 +4,7 @@ CREATE TABLE "conversation_request_tracings" (
     "conversationId" VARCHAR(255),
     "requestInput" JSONB,
     "responseOutput" JSONB,
-    "featureFlag" VARCHAR(255),
+    "featureFlag" JSONB,
     "traceId" VARCHAR(255),
     "tracePreviewUrl" VARCHAR(255),
     "createdAt" TIMESTAMPTZ(6) NOT NULL,
@@ -22,6 +22,16 @@ CREATE TABLE "conversation_tracings" (
     "updatedAt" TIMESTAMPTZ(6) NOT NULL,
 
     CONSTRAINT "conversation_tracings_pkey" PRIMARY KEY ("conversationId")
+);
+
+-- CreateTable
+CREATE TABLE "simple_chat_histories" (
+    "conversationId" VARCHAR(255) NOT NULL,
+    "messagesJSON" JSONB,
+    "createdAt" TIMESTAMPTZ(6) NOT NULL,
+    "updatedAt" TIMESTAMPTZ(6) NOT NULL,
+
+    CONSTRAINT "simple_chat_histories_pkey" PRIMARY KEY ("conversationId")
 );
 
 -- AddForeignKey

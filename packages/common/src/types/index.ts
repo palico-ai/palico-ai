@@ -13,6 +13,7 @@ export interface ConversationRequestContent<Payload = Record<string, unknown>> {
 export interface ConversationContext {
   conversationId: string;
   requestId: string;
+  isNewConversation: boolean;
   otel: {
     traceId: string;
   };

@@ -6,10 +6,12 @@ export type PackageJSONSchema = {
   version: string;
   description: string;
   main: string;
-  license: string;
   scripts: Record<string, string>;
   dependencies: Record<string, string>;
   devDependencies: Record<string, string>;
+  nodemonConfig: {
+    ignore: string[];
+  };
 };
 
 export interface InitPackageJSON {
@@ -33,21 +35,27 @@ export const commonPackageJSON: PackageJSONSchema = {
   name: 'sample-project',
   version: '1.0.0',
   description: 'Simple palico app generated with palico-cli',
-  main: 'src/dist/index.js',
-  license: 'Apache-2.0',
+  main: 'src/main.ts',
   scripts: {
     palico: 'palico-app',
-    start: 'docker-compose up',
+    start: 'palico-app start',
     'start:clean': 'docker-compose up --build --force-recreate',
-    dev: 'npm run palico dev',
     build: 'tsc',
   },
+  nodemonConfig: {
+    ignore: ['appdata/**/*'],
+  },
   dependencies: {
-    dotenv: '^16.4.3',
-    zod: '^3.22.4',
+    '@opentelemetry/api': '^1.8.0',
+    '@opentelemetry/auto-instrumentations-node': '^0.44.0',
+    '@opentelemetry/exporter-zipkin': '^1.24.0',
+    '@opentelemetry/sdk-metrics': '^1.24.0',
+    '@opentelemetry/sdk-node': '^0.51.0',
+    '@opentelemetry/sdk-trace-node': '^1.24.0',
+    '@palico-ai/app': '^1.12.11',
   },
   devDependencies: {
-    '@types/node': '^20.2.4',
+    nodemon: '^3.1.0',
     'ts-node': '^10.9.1',
     typescript: '^5.0.4',
   },
@@ -126,7 +134,7 @@ export default class PackageJSON {
       packageJSONParams.devDependencies = params.devDependencies;
     }
     await packageJSON.updatePackageJSON(packageJSONParams);
-    if(params.dependencies || params.devDependencies) {
+    if (params.dependencies || params.devDependencies) {
       await packageJSON.install();
     }
     return packageJSON;

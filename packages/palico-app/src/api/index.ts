@@ -10,6 +10,7 @@ import workflowRouter from './routes/workflow';
 import metadataRouter from './routes/metadata';
 import { defaultErrorMiddleware } from './middlewares/default_error_middeware';
 import JobQueue from '../services/job_queue';
+import config from '../config';
 
 export interface PalicoAPICreateParams {
   enableDevMode?: boolean;
@@ -37,7 +38,7 @@ export class PalicoAPIServer {
     this.expressAPI.use('/studio', studioRouter);
     this.expressAPI.use('/telemetry', telemetryRouter);
     this.expressAPI.use('/metadata', metadataRouter);
-    this.expressAPI.use('/workflow', workflowRouter)
+    this.expressAPI.use('/workflow', workflowRouter);
     if (params.enableDevMode) {
       this.enableDevMode = true;
       this.expressAPI.use('/dev', devRouter);
@@ -45,9 +46,7 @@ export class PalicoAPIServer {
     this.expressAPI.use(defaultErrorMiddleware);
   }
 
-  public static create(
-    params: PalicoAPICreateParams
-  ): PalicoAPIServer {
+  public static create(params: PalicoAPICreateParams): PalicoAPIServer {
     if (PalicoAPIServer.instance) {
       throw new Error('PalicoAPIService already created');
     }
@@ -62,10 +61,11 @@ export class PalicoAPIServer {
     return PalicoAPIServer.instance;
   }
 
-  public async start(port: number) {
+  public async start() {
     if (this.enableDevMode) {
       await JobQueue.start();
     }
+    const port = config.getAPIPort();
     this.expressAPI.listen(port, () => {
       console.log('Server started on port ' + port);
     });

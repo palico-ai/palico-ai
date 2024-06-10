@@ -26,7 +26,10 @@ import TableRow from './row';
 import TableControlPanel from './control_panel';
 import { TableContextParams, TableContextProvider } from './table.contex';
 
-export type RenderCellFN<Data> = (cell: Cell<Data, unknown>) => React.ReactNode;
+export type RenderCellFN<Data> = (
+  cell: Cell<Data, unknown>,
+  renderContent: () => React.ReactNode // Used to render the content of the cell in table's data
+) => React.ReactNode;
 
 export interface TableParams<Data> {
   table: TANTable<Data>;
