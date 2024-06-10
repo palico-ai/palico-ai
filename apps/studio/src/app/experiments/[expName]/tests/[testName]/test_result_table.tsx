@@ -2,9 +2,13 @@
 
 import { Paper } from '@mui/material';
 import { ExperimentTest } from '@palico-ai/common';
-import { Table, useTableModel } from '@palico-ai/components';
-import { flattenExperimentColumns } from '../../../../../utils/experiments';
+import { RenderCellFN, Table, useTableModel } from '@palico-ai/components';
+import {
+  TestTableColumnHeader,
+  flattenExperimentColumns,
+} from '../../../../../utils/experiments';
 import React from 'react';
+import TestCellConversationID from '../../../../../components/table/test_cell_conversation_id';
 
 export interface TestResultTableProps {
   test: ExperimentTest;
@@ -18,9 +22,21 @@ const TestResultTable: React.FC<TestResultTableProps> = ({ test }) => {
     columns,
   });
 
+  const renderCell: RenderCellFN<ExperimentTest['result'][0]> = (
+    cell,
+    renderContent
+  ) => {
+    if (cell.column.columnDef.header === TestTableColumnHeader.ConversationId) {
+      return (
+        <TestCellConversationID cell={cell} renderContent={renderContent} />
+      );
+    }
+    return renderContent();
+  };
+
   return (
     <Paper sx={{ p: 2 }}>
-      <Table table={table} />
+      <Table table={table} renderCell={renderCell} />
     </Paper>
   );
 };

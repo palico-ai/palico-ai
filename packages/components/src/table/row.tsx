@@ -24,7 +24,9 @@ function TableRow<D>(props: TableRowParams<D>): React.ReactElement {
 
   const handleRenderCellValue = (cell: Cell<D, unknown>) => {
     if (renderCell) {
-      return renderCell(cell);
+      return renderCell(cell, () =>
+        flexRender(cell.column.columnDef.cell, cell.getContext())
+      );
     }
     return flexRender(cell.column.columnDef.cell, cell.getContext());
   };

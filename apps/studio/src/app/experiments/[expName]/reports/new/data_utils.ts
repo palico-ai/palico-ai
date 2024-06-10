@@ -1,5 +1,8 @@
 import { ExperimentTest, ExperimentTestCaseResult } from '@palico-ai/common';
-import { ColumnDef, createColumnHelper } from '@tanstack/react-table';
+import { ColumnDef } from '@tanstack/react-table';
+import { TestTableColumnHeader } from '../../../../../utils/experiments';
+
+// TOOD: Consolidate with utils/experiments.ts
 
 export interface TestResultWithIdentifier extends ExperimentTestCaseResult {
   name: string;
@@ -28,7 +31,7 @@ const getAllMetrics = (data: TestResultWithIdentifier[]) => {
     });
   });
   return Array.from(metrics);
-}
+};
 
 const getAllTags = (data: TestResultWithIdentifier[]) => {
   const tags = new Set<string>();
@@ -38,7 +41,7 @@ const getAllTags = (data: TestResultWithIdentifier[]) => {
     });
   });
   return Array.from(tags);
-}
+};
 
 export const createColumnDefs = (data: TestResultWithIdentifier[]) => {
   const columns: ColumnDef<TestResultWithIdentifier>[] = [
@@ -47,27 +50,23 @@ export const createColumnDefs = (data: TestResultWithIdentifier[]) => {
       header: 'Test Name',
     },
     {
-      accessorKey: "input.userMessage",
-      header: "Input::User Message",
+      accessorKey: 'input.userMessage',
+      header: 'Input::User Message',
     },
     {
-      accessorKey: "input.payload",
-      header: "Input::Payload",
+      accessorKey: 'input.payload',
+      header: 'Input::Payload',
       cell: (item) => JSON.stringify(item.getValue()),
     },
     {
-      accessorKey: "output.message",
-      header: "Output::Response",
+      accessorKey: 'output.message',
+      header: 'Output::Response',
     },
     {
-      accessorKey: "output.data",
-      header: "Output::Data",
+      accessorKey: 'output.data',
+      header: 'Output::Data',
       cell: (item) => JSON.stringify(item.getValue()),
     },
-    {
-      accessorKey: "output.conversationId",
-      header: "Conversation ID",
-    }
   ];
   const tags = getAllTags(data);
   tags.forEach((tag) => {
@@ -82,6 +81,10 @@ export const createColumnDefs = (data: TestResultWithIdentifier[]) => {
       accessorKey: `metrics.${metric}`,
       header: `Metrics::${metric}`,
     });
+  });
+  columns.push({
+    accessorKey: 'output.conversationId',
+    header: TestTableColumnHeader.ConversationId,
   });
   return columns;
 };
