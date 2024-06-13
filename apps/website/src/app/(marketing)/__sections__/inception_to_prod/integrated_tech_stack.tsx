@@ -1,6 +1,7 @@
 import { Box } from '@mui/material';
 import { Typography } from '@palico-ai/components';
 import React from 'react';
+import { LandingPageData } from '../../data';
 
 interface TechStackItemProps {
   label: string;
@@ -25,29 +26,14 @@ const AnIntegratedDevelopmentStack: React.FC = () => {
   return (
     <Box>
       <Typography variant="h4" mb={4}>
-        Start with a flexible set of integrated tools
+        {LandingPageData.protoToProd.sections.techStack.title}
       </Typography>
       <Box>
-        <TechStackItem
-          label="Agent API and SDK"
-          description="Easily define any LLM components and automatically depoy them as a RESTful API."
-        />
-        <TechStackItem
-          label="Workflows"
-          description="Organize and combine multiple LLM components, business logics, and their interactions into a single workflow."
-        />
-        <TechStackItem
-          label="Observability"
-          description="Organize and combine multiple LLM components, business logics, and their interactions into a single workflow."
-        />
-        <TechStackItem
-          label="Experimentation"
-          description="Organize and combine multiple LLM components, business logics, and their interactions into a single workflow."
-        />
-        <TechStackItem
-          label="Dashboard UI"
-          description="Organize and combine multiple LLM components, business logics, and their interactions into a single workflow."
-        />
+        {LandingPageData.protoToProd.sections.techStack.items.map(
+          (techStackItem, index) => (
+            <TechStackItem key={index} {...techStackItem} />
+          )
+        )}
       </Box>
     </Box>
   );

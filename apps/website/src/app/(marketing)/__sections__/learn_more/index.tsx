@@ -28,12 +28,15 @@ const LearnMoreItem: React.FC<LearnMoreItemProps> = ({
 
 const LearnMore: React.FC = () => {
   return (
-    <SectionLayout title="Learn More">
+    <SectionLayout
+      title="Build Confidence with Data-Driven Decisions"
+      disableGutter
+    >
       <Box
         sx={{
           display: 'flex',
           justifyContent: 'center',
-          gap: 4,
+          gap: 2,
         }}
       >
         <Button variant="contained" color="primary" size="large">
@@ -43,7 +46,7 @@ const LearnMore: React.FC = () => {
           Schedule a demo
         </Button>
       </Box>
-      <Divider
+      {/* <Divider
         sx={{
           my: 8,
         }}
@@ -110,7 +113,7 @@ const LearnMore: React.FC = () => {
             />
           </div>
         </Grid>
-      </Grid>
+      </Grid> */}
     </SectionLayout>
   );
 };

@@ -5,6 +5,7 @@ import SimpleValuePropCard from './value_prop_card';
 import UseCases from './use_cases';
 import AnIntegratedDevelopmentStack from './integrated_tech_stack';
 import PrototypeAndIterate from './prototype';
+import { LandingPageData } from '../../data';
 
 const SimpleValueProps = [
   {
@@ -23,7 +24,10 @@ const SimpleValueProps = [
 
 const InceptionToProduction: React.FC = () => {
   return (
-    <SectionLayout alignTitle={'center'} title="From Prototype to Production">
+    <SectionLayout
+      alignTitle={'center'}
+      title={LandingPageData.protoToProd.title}
+    >
       <Box>
         <Grid container spacing={4} columnSpacing={12}>
           <Grid item xs={12} md={6}>
