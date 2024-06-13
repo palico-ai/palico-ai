@@ -1,4 +1,4 @@
-import { ConversationRequestContent, ConversationResponse } from ".";
+import { ConversationRequestContent, ConversationResponse } from '.';
 
 export interface CreateExperimentParams {
   name: string;
@@ -14,7 +14,7 @@ export interface ExperimentJSON {
   createdAt: number;
 }
 
-export type EvalMetricOutput = boolean | number | string | undefined;
+export type EvalMetricOutput = number;
 
 export interface EvalMetric {
   label: string;

@@ -42,6 +42,7 @@
     "pg-hstore": "^2.3.4",
     "sequelize": "^6.37.3",
     "tslib": "^2.3.0",
+    "zod": "^3.23.8",
     "uuidv4": "^6.2.13"
   },
   "devDependencies": {

@@ -1,10 +1,17 @@
-import { ConversationRequestContent, ConversationResponse } from '@palico-ai/common';
-import { EvalMetric, EvalMetricOutput } from './types';
+import {
+  ConversationRequestContent,
+  ConversationResponse,
+} from '@palico-ai/common';
+import { EvalMetric, EvalMetricOutput } from '../types';
 
 export interface ExactMatchParams {
   expected: Pick<ConversationResponse, 'message' | 'data'>;
 }
 
+/**
+ * Checks if the response is an exact match.
+ * Returns 0 if the response is not an exact match, 1 if it is.
+ */
 export class ExactMatchEvalMetric implements EvalMetric {
   private params: ExactMatchParams;
   label = 'exact-match';
@@ -18,20 +25,11 @@ export class ExactMatchEvalMetric implements EvalMetric {
     response: ConversationResponse
   ): Promise<EvalMetricOutput> {
     if (response.message !== this.params.expected.message) {
-      return false;
+      return 0;
     }
     if (response.data !== this.params.expected.data) {
-      return false;
+      return 0;
     }
-    return true;
-  }
-}
-
-export class ProfessionalismEvalMetric implements EvalMetric {
-  label = 'professionalism';
-
-  async evaluate(): Promise<EvalMetricOutput> {
-    const random = Math.random() * 100;
-    return parseInt(random.toFixed(2));
+    return 1;
   }
 }
