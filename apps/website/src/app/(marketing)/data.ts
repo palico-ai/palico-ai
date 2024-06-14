@@ -17,14 +17,14 @@ export class LandingPageData {
         ],
       },
       runExperiments: {
-        title: 'Run Experiments like a Scientist',
+        title: 'Experiment like a Scientist',
         descriptions: [
           "Test how indepedent variables (prompt, model, business logic, etc) affect your agent's performance",
           'Automatically version control your experiments alongside your code',
           'Organize and collaborate on experiments with your team',
         ],
         demoUrl:
-          'https://www.loom.com/embed/72d981d967e140c2a8023afd1a21e73f?sid=6102aecf-be83-4e23-bed9-4f57f560c21f',
+          'https://www.loom.com/embed/ac36ce6824c241b891c3bb4c246dfdf4?sid=3be46e46-8fbf-4c74-8bc3-4078372b76fd',
       },
     },
   };

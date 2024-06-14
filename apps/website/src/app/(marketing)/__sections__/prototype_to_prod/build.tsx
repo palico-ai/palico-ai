@@ -33,7 +33,7 @@ export const LLMDevelopmentFramework: React.FC = () => {
           </Box>
           <Box sx={{ flexGrow: 1 }} />
           <Typography variant="body2">
-            Build a modular prompt-layer, allowing you to easily swap different
+            Build a modular prompt-layer that lets you easily swap different
             components in and out and view its impact on your models
             performance.
           </Typography>
@@ -102,8 +102,9 @@ export const Experimentation: React.FC = () => {
           }}
         />
         <Typography variant="body2" gutterBottom>
-          Test different models, prompts, business logics, and any other
-          components of your LLM application
+          Run, manage, and analyze experiments that tests different models,
+          prompts, business logics, and any other components of your LLM
+          application
         </Typography>
       </CardContent>
     </Card>
@@ -115,7 +116,7 @@ export const Evaluation: React.FC = () => {
     <ComponentCardWithDescription
       title={'Evaluation'}
       descriptions={[
-        'Evaluate the performance of your LLM Agent using our evaluation tools',
+        'Unit-test the accuracy of your LLM Agents using our pre-built metrics, or define your own custom metrics',
       ]}
     />
   );
@@ -126,7 +127,9 @@ export const Analysis: React.FC = () => {
     <ComponentCardWithDescription
       title={'Analysis'}
       descriptions={[
-        'Analyze the performance of your LLM Agent using our analysis tools',
+        'Deep-dive into test results for your LLM Agents directly within Palico Studio',
+        'Create reports comparing multiple test-cases and their aggregated results',
+        'Export test results to Jupiter Notebook for more in-depth analysis',
       ]}
     />
   );
@@ -137,7 +140,7 @@ export const VersionControl: React.FC = () => {
     <ComponentCardWithDescription
       title={'Version Control'}
       descriptions={[
-        'Automatically version control your experiments alongside your code',
+        'All experiments are automatically version-controlled alongside your code',
       ]}
     />
   );

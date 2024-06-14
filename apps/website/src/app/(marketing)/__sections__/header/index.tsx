@@ -1,10 +1,11 @@
 'use client';
 
 import { Box, Divider, styled } from '@mui/material';
-import { Button, Typography } from '@palico-ai/components';
+import { Button, Link, Typography } from '@palico-ai/components';
 import React from 'react';
 import SectionLayout from '../section_layout';
 import { LandingPageData } from '../../data';
+import RoutePath from '../../../../utils/route_path';
 
 const AccuracySpan = styled('span')(({ theme }) => ({
   color: theme.palette.primary.light,
@@ -46,22 +47,26 @@ const LandingPageHeader: React.FC = () => {
               mt: 4,
             }}
           >
-            <Button
-              variant="contained"
-              size="large"
-              color="primary"
-              sx={{ mt: 4 }}
-            >
-              Quickstart
-            </Button>
-            <Button
-              variant="contained"
-              size="large"
-              color="secondary"
-              sx={{ mt: 4 }}
-            >
-              Documentation
-            </Button>
+            <Link href={RoutePath.quickStart()}>
+              <Button
+                variant="contained"
+                size="large"
+                color="primary"
+                sx={{ mt: 4 }}
+              >
+                Quickstart
+              </Button>
+            </Link>
+            <Link href={RoutePath.docs()}>
+              <Button
+                variant="contained"
+                size="large"
+                color="secondary"
+                sx={{ mt: 4 }}
+              >
+                Documentation
+              </Button>
+            </Link>
           </Box>
         </Box>
       </Box>

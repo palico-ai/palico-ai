@@ -64,9 +64,9 @@ export const theme = createTheme({
   typography,
   breakpoints: {
     values: {
-      xs: 576,
-      sm: 768,
-      md: 992,
+      xs: 0,
+      sm: 600,
+      md: 900,
       lg: 1200,
       xl: 1400,
     },
