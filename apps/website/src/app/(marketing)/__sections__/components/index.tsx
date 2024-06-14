@@ -19,10 +19,10 @@ const FrameworkComponents: React.FC = () => {
   return (
     <SectionLayout title={'Take your Application from Prototype to Production'}>
       <Grid container spacing={GRID_SPACING} columnSpacing={GRID_SPACING}>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={5}>
           <LLMDevelopmentFramework />
         </Grid>
-        <Grid container item xs={12} md={6} spacing={GRID_SPACING}>
+        <Grid container item xs={12} md={7} spacing={GRID_SPACING}>
           <Grid item xs={12}>
             <Workflows />
           </Grid>
@@ -36,7 +36,7 @@ const FrameworkComponents: React.FC = () => {
         <Grid item xs={12}>
           <Prototype />
         </Grid>
-        <Grid container item xs={12} md={6} spacing={GRID_SPACING}>
+        <Grid container item xs={12} md={7} spacing={GRID_SPACING}>
           <Grid item xs={12}>
             <Evaluation />
           </Grid>
@@ -47,7 +47,7 @@ const FrameworkComponents: React.FC = () => {
             <VersionControl />
           </Grid>
         </Grid>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={5}>
           <Experimentation />
         </Grid>
       </Grid>

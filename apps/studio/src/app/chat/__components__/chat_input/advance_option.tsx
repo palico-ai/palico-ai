@@ -34,7 +34,7 @@ const AdvanceOption: React.FC<AdvanceOptionProps> = ({
           <TabPanel value="request_payload">
             <Editor
               theme="vs-dark"
-              height={200}
+              height={'15vh'}
               defaultLanguage="json"
               value={requestPayload}
               onChange={(value) => onChangeRequestPayload(value ?? '')}
