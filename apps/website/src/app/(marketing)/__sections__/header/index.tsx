@@ -1,9 +1,11 @@
 'use client';
 
 import { Box, Divider, styled } from '@mui/material';
-import { Button, Typography } from '@palico-ai/components';
+import { Button, Link, Typography } from '@palico-ai/components';
 import React from 'react';
 import SectionLayout from '../section_layout';
+import { LandingPageData } from '../../data';
+import RoutePath from '../../../../utils/route_path';
 
 const AccuracySpan = styled('span')(({ theme }) => ({
   color: theme.palette.primary.light,
@@ -34,11 +36,8 @@ const LandingPageHeader: React.FC = () => {
             Development
           </Typography>
           <Divider sx={{ my: 2 }} />
-          <Typography variant="body2" fontSize={17}>
-            With our LLM Development Framework, you can quickly prototype and
-            build your LLM application (agent), unit-test the accuracy of your
-            agent , dig into and root-cause accuracy issues, and confidently
-            ship your LLM features by making data-driven decisions
+          <Typography variant="body2" fontSize={17} whiteSpace={'pre-line'}>
+            {LandingPageData.header.subtitle.v2}
           </Typography>
           <Box
             sx={{
@@ -48,22 +47,26 @@ const LandingPageHeader: React.FC = () => {
               mt: 4,
             }}
           >
-            <Button
-              variant="contained"
-              size="large"
-              color="primary"
-              sx={{ mt: 4 }}
-            >
-              Quickstart
-            </Button>
-            <Button
-              variant="contained"
-              size="large"
-              color="secondary"
-              sx={{ mt: 4 }}
-            >
-              Documentation
-            </Button>
+            <Link href={RoutePath.quickStart()}>
+              <Button
+                variant="contained"
+                size="large"
+                color="primary"
+                sx={{ mt: 4 }}
+              >
+                Quickstart
+              </Button>
+            </Link>
+            <Link href={RoutePath.docs()}>
+              <Button
+                variant="contained"
+                size="large"
+                color="secondary"
+                sx={{ mt: 4 }}
+              >
+                Documentation
+              </Button>
+            </Link>
           </Box>
         </Box>
       </Box>

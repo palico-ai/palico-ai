@@ -22,15 +22,11 @@ const SectionLayout: React.FC<SectionLayoutProps> = ({
       }}
     >
       {title && (
-        <Typography
-          variant="h2"
-          textAlign={alignTitle}
-          sx={{
-            mb: 12,
-          }}
-        >
-          {title}
-        </Typography>
+        <Box sx={{ mb: 14 }}>
+          <Typography variant="h2" textAlign={alignTitle}>
+            {title}
+          </Typography>
+        </Box>
       )}
       {children}
     </Box>

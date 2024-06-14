@@ -12,7 +12,7 @@ const DebugAndTrace: React.FC = () => {
         'Easily add your own traces with OpenTelemetry standards',
         'Sync your traces to your favorite observability tools like Datadog, New Relic, and more',
       ]}
-      embedURL="https://www.loom.com/embed/72d981d967e140c2a8023afd1a21e73f?sid=6102aecf-be83-4e23-bed9-4f57f560c21f"
+      embedURL="https://www.loom.com/embed/afb70c07bcc24f46a12a756dd80de29a?sid=d3e3a2c9-3ebb-4a73-8538-6d0406dd726e"
     />
   );
 };

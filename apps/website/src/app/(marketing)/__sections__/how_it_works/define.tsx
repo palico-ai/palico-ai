@@ -1,5 +1,6 @@
 import React from 'react';
 import HowItWorksStep from './side_by_side_layout';
+import { LandingPageData } from '../../data';
 
 const codeSnippet = `class IntentClassifier implements LLMAgent {
   async chat(
@@ -35,11 +36,10 @@ const DefineYourApplication: React.FC = () => {
   return (
     <HowItWorksStep
       maxHeight={400}
-      title="Define your LLM Agent"
-      descriptions={[
-        'Define your LLM application with feature-flags to be able to test different how your LLM Agent performs under different models, prompts, business logics, and other variations',
-        'Automatically deploy your Agent behind a REST API endpoint, and use our Javascript SDK to integrate it into your existing application',
-      ]}
+      title={LandingPageData.howItWorks.step.defineYourAgent.title}
+      descriptions={
+        LandingPageData.howItWorks.step.defineYourAgent.descriptions
+      }
       codeSnippet={codeSnippet}
     />
   );
