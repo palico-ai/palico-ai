@@ -1,6 +1,5 @@
 import React from 'react';
-import HowItWorksStep from './side_by_side_layout';
-import { LandingPageData } from '../../data';
+import HowItWorksStepWithMedia from './side_by_side_layout';
 
 const codeSnippet = `class IntentClassifier implements LLMAgent {
   async chat(
@@ -34,12 +33,12 @@ const codeSnippet = `class IntentClassifier implements LLMAgent {
 
 const DefineYourApplication: React.FC = () => {
   return (
-    <HowItWorksStep
+    <HowItWorksStepWithMedia
       maxHeight={400}
-      title={LandingPageData.howItWorks.step.defineYourAgent.title}
-      descriptions={
-        LandingPageData.howItWorks.step.defineYourAgent.descriptions
-      }
+      title={'Build a modular LLM Application'}
+      descriptions={[
+        'To streamline your experimentation process, you need a modular application layer. Palico structures your LLM Development to build modular application by using feature-flags, and provides you with maximum flexibilities in what components you for building your application.',
+      ]}
       codeSnippet={codeSnippet}
     />
   );

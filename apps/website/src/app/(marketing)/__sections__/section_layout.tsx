@@ -12,7 +12,7 @@ export interface SectionLayoutProps {
 const SectionLayout: React.FC<SectionLayoutProps> = ({
   title,
   disableGutter,
-  alignTitle = 'center',
+  alignTitle = 'left',
   children,
 }) => {
   return (
