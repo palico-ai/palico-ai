@@ -1,5 +1,5 @@
 import React from 'react';
-import HowItWorksStep from './side_by_side_layout';
+import HowItWorksStepWithMedia from './side_by_side_layout';
 
 const codeSnippet = `[
   new TestCase()
@@ -24,12 +24,12 @@ const codeSnippet = `[
 
 const UnitestAccuracySection: React.FC = () => {
   return (
-    <HowItWorksStep
+    <HowItWorksStepWithMedia
       maxHeight={300}
       title="Write Unit-test for Accuracy"
       descriptions={[
-        'Using our evaluation library, write a test for every use-case your agent needs to support',
-        'Measure the accuracy of your agents with our pre-built metrics, or create your own',
+        'Define test-cases that models the expected behaviors from your LLM Agent with Palico’s Evaluation library',
+        'Measure accuracy with our out-of-the box metrics like Valid JSON Schema, Exact Match, Contains, Friendliness, or create your own',
       ]}
       codeSnippet={codeSnippet}
     />

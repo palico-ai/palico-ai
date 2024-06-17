@@ -11,6 +11,7 @@ const LearnMore: React.FC = () => {
     <SectionLayout
       title="Improve Accuracy with Experiment-Driven Development"
       disableGutter
+      alignTitle={'center'}
     >
       <Box
         sx={{

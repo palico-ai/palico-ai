@@ -56,31 +56,31 @@ const attributes: AttributeCardProps[] = [
     label: 'Build with Typescript',
     icon: <CodeIcon fontSize="medium" />,
     description:
-      'Our framework lets you build flexible LLM applications in Typescript and automatically deploy it behind an API',
+      'Build production-ready LLM applications with your team in Typescript',
   },
   {
     label: 'Experiment at Scale',
     icon: <ExperimentIcon />,
     description:
-      'Write tests for every use-case for your agent and run them on any changes and across every variants of your agents',
+      'Run hundreds of tests across every component of your LLM application to find the best fit for your use case',
   },
   {
     label: 'Debug and Tracing',
     icon: <BugReportIcon />,
     description:
-      'We provide out of the box tracing with ability to add your own custom traces with OpenTelemetry',
+      'Palico comes with out-of-the-box tracing and lets you add any custom traces of your own',
+  },
+  {
+    label: 'E2E Development',
+    icon: <MoveFastIcon />,
+    description:
+      'Build your LLM application with maximum flexibility and Palico will handle the REST (api & deployment)',
   },
   {
     label: 'REST API and SDK',
     icon: <AnalyzeIcon />,
     description:
       'Compare different tests with each other with our visualization tools, or import test results into Jupyter notebook to create powerful analysis',
-  },
-  {
-    label: 'Rapid Prototyping',
-    icon: <MoveFastIcon />,
-    description:
-      'Use our Chat Playground to quickly test your agents locally, or setup quick comparisons between different variants of your agents',
   },
   {
     label: 'Open Source',

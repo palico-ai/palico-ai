@@ -4,7 +4,6 @@ import { Box, Divider, styled } from '@mui/material';
 import { Button, Link, Typography } from '@palico-ai/components';
 import React from 'react';
 import SectionLayout from '../section_layout';
-import { LandingPageData } from '../../data';
 import RoutePath from '../../../../utils/route_path';
 
 const AccuracySpan = styled('span')(({ theme }) => ({
@@ -20,7 +19,12 @@ const LandingPageHeader: React.FC = () => {
     <SectionLayout disableGutter>
       <Box
         sx={{
-          py: 24,
+          py: {
+            xs: 8,
+            md: 12,
+            lg: 16,
+            xl: 24,
+          },
           textAlign: 'center',
         }}
       >
@@ -31,13 +35,15 @@ const LandingPageHeader: React.FC = () => {
           }}
         >
           <Typography variant="h1" gutterBottom whiteSpace={'pre-line'}>
-            Improve <AccuracySpan>Accuracy</AccuracySpan> with{'\n'}
-            <ExperimentSpan>Experiment-Driven</ExperimentSpan> {` `}
-            Development
+            Improve <AccuracySpan>Accuracy</AccuracySpan> with Rapid{' '}
+            <ExperimentSpan>Experimentation</ExperimentSpan>
           </Typography>
           <Divider sx={{ my: 2 }} />
-          <Typography variant="body2" fontSize={17} whiteSpace={'pre-line'}>
-            {LandingPageData.header.subtitle.v2}
+          <Typography variant="subtitle1" fontSize={18} whiteSpace={'pre-line'}>
+            Accuracy improvement requires running <b>hundreds of experiments</b>{' '}
+            with different prompt techniques, LLM models, rag-pipeline versions,
+            and more. <b>Streamline your experimentation</b> process to reach{' '}
+            <b>production-level accuracy</b> in weeks instead of months.
           </Typography>
           <Box
             sx={{

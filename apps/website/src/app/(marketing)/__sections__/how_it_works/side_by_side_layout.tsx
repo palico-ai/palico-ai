@@ -1,4 +1,4 @@
-import { Grid, Typography } from '@mui/material';
+import { Box, Grid, Typography } from '@mui/material';
 import { Editor, LoomEmbed } from '@palico-ai/components';
 import React, { useMemo } from 'react';
 
@@ -11,7 +11,7 @@ interface HowItWorksSectionLayoutProps {
   disableGutter?: boolean;
 }
 
-const HowItWorksStep: React.FC<HowItWorksSectionLayoutProps> = ({
+const HowItWorksStepWithMedia: React.FC<HowItWorksSectionLayoutProps> = ({
   title,
   descriptions,
   codeSnippet,
@@ -78,4 +78,27 @@ const HowItWorksStep: React.FC<HowItWorksSectionLayoutProps> = ({
   );
 };
 
-export default HowItWorksStep;
+export interface HowItWorksTextStepProps {
+  title: string;
+  descriptions: string[];
+}
+
+export const HowItWorksTextStep: React.FC<HowItWorksTextStepProps> = ({
+  title,
+  descriptions,
+}) => {
+  return (
+    <Box>
+      <Typography variant="h4" gutterBottom>
+        {title}
+      </Typography>
+      {descriptions.map((description, index) => (
+        <Typography key={index} variant="body2" mb={2}>
+          {description}
+        </Typography>
+      ))}
+    </Box>
+  );
+};
+
+export default HowItWorksStepWithMedia;

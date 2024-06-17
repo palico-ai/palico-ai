@@ -1,13 +1,15 @@
 import React from 'react';
-import HowItWorksStep from './side_by_side_layout';
+import HowItWorksStepWithMedia from './side_by_side_layout';
 import { LandingPageData } from '../../data';
 
 const CreateExperiments: React.FC = () => {
   return (
-    <HowItWorksStep
+    <HowItWorksStepWithMedia
       maxHeight={300}
-      title={LandingPageData.howItWorks.step.runExperiments.title}
-      descriptions={LandingPageData.howItWorks.step.runExperiments.descriptions}
+      title={'Scale your Experimentation'}
+      descriptions={[
+        "Use Palico Studio to run experiments that tests how independent variables (prompt, model, business logic, etc) affect your agent's performance",
+      ]}
       embedURL={LandingPageData.howItWorks.step.runExperiments.demoUrl}
     />
   );
