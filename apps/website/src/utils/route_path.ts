@@ -14,4 +14,8 @@ export default class RoutePath {
   static scheduleDemo() {
     return 'https://calendar.app.google/3rsaXFkGFNBXniZGA';
   }
+
+  static newsletter() {
+    return 'https://forms.gle/HX3Dn4TYu3o1anoP6';
+  }
 }
