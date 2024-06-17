@@ -4,14 +4,18 @@ import React from 'react';
 
 export interface SectionLayoutProps {
   title?: string;
+  titleHeader?: TypographyProps['variant'];
   children: React.ReactNode;
   alignTitle?: TypographyProps['textAlign'];
   disableGutter?: boolean;
+  disableTitleGutter?: boolean;
 }
 
 const SectionLayout: React.FC<SectionLayoutProps> = ({
   title,
   disableGutter,
+  disableTitleGutter,
+  titleHeader = 'h2',
   alignTitle = 'left',
   children,
 }) => {
@@ -22,8 +26,12 @@ const SectionLayout: React.FC<SectionLayoutProps> = ({
       }}
     >
       {title && (
-        <Box sx={{ mb: 14 }}>
-          <Typography variant="h2" textAlign={alignTitle}>
+        <Box
+          sx={{
+            mb: disableTitleGutter ? 0 : 14,
+          }}
+        >
+          <Typography variant={titleHeader} textAlign={alignTitle}>
             {title}
           </Typography>
         </Box>
