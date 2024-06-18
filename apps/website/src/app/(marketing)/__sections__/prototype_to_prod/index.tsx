@@ -17,7 +17,7 @@ const GRID_SPACING = 2;
 
 const FrameworkComponents: React.FC = () => {
   return (
-    <SectionLayout title={'Take your Application from Prototype to Production'}>
+    <SectionLayout title={'Explore Our Platform'}>
       <Grid container spacing={GRID_SPACING} columnSpacing={GRID_SPACING}>
         <Grid item xs={12} md={5}>
           <LLMDevelopmentFramework />

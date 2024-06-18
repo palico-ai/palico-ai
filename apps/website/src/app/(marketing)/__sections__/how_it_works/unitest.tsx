@@ -26,10 +26,10 @@ const UnitestAccuracySection: React.FC = () => {
   return (
     <HowItWorksStepWithMedia
       maxHeight={300}
-      title="Write Unit-test for Accuracy"
+      title="Write unit-tests to evaluate accuracy"
       descriptions={[
-        'Define test-cases that models the expected behaviors from your LLM Agent with Palico’s Evaluation library',
-        'Measure accuracy with our out-of-the box metrics like Valid JSON Schema, Exact Match, Contains, Friendliness, or create your own',
+        'Define test-cases that model the expected behaviors from your LLM Agent with our evaluation library',
+        'Measure accuracy with out-of-the box metrics like Valid JSON Schema, Exact Match, Contains, Friendliness, or define your own.',
       ]}
       codeSnippet={codeSnippet}
     />
