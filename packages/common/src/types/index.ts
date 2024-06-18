@@ -17,7 +17,8 @@ export interface ConversationContext {
   otel: {
     traceId: string;
   };
-  featureFlags: Record<string, unknown>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  featureFlags: Record<string, any>;
 }
 
 export * from './studio';

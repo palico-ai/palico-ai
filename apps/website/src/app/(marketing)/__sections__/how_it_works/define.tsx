@@ -35,7 +35,7 @@ const DefineYourApplication: React.FC = () => {
   return (
     <HowItWorksStepWithMedia
       maxHeight={400}
-      title={'Build a modular LLM Application'}
+      title={'Build a modular system for experimentation'}
       descriptions={[
         'To streamline your experimentation process, you need a modular application layer. Palico structures your LLM Development to build modular application by using feature-flags, and provides you with maximum flexibilities in what components you for building your application.',
       ]}

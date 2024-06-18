@@ -1,10 +1,10 @@
 export default class RoutePath {
   static docs() {
-    return 'https://docs.palico.ai/';
+    return '/docs';
   }
 
   static quickStart() {
-    return 'https://docs.palico.ai/guides/getting_started';
+    return '/docs';
   }
 
   static github() {

@@ -4,20 +4,50 @@ import React from 'react';
 import SectionLayout from '../section_layout';
 import { Button, Link, Typography } from '@palico-ai/components';
 import { Box, Container, MobileStepper, Paper } from '@mui/material';
+import Image, { ImageProps } from 'next/image';
+import MicrosoftIcon from '../../../../../public/logos/microsoft.svg';
+import OpenAIIcon from '../../../../../public/logos/openai.svg';
+
+const LogoImage: React.FC<{
+  src: ImageProps['src'];
+  backgroundColor?: string;
+}> = ({ src, backgroundColor }) => (
+  <Image
+    src={src}
+    width={20}
+    height={20}
+    alt={''}
+    style={{
+      borderRadius: '12%',
+      backgroundColor: backgroundColor || 'transparent',
+    }}
+  />
+);
 
 const quotes: EvidenceQuoteProps[] = [
   {
     quote:
       'Users should conduct evaluation in an iterative and continuous manner [aka. experimentation], and update and refine their evaluation data, metrics, methods, and actions based on the feedback and findings from the evaluation.',
     quotee: 'Microsoft',
+    icon: <LogoImage src={MicrosoftIcon} />,
     referenceTitle: 'Best Practices and Challenges of Evaluation Flows',
     learnMoreURL:
-      'https://techcommunity.microsoft.com/t5/ai-azure-ai-services-blog/evaluation-flows-for-large-language-models-llm-in-azure-ai/ba-p/4153110#:~:text=These%20systematic%20procedures%20help%20you%20assess%20and%20improve%20the%20LLM%27s%20outputs%2C%20making%20it%20easier%20to%20spot%20and%20fix%20errors%2C%20biases%2C%20and%20potential%20risks',
+      'https://techcommunity.microsoft.com/t5/ai-azure-ai-services-blog/evaluation-flows-for-large-language-models-llm-in-azure-ai/ba-p/4153110#:~:text=Conducting%20iterative%20and%20continuous%20evaluation.%20Users%20should%20conduct%20evaluation%20in%20an%20iterative%20and%20continuous%20manner%2C%20and%20update%20and%20refine%20their%20evaluation%20data%2C%20metrics%2C%20methods%2C%20and%20actions%20based%20on%20the%20feedback%20and%20findings%20from%20the%20evaluation.%C2%A0',
+  },
+  {
+    quote:
+      'It’s time to recognize that evaluation is not a one-time endeavor but a multi-step, iterative process that has a significant impact on the performance and longevity of your LLM application.',
+    quotee: 'Jane Huang',
+    icon: <LogoImage src={MicrosoftIcon} />,
+    referenceTitle: 'Published in Data Science at Microsoft',
+    learnMoreURL:
+      'https://medium.com/data-science-at-microsoft/evaluating-llm-systems-metrics-challenges-and-best-practices-664ac25be7e5',
   },
   {
     quote:
       'Sometimes it can be hard to tell whether a change — e.g., a new instruction or a new design — makes your system better or worse. Looking at a few examples may hint at which is better, but with small sample sizes it can be hard to distinguish between a true improvement or random luck.',
     quotee: 'Open AI',
+    icon: <LogoImage backgroundColor="white" src={OpenAIIcon} />,
     referenceTitle: 'Strategy: Test Changes Systematically',
     learnMoreURL:
       'https://platform.openai.com/docs/guides/prompt-engineering/strategy-use-external-tools',
@@ -26,23 +56,17 @@ const quotes: EvidenceQuoteProps[] = [
     quote:
       'The behavior we witnessed in our evals (experimentation) and from what we know about this question told us that this is a behavior optimization problem where additional context will not necessarily help the model.',
     quotee: 'Open AI',
+    icon: <LogoImage backgroundColor="white" src={OpenAIIcon} />,
     referenceTitle: 'On learnings from systematic experimentations',
     learnMoreURL:
       'https://platform.openai.com/docs/guides/optimizing-llm-accuracy/understanding-the-tools',
-  },
-  {
-    quote:
-      'It’s time to recognize that evaluation is not a one-time endeavor but a multi-step, iterative process that has a significant impact on the performance and longevity of your LLM application.',
-    quotee: 'Jane Huang',
-    referenceTitle: 'Published in Data Science at Microsoft',
-    learnMoreURL:
-      'https://platform.openai.com/docs/guides/prompt-engineering/strategy-use-external-tools',
   },
 ];
 
 interface EvidenceQuoteProps {
   quote: string;
   quotee: string;
+  icon?: React.ReactNode;
   referenceTitle: string;
   learnMoreURL: string;
 }
@@ -52,6 +76,7 @@ const EvidenceQuote: React.FC<EvidenceQuoteProps> = ({
   quotee,
   referenceTitle,
   learnMoreURL,
+  icon,
 }) => {
   return (
     <Box p={4}>
@@ -73,9 +98,19 @@ const EvidenceQuote: React.FC<EvidenceQuoteProps> = ({
         }}
       >
         <Box>
-          <Typography variant="h6" fontSize={18} gutterBottom>
-            {quotee}
-          </Typography>
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'flex-start',
+              gap: 1,
+            }}
+          >
+            {icon && <Box sx={{ mr: 1 }}>{icon}</Box>}
+            <Typography variant="h6" fontSize={18} gutterBottom>
+              {quotee}
+            </Typography>
+          </Box>
           <Typography variant="caption" fontSize={14}>
             {referenceTitle}
           </Typography>
