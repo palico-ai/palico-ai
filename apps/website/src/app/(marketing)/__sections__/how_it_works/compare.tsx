@@ -7,11 +7,11 @@ const CompareAndAnalyze: React.FC = () => {
     <Box>
       <HowItWorksStepWithMedia
         maxHeight={400}
-        title="Analyze your Test Results"
+        title="Compare and analyze results from different experiments"
         descriptions={[
-          'Review your agent’s test-result directly from Palico Studio UI.',
-          'Use Palico’s tracing tool to look under-the-hood for how each test-case was executed',
-          'Export test results to Jupyter notebook for more powerful analytics',
+          'Review the results of your experiments',
+          'Use our tracing tool to look under-the-hood for how each test-case was executed.',
+          'Export test results to Jupyter notebook for more powerful analytics.',
         ]}
         embedURL="https://www.loom.com/embed/ba22e22dbd1a4540bc4cbea094c64237?sid=d43faa1a-834e-498e-9d1e-d9fa5e79bbfe"
       />

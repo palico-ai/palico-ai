@@ -6,9 +6,9 @@ const CreateExperiments: React.FC = () => {
   return (
     <HowItWorksStepWithMedia
       maxHeight={300}
-      title={'Scale your Experimentation'}
+      title={'Scale your experimentation'}
       descriptions={[
-        "Use Palico Studio to run experiments that tests how independent variables (prompt, model, business logic, etc) affect your agent's performance",
+        'Tests how independent variables (prompt, model, business logic, etc) affect your agent’s performance at scale. Find and implement the most effective permutation.',
       ]}
       embedURL={LandingPageData.howItWorks.step.runExperiments.demoUrl}
     />

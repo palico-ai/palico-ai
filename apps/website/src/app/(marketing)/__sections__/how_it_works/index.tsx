@@ -9,7 +9,10 @@ import { Grid } from '@mui/material';
 
 const HowItWorks: React.FC = () => {
   return (
-    <SectionLayout title="Building an Experiment-Driven Application">
+    <SectionLayout
+      title="Building an Experiment-Driven Application"
+      alignTitle={'center'}
+    >
       <DefineYourApplication />
       <UnitestAccuracySection />
       <CreateExperiments />
@@ -19,7 +22,7 @@ const HowItWorks: React.FC = () => {
           <HowItWorksTextStep
             title="Collaborate with your Team"
             descriptions={[
-              'All your changes and experiments are automatically version-controlled alongside your code, allowing anyone in your team to review any experiments independently',
+              'All your changes and experiments are automatically version-controlled alongside your code, allowing anyone in your team to review experiments independently',
             ]}
           />
         </Grid>

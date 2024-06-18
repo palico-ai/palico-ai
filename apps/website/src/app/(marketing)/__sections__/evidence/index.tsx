@@ -107,7 +107,7 @@ const EvidenceQuote: React.FC<EvidenceQuoteProps> = ({
             }}
           >
             {icon && <Box sx={{ mr: 1 }}>{icon}</Box>}
-            <Typography variant="h6" fontSize={18} gutterBottom>
+            <Typography variant="h6" fontSize={18}>
               {quotee}
             </Typography>
           </Box>
