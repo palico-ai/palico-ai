@@ -1,5 +1,4 @@
-import { readFile, setFileContent } from '../utils/copy';
-import { runCommands } from '../utils/run_command';
+import { readFile, runCommands, setFileContent } from '../utils/os';
 
 export type PackageJSONSchema = {
   name: string;
@@ -30,36 +29,6 @@ export interface InstallDependencyParams {
   name: string;
   version?: string;
 }
-
-export const commonPackageJSON: PackageJSONSchema = {
-  name: 'sample-project',
-  version: '1.0.0',
-  description: 'Simple palico app generated with palico-cli',
-  main: 'src/main.ts',
-  scripts: {
-    palico: 'palico-app',
-    start: 'palico-app start',
-    'start:clean': 'docker-compose up --build --force-recreate',
-    build: 'tsc',
-  },
-  nodemonConfig: {
-    ignore: ['appdata/**/*'],
-  },
-  dependencies: {
-    '@opentelemetry/api': '^1.8.0',
-    '@opentelemetry/auto-instrumentations-node': '^0.44.0',
-    '@opentelemetry/exporter-zipkin': '^1.24.0',
-    '@opentelemetry/sdk-metrics': '^1.24.0',
-    '@opentelemetry/sdk-node': '^0.51.0',
-    '@opentelemetry/sdk-trace-node': '^1.24.0',
-    '@palico-ai/app': '^1.12.11',
-  },
-  devDependencies: {
-    nodemon: '^3.1.0',
-    'ts-node': '^10.9.1',
-    typescript: '^5.0.4',
-  },
-};
 
 export default class PackageJSON {
   private packageDirectory: string;

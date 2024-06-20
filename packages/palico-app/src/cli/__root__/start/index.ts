@@ -112,6 +112,7 @@ const startServer = async () => {
     [envName]: dbURL,
     ['TRACE_PREVIEW_URL_PREFIX']: 'http://localhost:16686/trace',
   };
+  console.log('Starting Server...');
   const command = `nodemon --exec ts-node src/main.ts`;
   const serverPs = exec(command, {
     cwd: projectRoot,
@@ -121,6 +122,7 @@ const startServer = async () => {
     },
   });
   serverPs.stdout?.pipe(process.stdout);
+  serverPs.stderr?.pipe(process.stderr);
 };
 
 const waitUntilExit = async () => {

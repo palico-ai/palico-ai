@@ -1,0 +1,5 @@
+node_modules
+dist
+.palico
+.DS_Store
+.env
