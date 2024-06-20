@@ -1,32 +1,19 @@
 import * as path from 'path';
 import * as chalk from 'chalk';
-import { copyDirectory } from '../utils/copy';
-import { createFile } from '../utils/create_file';
-import PackageJSON, { commonPackageJSON } from './package_json';
-
-const ENV_FILE_CONTENT = `OPENAI_API_KEY=""
-JWT_SECRET="secret"
-`;
+import PackageJSON from './package_json';
+import { copyDirectory, getFileNames, renameFile } from '../utils/os';
+import { StarterTemplateNextSteps } from './templates';
 
 interface Option {
   template?: string;
 }
 
-const knownTemplates = new Set(['base', 'lexical']);
+const knownTemplates = new Set(['starter']);
 
-const lexicalAdditionalDependencies = {
-  'zod-to-json-schema': '^3.22.4',
-};
-
-export const InitHandler = async (projectName: string, option: Option) => {
-  const { template = 'base' } = option;
+const copyTemplate = async (template: string, destination: string) => {
   if (!knownTemplates.has(template)) {
     throw new Error(`Unknown template: ${template}`);
   }
-  if (!projectName || projectName.length === 0) {
-    throw new Error('Project name is required');
-  }
-  console.log(`Initializing ${projectName}...`);
   const templateDirectory = path.join(
     __dirname,
     '..',
@@ -34,31 +21,32 @@ export const InitHandler = async (projectName: string, option: Option) => {
     'templates',
     template
   );
+  await copyDirectory(templateDirectory, destination);
+  const allFiles = await getFileNames(destination);
+  const templateFiles = allFiles.filter((file) => file.startsWith('template.'));
+  await Promise.all(
+    templateFiles.map((file) =>
+      renameFile(destination, file, file.replace('template.', ''))
+    )
+  );
+};
+
+export const InitHandler = async (projectName: string, option: Option) => {
+  const { template = 'starter' } = option;
+  if (!projectName || projectName.length === 0) {
+    throw new Error('Project name is required');
+  }
+  console.log(`Initializing ${projectName}...`);
   const destinationDirectory = path.join(process.cwd(), projectName);
-  await copyDirectory(templateDirectory, destinationDirectory);
-  const dependencies = {
-    ...commonPackageJSON.dependencies,
-    ...(template === 'lexical' ? lexicalAdditionalDependencies : {}),
-  };
-  console.log("Setting up project's dependecies...");
-  const packageJSON = await PackageJSON.init({
-    directory: process.cwd(),
-    projectName,
-    ...commonPackageJSON,
-    dependencies,
+  await copyTemplate(template, destinationDirectory);
+  const packageJSON = new PackageJSON(destinationDirectory);
+  await packageJSON.updatePackageJSON({
+    name: projectName,
   });
   await packageJSON.installDependencies([{ name: '@palico-ai/app' }]);
-  await createFile(path.join(destinationDirectory, '.env'), ENV_FILE_CONTENT);
-  const nextSteps = [
-    `Navigate to the project directory: ${chalk.greenBright(
-      `cd ${projectName}`
-    )}`,
-    `Update ${chalk.greenBright('.env')} with your OpenAI API key and model`,
-    `Run ${chalk.greenBright('npm start')} to start the application`,
-  ];
   console.log(chalk.green('Project initialized!'));
   console.log(chalk.blue('Next Steps:'));
-  nextSteps.forEach((step, index) => {
+  StarterTemplateNextSteps(projectName).forEach((step, index) => {
     console.log(chalk.blue(`${index + 1}. ${step}`));
   });
 };
