@@ -44,7 +44,7 @@ const createDockerCompose = async (
   const apiPort = config.getAPIPort();
   const { composeFilePath } = await getDockerComposePath();
   const studioFragment = {
-    image: `palicoai/studio:main@${CONFIG.STUDIO.digest}`,
+    image: `palicoai/studio:release-studio@${CONFIG.STUDIO.digest}`,
     platform: 'linux/amd64',
     extra_hosts: ['host.docker.internal:host-gateway'],
     ports: ['5173:3000'],
