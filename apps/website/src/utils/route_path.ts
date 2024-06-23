@@ -7,7 +7,7 @@ export default class RoutePath {
   }
 
   static docsInstallation() {
-    return `${RoutePath.docs()}/build_app/installation`;
+    return `${RoutePath.docs()}/getting_started/installation`;
   }
 
   static docsConcepts() {
