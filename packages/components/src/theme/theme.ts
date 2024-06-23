@@ -80,6 +80,10 @@ export const theme = createTheme({
         text: {
           color: color.white,
         },
+        outlinedSecondary: {
+          color: color.white,
+          opacity: 0.6,
+        },
       },
     },
     MuiTypography: {},

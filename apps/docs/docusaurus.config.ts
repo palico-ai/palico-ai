@@ -73,6 +73,11 @@ const config: Config = {
           position: 'left',
           label: 'Docs',
         },
+        {
+          to: 'https://palico-ai.github.io/palico-main/',
+          label: 'API Reference',
+          position: 'left',
+        },
         { to: 'https://palico.ai/', label: 'Palico.AI', position: 'right' },
         {
           href: 'https://github.com/palico-ai/palico-main',

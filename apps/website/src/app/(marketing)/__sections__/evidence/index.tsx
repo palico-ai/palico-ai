@@ -27,21 +27,21 @@ const LogoImage: React.FC<{
 const quotes: EvidenceQuoteProps[] = [
   {
     quote:
+      'It’s time to recognize that evaluation is not a one-time endeavor but a multi-step, iterative process that has a significant impact on the performance and longevity of your LLM application.',
+    quotee: 'Jane Huang',
+    icon: <LogoImage src={MicrosoftIcon} />,
+    referenceTitle: 'Published in Data Science at Microsoft',
+    learnMoreURL:
+      'https://medium.com/data-science-at-microsoft/evaluating-llm-systems-metrics-challenges-and-best-practices-664ac25be7e5#:~:text=it%E2%80%99s%20time%20to%20recognize%20that%20evaluation%20is%20not%20a%20one%2Dtime%20endeavor%20but%20a%20multi%2Dstep%2C%20iterative%20process%20that%20has%20a%20significant%20impact%20on%20the%20performance%20and%20longevity%20of%20your%20LLM%20application',
+  },
+  {
+    quote:
       'Users should conduct evaluation in an iterative and continuous manner [aka. experimentation], and update and refine their evaluation data, metrics, methods, and actions based on the feedback and findings from the evaluation.',
     quotee: 'Microsoft',
     icon: <LogoImage src={MicrosoftIcon} />,
     referenceTitle: 'Best Practices and Challenges of Evaluation Flows',
     learnMoreURL:
       'https://techcommunity.microsoft.com/t5/ai-azure-ai-services-blog/evaluation-flows-for-large-language-models-llm-in-azure-ai/ba-p/4153110#:~:text=Conducting%20iterative%20and%20continuous%20evaluation.%20Users%20should%20conduct%20evaluation%20in%20an%20iterative%20and%20continuous%20manner%2C%20and%20update%20and%20refine%20their%20evaluation%20data%2C%20metrics%2C%20methods%2C%20and%20actions%20based%20on%20the%20feedback%20and%20findings%20from%20the%20evaluation.%C2%A0',
-  },
-  {
-    quote:
-      'It’s time to recognize that evaluation is not a one-time endeavor but a multi-step, iterative process that has a significant impact on the performance and longevity of your LLM application.',
-    quotee: 'Jane Huang',
-    icon: <LogoImage src={MicrosoftIcon} />,
-    referenceTitle: 'Published in Data Science at Microsoft',
-    learnMoreURL:
-      'https://medium.com/data-science-at-microsoft/evaluating-llm-systems-metrics-challenges-and-best-practices-664ac25be7e5',
   },
   {
     quote:
@@ -80,7 +80,7 @@ const EvidenceQuote: React.FC<EvidenceQuoteProps> = ({
 }) => {
   return (
     <Box p={4}>
-      <Typography variant="body2" mb={3}>
+      <Typography variant="body2" mb={3} fontStyle={'italic'}>
         {quote}
       </Typography>
       <Box
@@ -141,7 +141,7 @@ const EvidenceSection: React.FC = () => {
 
   return (
     <SectionLayout
-      title="Iterative Testing Leads to Accuracy Improvements"
+      title="Iterative Testing leads to Accuracy Improvements"
       titleHeader="h4"
       alignTitle={'center'}
       disableTitleGutter
