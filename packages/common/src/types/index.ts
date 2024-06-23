@@ -1,11 +1,13 @@
-export interface ConversationResponse<Data = Record<string, unknown>> {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export interface ConversationResponse<Data = Record<string, any>> {
   conversationId: string;
   requestId: string;
   message?: string;
   data?: Data;
 }
 
-export interface ConversationRequestContent<Payload = Record<string, unknown>> {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export interface ConversationRequestContent<Payload = Record<string, any>> {
   userMessage?: string;
   payload?: Payload;
 }

@@ -3,46 +3,20 @@ sidebar_position: 1
 slug: /
 ---
 
-# Tutorial Intro
+# Introduction
+Improving the accuracy of your LLM application requires running hundreds of experiments to test different combination of LLM models, prompt techniques, prompt context, RAG pipline, and more. Palico streamlines this experimentation by providing an LLM Development Framework that's structures your LLM development for Rapid Experimentation so you can reach your accuracy targets much faster.
 
-Let's discover **Docusaurus in less than 5 minutes**.
+The in following section we dig a little bit deeper into the need for streamlining your experimentation process, the role of Palico App plays in your development, and how Palico compares to other frameworks like LangChain. If you would rather jump straight into building, you can get started by following the [installation guide](./getting_started/00_installation.md) or follow the [tutorial](./tutorials/00_intro.md) on building an experiment-driven application.
 
-## Getting Started
+## The Problem
 
-Get started by **creating a new site**.
 
-Or **try Docusaurus immediately** with **[docusaurus.new](https://docusaurus.new)**.
+### Experiment Driven Development
 
-### What you'll need
+### Typical lifecycle of an LLM Development Team
 
-- [Node.js](https://nodejs.org/en/download/) version 18.0 or above:
-  - When installing Node.js, you are recommended to check all checkboxes related to dependencies.
+### Our goal for Development Teams
 
-## Generate a new site
+## Role of Palico App in your Development
 
-Generate a new Docusaurus site using the **classic template**.
-
-The classic template will automatically be added to your project after you run the command:
-
-```bash
-npm init docusaurus@latest my-website classic
-```
-
-You can type this command into Command Prompt, Powershell, Terminal, or any other integrated terminal of your code editor.
-
-The command also installs all necessary dependencies you need to run Docusaurus.
-
-## Start your site
-
-Run the development server:
-
-```bash
-cd my-website
-npm run start
-```
-
-The `cd` command changes the directory you're working with. In order to work with your newly created Docusaurus site, you'll need to navigate the terminal there.
-
-The `npm run start` command builds your website locally and serves it through a development server, ready for you to view at http://localhost:3000/.
-
-Open `docs/intro.md` (this page) and edit some lines: the site **reloads automatically** and displays your changes.
+## How does Palico compare to frameworks like LangChain

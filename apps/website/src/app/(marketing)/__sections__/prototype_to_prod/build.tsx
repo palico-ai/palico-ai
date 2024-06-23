@@ -1,16 +1,28 @@
 import { Box, CardContent, CardHeader, Grid } from '@mui/material';
-import { Typography } from '@palico-ai/components';
+import { Button, Link, Typography } from '@palico-ai/components';
 import React from 'react';
 import { ComponentCard as Card, ComponentCardWithDescription } from './shared';
 import DevImage from '../../../../../public/landing_page/dev.png';
 import PrototypeImage from '../../../../../public/landing_page/prototype.png';
 import ExpImage from '../../../../../public/landing_page/experiment.png';
 import Image from 'next/image';
+import RoutePath from '../../../../utils/route_path';
+
+const LEARN_MORE_TEXT = 'Docs';
 
 export const LLMDevelopmentFramework: React.FC = () => {
   return (
     <Card>
-      <CardHeader title={'LLM Development'} />
+      <CardHeader
+        title={'LLM Development'}
+        action={
+          <Link href={RoutePath.docsConcepts()}>
+            <Button variant="outlined" color="secondary" size="small">
+              {LEARN_MORE_TEXT}
+            </Button>
+          </Link>
+        }
+      />
       <CardContent>
         <Box
           sx={{
@@ -50,6 +62,10 @@ export const Workflows: React.FC = () => {
   return (
     <ComponentCardWithDescription
       title={'Workflows'}
+      action={{
+        label: LEARN_MORE_TEXT,
+        link: RoutePath.docsWorkflow(),
+      }}
       descriptions={[
         'Model complex operations including multiple LLM Agents and business logics into a single workflow',
       ]}
@@ -60,6 +76,10 @@ export const Workflows: React.FC = () => {
 export const Observability: React.FC = () => {
   return (
     <ComponentCardWithDescription
+      action={{
+        label: LEARN_MORE_TEXT,
+        link: RoutePath.docsTracing(),
+      }}
       title={'Observability'}
       descriptions={[
         'Add custom tracing using OpenTelemetry. Sync your traces with your existing observability tools like Datadog, New Relic, and more.',
@@ -70,22 +90,32 @@ export const Observability: React.FC = () => {
 
 export const APIAndSDK: React.FC = () => {
   return (
-    <Card>
-      <CardHeader title={'API & SDK'} />
-      <CardContent>
-        <Typography variant="body2">
-          Your LLM Agents and Workflows are automatically deployed as a RESTful
-          API and can be accessed using our Javascript SDK.
-        </Typography>
-      </CardContent>
-    </Card>
+    <ComponentCardWithDescription
+      title={'API & SDK'}
+      action={{
+        label: LEARN_MORE_TEXT,
+        link: RoutePath.docsClientSDK(),
+      }}
+      descriptions={[
+        'Your LLM Agents and Workflows are automatically deployed as a RESTful API and can be accessed using our Javascript SDK',
+      ]}
+    />
   );
 };
 
 export const Experimentation: React.FC = () => {
   return (
     <Card>
-      <CardHeader title={'Experimentation'} />
+      <CardHeader
+        title={'Experimentation'}
+        action={
+          <Link href={RoutePath.docsExperimentation()}>
+            <Button variant="outlined" color="secondary" size="small">
+              {LEARN_MORE_TEXT}
+            </Button>
+          </Link>
+        }
+      />
       <CardContent
         sx={{
           display: 'flex',
@@ -115,6 +145,10 @@ export const Evaluation: React.FC = () => {
   return (
     <ComponentCardWithDescription
       title={'Evaluation'}
+      action={{
+        label: LEARN_MORE_TEXT,
+        link: RoutePath.docsEvaluation(),
+      }}
       descriptions={[
         'Unit-test the accuracy of your LLM Agents using our pre-built metrics, or define your own custom metrics',
       ]}
@@ -126,6 +160,10 @@ export const Analysis: React.FC = () => {
   return (
     <ComponentCardWithDescription
       title={'Analysis'}
+      action={{
+        label: LEARN_MORE_TEXT,
+        link: RoutePath.docsExperimentAnalysis(),
+      }}
       descriptions={[
         'Deep-dive into test results for your LLM Agents directly within Palico Studio',
         'Create reports comparing multiple test-cases and their aggregated results',
@@ -138,6 +176,10 @@ export const Analysis: React.FC = () => {
 export const VersionControl: React.FC = () => {
   return (
     <ComponentCardWithDescription
+      action={{
+        label: LEARN_MORE_TEXT,
+        link: RoutePath.docsVersioning(),
+      }}
       title={'Version Control'}
       descriptions={[
         'All experiments are automatically version-controlled alongside your code',
@@ -170,6 +212,11 @@ export const Prototype: React.FC = () => {
             <Typography variant="body2">
               Compare responses side-by-side with different feature-flags
             </Typography>
+            <Link href={RoutePath.docsStudios()}>
+              <Button variant="outlined" color="secondary" size="small">
+                {LEARN_MORE_TEXT}
+              </Button>
+            </Link>
           </Grid>
           <Grid item xs={12} md={9}>
             <Image

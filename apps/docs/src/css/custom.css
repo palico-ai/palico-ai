@@ -27,6 +27,12 @@
   --ifm-color-primary-lighter: #c3a9ef;
   --ifm-color-primary-lightest: #e2d6f7;
   --ifm-background-color: #08070B;
+  
+  .footer {
+    background-color: #242526;
+    /* background-color: #1B1B1D; */
+    /* box-shadow: 0px 0px 2px 0px rgba(35, 34, 34, 0.75); */
+  }
   /* --ifm-background-color: #08070B; */
 
   --ifm-color-secondary: #e4e4e6;

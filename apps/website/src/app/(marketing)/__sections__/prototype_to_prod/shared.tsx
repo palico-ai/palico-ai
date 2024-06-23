@@ -1,10 +1,12 @@
 import { Box } from '@mui/material';
 import {
+  Button,
   Card,
   CardContent,
   CardHeader,
   CardMedia,
   CardProps,
+  Link,
   Typography,
 } from '@palico-ai/components';
 
@@ -34,14 +36,29 @@ export const ComponentCard: React.FC<ComponentCardProps> = ({
 export interface ComponentCardWithDescriptionProps extends ComponentCardProps {
   title: string;
   descriptions: string[];
+  action?: {
+    label: string;
+    link: string;
+  };
 }
 
 export const ComponentCardWithDescription: React.FC<
   ComponentCardWithDescriptionProps
-> = ({ title, descriptions, ...props }) => {
+> = ({ title, descriptions, action, ...props }) => {
   return (
     <ComponentCard {...props}>
-      <CardHeader title={title} />
+      <CardHeader
+        title={title}
+        action={
+          action && (
+            <Link href={action.link}>
+              <Button variant="outlined" color="secondary" size="small">
+                {action.label}
+              </Button>
+            </Link>
+          )
+        }
+      />
       <CardContent>
         {descriptions.map((description, index) => (
           <Typography key={index} variant="body2">
