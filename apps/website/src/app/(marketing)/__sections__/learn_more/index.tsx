@@ -24,7 +24,7 @@ const LearnMore: React.FC = () => {
           gap: 2,
         }}
       >
-        <Link href={RoutePath.docs()}>
+        <Link href={RoutePath.quickStart()}>
           <Button variant="contained" color="primary" size="large" fullWidth>
             Get started in 5 minutes
           </Button>
