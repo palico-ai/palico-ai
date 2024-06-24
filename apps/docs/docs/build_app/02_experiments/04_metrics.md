@@ -6,11 +6,11 @@ Metrics are a way to measure the output of your LLM Agent's response. You can le
 
 | Metric Name        | Description                                                    | API Reference                                                                                 |
 | ------------------ | -------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
-| ContainsMetrics    | Checks if the response contains the provided substring         | [ContainsMetrics](https://palico-ai.github.io/palico-main/classes/ContainsMetrics.html)     |
-| ContainsAnyMetrics | Checks if the response contains any of the provided substrings | [ContainsAnyMetrics](https://palico-ai.github.io/palico-main/classes/ContainsAnyMetrics.html) |
-| ContainsAllMetrics | Checks if the response contains all of the provided substrings | [ContainsAllMetrics](https://palico-ai.github.io/palico-main/classes/ContainsAllMetrics.html) |
-| ExactMatchMetrics  | Checks if the response is an exact match                       | [ExactMatchMetrics](https://palico-ai.github.io/palico-main/classes/ExactMatchEvalMetric.html)   |
-| ValidJSONMetrics   | Checks if the response is a valid JSON                         | [ValidJSONMetrics](https://palico-ai.github.io/palico-main/classes/ValidJSONMetrics.html)     |
+| ContainsMetrics    | Checks if the response contains the provided substring         | [ContainsMetrics](https://palico-ai.github.io/palico-main/classes/_palico_ai_app.ContainsMetrics.html)     |
+| ContainsAnyMetrics | Checks if the response contains any of the provided substrings | [ContainsAnyMetrics](https://palico-ai.github.io/palico-main/classes/_palico_ai_app.ContainsAnyMetrics.html) |
+| ContainsAllMetrics | Checks if the response contains all of the provided substrings | [ContainsAllMetrics](https://palico-ai.github.io/palico-main/classes/_palico_ai_app.ContainsAllMetrics.html) |
+| ExactMatchMetrics  | Checks if the response is an exact match                       | [ExactMatchMetrics](https://palico-ai.github.io/palico-main/classes/_palico_ai_app.ExactMatchEvalMetric.html)   |
+| ValidJSONMetrics   | Checks if the response is a valid JSON                         | [ValidJSONMetrics](https://palico-ai.github.io/palico-main/classes/_palico_ai_app.ValidJSONMetrics.html)     |
 
 ## Adding your own custom metrics
 
