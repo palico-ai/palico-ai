@@ -24,6 +24,13 @@
         ],
         "parallel": true
       }
+    },
+    "typedoc": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": ".",
+        "commands": ["npx typedoc"]
+      }
     }
   }
 }

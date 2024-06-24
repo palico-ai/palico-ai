@@ -32,12 +32,12 @@ jobs:
           node-version: 20
           cache: 'npm'
       - run: npm ci
-      - uses: nrwl/nx-set-shas@v4
-      - run: npx nx run palico-app:typedoc
+      - run: npx nx run-many -t build -p palico-app -p common -p client-js
+      - run: npx nx run typedoc
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./dist/typedoc/palico-app
+          path: ./dist/typedoc
 
   # Deployment job
   deploy:

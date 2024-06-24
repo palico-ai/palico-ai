@@ -1,0 +1,11 @@
+{
+  "entryPoints": [
+    "packages/client-js",
+    "packages/common",
+    "packages/palico-app"
+  ],
+  "name": "Palico App",
+  "entryPointStrategy": "packages",
+  "includeVersion": false,
+  "out": "dist/typedoc"
+}

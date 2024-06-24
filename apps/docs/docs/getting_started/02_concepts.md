@@ -73,3 +73,7 @@ Helps you run, manage, and analyze experiments.
 
 ### Traces
 View runtime traces of your LLM application.
+
+## Version Control
+
+Your Palico App is a codebase that is meant to be version controlled with git and is made for easy collaboration with your team. Alongside your code like your LLM Agents or test suites, some states from your Palico Studio are also version controlled. Mainly all the experiments you run. Experiments are version-controlled alongside their evaluation and results. We however do not version-control traces at the moment. We also do not version-control Chat History Store data.

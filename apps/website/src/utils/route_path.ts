@@ -43,7 +43,7 @@ export default class RoutePath {
   }
 
   static docsVersioning() {
-    return `${RoutePath.docs()}/build_app/version_control`;
+    return `${RoutePath.docs()}/getting_started/concepts#version-control`;
   }
 
   static quickStart() {
