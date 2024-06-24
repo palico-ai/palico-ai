@@ -3,12 +3,30 @@ import ExperimentModel from '../../../experiments/model';
 import JobQueue from '../../../services/job_queue';
 import { ExperimentExecutor } from '../../../experiments/executor';
 import { APIError } from '../../error';
+import {
+  CreateEvalJobResponse,
+  CreateEvaluationParams,
+  CreateExperimentParams,
+  ExperimentMetadata,
+} from '@palico-ai/common';
 
-export const createNewExperimentHandler: RequestHandler = async (
-  req,
-  res,
-  next
-) => {
+type ExperimentRouteParams = {
+  expName: string;
+};
+
+type EvalRouteParams = ExperimentRouteParams & {
+  evalName: string;
+};
+
+type JobRouteParams = {
+  jobId: string;
+};
+
+export const newExperimentRouteHandler: RequestHandler<
+  unknown,
+  ExperimentMetadata,
+  CreateExperimentParams
+> = async (req, res, next) => {
   try {
     const { name } = req.body;
     const experiment = await ExperimentModel.createNewExperiment({ name });
@@ -18,7 +36,7 @@ export const createNewExperimentHandler: RequestHandler = async (
   }
 };
 
-export const getAllExperimentsHandler: RequestHandler = async (
+export const getAllExperimentsRouteHandler: RequestHandler = async (
   _,
   res,
   next
@@ -31,29 +49,29 @@ export const getAllExperimentsHandler: RequestHandler = async (
   }
 };
 
-export const createTestForExperimentHandler: RequestHandler = async (
-  req,
-  res,
-  next
-) => {
+export const createEvalForExperimentHandler: RequestHandler<
+  ExperimentRouteParams,
+  CreateEvalJobResponse,
+  CreateEvaluationParams
+> = async (req, res, next) => {
   try {
     const { expName } = req.params;
     const {
-      testName,
+      evalName,
       description,
       featureFlags,
       agentName,
       workflowName,
-      testCaseDatasetName,
+      testSuiteName,
     } = req.body;
     const test = await ExperimentExecutor.startTestJob({
       experimentName: expName,
-      testName,
+      evalName,
       description,
       featureFlags,
       agentName,
       workflowName,
-      testCaseDatasetName,
+      testSuiteName,
     });
     return res.status(200).json(test);
   } catch (error) {
@@ -61,11 +79,9 @@ export const createTestForExperimentHandler: RequestHandler = async (
   }
 };
 
-export const getExperimentByNameHandler: RequestHandler = async (
-  req,
-  res,
-  next
-) => {
+export const getExperimentByNameHandler: RequestHandler<
+  ExperimentRouteParams
+> = async (req, res, next) => {
   try {
     const { expName } = req.params;
     const experiment = await ExperimentModel.findExperimentByName(expName);
@@ -75,49 +91,58 @@ export const getExperimentByNameHandler: RequestHandler = async (
   }
 };
 
-export const getJobStatusHandler: RequestHandler = async (req, res, next) => {
+export const getJobStatusHandler: RequestHandler<JobRouteParams> = async (
+  req,
+  res,
+  next
+) => {
   try {
     const { jobId } = req.params;
-    console.log(jobId);
     const job = await JobQueue.boss().getJobById(jobId);
-    console.log(job);
-    console.log(job?.state);
     return res.status(200).json({ jobStatus: job?.state });
   } catch (error) {
     return next(error);
   }
 };
 
-export const getAllTestForExperimentHandler: RequestHandler = async (
+export const getAllEvalForExperimentHandler: RequestHandler = async (
   req,
   res,
   next
 ) => {
   try {
     const { expName } = req.params;
-    const tests = await ExperimentModel.getTestsInExperiment(expName);
+    const tests = await ExperimentModel.getEvalsInExperiment(expName);
     return res.status(200).json({ tests });
   } catch (error) {
     return next(error);
   }
 };
 
-export const getTestByNameHandler: RequestHandler = async (req, res, next) => {
+export const getEvalByNameHandler: RequestHandler<EvalRouteParams> = async (
+  req,
+  res,
+  next
+) => {
   try {
-    const { expName, testName } = req.params;
-    const test = await ExperimentModel.findTest(expName, testName);
+    const { expName, evalName } = req.params;
+    const test = await ExperimentModel.findEval(expName, evalName);
     return res.status(200).json(test);
   } catch (error) {
     return next(error);
   }
 };
 
-export const getTestStatusHandler: RequestHandler = async (req, res, next) => {
+export const getEvalStatusHandler: RequestHandler<EvalRouteParams> = async (
+  req,
+  res,
+  next
+) => {
   try {
-    const { testName, expName } = req.params;
-    const test = await ExperimentModel.findTest(expName, testName);
+    const { evalName, expName } = req.params;
+    const test = await ExperimentModel.findEval(expName, evalName);
     if (!test) {
-      throw APIError.notFound('Test not found');
+      throw APIError.notFound('Eval not found');
     }
     return res.status(200).json(test.status);
   } catch (error) {
@@ -125,7 +150,11 @@ export const getTestStatusHandler: RequestHandler = async (req, res, next) => {
   }
 };
 
-export const removeExperimentHandler: RequestHandler = async (req, res, next) => {
+export const removeExperimentHandler: RequestHandler = async (
+  req,
+  res,
+  next
+) => {
   try {
     const { expName } = req.params;
     await ExperimentModel.removeExperiment(expName);
@@ -133,4 +162,4 @@ export const removeExperimentHandler: RequestHandler = async (req, res, next) =>
   } catch (error) {
     return next(error);
   }
-}
+};

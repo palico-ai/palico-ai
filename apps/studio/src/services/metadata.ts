@@ -1,6 +1,11 @@
 'use server';
 
-import { GetAgentMetadataResponse, GetAllTestsResponse, GetAllTestSuitesResponse, GetWorkflowMetadataResponse } from '@palico-ai/common';
+import {
+  GetAgentMetadataResponse,
+  GetAllEvalsResponse,
+  GetAllTestSuitesResponse,
+  GetWorkflowMetadataResponse,
+} from '@palico-ai/common';
 import { verifySession } from './auth';
 import { palicoFetch } from './palico';
 
@@ -24,9 +29,9 @@ export const getAllWorkflows = async () => {
     }
   );
   return response.workflows;
-}
+};
 
-export const getAllTestCaseDatasets = async () => {
+export const getAllTestSuites = async () => {
   await verifySession();
   const response = await palicoFetch<GetAllTestSuitesResponse>(
     '/metadata/test-case-dataset',
@@ -35,15 +40,12 @@ export const getAllTestCaseDatasets = async () => {
     }
   );
   return response.datasets;
-}
+};
 
-export const getAllTests = async () => {
+export const getAllEvals = async () => {
   await verifySession();
-  const response = await palicoFetch<GetAllTestsResponse>(
-    '/metadata/tests',
-    {
-      method: 'GET',
-    }
-  );
-  return response.tests;
-}
+  const response = await palicoFetch<GetAllEvalsResponse>('/metadata/tests', {
+    method: 'GET',
+  });
+  return response.evals;
+};

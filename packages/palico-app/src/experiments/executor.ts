@@ -1,19 +1,20 @@
-import { ConversationResponse, ExperimentTestKeyID } from '@palico-ai/common';
+import {
+  ConversationResponse,
+  EvalJobKeyID,
+  CreateEvaluationParams,
+  CreateEvalJobResponse,
+  EvalTestCase,
+  EvalJSON,
+  EvalJobStatus,
+  EvalResult,
+  EvalMetricOutput,
+} from '@palico-ai/common';
 import { Application } from '../app';
 import JobQueue from '../services/job_queue';
 import ExperimentModel from './model';
-import {
-  CreateExperimentTestParams,
-  CreateNewExperimentTestResult,
-  EvalMetricOutput,
-  ExperimentTestCaseDataset,
-  ExperimentTestCaseResult,
-  ExperimentTestJSON,
-  ExperimentTestStatus,
-} from './types';
 
 interface RunTestCaseParams {
-  testCase: ExperimentTestCaseDataset;
+  testCase: EvalTestCase;
   featureFlags?: Record<string, unknown>;
   agentName?: string;
   workflowName?: string;
@@ -21,32 +22,28 @@ interface RunTestCaseParams {
 
 export class ExperimentExecutor {
   static async startTestJob(
-    params: CreateExperimentTestParams
-  ): Promise<CreateNewExperimentTestResult> {
-    const { test } = await ExperimentModel.createTest(params);
+    params: CreateEvaluationParams
+  ): Promise<CreateEvalJobResponse> {
+    const { eval: test } = await ExperimentModel.createEvalJobConfig(params);
     // TODO: Move run experiment to here
     const jobId = await JobQueue.runExperiment({
       experimentName: test.experimentName,
-      testName: test.testName,
+      evalName: test.evalName,
     });
     return {
       jobId,
-      test,
+      evalName: test,
     };
   }
 
-  static async runTest(
-    testKey: ExperimentTestKeyID
-  ): Promise<ExperimentTestJSON> {
+  static async runEvaluation(key: EvalJobKeyID): Promise<EvalJSON> {
     try {
-      let test = await ExperimentModel.updateTestJSON(testKey, {
+      let test = await ExperimentModel.updateTestJSON(key, {
         status: {
-          state: ExperimentTestStatus.ACTIVE,
+          state: EvalJobStatus.ACTIVE,
         },
       });
-      const dataset = await Application.fetchTestDataset(
-        test.testCaseDatasetName
-      );
+      const dataset = await Application.fetchTestDataset(test.testSuiteName);
       const results = await Promise.all(
         dataset.map((testCase) =>
           ExperimentExecutor.runTestCase({
@@ -57,21 +54,21 @@ export class ExperimentExecutor {
           })
         )
       );
-      test = await ExperimentModel.updateTestJSON(testKey, {
+      test = await ExperimentModel.updateTestJSON(key, {
         status: {
-          state: ExperimentTestStatus.SUCCESS,
+          state: EvalJobStatus.SUCCESS,
         },
       });
-      await ExperimentModel.updateTestResultJSON(testKey, {
+      await ExperimentModel.updateTestResultJSON(key, {
         result: results,
       });
       return test;
     } catch (error) {
       console.error(error);
       const message = error instanceof Error ? error.message : 'Unknown error';
-      await ExperimentModel.updateTestJSON(testKey, {
+      await ExperimentModel.updateTestJSON(key, {
         status: {
-          state: ExperimentTestStatus.FAILED,
+          state: EvalJobStatus.FAILED,
           message,
         },
       });
@@ -81,7 +78,7 @@ export class ExperimentExecutor {
 
   private static runTestCase = async (
     params: RunTestCaseParams
-  ): Promise<ExperimentTestCaseResult> => {
+  ): Promise<EvalResult> => {
     const { testCase, agentName, workflowName, featureFlags } = params;
     let response: ConversationResponse;
     if (agentName) {

@@ -12,7 +12,7 @@ export interface ExactMatchParams {
  * Checks if the response is an exact match.
  * Returns 0 if the response is not an exact match, 1 if it is.
  */
-export class ExactMatchEvalMetric implements EvalMetric {
+export class ExactMatchMetric implements EvalMetric {
   private params: ExactMatchParams;
   label = 'exact-match';
 

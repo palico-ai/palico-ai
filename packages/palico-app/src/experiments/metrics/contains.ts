@@ -13,7 +13,7 @@ export interface ContainsMetricParams {
  * Checks if the response contains a substring.
  * Returns 0 if the substring is not found, 1 if it is found.
  */
-export class ContainsMetrics implements EvalMetric {
+export class ContainsMetric implements EvalMetric {
   private params: ContainsMetricParams;
   label = 'substring';
 
@@ -32,7 +32,7 @@ export class ContainsMetrics implements EvalMetric {
   }
 }
 
-export interface ContainsAnyMetricsParams {
+export interface ContainsAnyMetricParams {
   substrings: string[];
 }
 
@@ -41,11 +41,11 @@ export interface ContainsAnyMetricsParams {
  * Returns 0 if none of the substrings are found.
  * if found, returns 1.
  */
-export class ContainsAnyMetrics implements EvalMetric {
-  private params: ContainsAnyMetricsParams;
+export class ContainsAnyMetric implements EvalMetric {
+  private params: ContainsAnyMetricParams;
   label = 'contains-any';
 
-  constructor(params: ContainsAnyMetricsParams) {
+  constructor(params: ContainsAnyMetricParams) {
     this.params = params;
   }
 
@@ -60,7 +60,7 @@ export class ContainsAnyMetrics implements EvalMetric {
   }
 }
 
-export interface ContainsAllMetricsParams {
+export interface ContainsAllMetricParams {
   substrings: string[];
 }
 
@@ -69,11 +69,11 @@ export interface ContainsAllMetricsParams {
  * Returns 0 if any of the substrings are not found.
  * if found, returns 1.
  */
-export class ContainsAllMetrics implements EvalMetric {
-  private params: ContainsAllMetricsParams;
+export class ContainsAllMetric implements EvalMetric {
+  private params: ContainsAllMetricParams;
   label = 'contains-all';
 
-  constructor(params: ContainsAllMetricsParams) {
+  constructor(params: ContainsAllMetricParams) {
     this.params = params;
   }
 

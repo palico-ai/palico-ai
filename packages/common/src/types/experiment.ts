@@ -25,37 +25,33 @@ export interface EvalMetric {
   ) => Promise<EvalMetricOutput>;
 }
 
-export type ExperimentTestResultMetricValue = Record<string, EvalMetricOutput>;
+export type EvalMetricResultMap = Record<string, EvalMetricOutput>;
 
-export interface ExperimentTestCaseResult {
+export interface EvalResult {
   input: ConversationRequestContent;
-  tags: ExperimentTestCaseTag;
+  tags: EvalTestCaseTag;
   output: ConversationResponse;
-  metrics: Record<string, EvalMetricOutput>;
+  metrics: EvalMetricResultMap;
 }
 
-export type ExperimentTestCaseTag = Record<string, string>;
+export type EvalTestCaseTag = Record<string, string>;
 
-export interface ExperimentTestCaseDataset<Input = ConversationRequestContent> {
+export interface EvalTestCase<Input = ConversationRequestContent> {
   input: Input;
-  tags: ExperimentTestCaseTag;
+  tags: EvalTestCaseTag;
   metrics: EvalMetric[];
 }
 
-export interface Dataset<Schema = unknown, FetchParams = unknown> {
-  fetch: (params?: FetchParams) => Promise<Schema[]>;
-}
-
-export enum ExperimentTestStatus {
+export enum EvalJobStatus {
   CREATED = 'created',
   ACTIVE = 'active',
   FAILED = 'failed',
   SUCCESS = 'success',
 }
 
-export interface ExperimentTestJSON {
+export interface EvalJSON {
   status: {
-    state: ExperimentTestStatus;
+    state: EvalJobStatus;
     message?: string;
   };
   jobId?: string;
@@ -63,36 +59,36 @@ export interface ExperimentTestJSON {
   featureFlags?: Record<string, unknown>;
   agentName?: string;
   workflowName?: string;
-  testCaseDatasetName: string;
+  testSuiteName: string;
   createdAt: number;
 }
 
-export interface TestResultJSON {
-  result: ExperimentTestCaseResult[];
+export interface EvalResultJSON {
+  result: EvalResult[];
 }
 
-export interface ExperimentTest extends ExperimentTestJSON, TestResultJSON {
+export interface Evaluation extends EvalJSON, EvalResultJSON {
   experimentName: string;
-  testName: string;
+  evalName: string;
 }
 
-export type ExperimentTestMetadata = Omit<ExperimentTest, 'result'>;
+export type EvaluationMetadata = Omit<Evaluation, 'result'>;
 
-export type CreateExperimentTestParams = Omit<
-  ExperimentTest,
+export type CreateEvaluationParams = Omit<
+  Evaluation,
   'createdAt' | 'jobId' | 'result' | 'status'
 >;
 
-export interface CreateExperimentTestJobResponse {
+export interface CreateEvalJobResponse {
   jobId: string;
-  test: ExperimentTestMetadata;
+  evalName: EvaluationMetadata;
 }
 
-export interface ExperimentTestKeyID {
+export interface EvalJobKeyID {
   experimentName: string;
-  testName: string;
+  evalName: string;
 }
 
-export interface GetAllTestsResponse {
-  tests: ExperimentTestKeyID[];
+export interface GetAllEvalsResponse {
+  evals: EvalJobKeyID[];
 }

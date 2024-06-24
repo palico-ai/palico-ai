@@ -1,23 +1,23 @@
-import { ExperimentTestKeyID } from '@palico-ai/common';
-import { getTestByName } from '../../../../../services/experiments';
+import { EvalJobKeyID } from '@palico-ai/common';
+import { getEvalByName } from '../../../../../services/experiments';
 import React from 'react';
 import PageContent from '../../../../../components/layout/page_content';
-import MultiTestCompareTable from './compare_table';
+import MultiEvalCompareTable from './compare_table';
 import { ExperimentItemChildPage } from '../../../../../types/component_types';
 import Breadcrumb from '../../../../../utils/breadcrumb';
 
 export interface TestReportItemPageProps extends ExperimentItemChildPage {
   searchParams: {
     name: string;
-    tests: string;
+    evals: string;
   };
 }
 
 const NewTestReportPage: React.FC<TestReportItemPageProps> = async (props) => {
-  const { tests: testString } = props.searchParams;
-  const tests = JSON.parse(testString) as ExperimentTestKeyID[];
+  const { evals: evalString } = props.searchParams;
+  const tests = JSON.parse(evalString) as EvalJobKeyID[];
   const testDatasets = await Promise.all(
-    tests.map((test) => getTestByName(test.experimentName, test.testName))
+    tests.map((test) => getEvalByName(test.experimentName, test.evalName))
   );
   return (
     <PageContent
@@ -26,7 +26,7 @@ const NewTestReportPage: React.FC<TestReportItemPageProps> = async (props) => {
         Breadcrumb.newReport(),
       ]}
     >
-      <MultiTestCompareTable tests={testDatasets} />
+      <MultiEvalCompareTable evals={testDatasets} />
     </PageContent>
   );
 };

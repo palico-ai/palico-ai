@@ -1,22 +1,22 @@
 export interface ComponentWithChildren {
-  children: React.ReactNode
+  children: React.ReactNode;
 }
 
 export interface LabItemChildPage {
   params: {
-    labId: string
-  }
+    labId: string;
+  };
 }
 
 export interface ExperimentItemChildPage {
   params: {
-    expName: string
-  }
+    expName: string;
+  };
 }
 
-export interface ExperimentTestChildPage {
+export interface EvalChildPage {
   params: {
-    expName: string,
-    testName: string
-  }
+    expName: string;
+    evalName: string;
+  };
 }

@@ -5,7 +5,7 @@ import { Button, useDialogController } from '@palico-ai/components';
 import NewAnalysisForm from '../../../../../components/forms/new_analysis';
 import {
   useExperimentName,
-  useTestName,
+  useEvalName,
 } from '../../../../../hooks/use_params';
 
 const ExperimentTestTopbarAction: React.FC = () => {
@@ -15,15 +15,15 @@ const ExperimentTestTopbarAction: React.FC = () => {
     close: closeCreateAnalysisForm,
   } = useDialogController();
   const experimentName = useExperimentName();
-  const testName = useTestName();
+  const evalName = useEvalName();
   return (
     <Box>
       <NewAnalysisForm
         experimentName={experimentName}
-        initialTests={[
+        initialEvals={[
           {
             experimentName: decodeURIComponent(experimentName),
-            testName: decodeURIComponent(testName),
+            evalName: decodeURIComponent(evalName),
           },
         ]}
         isOpen={isCreateAnalysisFormOpen}

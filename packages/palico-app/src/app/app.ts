@@ -1,12 +1,9 @@
-import {
-  ConversationResponse,
-  ExperimentTestCaseDataset,
-} from '@palico-ai/common';
+import { ConversationResponse, EvalTestCase } from '@palico-ai/common';
 import ChainWorkflowExecutor, {
   RunWorkflowParams,
 } from '../workflows/executor';
 import AgentExecutor, { AgentExecutorChatParams } from '../agent/executor';
-import TestCaseDatasetModel from '../experiments/test_case.model';
+import TestSuiteModel from '../experiments/test_case.model';
 
 export class Application {
   static async chat(
@@ -23,10 +20,8 @@ export class Application {
     return result;
   }
 
-  static async fetchTestDataset(
-    name: string
-  ): Promise<ExperimentTestCaseDataset[]> {
-    const dataset = await TestCaseDatasetModel.findByName(name);
+  static async fetchTestDataset(name: string): Promise<EvalTestCase[]> {
+    const dataset = await TestSuiteModel.findByName(name);
     return dataset;
   }
 }

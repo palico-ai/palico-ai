@@ -1,21 +1,21 @@
 'use client';
 
-import { ExperimentTest } from '@palico-ai/common';
+import { Evaluation } from '@palico-ai/common';
 import React, { useEffect, useMemo, useState } from 'react';
-import { CreateTestResultDatasets, createColumnDefs } from './data_utils';
+import { CreateEvalResultDatasets, createColumnDefs } from './data_utils';
 import { RenderCellFN, Table, useTableModel } from '@palico-ai/components';
 import { Paper } from '@mui/material';
 import { TestTableColumnHeader } from '../../../../../utils/experiments';
 import TestCellConversationID from '../../../../../components/table/test_cell_conversation_id';
 
 interface MultiTestCompareTableProps {
-  tests: ExperimentTest[];
+  evals: Evaluation[];
 }
 
-const MultiTestCompareTable: React.FC<MultiTestCompareTableProps> = ({
-  tests,
+const MultiEvalCompareTable: React.FC<MultiTestCompareTableProps> = ({
+  evals: tests,
 }) => {
-  const dataset = useMemo(() => CreateTestResultDatasets(tests), [tests]);
+  const dataset = useMemo(() => CreateEvalResultDatasets(tests), [tests]);
   const [columns, setColumns] = useState(createColumnDefs(dataset));
 
   useEffect(() => {
@@ -55,4 +55,4 @@ const MultiTestCompareTable: React.FC<MultiTestCompareTableProps> = ({
   );
 };
 
-export default MultiTestCompareTable;
+export default MultiEvalCompareTable;

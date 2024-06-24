@@ -145,7 +145,7 @@ const ExperimentList: React.FC<ExpListProps> = ({ initialExpItems }) => {
 
   const handleCreateExp = (item: ExperimentMetadata) => {
     setExpItems([...expItems, { ...item }]);
-    router.push(RoutePath.experimentTestList({ experimentName: item.name }));
+    router.push(RoutePath.experimentEvalList({ experimentName: item.name }));
   };
 
   const handleDeleteExp = async (name: string) => {

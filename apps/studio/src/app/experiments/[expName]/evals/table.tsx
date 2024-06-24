@@ -1,9 +1,5 @@
 'use client';
 
-import {
-  ExperimentTestMetadata,
-  ExperimentTestStatus,
-} from '@palico-ai/common';
 import React from 'react';
 import { Cell, ColumnDef, flexRender } from '@tanstack/react-table';
 import { useRouter } from 'next/navigation';
@@ -15,9 +11,10 @@ import {
   useTableModel,
 } from '@palico-ai/components';
 import { RoutePath } from '../../../../utils/route_path';
+import { EvalJobStatus, EvaluationMetadata } from '@palico-ai/common';
 
 interface TestListProps {
-  data: ExperimentTestMetadata[];
+  data: EvaluationMetadata[];
 }
 
 const CELL_HEADER = {
@@ -30,17 +27,17 @@ const CELL_HEADER = {
   CREATED_AT: 'Created At',
 };
 
-const isStatusCell = (cell: Cell<ExperimentTestMetadata, unknown>) => {
+const isStatusCell = (cell: Cell<EvaluationMetadata, unknown>) => {
   return cell.column.columnDef.header === 'Status';
 };
 
-const columns: ColumnDef<ExperimentTestMetadata, unknown>[] = [
+const columns: ColumnDef<EvaluationMetadata, unknown>[] = [
   {
-    accessorKey: 'testName',
+    accessorKey: 'evalName',
     header: CELL_HEADER.NAME,
   },
   {
-    accessorKey: 'testDescription',
+    accessorKey: 'description',
     header: CELL_HEADER.DESCRIPTION,
   },
   {
@@ -65,27 +62,27 @@ const columns: ColumnDef<ExperimentTestMetadata, unknown>[] = [
   },
 ];
 
-const TestTable: React.FC<TestListProps> = ({ data }) => {
+const EvalTable: React.FC<TestListProps> = ({ data }) => {
   const router = useRouter();
   const table = useTableModel({
     data,
     columns,
   });
 
-  const handleRowClick = (row: ExperimentTestMetadata) => {
+  const handleRowClick = (row: EvaluationMetadata) => {
     router.push(
-      RoutePath.experimentTestItem({
+      RoutePath.experimentEvalItem({
         experimentName: row.experimentName,
-        testName: row.testName,
+        evalName: row.evalName,
       })
     );
   };
 
-  const renderCell: RenderCellFN<ExperimentTestMetadata> = (
-    cell: Cell<ExperimentTestMetadata, unknown>
+  const renderCell: RenderCellFN<EvaluationMetadata> = (
+    cell: Cell<EvaluationMetadata, unknown>
   ) => {
     if (isStatusCell(cell)) {
-      const status = cell.getValue() as ExperimentTestStatus;
+      const status = cell.getValue() as EvalJobStatus;
       return (
         <Chip
           size="small"
@@ -96,12 +93,12 @@ const TestTable: React.FC<TestListProps> = ({ data }) => {
           }
           variant="outlined"
           color={
-            status === ExperimentTestStatus.SUCCESS
+            status === EvalJobStatus.SUCCESS
               ? 'success'
-              : status === ExperimentTestStatus.FAILED
+              : status === EvalJobStatus.FAILED
               ? 'error'
-              : status === ExperimentTestStatus.ACTIVE ||
-                status === ExperimentTestStatus.CREATED
+              : status === EvalJobStatus.ACTIVE ||
+                status === EvalJobStatus.CREATED
               ? 'warning'
               : 'default'
           }
@@ -116,4 +113,4 @@ const TestTable: React.FC<TestListProps> = ({ data }) => {
   );
 };
 
-export default TestTable;
+export default EvalTable;

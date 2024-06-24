@@ -1,34 +1,32 @@
-import { ExperimentTestCaseDataset } from '.';
+import { EvalTestCase } from '@palico-ai/common';
 import OS from '../utils/os';
 import Project from '../utils/project';
 
-export default class TestCaseDatasetModel {
+export default class TestSuiteModel {
   static readonly fileName = 'index.ts';
 
-  static async getAllDatasets() {
-    const datasetDirName = await Project.getTestCaseDatasetRootDir();
+  static async getAllTestSuites() {
+    const datasetDirName = await Project.getTestSuiteRootDir();
     const dirs = await OS.getDirectories(datasetDirName);
     const datasets = dirs.filter((dir) =>
-      OS.doesFileExist(`${datasetDirName}/${dir}/${TestCaseDatasetModel.fileName}`)
+      OS.doesFileExist(`${datasetDirName}/${dir}/${TestSuiteModel.fileName}`)
     );
     return datasets;
   }
 
-  static async doesDatasetExists(name: string): Promise<boolean> {
-    const filePath = await TestCaseDatasetModel.datasetFilePath(name);
+  static async doesTestSuiteExists(name: string): Promise<boolean> {
+    const filePath = await TestSuiteModel.filePath(name);
     return OS.doesFileExist(filePath);
   }
 
-  static async findByName(
-    name: string
-  ): Promise<ExperimentTestCaseDataset[]> {
-    const filePath = await TestCaseDatasetModel.datasetFilePath(name);
+  static async findByName(name: string): Promise<EvalTestCase[]> {
+    const filePath = await TestSuiteModel.filePath(name);
     const datasetExports = await import(filePath);
-    return datasetExports.default
+    return datasetExports.default;
   }
 
-  private static async datasetFilePath(name: string) {
-    const datasetDir = await Project.getTestCaseDatasetRootDir();
-    return `${datasetDir}/${name}/${TestCaseDatasetModel.fileName}`;
+  private static async filePath(name: string) {
+    const datasetDir = await Project.getTestSuiteRootDir();
+    return `${datasetDir}/${name}/${TestSuiteModel.fileName}`;
   }
 }

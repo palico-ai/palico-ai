@@ -18,6 +18,8 @@ You should always create a Palico Client from server-side code. This is because 
 
 To get a new API Key, checkout the [CLI documentation](./09_cli.md#generate-api-keys). You can create a new client like this:
 
+You can view the full API Reference for Client SDK [here](https://palico-ai.github.io/palico-main/modules/_palico_ai_client_js.html)
+
 ```typescript
 import { createClient } from '@palico-ai/client-js';
 

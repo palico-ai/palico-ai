@@ -1,22 +1,21 @@
 import {
   ConversationRequestContent,
   ConversationContext,
-  ConversationResponse
+  ConversationResponse,
 } from '@palico-ai/common';
 
-export type LLMAgentResponse<D = Record<string, unknown>> = Omit<
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type AgentResponse<D = any> = Omit<
   ConversationResponse<D>,
   'conversationId' | 'requestId'
 >;
 
-export interface LLMAgent<
-  RequestBody = Record<string, unknown>,
-  Response = Record<string, unknown>
-> {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export interface Agent<RequestBody = any, Response = any> {
   chat: (
     content: ConversationRequestContent<RequestBody>,
     context: ConversationContext
-  ) => Promise<LLMAgentResponse<Response>>;
+  ) => Promise<AgentResponse<Response>>;
 }
 
 export {
