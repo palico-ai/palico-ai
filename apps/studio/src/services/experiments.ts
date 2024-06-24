@@ -2,11 +2,11 @@
 
 import {
   CreateExperimentParams,
-  CreateExperimentTestParams,
-  CreateExperimentTestJobResponse,
+  CreateEvaluationParams,
+  CreateEvalJobResponse,
   ExperimentMetadata,
-  ExperimentTestMetadata,
-  ExperimentTest,
+  EvaluationMetadata,
+  Evaluation,
 } from '@palico-ai/common';
 import { verifySession } from './auth';
 import { palicoFetch } from './palico';
@@ -34,11 +34,11 @@ export const deleteExperiment = async (name: string) => {
   });
 };
 
-export const getTestsForExperiments = async (
+export const getEvalsForExperiments = async (
   expName: string
-): Promise<ExperimentTestMetadata[]> => {
+): Promise<EvaluationMetadata[]> => {
   await verifySession();
-  const data = await palicoFetch(`/dev/experiments/${expName}/tests`, {
+  const data = await palicoFetch(`/dev/experiments/${expName}/evals`, {
     method: 'GET',
   });
   return data.tests;
@@ -53,38 +53,38 @@ export const getExperimentByName = async (
   });
 };
 
-export const runExperimentTest = async (params: CreateExperimentTestParams) => {
+export const runEval = async (params: CreateEvaluationParams) => {
   await verifySession();
-  return await palicoFetch<CreateExperimentTestJobResponse>(
-    `/dev/experiments/${params.experimentName}/tests`,
+  return await palicoFetch<CreateEvalJobResponse>(
+    `/dev/experiments/${params.experimentName}/evals`,
     {
       method: 'POST',
       body: JSON.stringify({
-        testName: params.testName,
+        evalName: params.evalName,
         description: params.description,
         featureFlags: params.featureFlags,
         agentName: params.agentName,
         workflowName: params.workflowName,
-        testCaseDatasetName: params.testCaseDatasetName,
+        testSuiteName: params.testSuiteName,
       }),
     }
   );
 };
 
-export const getTestByName = async (expName: string, testName: string) => {
+export const getEvalByName = async (expName: string, testName: string) => {
   await verifySession();
-  return await palicoFetch<ExperimentTest>(
-    `/dev/experiments/${expName}/tests/${testName}`,
+  return await palicoFetch<Evaluation>(
+    `/dev/experiments/${expName}/evals/${testName}`,
     {
       method: 'GET',
     }
   );
-}
+};
 
-export const getTestStatus = async (expName: string, testName: string) => {
+export const getEvalStatus = async (expName: string, testName: string) => {
   await verifySession();
-  return await palicoFetch<ExperimentTestMetadata['status']>(
-    `/dev/experiments/${expName}/tests/${testName}/status`,
+  return await palicoFetch<EvaluationMetadata['status']>(
+    `/dev/experiments/${expName}/evals/${testName}/status`,
     {
       method: 'GET',
     }

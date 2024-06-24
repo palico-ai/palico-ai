@@ -1,4 +1,9 @@
-import { RequireExperimentName, RequireLabId, RequireTestName, RequireTestReportName } from "../types/common";
+import {
+  RequireExperimentName,
+  RequireLabId,
+  RequireEvalName,
+  RequireTestReportName,
+} from '../types/common';
 
 export class RoutePath {
   static chat() {
@@ -21,12 +26,12 @@ export class RoutePath {
     return `${RoutePath.experimentList()}/${params.experimentName}`;
   }
 
-  static experimentTestList(params: RequireExperimentName) {
-    return `${RoutePath.experimentItem(params)}/tests`;
+  static experimentEvalList(params: RequireExperimentName) {
+    return `${RoutePath.experimentItem(params)}/evals`;
   }
 
-  static experimentTestItem(params: RequireExperimentName & RequireTestName) {
-    return `${RoutePath.experimentTestList(params)}/${params.testName}`;
+  static experimentEvalItem(params: RequireExperimentName & RequireEvalName) {
+    return `${RoutePath.experimentEvalList(params)}/${params.evalName}`;
   }
 
   static experimentReportItem(params: RequireExperimentName) {
@@ -37,8 +42,10 @@ export class RoutePath {
     return `${RoutePath.experimentReportItem(params)}/new`;
   }
 
-  static experimentTestReportItem(params: RequireExperimentName & RequireTestReportName) {
-    return `${RoutePath.experimentTestList(params)}/${params.testReportName}`;
+  static experimentEvalReportItem(
+    params: RequireExperimentName & RequireTestReportName
+  ) {
+    return `${RoutePath.experimentEvalList(params)}/${params.testReportName}`;
   }
 
   static tracing() {

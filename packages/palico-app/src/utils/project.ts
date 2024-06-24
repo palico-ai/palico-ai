@@ -32,9 +32,9 @@ export default class Project {
     return `${root}/appdata/quicklabs`;
   }
 
-  static async getTestCaseDatasetRootDir(): Promise<string> {
+  static async getTestSuiteRootDir(): Promise<string> {
     const root = await this.getWorkspaceRootDir();
-    return `${root}/src/testcases`;
+    return `${root}/src/eval_tests`;
   }
 
   static async getWorkflowRootDir(): Promise<string> {

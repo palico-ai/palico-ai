@@ -7,7 +7,7 @@ const ExperimentPage: React.FC<ExperimentItemChildPage> = ({
   params: { expName },
 }) => {
   return redirect(
-    RoutePath.experimentTestList({
+    RoutePath.experimentEvalList({
       experimentName: expName,
     })
   );

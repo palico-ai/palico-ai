@@ -1,6 +1,6 @@
 import Project from '../utils/project';
 import OS from '../utils/os';
-import { LLMAgent } from './types';
+import { Agent } from './types';
 
 export class AgentModel {
   private static readonly agentFile = 'index.ts';
@@ -19,7 +19,7 @@ export class AgentModel {
     return OS.doesFileExist(filePath);
   }
 
-  static async getAgentByName(name: string) : Promise<LLMAgent> {
+  static async getAgentByName(name: string): Promise<Agent> {
     const filePath = await AgentModel.agentFilePath(name);
     const agentExports = await import(filePath);
     const agent = new agentExports.default();

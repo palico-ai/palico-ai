@@ -1,13 +1,13 @@
 import { Router } from 'express';
 import {
-  createNewExperimentHandler,
-  createTestForExperimentHandler,
-  getAllExperimentsHandler,
-  getAllTestForExperimentHandler,
+  newExperimentRouteHandler,
+  createEvalForExperimentHandler,
+  getAllExperimentsRouteHandler,
+  getAllEvalForExperimentHandler,
   getExperimentByNameHandler,
   getJobStatusHandler,
-  getTestByNameHandler,
-  getTestStatusHandler,
+  getEvalByNameHandler,
+  getEvalStatusHandler,
   removeExperimentHandler,
 } from './handlers';
 
@@ -21,8 +21,8 @@ router.route('/job/:jobId/status').get(getJobStatusHandler);
 
 router
   .route('/experiments')
-  .post(createNewExperimentHandler)
-  .get(getAllExperimentsHandler);
+  .post(newExperimentRouteHandler)
+  .get(getAllExperimentsRouteHandler);
 
 router
   .route('/experiments/:expName')
@@ -30,14 +30,14 @@ router
   .delete(removeExperimentHandler);
 
 router
-  .route('/experiments/:expName/tests')
-  .get(getAllTestForExperimentHandler)
-  .post(createTestForExperimentHandler);
+  .route('/experiments/:expName/evals')
+  .get(getAllEvalForExperimentHandler)
+  .post(createEvalForExperimentHandler);
 
-router.route('/experiments/:expName/tests/:testName').get(getTestByNameHandler);
+router.route('/experiments/:expName/evals/:evalName').get(getEvalByNameHandler);
 
 router
-  .route('/experiments/:expName/tests/:testName/status')
-  .get(getTestStatusHandler);
+  .route('/experiments/:expName/evals/:evalName/status')
+  .get(getEvalStatusHandler);
 
 export default router;

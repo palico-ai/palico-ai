@@ -1,11 +1,20 @@
 import { RequestHandler } from 'express';
 import { AgentModel } from '../../..//agent/model';
 import WorkflowModel from '../../../models/workflow';
-import { GetAgentMetadataResponse, GetAllTestsResponse, GetAllTestSuitesResponse, GetWorkflowMetadataResponse, MetadataListItemCommon } from '@palico-ai/common';
+import {
+  GetAgentMetadataResponse,
+  GetAllEvalsResponse,
+  GetAllTestSuitesResponse,
+  GetWorkflowMetadataResponse,
+  MetadataListItemCommon,
+} from '@palico-ai/common';
 import ExperimentModel from '../../../experiments/model';
-import TestCaseDatasetModel from '../../../experiments/test_case.model';
+import TestSuiteModel from '../../../experiments/test_case.model';
 
-export const getAgentMetadataHandler: RequestHandler<unknown, GetAgentMetadataResponse> = async (_, res, next) => {
+export const getAgentMetadataHandler: RequestHandler<
+  unknown,
+  GetAgentMetadataResponse
+> = async (_, res, next) => {
   try {
     const agentList = await AgentModel.getAllAgents();
     const agents: MetadataListItemCommon[] = agentList.map((name) => {
@@ -17,11 +26,10 @@ export const getAgentMetadataHandler: RequestHandler<unknown, GetAgentMetadataRe
   }
 };
 
-export const getAllWorkflowsMetadataHandler: RequestHandler<unknown, GetWorkflowMetadataResponse> = async (
-  _,
-  res,
-  next
-) => {
+export const getAllWorkflowsMetadataHandler: RequestHandler<
+  unknown,
+  GetWorkflowMetadataResponse
+> = async (_, res, next) => {
   try {
     const workflowList = await WorkflowModel.getAllWorkflows();
     const workflows: MetadataListItemCommon[] = workflowList.map((name) => {
@@ -33,13 +41,12 @@ export const getAllWorkflowsMetadataHandler: RequestHandler<unknown, GetWorkflow
   }
 };
 
-export const getAllTestCaseDatasets: RequestHandler<unknown, GetAllTestSuitesResponse>= async (
-  _,
-  res,
-  next
-) => {
+export const getAllTestCaseDatasets: RequestHandler<
+  unknown,
+  GetAllTestSuitesResponse
+> = async (_, res, next) => {
   try {
-    const datasetList = await TestCaseDatasetModel.getAllDatasets();
+    const datasetList = await TestSuiteModel.getAllTestSuites();
     const testSuites: MetadataListItemCommon[] = datasetList.map((name) => {
       return { name };
     });
@@ -49,15 +56,14 @@ export const getAllTestCaseDatasets: RequestHandler<unknown, GetAllTestSuitesRes
   }
 };
 
-export const getAllTestsHandler: RequestHandler<unknown, GetAllTestsResponse>= async (
-  _,
-  res,
-  next
-) => {
+export const getAllTestsHandler: RequestHandler<
+  unknown,
+  GetAllEvalsResponse
+> = async (_, res, next) => {
   try {
     const tests = await ExperimentModel.getAllTests();
-    return res.status(200).json({ tests });
+    return res.status(200).json({ evals: tests });
   } catch (error) {
     return next(error);
   }
-}
+};

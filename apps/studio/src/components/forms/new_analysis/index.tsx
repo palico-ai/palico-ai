@@ -1,6 +1,6 @@
 'use client';
 
-import { ExperimentTestKeyID } from '@palico-ai/common';
+import { EvalJobKeyID } from '@palico-ai/common';
 import {
   Button,
   CheckboxAutocomplete,
@@ -12,7 +12,7 @@ import {
   TextField,
 } from '@palico-ai/components';
 import useAsyncTask from '../../../hooks/use_async_task';
-import { getAllTests } from '../../../services/metadata';
+import { getAllEvals } from '../../../services/metadata';
 import React, { useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { RoutePath } from '../../../utils/route_path';
@@ -21,12 +21,12 @@ export interface NewAnalysisFormProps {
   experimentName: string;
   isOpen: boolean;
   closeForm: () => void;
-  initialTests?: ExperimentTestKeyID[];
+  initialEvals?: EvalJobKeyID[];
 }
 
 const NewAnalysisForm: React.FC<NewAnalysisFormProps> = ({
   isOpen,
-  initialTests,
+  initialEvals: initialTests,
   experimentName,
   closeForm: closeDialog,
 }) => {
@@ -38,11 +38,11 @@ const NewAnalysisForm: React.FC<NewAnalysisFormProps> = ({
     runTask,
     pendingInitialFetch,
   } = useAsyncTask({
-    task: getAllTests,
+    task: getAllEvals,
   });
-  const [selectedTests, setSelectedTests] = React.useState<
-    ExperimentTestKeyID[]
-  >(initialTests ?? []);
+  const [selectedTests, setSelectedTests] = React.useState<EvalJobKeyID[]>(
+    initialTests ?? []
+  );
   const router = useRouter();
 
   console.log(`selectedTests: `, selectedTests);
@@ -54,8 +54,8 @@ const NewAnalysisForm: React.FC<NewAnalysisFormProps> = ({
   const datasetOptions: CheckboxAutocompleteProps['options'] =
     React.useMemo(() => {
       return (
-        allTests?.map((test: ExperimentTestKeyID) => ({
-          label: test.testName,
+        allTests?.map((test: EvalJobKeyID) => ({
+          label: test.evalName,
           value: test,
         })) ?? []
       );
@@ -74,17 +74,15 @@ const NewAnalysisForm: React.FC<NewAnalysisFormProps> = ({
         />
         <CheckboxAutocomplete
           inputProps={{
-            label: 'Datasets',
+            label: 'Evaluations',
           }}
           groupBy={(option) => {
-            const test = option.value as ExperimentTestKeyID;
+            const test = option.value as EvalJobKeyID;
             return test.experimentName;
           }}
           value={selectedTests}
           onChange={(values) => {
-            setSelectedTests(
-              values.map((value) => value as ExperimentTestKeyID)
-            );
+            setSelectedTests(values.map((value) => value as EvalJobKeyID));
           }}
           options={datasetOptions}
         />
@@ -96,7 +94,7 @@ const NewAnalysisForm: React.FC<NewAnalysisFormProps> = ({
     const searchParams =
       '?' +
       `name=${encodeURIComponent(name)}` +
-      `&tests=${JSON.stringify(selectedTests)}`;
+      `&evals=${JSON.stringify(selectedTests)}`;
     router.push(
       RoutePath.experimentNewReportItem({ experimentName }) + searchParams
     );

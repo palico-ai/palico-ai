@@ -1,5 +1,9 @@
 import { BreadcrumbItem } from '../components/layout/topbar';
-import { RequireExperimentName, RequireLabName, RequireTestName } from '../types/common';
+import {
+  RequireExperimentName,
+  RequireLabName,
+  RequireEvalName,
+} from '../types/common';
 import { RoutePath } from './route_path';
 
 export interface IncludeHref {
@@ -45,29 +49,30 @@ export default class Breadcrumb {
     };
   }
 
-  static experimentTestList(
+  static experimentEvalList(
     params?: IncludeHrefWithOptions<RequireExperimentName>
   ): BreadcrumbItem {
     return {
-      label: 'Tests',
+      label: 'Evals',
       href: params?.includeHref
-        ? RoutePath.experimentTestList({
+        ? RoutePath.experimentEvalList({
             experimentName: params.options.experimentName,
           })
         : undefined,
     };
   }
 
-  static experimentTestItem(
-    params: RequireTestName &
+  static experimentEvalItem(
+    params: RequireEvalName &
       Partial<IncludeHrefWithOptions<RequireExperimentName>>
   ): BreadcrumbItem {
     return {
-      label: params.testName,
+      label: params.evalName,
       href: params.includeHref
-        ? RoutePath.experimentTestItem({
+        ? RoutePath.experimentEvalItem({
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             experimentName: params.options!.experimentName,
-            testName: params.testName,
+            evalName: params.evalName,
           })
         : undefined,
     };

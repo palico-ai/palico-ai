@@ -1,22 +1,22 @@
-import { ExperimentTest, ExperimentTestCaseResult } from '@palico-ai/common';
+import { Evaluation, EvalResult } from '@palico-ai/common';
 import { ColumnDef } from '@tanstack/react-table';
 import { TestTableColumnHeader } from '../../../../../utils/experiments';
 
 // TOOD: Consolidate with utils/experiments.ts
 
-export interface TestResultWithIdentifier extends ExperimentTestCaseResult {
+export interface TestResultWithIdentifier extends EvalResult {
   name: string;
 }
 
-export const CreateTestResultDatasets = (
-  tests: ExperimentTest[]
+export const CreateEvalResultDatasets = (
+  evals: Evaluation[]
 ): TestResultWithIdentifier[] => {
   const dataset: TestResultWithIdentifier[] = [];
-  tests.forEach((test) => {
+  evals.forEach((test) => {
     test.result.forEach((result) => {
       dataset.push({
         ...result,
-        name: `${test.experimentName}::${test.testName}`,
+        name: `${test.experimentName}::${test.evalName}`,
       });
     });
   });

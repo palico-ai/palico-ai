@@ -1,40 +1,39 @@
 'use client';
 
 import {
-  CreateExperimentTestJobResponse,
-  ExperimentTestMetadata,
-  ExperimentTestStatus,
+  CreateEvalJobResponse,
+  EvaluationMetadata,
+  EvalJobStatus,
 } from '@palico-ai/common';
 import React, { useEffect } from 'react';
-import TestTable from './table';
+import EvalTable from './table';
 import TopbarAction from './page_actions';
 import { cloneDeep, size } from 'lodash';
 import { useInterval } from 'usehooks-ts';
 import { useExperimentName } from '../../../../hooks/use_params';
-import { getTestStatus } from '../../../../services/experiments';
+import { getEvalStatus } from '../../../../services/experiments';
 import PageContent from '../../../../components/layout/page_content';
 import { Paper } from '@mui/material';
 import Breadcrumb from '../../../../utils/breadcrumb';
 
 interface TestListProps {
-  initialTests: ExperimentTestMetadata[];
+  initialTests: EvaluationMetadata[];
 }
 
-const TestList: React.FC<TestListProps> = ({ initialTests }) => {
-  const [data, setData] =
-    React.useState<ExperimentTestMetadata[]>(initialTests);
-  const [pendingTests, setPendingTests] = React.useState<
-    ExperimentTestMetadata[]
-  >([]);
+const EvalList: React.FC<TestListProps> = ({ initialTests }) => {
+  const [data, setData] = React.useState<EvaluationMetadata[]>(initialTests);
+  const [pendingEvals, setPendingEvals] = React.useState<EvaluationMetadata[]>(
+    []
+  );
   const expName = useExperimentName();
 
   useInterval(
     async () => {
-      if (pendingTests.length === 0) return;
+      if (pendingEvals.length === 0) return;
       let testStatusChanged = false;
       const newTestStatus = await Promise.all(
-        pendingTests.map(async (test) => {
-          const response = await getTestStatus(expName, test.testName);
+        pendingEvals.map(async (test) => {
+          const response = await getEvalStatus(expName, test.evalName);
           if (response.state !== test.status.state) {
             testStatusChanged = true;
           }
@@ -42,46 +41,50 @@ const TestList: React.FC<TestListProps> = ({ initialTests }) => {
         })
       );
       if (!testStatusChanged) return;
-      const newPendingTest: ExperimentTestMetadata[] = cloneDeep(
-        pendingTests
-      ).map((test, index) => {
-        return {
-          ...test,
-          status: newTestStatus[index],
-        };
-      });
-      const pendingTestByName: Record<string, ExperimentTestMetadata> =
+      const newPendingTest: EvaluationMetadata[] = cloneDeep(pendingEvals).map(
+        (test, index) => {
+          return {
+            ...test,
+            status: newTestStatus[index],
+          };
+        }
+      );
+      const pendingTestByName: Record<string, EvaluationMetadata> =
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         newPendingTest.reduce((acc: any, test) => {
-          acc[test.testName] = test;
+          acc[test.evalName] = test;
           return acc;
         }, {});
       setData((prevData) => {
         const newData = cloneDeep(prevData).map((test) => {
-          return pendingTestByName[test.testName] || test;
+          return pendingTestByName[test.evalName] || test;
         });
         return newData;
       });
-      setPendingTests(
+      setPendingEvals(
         newPendingTest.filter(
           (test) =>
-            test.status.state === ExperimentTestStatus.ACTIVE ||
-            test.status.state === ExperimentTestStatus.CREATED
+            test.status.state === EvalJobStatus.ACTIVE ||
+            test.status.state === EvalJobStatus.CREATED
         )
       );
     },
-    size(pendingTests) > 0 ? 2500 : null
+    size(pendingEvals) > 0 ? 2500 : null
   );
 
   useEffect(() => {
     console.log('Data Changed', data);
   }, [data]);
 
-  const handleTestCreated = (
-    response: CreateExperimentTestJobResponse
-  ): void => {
-    setData((prevData) => [cloneDeep(response.test), ...cloneDeep(prevData)]);
-    setPendingTests((prevTests) => [cloneDeep(response.test), ...prevTests]);
+  const handleTestCreated = (response: CreateEvalJobResponse): void => {
+    setData((prevData) => [
+      cloneDeep(response.evalName),
+      ...cloneDeep(prevData),
+    ]);
+    setPendingEvals((prevTests) => [
+      cloneDeep(response.evalName),
+      ...prevTests,
+    ]);
     // TODO: Monitor the test status
   };
 
@@ -93,15 +96,15 @@ const TestList: React.FC<TestListProps> = ({ initialTests }) => {
           experimentName: expName,
           includeHref: true,
         }),
-        Breadcrumb.experimentTestList(),
+        Breadcrumb.experimentEvalList(),
       ]}
-      actions={<TopbarAction onTestCreated={handleTestCreated} />}
+      actions={<TopbarAction onEvalCreated={handleTestCreated} />}
     >
       <Paper sx={{ p: 2 }}>
-        <TestTable data={data} />
+        <EvalTable data={data} />
       </Paper>
     </PageContent>
   );
 };
 
-export default TestList;
+export default EvalList;

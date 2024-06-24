@@ -1,4 +1,4 @@
-import { ExperimentTest } from '@palico-ai/common';
+import { Evaluation } from '@palico-ai/common';
 import { ColumnDef } from '@tanstack/react-table';
 
 export const TestTableColumnHeader = {
@@ -8,7 +8,8 @@ export const TestTableColumnHeader = {
 };
 
 export const flattenExperimentColumns = (
-  result: ExperimentTest['result']
+  result: Evaluation['result']
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): ColumnDef<any>[] => {
   const allTags = new Set<string>();
   const allMetrics = new Set<string>();

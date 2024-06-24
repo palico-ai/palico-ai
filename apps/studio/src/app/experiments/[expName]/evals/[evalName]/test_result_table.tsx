@@ -1,7 +1,7 @@
 'use client';
 
 import { Paper } from '@mui/material';
-import { ExperimentTest } from '@palico-ai/common';
+import { Evaluation } from '@palico-ai/common';
 import { RenderCellFN, Table, useTableModel } from '@palico-ai/components';
 import {
   TestTableColumnHeader,
@@ -11,7 +11,7 @@ import React from 'react';
 import TestCellConversationID from '../../../../../components/table/test_cell_conversation_id';
 
 export interface TestResultTableProps {
-  test: ExperimentTest;
+  test: Evaluation;
 }
 
 const TestResultTable: React.FC<TestResultTableProps> = ({ test }) => {
@@ -22,7 +22,7 @@ const TestResultTable: React.FC<TestResultTableProps> = ({ test }) => {
     columns,
   });
 
-  const renderCell: RenderCellFN<ExperimentTest['result'][0]> = (
+  const renderCell: RenderCellFN<Evaluation['result'][0]> = (
     cell,
     renderContent
   ) => {

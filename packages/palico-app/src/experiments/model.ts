@@ -1,22 +1,24 @@
-import { ExperimentJSON, ExperimentTestKeyID, TestResultJSON } from '@palico-ai/common';
 import {
+  ExperimentJSON,
+  EvalJobKeyID,
+  EvalResultJSON,
+  CreateEvaluationParams,
   CreateExperimentParams,
-  CreateExperimentTestParams,
-  CreateTestConfigResult,
   ExperimentMetadata,
-  ExperimentTest,
-  ExperimentTestJSON,
-  ExperimentTestMetadata,
-  ExperimentTestStatus,
-} from '.';
+  Evaluation,
+  EvalJSON,
+  EvalJobStatus,
+  EvaluationMetadata,
+} from '@palico-ai/common';
+import { CreateEvalJobConfigResult } from '.';
 import OS from '../utils/os';
 import Project from '../utils/project';
 import omit from 'lodash/omit';
 
 export default class ExperimentModel {
-  private static readonly TEST_DIR = 'tests';
-  private static readonly TEST_FILE_NAME = 'test.json';
-  private static readonly TEST_RESULT_FILE_NAME = 'result.json';
+  private static readonly TEST_DIR = 'evals';
+  private static readonly EVAL_FILE_NAME = 'eval.json';
+  private static readonly EVAL_RESULT_FILE_NAME = 'result.json';
   private static readonly EXPERIMENT_FILE_NAME = 'experiment.json';
 
   static async createNewExperiment(
@@ -68,10 +70,10 @@ export default class ExperimentModel {
     });
   }
 
-  static async createTest(
-    params: CreateExperimentTestParams
-  ): Promise<CreateTestConfigResult> {
-    const { testName, experimentName } = params;
+  static async createEvalJobConfig(
+    params: CreateEvaluationParams
+  ): Promise<CreateEvalJobConfigResult> {
+    const { evalName: testName, experimentName } = params;
     const exp = await ExperimentModel.findExperimentByName(experimentName);
     const testFilePath = await ExperimentModel.buildTestFilePath(
       experimentName,
@@ -81,44 +83,44 @@ export default class ExperimentModel {
       throw new Error(`Test with name "${testName}" already exists`);
     }
     const createdAt = Date.now();
-    const testJSON: ExperimentTestJSON = {
+    const testJSON: EvalJSON = {
       ...params,
       status: {
-        state: ExperimentTestStatus.CREATED,
+        state: EvalJobStatus.CREATED,
       },
       createdAt,
     };
     await OS.createJsonFile(testFilePath, testJSON);
-    const resultFilePath = await ExperimentModel.buildTestResultFilePath(
+    const resultFilePath = await ExperimentModel.buildEvalResultFilePath(
       experimentName,
       testName
     );
-    const resultJSON: TestResultJSON = {
+    const resultJSON: EvalResultJSON = {
       result: [],
     };
     const testRootDir = await ExperimentModel.buildTestDirPath(experimentName);
     await OS.createJsonFile(resultFilePath, resultJSON);
     return {
       testRootDir,
-      test: {
+      eval: {
         ...testJSON,
-        testName,
+        evalName: testName,
         experimentName: exp.name,
       },
     };
   }
 
   static async updateTestJSON(
-    key: ExperimentTestKeyID,
-    content: Partial<ExperimentTestJSON>
-  ): Promise<ExperimentTestJSON> {
-    const { experimentName, testName } = key;
+    key: EvalJobKeyID,
+    content: Partial<EvalJSON>
+  ): Promise<EvalJSON> {
+    const { experimentName, evalName: testName } = key;
     const path = await ExperimentModel.buildTestFilePath(
       experimentName,
       testName
     );
-    const currentContent = await OS.readJsonFile<ExperimentTestJSON>(path);
-    const updatedTest: ExperimentTestJSON = {
+    const currentContent = await OS.readJsonFile<EvalJSON>(path);
+    const updatedTest: EvalJSON = {
       ...currentContent,
       ...content,
     };
@@ -127,23 +129,22 @@ export default class ExperimentModel {
   }
 
   static async updateTestResultJSON(
-    key: ExperimentTestKeyID,
-    content: TestResultJSON
-  ): Promise<TestResultJSON> {
-    const { experimentName, testName } = key;
-    const path = await ExperimentModel.buildTestResultFilePath(
+    key: EvalJobKeyID,
+    content: EvalResultJSON
+  ): Promise<EvalResultJSON> {
+    const { experimentName, evalName: testName } = key;
+    const path = await ExperimentModel.buildEvalResultFilePath(
       experimentName,
       testName
     );
-    const currentContent = await OS.readJsonFile<TestResultJSON>(path);
-    const updatedTest: TestResultJSON = {
+    const currentContent = await OS.readJsonFile<EvalResultJSON>(path);
+    const updatedTest: EvalResultJSON = {
       ...currentContent,
       ...content,
     };
     await OS.createJsonFile(path, updatedTest);
     return updatedTest;
   }
-    
 
   static async findExperimentByName(name: string): Promise<ExperimentMetadata> {
     const fileName = await ExperimentModel.buildExpertimentFilePath(name);
@@ -157,67 +158,65 @@ export default class ExperimentModel {
     };
   }
 
-  static async getAllTests(): Promise<ExperimentTestKeyID[]> {
+  static async getAllTests(): Promise<EvalJobKeyID[]> {
     const allExperiments = await this.getAllExperiments();
     const tests = await Promise.all(
       allExperiments.map(async (exp) => {
         const testDir = await ExperimentModel.buildTestDirPath(exp.name);
         const possibleTestFiles = await OS.getFiles(testDir);
         return possibleTestFiles
-          .filter((file) => file.endsWith(`.${ExperimentModel.TEST_FILE_NAME}`))
+          .filter((file) => file.endsWith(`.${ExperimentModel.EVAL_FILE_NAME}`))
           .map((file) => ({
             experimentName: exp.name,
-            testName: ExperimentModel.parseTestName(file),
+            evalName: ExperimentModel.parseEvalName(file),
           }));
       })
     );
     return tests.flat();
   }
 
-  static async getTestsInExperiment(
+  static async getEvalsInExperiment(
     experimentName: string
-  ): Promise<ExperimentTestMetadata[]> {
+  ): Promise<EvaluationMetadata[]> {
     const testDir = await ExperimentModel.buildTestDirPath(experimentName);
     const files = await OS.getFiles(testDir);
     const testFiles = files.filter((file) =>
-      file.endsWith(`.${ExperimentModel.TEST_FILE_NAME}`)
+      file.endsWith(`.${ExperimentModel.EVAL_FILE_NAME}`)
     );
-    const tests: ExperimentTestMetadata[] = await Promise.all(
+    const tests: EvaluationMetadata[] = await Promise.all(
       testFiles.map(async (file) => {
-        const content = await OS.readJsonFile<ExperimentTestJSON>(
-          `${testDir}/${file}`
-        );
+        const content = await OS.readJsonFile<EvalJSON>(`${testDir}/${file}`);
         return {
           ...omit(content, 'result'),
           experimentName,
-          testName: ExperimentModel.parseTestName(file),
+          evalName: ExperimentModel.parseEvalName(file),
         };
       })
     );
     return tests;
   }
 
-  static async findTest(
+  static async findEval(
     experimentName: string,
-    testName: string
-  ): Promise<ExperimentTest> {
+    evalName: string
+  ): Promise<Evaluation> {
     const testFilePath = await ExperimentModel.buildTestFilePath(
       experimentName,
-      testName
+      evalName
     );
-    const resultFilePath = await ExperimentModel.buildTestResultFilePath(
+    const resultFilePath = await ExperimentModel.buildEvalResultFilePath(
       experimentName,
-      testName
+      evalName
     );
     const [content, result] = await Promise.all([
-      OS.readJsonFile<ExperimentTestJSON>(testFilePath),
-      OS.readJsonFile<TestResultJSON>(resultFilePath),
+      OS.readJsonFile<EvalJSON>(testFilePath),
+      OS.readJsonFile<EvalResultJSON>(resultFilePath),
     ]);
     return {
       ...content,
       ...result,
       experimentName,
-      testName,
+      evalName: evalName,
     };
   }
 
@@ -243,18 +242,18 @@ export default class ExperimentModel {
     testName: string
   ): Promise<string> {
     const rootPath = await ExperimentModel.buildTestDirPath(expName);
-    return `${rootPath}/${testName}.${ExperimentModel.TEST_FILE_NAME}`;
+    return `${rootPath}/${testName}.${ExperimentModel.EVAL_FILE_NAME}`;
   }
 
-  static async buildTestResultFilePath(
+  static async buildEvalResultFilePath(
     expName: string,
     testName: string
   ): Promise<string> {
     const rootPath = await ExperimentModel.buildTestDirPath(expName);
-    return `${rootPath}/${testName}.${ExperimentModel.TEST_RESULT_FILE_NAME}`;
+    return `${rootPath}/${testName}.${ExperimentModel.EVAL_RESULT_FILE_NAME}`;
   }
 
-  private static parseTestName(testFileName: string): string {
-    return testFileName.replace(`.${ExperimentModel.TEST_FILE_NAME}`, '');
+  private static parseEvalName(filename: string): string {
+    return filename.replace(`.${ExperimentModel.EVAL_FILE_NAME}`, '');
   }
 }

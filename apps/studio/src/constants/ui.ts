@@ -6,7 +6,7 @@ export const ExperimentItemPageTabItemList = (
 ): TopbarNavItem[] => [
   {
     label: 'Tests',
-    href: RoutePath.experimentTestList({
+    href: RoutePath.experimentEvalList({
       experimentName,
     }),
   },

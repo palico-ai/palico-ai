@@ -7,21 +7,21 @@ import {
 } from '@palico-ai/components';
 import {
   getAllAgents,
-  getAllTestCaseDatasets,
+  getAllTestSuites,
   getAllWorkflows,
 } from '../../../../services/metadata';
 import React, { useMemo } from 'react';
-import { CreateExperimentTestJobResponse } from '@palico-ai/common';
-import { runExperimentTest } from '../../../../services/experiments';
+import { CreateEvalJobResponse } from '@palico-ai/common';
+import { runEval } from '../../../../services/experiments';
 import { useExperimentName } from '../../../../hooks/use_params';
 import NewAnalysisForm from '../../../../components/forms/new_analysis';
 
 export interface TestListTableHeaderProps {
-  onTestCreated: (test: CreateExperimentTestJobResponse) => void;
+  onEvalCreated: (test: CreateEvalJobResponse) => void;
 }
 
 const TestListTableHeader: React.FC<TestListTableHeaderProps> = ({
-  onTestCreated,
+  onEvalCreated: onTestCreated,
 }) => {
   const {
     isOpen,
@@ -43,7 +43,7 @@ const TestListTableHeader: React.FC<TestListTableHeaderProps> = ({
       const [agents, workflows, datasets] = await Promise.all([
         getAllAgents(),
         getAllWorkflows(),
-        getAllTestCaseDatasets(),
+        getAllTestSuites(),
       ]);
       console.log(datasets);
       setAgentList(agents.map((agent) => agent.name));
@@ -54,7 +54,7 @@ const TestListTableHeader: React.FC<TestListTableHeaderProps> = ({
     fetchInitialData();
   }, []);
 
-  const createTestFormFields: FormField[] = useMemo(() => {
+  const createEvalFormFields: FormField[] = useMemo(() => {
     const fields: FormField[] = [
       {
         name: 'name',
@@ -82,7 +82,7 @@ const TestListTableHeader: React.FC<TestListTableHeaderProps> = ({
         required: true,
       },
       {
-        name: 'testCaseDatasetName',
+        name: 'testSuiteName',
         label: 'Test Suite',
         type: 'select',
         selectOptions: datasetList.map((dataset) => ({
@@ -106,12 +106,12 @@ const TestListTableHeader: React.FC<TestListTableHeaderProps> = ({
   const handleCreateTest = async (
     data: Record<string, unknown>
   ): Promise<void> => {
-    const response = await runExperimentTest({
+    const response = await runEval({
       experimentName,
-      testName: data.name as string,
+      evalName: data.name as string,
       description: data.description as string,
       featureFlags: JSON.parse(data.featureFlags as string),
-      testCaseDatasetName: data.testCaseDatasetName as string,
+      testSuiteName: data.testSuiteName as string,
       ...((data.executor as string).startsWith('agent')
         ? { agentName: (data.executor as string).split(':')[1] }
         : { workflowName: (data.executor as string).split(':')[1] }),
@@ -128,10 +128,10 @@ const TestListTableHeader: React.FC<TestListTableHeaderProps> = ({
       }}
     >
       <SimpleDialogForm
-        title="Create New Test"
+        title="Create New Evaluation"
         isOpen={isOpen}
         closeForm={closeDialog}
-        formFields={createTestFormFields}
+        formFields={createEvalFormFields}
         onSubmit={handleCreateTest}
       />
       <NewAnalysisForm
@@ -148,7 +148,7 @@ const TestListTableHeader: React.FC<TestListTableHeaderProps> = ({
         Comapre
       </Button>
       <Button variant="contained" size="small" onClick={openDialog}>
-        New Test
+        Create Evaluation
       </Button>
     </Box>
   );

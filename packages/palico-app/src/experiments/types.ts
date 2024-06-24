@@ -1,26 +1,23 @@
-import {
-  ExperimentTestMetadata,
-} from '@palico-ai/common';
+import { EvaluationMetadata } from '@palico-ai/common';
 
 export { CreateExperimentParams, ExperimentMetadata } from '@palico-ai/common';
 
-export interface CreateTestConfigResult {
+export interface CreateEvalJobConfigResult {
   testRootDir: string;
-  test: ExperimentTestMetadata;
+  eval: EvaluationMetadata;
 }
 
 export {
   EvalMetricOutput,
   EvalMetric,
-  ExperimentTestResultMetricValue,
-  ExperimentTestCaseResult,
-  ExperimentTestCaseTag,
-  Dataset,
-  ExperimentTestStatus,
-  ExperimentTestCaseDataset,
-  ExperimentTestJSON,
-  ExperimentTest,
-  ExperimentTestMetadata,
-  CreateExperimentTestParams,
-  CreateExperimentTestJobResponse as CreateNewExperimentTestResult,
-} from "@palico-ai/common"
+  EvalMetricResultMap,
+  EvalResult,
+  EvalTestCaseTag,
+  EvalJobStatus,
+  EvalTestCase,
+  EvalJSON,
+  Evaluation,
+  EvaluationMetadata,
+  CreateEvaluationParams,
+  CreateEvalJobResponse,
+} from '@palico-ai/common';

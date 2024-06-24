@@ -10,8 +10,8 @@ export interface RequireExperimentName {
   experimentName: string;
 }
 
-export interface RequireTestName {
-  testName: string;
+export interface RequireEvalName {
+  evalName: string;
 }
 
 export interface RequireTestReportName {
