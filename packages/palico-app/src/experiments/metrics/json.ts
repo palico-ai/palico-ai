@@ -6,7 +6,7 @@ import {
 } from '@palico-ai/common';
 import { ZodSchema } from 'zod';
 
-export interface ValidJSONMetricsParams {
+export interface ValidJSONMetricParams {
   schema?: ZodSchema;
   responseKey?: keyof Pick<ConversationResponse, 'data' | 'message'>;
 }
@@ -15,11 +15,11 @@ export interface ValidJSONMetricsParams {
  * Checks if the response is a valid JSON.
  * Returns 0 if the response is not valid JSON, 1 if it is.
  */
-export class ValidJSONMetrics implements EvalMetric {
-  private params: ValidJSONMetricsParams;
+export class ValidJSONMetric implements EvalMetric {
+  private params: ValidJSONMetricParams;
   label = 'valid-json';
 
-  constructor(params: ValidJSONMetricsParams) {
+  constructor(params: ValidJSONMetricParams) {
     this.params = params;
   }
 
