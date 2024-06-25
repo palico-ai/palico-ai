@@ -27,7 +27,7 @@ OPENAI_API_KEY=<your-openai-api-key>
 ### Bootstrap your Services
 Your Palico app has additional services associated with it, such as a database and tracing service. To bootstrap these services, run the following command:
 ```bash
-npm run bootstrap
+npm run palico bootstrap
 ```
 You will only need to run this command once when you first setup your code repository, or when you update the version of your `@palico-ai/app` package.
 

@@ -1,49 +1,49 @@
 import {
-  ContainsAnyMetrics,
-  ContainsMetrics,
-  ExperimentTestCaseDataset,
-  ValidJSONMetrics,
-} from "@palico-ai/app";
-import z from "zod";
+  ContainsAnyMetric,
+  ContainsMetric,
+  EvalTestCase,
+  ValidJSONMetric,
+} from '@palico-ai/app';
+import z from 'zod';
 
-const TestCaseDataset: ExperimentTestCaseDataset[] = [
+const TestCaseDataset: EvalTestCase[] = [
   {
     input: {
-      userMessage: "Hello",
+      userMessage: 'Hello',
     },
     tags: {
-      intent: "greeting",
+      intent: 'greeting',
     },
     metrics: [
-      new ContainsAnyMetrics({
-        substrings: ["Hello", "Hi", "Hey", "Greetings"],
+      new ContainsAnyMetric({
+        substrings: ['Hello', 'Hi', 'Hey', 'Greetings'],
       }),
     ],
   },
   {
     input: {
-      userMessage: "What is the capital of France?",
+      userMessage: 'What is the capital of France?',
     },
     tags: {
-      intent: "question",
+      intent: 'question',
     },
     metrics: [
-      new ContainsMetrics({
-        substring: "France",
+      new ContainsMetric({
+        substring: 'France',
       }),
     ],
   },
   {
     input: {
       userMessage:
-        "Given the equation 2x + 3 = 7, solve for x. Only respond with the final value of x.",
+        'Given the equation 2x + 3 = 7, solve for x. Only respond with the final value of x.',
     },
     tags: {
-      intent: "math",
+      intent: 'math',
     },
     metrics: [
-      new ContainsMetrics({
-        substring: "2",
+      new ContainsMetric({
+        substring: '2',
       }),
     ],
   },
@@ -63,11 +63,11 @@ const TestCaseDataset: ExperimentTestCaseDataset[] = [
       `,
     },
     tags: {
-      intent: "history",
+      intent: 'history',
     },
     metrics: [
-      new ValidJSONMetrics({
-        responseKey: "message",
+      new ValidJSONMetric({
+        responseKey: 'message',
         schema: z.object({
           title: z.string(),
           lines: z.array(z.string()),

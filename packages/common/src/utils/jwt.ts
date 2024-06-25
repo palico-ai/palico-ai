@@ -1,40 +1,46 @@
-import * as JWT from 'jsonwebtoken'
+import * as JWT from 'jsonwebtoken';
 
 export type JWTPayload = {
-  role: "admin" | "user" | "studio",
-}
+  role: 'admin' | 'apikey' | 'studio';
+};
 
 export class JWTAuthenticator {
-  static async generateAPIJWT (payload: JWTPayload, secret: string): Promise<string> {
+  static async generateAPIJWT(
+    payload: JWTPayload,
+    secret: string
+  ): Promise<string> {
     return await new Promise((resolve, reject) => {
       JWT.sign(
         {
-          ...payload
+          ...payload,
         },
         secret,
         {},
         (err, token) => {
           if (err ?? !token) {
-            reject(err)
+            reject(err);
           } else {
-            resolve(token)
+            resolve(token);
           }
         }
-      )
-    })
+      );
+    });
   }
 
-  static async decodeJWTToken<JWTPayload> (token: string, secret: string): Promise<JWTPayload> {
-    const tokenPart = token.includes(' ') ? token.split(' ')[1] : token
+  static async decodeJWTToken<JWTPayload>(
+    token: string,
+    secret: string
+  ): Promise<JWTPayload> {
+    const tokenPart = token.includes(' ') ? token.split(' ')[1] : token;
     return await new Promise((resolve, reject) => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       JWT.verify(tokenPart, secret, (err, decoded: any) => {
         if (err) {
-          reject(err)
+          reject(err);
         } else {
-          resolve(decoded)
+          resolve(decoded);
         }
-      })
-    })
+      });
+    });
   }
 }

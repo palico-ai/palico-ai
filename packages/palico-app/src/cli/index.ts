@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 
 import { Command } from 'commander';
-import { GenerateJWTToken } from './generate_token';
-import ExpCommand from './exp';
+import { GenerateJWTToken } from './generate/generate_token';
 import UpdateCommand from './update';
-import { StartPalicoApp } from './__root__/start';
+import { BootstrapProject, ShowStatus, StartPalicoApp } from './__root__';
+import GenerateCommand from './generate';
 
 const root = new Command();
 
@@ -16,11 +16,20 @@ root
 root
   .command('start')
   .description('Starts the Palico App')
-  .option('--no-studio', 'Start the app without the studio')
   .action(StartPalicoApp);
 
-root.addCommand(ExpCommand);
+root
+  .command('bootstrap')
+  .description('Provision all services needed to run Palico App')
+  .action(BootstrapProject);
+
+root
+  .command('show')
+  .description('Show status of the Palico App')
+  .action(ShowStatus);
 
 root.addCommand(UpdateCommand);
+
+root.addCommand(GenerateCommand);
 
 root.parse();

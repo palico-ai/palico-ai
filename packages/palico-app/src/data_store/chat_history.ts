@@ -10,7 +10,7 @@ export interface ChatHistoryFromConversationParams {
   isNewConversation?: boolean;
 }
 
-export class ChatHistoryStorage<MessageSchema> {
+export class ChatHistoryStore<MessageSchema> {
   readonly conversationId: string;
 
   private _messages: MessageSchema[];
@@ -47,12 +47,12 @@ export class ChatHistoryStorage<MessageSchema> {
 
   private static async createAsNew<MessageSchema>(
     conversationId: string
-  ): Promise<ChatHistoryStorage<MessageSchema>> {
+  ): Promise<ChatHistoryStore<MessageSchema>> {
     await SimpleChatHistoryTable.create({
       conversationId: conversationId,
       messagesJSON: JSON.stringify([]),
     });
-    return new ChatHistoryStorage({
+    return new ChatHistoryStore({
       conversationId,
       messages: [],
     });
@@ -60,10 +60,10 @@ export class ChatHistoryStorage<MessageSchema> {
 
   static async fromConversation<MessageSchema>(
     params: ChatHistoryFromConversationParams
-  ): Promise<ChatHistoryStorage<MessageSchema>> {
+  ): Promise<ChatHistoryStore<MessageSchema>> {
     const { conversationId, isNewConversation } = params;
     if (isNewConversation) {
-      const history = await ChatHistoryStorage.createAsNew<MessageSchema>(
+      const history = await ChatHistoryStore.createAsNew<MessageSchema>(
         conversationId
       );
       return history;
@@ -72,12 +72,12 @@ export class ChatHistoryStorage<MessageSchema> {
       conversationId
     );
     if (!currentHistory) {
-      const history = await ChatHistoryStorage.createAsNew<MessageSchema>(
+      const history = await ChatHistoryStore.createAsNew<MessageSchema>(
         conversationId
       );
       return history;
     }
-    return new ChatHistoryStorage({
+    return new ChatHistoryStore({
       conversationId,
       messages: JSON.parse(currentHistory.dataValues.messagesJSON),
     });

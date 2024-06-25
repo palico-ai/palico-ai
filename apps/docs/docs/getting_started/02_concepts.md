@@ -10,8 +10,8 @@ Palico App expects a specific project structure to be able to run your applicati
 │   ├── agents
 │   │   └── <agent-name>
 │   │       └── index.ts
-│   ├── testcases
-│   │   └── <testcase-name>
+│   ├── eval_tests
+│   │   └── <test-suite-name>
 │   │       └── index.ts
 │   │── workflows
 │   │   └── <workflow-name>
@@ -22,7 +22,7 @@ Palico App expects a specific project structure to be able to run your applicati
 ```
 
 - **`/agents`**: This directory contains all the agents that you have created. To create a new agent, just create a new directory with the agent's name and add an `index.ts` file in it
-- **`/testcases`**: This directory contains different testsuites that you want to use for experiments. To create a new testsuite, just create a new directory with the testsuite's name and add an `index.ts` file in it
+- **`/eval_tests`**: This directory contains different testsuites that you want to use for experiments. To create a new testsuite, just create a new directory with the testsuite's name and add an `index.ts` file in it
 - **`/workflows`**: This directory contains different workflows that you want to use for experiments. To create a new workflow, just create a new directory with the workflow's name and add an `index.ts` file in it
 - **`instrumentation.ts`**: This file configurations for tracing and logging. You can just leave it as is for now.
 - **`main.ts`**: This file is the entry point of your application. You can just leave it as is for now.

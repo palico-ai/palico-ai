@@ -1,6 +1,6 @@
 # Chat History Store
 
-For conversational applications like chatbots, you need to often store conversation states in a database. Palico provides a conversation store out-of-the-box for you to easily store and retrieve conversation states. You can view the API Reference [here](https://palico-ai.github.io/palico-main/classes/ChatHistoryStorage.html)
+For conversational applications like chatbots, you need to often store conversation states in a database. Palico provides a conversation store out-of-the-box for you to easily store and retrieve conversation states. You can view the API Reference [here](https://palico-ai.github.io/palico-main/classes/ChatHistoryStore.html)
 
 ## Getting a Conversation State
 
@@ -11,7 +11,7 @@ import { ChatCompletionMessageParam } from 'openai/resources/chat/completions';
 
 const handleNewConversation = async () => {
   const historyDB =
-    await ChatHistoryStorage.fromConversation<ChatCompletionMessageParam>({
+    await ChatHistoryStore.fromConversation<ChatCompletionMessageParam>({
       conversationId,
       newConversation: true,
     });
