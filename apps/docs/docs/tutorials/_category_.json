@@ -1,5 +1,9 @@
 {
   "label": "Tutorial",
   "position": 2,
-  "collapsed": true
+  "collapsed": true,
+  "link": {
+    "type": "doc",
+    "id": "intro"
+  }
 }
