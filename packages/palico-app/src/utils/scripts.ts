@@ -8,7 +8,7 @@ interface ApplyDBMigraitonParams {
 }
 
 export const ApplyDBMigraiton = async (params?: ApplyDBMigraitonParams) => {
-  const nodeModulesDir = await Project.getPalicoAppNodeModulesDir();
+  const nodeModulesDir = await Project.getPackageNodeModulesDir();
   const schemaPath = `${nodeModulesDir}/prisma/schema.prisma`;
   let command = `npx prisma migrate deploy --schema ${schemaPath}`;
   if (params?.DB_URL) {
@@ -27,7 +27,7 @@ export const getServiceKey = async () => {
     );
   }
   const token = await JWTAuthenticator.generateAPIJWT(
-    { role: 'admin' },
+    { role: 'apikey' },
     secret
   );
   return token;

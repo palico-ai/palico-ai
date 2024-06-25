@@ -47,7 +47,7 @@ export default class Project {
     return `${root}/src/agents`;
   }
 
-  static async getPalicoAppNodeModulesDir(): Promise<string> {
+  static async getPackageNodeModulesDir(): Promise<string> {
     const root = await this.getWorkspaceRootDir();
     return `${root}/node_modules/@palico-ai/app`;
   }
