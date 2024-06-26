@@ -4,7 +4,7 @@ RUN apt-get update
 RUN apt-get install -y build-essential python3
 WORKDIR /main
 COPY package.json package-lock.json ./
-RUN npm ci
+RUN npm install
 
 FROM base AS builder
 WORKDIR /main
