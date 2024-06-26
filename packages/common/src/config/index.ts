@@ -1,8 +1,12 @@
+import dotenv from 'dotenv';
+
+dotenv.config();
+
 class CommonConfig {
-  getSecretKey (): string {
-    const secret = process.env['JWT_SECRET'] ?? "local-secret"
-    return secret
+  getSecretKey(): string {
+    const secret = process.env['JWT_SECRET'] ?? 'local-secret';
+    return secret;
   }
 }
 
-export const commonConfig = new CommonConfig()
+export const commonConfig = new CommonConfig();

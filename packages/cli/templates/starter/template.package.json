@@ -8,6 +8,7 @@
   "scripts": {
     "palico": "palico-app",
     "start": "palico-app start",
+    "bootstrap": "palico-app bootstrap",
     "reinstall": "npm remove @palico-ai/app && npm install @palico-ai/app"
   },
   "nodemonConfig": {

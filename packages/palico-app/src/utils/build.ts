@@ -35,7 +35,7 @@ export class ProjectBuild {
   }
 
   static async createDockerCompose() {
-    const secretKey = await getServiceKey();
+    const serviceKey = await getServiceKey();
     const apiPort = config.getAPIPort();
     const { composeFilePath } = await ProjectBuild.getDockerComposePath();
     const composeDef = {
@@ -81,7 +81,7 @@ export class ProjectBuild {
           ports: ['5173:3000'],
           environment: [
             `PALICO_AGENT_API_URL=http://host.docker.internal:${apiPort}`,
-            `PALICO_SERVICE_KEY=${secretKey}`,
+            `PALICO_SERVICE_KEY=${serviceKey}`,
           ],
         },
       },
