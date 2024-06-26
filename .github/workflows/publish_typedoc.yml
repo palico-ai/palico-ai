@@ -3,7 +3,7 @@ name: Publish API TypeDoc
 on:
   push:
     tags:
-      - v*.*.*
+      - npm-v*.*.*
   workflow_dispatch:
 
 permissions:
