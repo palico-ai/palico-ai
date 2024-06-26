@@ -34,7 +34,7 @@ jobs:
         shell: bash
 
       - name: Build packages
-        run: npx nx run-many -t build
+        run: npx nx run-many -t build -p palico-app -p common -p client-js -p cli
         shell: bash
         env:
           PALICO_AGENT_API_URL: 'http://localhost:8000'
