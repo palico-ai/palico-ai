@@ -92,8 +92,8 @@ const TestListTableHeader: React.FC<TestListTableHeaderProps> = ({
         required: true,
       },
       {
-        name: 'featureFlags',
-        label: 'Feature Flags',
+        name: 'appConfig',
+        label: 'App Config',
         initialValue: '{}',
         type: 'code',
         required: true,
@@ -110,7 +110,7 @@ const TestListTableHeader: React.FC<TestListTableHeaderProps> = ({
       experimentName,
       evalName: data.name as string,
       description: data.description as string,
-      featureFlags: JSON.parse(data.featureFlags as string),
+      appConfig: JSON.parse(data.appConfig as string),
       testSuiteName: data.testSuiteName as string,
       ...((data.executor as string).startsWith('agent')
         ? { agentName: (data.executor as string).split(':')[1] }

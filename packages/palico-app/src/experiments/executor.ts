@@ -8,6 +8,7 @@ import {
   EvalJobStatus,
   EvalResult,
   EvalMetricOutput,
+  AppConfig,
 } from '@palico-ai/common';
 import { Application } from '../app';
 import JobQueue from '../services/job_queue';
@@ -15,7 +16,7 @@ import ExperimentModel from './model';
 
 interface RunTestCaseParams {
   testCase: EvalTestCase;
-  featureFlags?: Record<string, unknown>;
+  appConfig?: AppConfig;
   agentName?: string;
   workflowName?: string;
 }
@@ -50,7 +51,7 @@ export class ExperimentExecutor {
             testCase,
             agentName: test.agentName,
             workflowName: test.workflowName,
-            featureFlags: test.featureFlags,
+            appConfig: test.appConfig,
           })
         )
       );
@@ -79,19 +80,19 @@ export class ExperimentExecutor {
   private static runTestCase = async (
     params: RunTestCaseParams
   ): Promise<EvalResult> => {
-    const { testCase, agentName, workflowName, featureFlags } = params;
+    const { testCase, agentName, workflowName, appConfig } = params;
     let response: ConversationResponse;
     if (agentName) {
       response = await Application.chat({
         agentName,
         content: testCase.input,
-        featureFlags,
+        appConfig,
       });
     } else if (workflowName) {
       response = await Application.executeWorkflow({
         workflowName,
         content: testCase.input,
-        featureFlags,
+        appConfig,
       });
     } else {
       throw new Error('Either agentName or workflowName is required');

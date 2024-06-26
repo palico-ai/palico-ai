@@ -5,7 +5,6 @@ import {
   getAllExperimentsRouteHandler,
   getAllEvalForExperimentHandler,
   getExperimentByNameHandler,
-  getJobStatusHandler,
   getEvalByNameHandler,
   getEvalStatusHandler,
   removeExperimentHandler,
@@ -16,8 +15,6 @@ const router = Router();
 router.route('/health').get(async (_, res) => {
   res.status(200).json({ message: 'OK' });
 });
-
-router.route('/job/:jobId/status').get(getJobStatusHandler);
 
 router
   .route('/experiments')

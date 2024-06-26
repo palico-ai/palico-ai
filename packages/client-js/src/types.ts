@@ -1,4 +1,5 @@
 import {
+  AppConfig,
   ConversationRequestContent,
   ConversationResponse,
 } from '@palico-ai/common';
@@ -25,13 +26,13 @@ export interface ReplyToToolCallParams {
 
 export interface NewConversationParamsCommon
   extends ConversationRequestContent {
-  featureFlags?: Record<string, unknown>;
+  appConfig?: AppConfig;
 }
 
 export interface ReplyToConversationParamsCommon
   extends ConversationRequestContent {
   conversationId: string;
-  featureFlags?: Record<string, unknown>;
+  appConfig?: AppConfig;
 }
 
 export interface ClientNewConversationParams

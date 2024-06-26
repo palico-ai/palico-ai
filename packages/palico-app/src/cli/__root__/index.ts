@@ -3,6 +3,7 @@ import { ProjectBuild } from '../../utils/build';
 import Project from '../../utils/project';
 import path from 'path';
 import chalk from 'chalk';
+import { wait } from '@palico-ai/common';
 
 interface BootstrapJSON {
   updatedAt: string;
@@ -27,8 +28,13 @@ const projectNeedsBootstrap = async () => {
 };
 
 export const BootstrapProject = async () => {
+  console.log("Stopping project's containers...");
+  await ProjectBuild.stopDockerCompose();
+  await wait(2000);
   console.log('Creating Containers...');
   await ProjectBuild.createDockerCompose();
+  console.log("Building project's containers...");
+  await ProjectBuild.buildDockerImages();
   console.log('Applying migrations...');
   await ProjectBuild.applyDBMigrations();
   await markBootstrapCompleted();

@@ -1,10 +1,10 @@
-import { ConversationRequestContent, ConversationResponse } from ".";
+import { ConversationRequestContent, ConversationResponse } from '.';
 
 export interface LabExperimentModel {
   id: string;
   agentId: string;
   label: string;
-  featureFlagJSON?: string;
+  appConfigJSON?: string;
 }
 
 export interface LabTestCaseModel {

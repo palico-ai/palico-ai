@@ -90,6 +90,13 @@ export class ProjectBuild {
     await OS.createFile(composeFilePath, data);
   }
 
+  static async buildDockerImages() {
+    const { composeFilePath } = await ProjectBuild.getDockerComposePath();
+    execSync(`docker-compose -f ${composeFilePath} build --no-cache`, {
+      stdio: 'inherit',
+    });
+  }
+
   static async startDockerCompose(
     params?: ProjectBuildStartDockerComposeParams
   ) {

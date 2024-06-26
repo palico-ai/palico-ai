@@ -1,49 +1,61 @@
 'use server';
 
 import {
-  CreateQuickLabParams,
+  CreateLabAPIRequestBody,
+  CreateLabAPIResponse,
+  DeleteLabAPIResponse,
+  GetLabByIdAPIResponse,
+  GetLabListAPIResponse,
   QuickLab,
-  UpdateStudioLabParams,
+  UpdateLabAPIRequestBody,
+  UpdateLabAPIResponse,
 } from '@palico-ai/common';
 import { verifySession } from './auth';
 import { palicoFetch } from './palico';
 
 export const getAllLabViews = async () => {
   await verifySession();
-  return await palicoFetch('/studio/lab', {
+  const response = await palicoFetch<GetLabListAPIResponse>('/studio/lab', {
     method: 'GET',
   });
+  return response.labs;
 };
 
 export const getLabView = async (id: string): Promise<QuickLab> => {
   await verifySession();
-  return await palicoFetch(`/studio/lab/${id}`, {
+  return await palicoFetch<GetLabByIdAPIResponse>(`/studio/lab/${id}`, {
     method: 'GET',
   });
 };
 
-export const createLabView = async (params: CreateQuickLabParams) => {
+export const createLabView = async (params: CreateLabAPIRequestBody) => {
   await verifySession();
-  return await palicoFetch('/studio/lab', {
-    method: 'POST',
-    body: JSON.stringify(params),
-  });
+  return await palicoFetch<CreateLabAPIResponse, CreateLabAPIRequestBody>(
+    '/studio/lab',
+    {
+      method: 'POST',
+      body: params,
+    }
+  );
 };
 
 export const updateLabView = async (
   id: string,
-  params: UpdateStudioLabParams
+  params: UpdateLabAPIRequestBody
 ) => {
   await verifySession();
-  return await palicoFetch(`/studio/lab/${id}`, {
-    method: 'PATCH',
-    body: JSON.stringify(params),
-  });
+  return await palicoFetch<UpdateLabAPIResponse, UpdateLabAPIRequestBody>(
+    `/studio/lab/${id}`,
+    {
+      method: 'PATCH',
+      body: params,
+    }
+  );
 };
 
 export const deleteLabView = async (id: string) => {
   await verifySession();
-  return await palicoFetch(`/studio/lab/${id}`, {
+  return await palicoFetch<DeleteLabAPIResponse>(`/studio/lab/${id}`, {
     method: 'DELETE',
   });
 };

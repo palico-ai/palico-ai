@@ -1,11 +1,11 @@
-import { ConversationContext, ConversationRequestContent, ConversationResponse } from ".";
+import { AppConfig, ConversationRequestContent, ConversationResponse } from '.';
 
 export interface ConversationRequestTraceItem {
   requestId: string;
   conversationId: string;
   requestInput: ConversationRequestContent;
   responseOutput: ConversationResponse;
-  featureFlag: ConversationContext['featureFlags']
+  appConfig: AppConfig;
   traceId: string;
   tracePreviewUrl?: string;
   createdAt: string;
@@ -21,4 +21,7 @@ export interface ConversationTraces {
   updatedAt: string;
 }
 
-export type ConversationTracesWithoutRequests = Omit<ConversationTraces, 'requests'>;
+export type ConversationTracesWithoutRequests = Omit<
+  ConversationTraces,
+  'requests'
+>;

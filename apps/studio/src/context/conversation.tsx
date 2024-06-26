@@ -1,6 +1,7 @@
 'use client';
 
 import {
+  AppConfig,
   ConversationContext as ConversationContextType,
   ConversationRequestContent,
   ConversationResponse,
@@ -17,7 +18,7 @@ export type ConversationContextParams = {
   setConversationalEntity: (entity: ConversationalEntity) => void;
   sendMessage: (
     content: ConversationRequestContent,
-    featureFlag: ConversationContextType['featureFlags']
+    appConfig: AppConfig
   ) => Promise<void>;
 };
 
@@ -60,7 +61,7 @@ export const ConversationContextProvider: React.FC<
 
   const sendMessage = async (
     content: ConversationRequestContent,
-    featureFlag: ConversationContextType['featureFlags']
+    appConfig: AppConfig
   ): Promise<void> => {
     // TODO: This this as an input
     if (!conversationEntity) {
@@ -81,13 +82,13 @@ export const ConversationContextProvider: React.FC<
           conversationId,
           userMessage: content.userMessage,
           payload: content.payload,
-          featureFlags: featureFlag,
+          appConfig: appConfig,
         });
       } else {
         response = await newConversation(conversationEntity, {
           userMessage: content.userMessage,
           payload: content.payload,
-          featureFlags: featureFlag,
+          appConfig: appConfig,
         });
         setConversationId(response.conversationId);
       }

@@ -1,13 +1,17 @@
 import { RequestHandler } from 'express';
 import ExperimentModel from '../../../experiments/model';
-import JobQueue from '../../../services/job_queue';
 import { ExperimentExecutor } from '../../../experiments/executor';
 import { APIError } from '../../error';
 import {
-  CreateEvalJobResponse,
-  CreateEvaluationParams,
-  CreateExperimentParams,
-  ExperimentMetadata,
+  CreateEvalAPIRequestBody,
+  CreateEvalAPIResponse,
+  GetAllEvalsAPIResponse,
+  GetAllExperimentsAPIResponse,
+  GetEvalStatusAPIResponse,
+  GetExperimentByNameAPIResponse,
+  MessageAPIResponse,
+  NewExperimentAPIRequestBody,
+  NewExperimentAPIResponse,
 } from '@palico-ai/common';
 
 type ExperimentRouteParams = {
@@ -18,14 +22,10 @@ type EvalRouteParams = ExperimentRouteParams & {
   evalName: string;
 };
 
-type JobRouteParams = {
-  jobId: string;
-};
-
 export const newExperimentRouteHandler: RequestHandler<
   unknown,
-  ExperimentMetadata,
-  CreateExperimentParams
+  NewExperimentAPIRequestBody,
+  NewExperimentAPIResponse
 > = async (req, res, next) => {
   try {
     const { name } = req.body;
@@ -36,11 +36,10 @@ export const newExperimentRouteHandler: RequestHandler<
   }
 };
 
-export const getAllExperimentsRouteHandler: RequestHandler = async (
-  _,
-  res,
-  next
-) => {
+export const getAllExperimentsRouteHandler: RequestHandler<
+  never,
+  GetAllExperimentsAPIResponse
+> = async (_, res, next) => {
   try {
     const experiments = await ExperimentModel.getAllExperiments();
     return res.status(200).json({ experiments });
@@ -51,15 +50,15 @@ export const getAllExperimentsRouteHandler: RequestHandler = async (
 
 export const createEvalForExperimentHandler: RequestHandler<
   ExperimentRouteParams,
-  CreateEvalJobResponse,
-  CreateEvaluationParams
+  CreateEvalAPIResponse,
+  CreateEvalAPIRequestBody
 > = async (req, res, next) => {
   try {
     const { expName } = req.params;
     const {
       evalName,
       description,
-      featureFlags,
+      appConfig,
       agentName,
       workflowName,
       testSuiteName,
@@ -68,7 +67,7 @@ export const createEvalForExperimentHandler: RequestHandler<
       experimentName: expName,
       evalName,
       description,
-      featureFlags,
+      appConfig,
       agentName,
       workflowName,
       testSuiteName,
@@ -80,7 +79,8 @@ export const createEvalForExperimentHandler: RequestHandler<
 };
 
 export const getExperimentByNameHandler: RequestHandler<
-  ExperimentRouteParams
+  ExperimentRouteParams,
+  GetExperimentByNameAPIResponse
 > = async (req, res, next) => {
   try {
     const { expName } = req.params;
@@ -91,29 +91,14 @@ export const getExperimentByNameHandler: RequestHandler<
   }
 };
 
-export const getJobStatusHandler: RequestHandler<JobRouteParams> = async (
-  req,
-  res,
-  next
-) => {
-  try {
-    const { jobId } = req.params;
-    const job = await JobQueue.boss().getJobById(jobId);
-    return res.status(200).json({ jobStatus: job?.state });
-  } catch (error) {
-    return next(error);
-  }
-};
-
-export const getAllEvalForExperimentHandler: RequestHandler = async (
-  req,
-  res,
-  next
-) => {
+export const getAllEvalForExperimentHandler: RequestHandler<
+  ExperimentRouteParams,
+  GetAllEvalsAPIResponse
+> = async (req, res, next) => {
   try {
     const { expName } = req.params;
     const tests = await ExperimentModel.getEvalsInExperiment(expName);
-    return res.status(200).json({ tests });
+    return res.status(200).json({ evals: tests });
   } catch (error) {
     return next(error);
   }
@@ -133,11 +118,10 @@ export const getEvalByNameHandler: RequestHandler<EvalRouteParams> = async (
   }
 };
 
-export const getEvalStatusHandler: RequestHandler<EvalRouteParams> = async (
-  req,
-  res,
-  next
-) => {
+export const getEvalStatusHandler: RequestHandler<
+  EvalRouteParams,
+  GetEvalStatusAPIResponse
+> = async (req, res, next) => {
   try {
     const { evalName, expName } = req.params;
     const test = await ExperimentModel.findEval(expName, evalName);
@@ -150,11 +134,10 @@ export const getEvalStatusHandler: RequestHandler<EvalRouteParams> = async (
   }
 };
 
-export const removeExperimentHandler: RequestHandler = async (
-  req,
-  res,
-  next
-) => {
+export const removeExperimentHandler: RequestHandler<
+  ExperimentRouteParams,
+  MessageAPIResponse
+> = async (req, res, next) => {
   try {
     const { expName } = req.params;
     await ExperimentModel.removeExperiment(expName);

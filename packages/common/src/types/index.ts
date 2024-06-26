@@ -12,6 +12,8 @@ export interface ConversationRequestContent<Payload = Record<string, any>> {
   payload?: Payload;
 }
 
+export type AppConfig = Record<string, unknown>;
+
 export interface ConversationContext {
   conversationId: string;
   requestId: string;
@@ -19,8 +21,7 @@ export interface ConversationContext {
   otel: {
     traceId: string;
   };
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  featureFlags: Record<string, any>;
+  appConfig: AppConfig;
 }
 
 export * from './studio';

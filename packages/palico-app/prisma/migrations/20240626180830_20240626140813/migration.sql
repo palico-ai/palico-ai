@@ -4,7 +4,7 @@ CREATE TABLE "conversation_request_tracings" (
     "conversationId" VARCHAR(255),
     "requestInput" JSONB,
     "responseOutput" JSONB,
-    "featureFlag" JSONB,
+    "appConfig" JSONB,
     "traceId" VARCHAR(255),
     "tracePreviewUrl" VARCHAR(255),
     "createdAt" TIMESTAMPTZ(6) NOT NULL,
