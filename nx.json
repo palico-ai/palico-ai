@@ -10,13 +10,12 @@
     "libsDir": "packages"
   },
   "release": {
+    "releaseTagPattern": "npm:v${version}",
     "projects": [
       "packages/client-js",
       "packages/palico-app",
-      "packages/react-client",
       "packages/cli",
-      "packages/common",
-      "packages/lexical"
+      "packages/common"
     ],
     "changelog": {
       "workspaceChangelog": {
