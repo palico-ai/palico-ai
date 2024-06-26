@@ -6,7 +6,7 @@ import {
 } from '@palico-ai/app';
 import { OpenAIService } from '../../utils/openai';
 
-export interface FeatureFlag {
+export interface AppConfig {
   model?: 'gpt35' | 'gpt35-turbo' | 'gpt4' | 'gpt4o';
 }
 
@@ -19,8 +19,8 @@ class ChatbotAgent implements Agent {
   ): Promise<AgentResponse> {
     const { userMessage } = content;
     if (!userMessage) throw new Error('User message is required');
-    const { conversationId, featureFlags, isNewConversation } = context;
-    const { model } = featureFlags as FeatureFlag;
+    const { conversationId, appConfig, isNewConversation } = context;
+    const { model } = appConfig as AppConfig;
     if (isNewConversation) {
       const response = await OpenAIService.newConversation({
         conversationId,

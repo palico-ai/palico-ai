@@ -1,4 +1,9 @@
-import { ConversationRequestTraceItem, ConversationTraces, ConversationTracesWithoutRequests } from "./telemetry";
+import { AppConfig, ConversationRequestContent, ConversationResponse } from '.';
+import {
+  ConversationRequestTraceItem,
+  ConversationTraces,
+  ConversationTracesWithoutRequests,
+} from './telemetry';
 
 export interface MetadataListItemCommon {
   name: string;
@@ -31,6 +36,25 @@ export interface GetRecentConversationResponse {
 export interface GetTraceForRequestIdResponse {
   request: ConversationRequestTraceItem;
 }
+
+// ======== Route: /agent ========
+export interface AgentConversationRequestBody {
+  appConfig?: AppConfig;
+  content: ConversationRequestContent;
+}
+
+export type AgentConversationRequestResponse = ConversationResponse;
+
+// ======== Route: /workflow ========
+
+export interface WorkflowConverationRequestBody {
+  appConfig?: AppConfig;
+  content: ConversationRequestContent;
+}
+
+export type WorkflowRequestResponse = ConversationResponse;
+
+// Common
 
 export interface PaginationParams {
   limit: number;

@@ -1,4 +1,4 @@
-import { ConversationRequestContent, ConversationResponse } from '.';
+import { AppConfig, ConversationRequestContent, ConversationResponse } from '.';
 
 export interface CreateExperimentParams {
   name: string;
@@ -56,7 +56,7 @@ export interface EvalJSON {
   };
   jobId?: string;
   description?: string;
-  featureFlags?: Record<string, unknown>;
+  appConfig?: AppConfig;
   agentName?: string;
   workflowName?: string;
   testSuiteName: string;

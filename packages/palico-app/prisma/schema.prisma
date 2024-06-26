@@ -12,7 +12,7 @@ model conversation_request_tracings {
   conversationId        String?                @db.VarChar(255)
   requestInput          Json?
   responseOutput        Json?
-  featureFlag           Json?
+  appConfig             Json?
   traceId               String?                @db.VarChar(255)
   tracePreviewUrl       String?                @db.VarChar(255)
   createdAt             DateTime               @db.Timestamptz(6)

@@ -12,7 +12,7 @@ export interface AgentExecutorChatParams {
   agentName: string;
   content: ConversationRequestContent;
   conversationId?: string; // For grouping a conversation
-  featureFlags?: Record<string, unknown>;
+  appConfig?: Record<string, unknown>;
   traceId?: string;
 }
 
@@ -30,7 +30,7 @@ export default class AgentExecutor {
             agentName: params.agentName,
             content: JSON.stringify(params.content, null, 2),
             conversationId: params.conversationId,
-            featureFlags: JSON.stringify(params.featureFlags, null, 2),
+            appConfig: JSON.stringify(params.appConfig, null, 2),
             traceId: params.traceId,
           });
           const conversationId = params.conversationId || uuid();
@@ -41,7 +41,7 @@ export default class AgentExecutor {
             conversationId,
             isNewConversation: params.conversationId === undefined,
             requestId,
-            featureFlags: params.featureFlags ?? {},
+            appConfig: params.appConfig ?? {},
             otel: {
               traceId,
             },
@@ -56,7 +56,7 @@ export default class AgentExecutor {
             conversationId,
             requestId,
             traceId,
-            featureFlag: params.featureFlags,
+            appConfig: params.appConfig,
             agentName: params.agentName,
             requestInput: params.content,
             responseOutput: output,

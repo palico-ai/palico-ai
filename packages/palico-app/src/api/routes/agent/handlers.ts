@@ -2,20 +2,33 @@ import { trace } from '@opentelemetry/api';
 import { RequestHandler } from 'express';
 import { recordRequestErrorSpan } from '../../../utils/api';
 import { Application } from '../../../app/app';
-import { ConversationResponse } from '@palico-ai/common';
+import {
+  AgentConversationRequestBody,
+  AgentConversationRequestResponse,
+  ConversationResponse,
+} from '@palico-ai/common';
 
 const tracer = trace.getTracer('agent-route-handler');
 
-export const newConversationRequestHandler: RequestHandler = async (
-  req,
-  res,
-  next
-) => {
+interface AgentConversationRouteParams {
+  agentName: string;
+}
+
+interface AgentContinueConversationRouteParams
+  extends AgentConversationRouteParams {
+  conversationId: string;
+}
+
+export const newConversationRequestHandler: RequestHandler<
+  AgentConversationRouteParams,
+  AgentConversationRequestResponse,
+  AgentConversationRequestBody
+> = async (req, res, next) => {
   return await tracer.startActiveSpan(
     '(POST) /agent/:agentId/conversation',
     async (requestSpan) => {
       const { agentName } = req.params;
-      const { content, featureFlags } = req.body;
+      const { content, appConfig } = req.body;
       requestSpan.setAttributes({
         agentName,
         body: JSON.stringify(req.body, null, 2),
@@ -24,7 +37,7 @@ export const newConversationRequestHandler: RequestHandler = async (
         const agentResponse = await Application.chat({
           agentName,
           content,
-          featureFlags,
+          appConfig,
           traceId: requestSpan.spanContext().traceId,
         });
         return res.status(200).json(agentResponse);
@@ -38,17 +51,17 @@ export const newConversationRequestHandler: RequestHandler = async (
   );
 };
 
-export const replyToConversationRequestHandler: RequestHandler = async (
-  req,
-  res,
-  next
-) => {
+export const replyToConversationRequestHandler: RequestHandler<
+  AgentContinueConversationRouteParams,
+  AgentConversationRequestResponse,
+  AgentConversationRequestBody
+> = async (req, res, next) => {
   return await tracer.startActiveSpan(
     '(POST) /agent/:agentId/conversation',
     async (requestSpan) => {
       try {
         const { conversationId, agentName } = req.params;
-        const { content, featureFlags } = req.body;
+        const { content, appConfig } = req.body;
         requestSpan.setAttributes({
           agentName,
           conversationId,
@@ -59,7 +72,7 @@ export const replyToConversationRequestHandler: RequestHandler = async (
           conversationId,
           agentName,
           content,
-          featureFlags,
+          appConfig,
           traceId: requestSpan.spanContext().traceId,
         });
         const responseJSON: ConversationResponse = {

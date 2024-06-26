@@ -59,7 +59,7 @@ export const createEvalForExperimentHandler: RequestHandler<
     const {
       evalName,
       description,
-      featureFlags,
+      appConfig,
       agentName,
       workflowName,
       testSuiteName,
@@ -68,7 +68,7 @@ export const createEvalForExperimentHandler: RequestHandler<
       experimentName: expName,
       evalName,
       description,
-      featureFlags,
+      appConfig,
       agentName,
       workflowName,
       testSuiteName,

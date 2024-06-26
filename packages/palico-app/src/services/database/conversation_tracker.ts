@@ -1,5 +1,5 @@
 import {
-  ConversationContext,
+  AppConfig,
   ConversationRequestContent,
   ConversationRequestTraceItem,
   ConversationResponse,
@@ -21,7 +21,7 @@ export interface LogRequestParams {
   requestId: string;
   requestInput: ConversationRequestContent;
   responseOutput: ConversationResponse;
-  featureFlag?: ConversationContext['featureFlags'];
+  appConfig?: AppConfig;
   traceId: string;
   tracePreviewUrl?: string;
 }
@@ -49,9 +49,7 @@ export class ConversationTracker {
       conversationId: request.conversationId,
       requestInput: JSON.stringify(request.requestInput),
       responseOutput: JSON.stringify(request.responseOutput),
-      featureFlag: request.featureFlag
-        ? JSON.stringify(request.featureFlag)
-        : '{}',
+      appConfig: request.appConfig ? JSON.stringify(request.appConfig) : '{}',
       traceId: request.traceId,
       tracePreviewUrl,
     });
@@ -122,7 +120,7 @@ export class ConversationTracker {
       ...request,
       requestInput: JSON.parse(request.requestInput),
       responseOutput: JSON.parse(request.responseOutput),
-      featureFlag: JSON.parse(request.featureFlag ?? '{}'),
+      appConfig: JSON.parse(request.appConfig || '{}'),
     };
   }
 }

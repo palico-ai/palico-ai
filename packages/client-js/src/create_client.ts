@@ -6,7 +6,13 @@ import {
   PalicoAgentClient,
   PalicoWorkflowClient,
 } from './types';
-import { createAgentAPIFetcher } from './request';
+import { createAPIFetcher } from './request';
+import {
+  AgentConversationRequestBody,
+  AgentConversationRequestResponse,
+  WorkflowConverationRequestBody,
+  WorkflowRequestResponse,
+} from '@palico-ai/common';
 
 interface ClientConfig {
   apiURL: string;
@@ -15,35 +21,38 @@ interface ClientConfig {
 
 const createAgentClient = (config: ClientConfig): PalicoAgentClient => {
   const { apiURL, serviceKey } = config;
-  const apiFetch = createAgentAPIFetcher({ rootURL: apiURL, serviceKey });
+  const apiFetch = createAPIFetcher({ rootURL: apiURL, serviceKey });
 
   const newConversation: NewConversationFN = async (params) => {
-    return await apiFetch(`/agent/${params.name}/conversation`, {
+    return await apiFetch<
+      AgentConversationRequestResponse,
+      AgentConversationRequestBody
+    >(`/agent/${params.name}/conversation`, {
       method: 'POST',
-      body: JSON.stringify({
+      body: {
         content: {
           userMessage: params.userMessage,
           payload: params.payload,
         },
-        featureFlags: params.featureFlags,
-      }),
+        appConfig: params.appConfig,
+      },
     });
   };
 
   const replyAsUser: ReplyAsUserFN = async (params) => {
-    return await apiFetch(
-      `/agent/${params.name}/conversation/${params.conversationId}/reply`,
-      {
-        method: 'POST',
-        body: JSON.stringify({
-          content: {
-            userMessage: params.userMessage,
-            payload: params.payload,
-          },
-          featureFlags: params.featureFlags,
-        }),
-      }
-    );
+    return await apiFetch<
+      AgentConversationRequestResponse,
+      AgentConversationRequestBody
+    >(`/agent/${params.name}/conversation/${params.conversationId}/reply`, {
+      method: 'POST',
+      body: {
+        content: {
+          userMessage: params.userMessage,
+          payload: params.payload,
+        },
+        appConfig: params.appConfig,
+      },
+    });
   };
 
   // @deprecated
@@ -79,35 +88,38 @@ const createAgentClient = (config: ClientConfig): PalicoAgentClient => {
 
 const createWorkflowClient = (config: ClientConfig): PalicoWorkflowClient => {
   const { apiURL, serviceKey } = config;
-  const apiFetch = createAgentAPIFetcher({ rootURL: apiURL, serviceKey });
+  const apiFetch = createAPIFetcher({ rootURL: apiURL, serviceKey });
 
   const newConversation: NewConversationFN = async (params) => {
-    return await apiFetch(`/workflow/${params.name}/conversation`, {
+    return await apiFetch<
+      WorkflowRequestResponse,
+      WorkflowConverationRequestBody
+    >(`/workflow/${params.name}/conversation`, {
       method: 'POST',
-      body: JSON.stringify({
+      body: {
         content: {
           userMessage: params.userMessage,
           payload: params.payload,
         },
-        featureFlags: params.featureFlags,
-      }),
+        appConfig: params.appConfig,
+      },
     });
   };
 
   const replyAsUser: ReplyAsUserFN = async (params) => {
-    return await apiFetch(
-      `/workflow/${params.name}/conversation/${params.conversationId}/reply`,
-      {
-        method: 'POST',
-        body: JSON.stringify({
-          content: {
-            userMessage: params.userMessage,
-            payload: params.payload,
-          },
-          featureFlags: params.featureFlags,
-        }),
-      }
-    );
+    return await apiFetch<
+      WorkflowRequestResponse,
+      WorkflowConverationRequestBody
+    >(`/workflow/${params.name}/conversation/${params.conversationId}/reply`, {
+      method: 'POST',
+      body: {
+        content: {
+          userMessage: params.userMessage,
+          payload: params.payload,
+        },
+        appConfig: params.appConfig,
+      },
+    });
   };
 
   return {

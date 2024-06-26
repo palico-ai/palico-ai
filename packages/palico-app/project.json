@@ -36,6 +36,34 @@
         "cwd": "packages/palico-app",
         "command": "typedoc --out ../../dist/typedoc/palico-app --tsconfig tsconfig.lib.json src/index.ts"
       }
+    },
+    "syncdb": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "packages/palico-app",
+        "command": "ts-node scripts/database/sync_db.ts"
+      }
+    },
+    "prisma:apply": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "packages/palico-app",
+        "command": "npx prisma migrate deploy"
+      }
+    },
+    "prisma:pull": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "packages/palico-app",
+        "command": "npx prisma db pull"
+      }
+    },
+    "primsa:save": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "packages/palico-app",
+        "command": "prisma migrate dev --name \"$(date +'%Y%m%d%H%M%S')\""
+      }
     }
   },
   "tags": []

@@ -34,11 +34,11 @@ export type StudioLabCreationAttributes = Optional<
 
 export type ConversationRequestTraceTableSchema = Omit<
   ConversationRequestTraceItem,
-  'requestInput' | 'responseOutput' | 'featureFlag'
+  'requestInput' | 'responseOutput' | 'appConfig'
 > & {
   requestInput: string; // JSON stringified
   responseOutput: string; // JSON stringified
-  featureFlag: string; // JSON stringified
+  appConfig: string; // JSON stringified
 };
 export type CreateConversationRequestTraceParams = Omit<
   ConversationRequestTraceTableSchema,
@@ -73,7 +73,7 @@ export const ConversationRequestTracingTable: ModelDefined<
     responseOutput: {
       type: DataTypes.JSONB,
     },
-    featureFlag: {
+    appConfig: {
       type: DataTypes.JSONB,
     },
     traceId: {

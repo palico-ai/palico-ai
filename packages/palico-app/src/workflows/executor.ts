@@ -1,4 +1,5 @@
 import {
+  AppConfig,
   ConversationContext,
   ConversationRequestContent,
   ConversationResponseSchema,
@@ -14,7 +15,7 @@ export interface RunWorkflowParams {
   workflowName: string;
   content: ConversationRequestContent;
   conversationId?: string;
-  featureFlags?: Record<string, unknown>;
+  appConfig?: AppConfig;
   traceId?: string;
 }
 
@@ -112,7 +113,7 @@ export default class ChainWorkflowExecutor {
           conversationId,
           isNewConversation: params.conversationId === undefined,
           requestId,
-          featureFlags: params.featureFlags ?? {},
+          appConfig: params.appConfig ?? {},
           otel: {
             traceId,
           },
@@ -141,7 +142,7 @@ export default class ChainWorkflowExecutor {
           conversationId,
           requestId,
           traceId,
-          featureFlag: params.featureFlags,
+          appConfig: params.appConfig,
           agentName: params.workflowName,
           requestInput: params.content,
           responseOutput: finalOutput,
