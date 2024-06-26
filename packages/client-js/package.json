@@ -1,6 +1,6 @@
 {
   "name": "@palico-ai/client-js",
-  "version": "1.15.1",
+  "version": "1.16.0",
   "bugs": {
     "url": "https://github.com/palico-ai/palico-main/issues"
   },
@@ -13,7 +13,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@palico-ai/common": "1.15.1"
+    "@palico-ai/common": "1.16.0"
   },
   "type": "commonjs",
   "main": "./src/index.js",

@@ -1,6 +1,6 @@
 {
   "name": "@palico-ai/app",
-  "version": "1.15.1",
+  "version": "1.16.0",
   "main": "./src/index.js",
   "typings": "./src/index.d.ts",
   "bugs": {
@@ -25,7 +25,7 @@
   },
   "dependencies": {
     "@opentelemetry/api": "^1.8.0",
-    "@palico-ai/common": "1.15.1",
+    "@palico-ai/common": "1.16.0",
     "body-parser": "^1.20.2",
     "chalk": "^4.1.2",
     "commander": "^11.1.0",
