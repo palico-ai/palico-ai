@@ -37,3 +37,4 @@ jobs:
         env:
           PALICO_AGENT_API_URL: 'http://localhost:8000'
           PALICO_SERVICE_KEY: 'placeholder'
+      - run: npx nx run typedoc
