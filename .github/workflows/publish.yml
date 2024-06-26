@@ -3,7 +3,7 @@ name: Publish
 on:
   push:
     tags:
-      - npm:v*.*.*
+      - npm-v*.*.*
 
 jobs:
   test:

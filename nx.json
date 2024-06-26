@@ -10,7 +10,7 @@
     "libsDir": "packages"
   },
   "release": {
-    "releaseTagPattern": "npm:v${version}",
+    "releaseTagPattern": "npm-v${version}",
     "projects": [
       "packages/client-js",
       "packages/palico-app",
