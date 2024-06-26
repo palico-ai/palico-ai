@@ -3,8 +3,8 @@ import { RequestHandler } from 'express';
 import { recordRequestErrorSpan } from '../../../utils/api';
 import { Application } from '../../../app/app';
 import {
-  AgentConversationRequestBody,
-  AgentConversationRequestResponse,
+  AgentConversationAPIRequestBody,
+  AgentConversationAPIRequestResponse,
   ConversationResponse,
 } from '@palico-ai/common';
 
@@ -21,8 +21,8 @@ interface AgentContinueConversationRouteParams
 
 export const newConversationRequestHandler: RequestHandler<
   AgentConversationRouteParams,
-  AgentConversationRequestResponse,
-  AgentConversationRequestBody
+  AgentConversationAPIRequestResponse,
+  AgentConversationAPIRequestBody
 > = async (req, res, next) => {
   return await tracer.startActiveSpan(
     '(POST) /agent/:agentId/conversation',
@@ -53,8 +53,8 @@ export const newConversationRequestHandler: RequestHandler<
 
 export const replyToConversationRequestHandler: RequestHandler<
   AgentContinueConversationRouteParams,
-  AgentConversationRequestResponse,
-  AgentConversationRequestBody
+  AgentConversationAPIRequestResponse,
+  AgentConversationAPIRequestBody
 > = async (req, res, next) => {
   return await tracer.startActiveSpan(
     '(POST) /agent/:agentId/conversation',

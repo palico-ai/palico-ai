@@ -1,6 +1,6 @@
-import { useContext, useMemo } from "react";
-import { LabContext } from "./lab.context";
-import { LabExperimentTestResult } from "@palico-ai/common";
+import { useContext, useMemo } from 'react';
+import { LabContext } from './lab.context';
+import { LabExperimentTestResult } from '@palico-ai/common';
 
 export const useTestCase = (testCaseId: string) => {
   const { testCases, setTestCases, runTestCase } = useContext(LabContext);
@@ -15,7 +15,7 @@ export const useTestCase = (testCaseId: string) => {
         tc.id === testCaseId ? { ...tc, label } : tc
       )
     );
-  }
+  };
 
   const handleChangeTestCaseUserMessage = (userMessage: string) => {
     setTestCases((currentTestCases) =>
@@ -23,7 +23,7 @@ export const useTestCase = (testCaseId: string) => {
         tc.id === testCaseId ? { ...tc, userMessage } : tc
       )
     );
-  }
+  };
 
   const handleChangeRequestPayload = (payload?: string) => {
     setTestCases((currentTestCases) =>
@@ -31,13 +31,13 @@ export const useTestCase = (testCaseId: string) => {
         tc.id === testCaseId ? { ...tc, payloadString: payload } : tc
       )
     );
-  }
+  };
 
   const handleRemoveTestCase = () => {
     setTestCases((currentTestCases) =>
       currentTestCases.filter((tc) => tc.id !== testCaseId)
     );
-  }
+  };
 
   const handleChangeMetrics = (metrics: string[]) => {
     setTestCases((currentTestCases) =>
@@ -45,7 +45,7 @@ export const useTestCase = (testCaseId: string) => {
         tc.id === testCaseId ? { ...tc, metrics } : tc
       )
     );
-  }
+  };
 
   return {
     testCase,
@@ -61,7 +61,13 @@ export const useTestCase = (testCaseId: string) => {
 };
 
 export const useExperiment = (experimentId: string) => {
-  const { experiments, baselineExperimentId, setBaselineExperimentId, setExperiments, runExperiment } = useContext(LabContext);
+  const {
+    experiments,
+    baselineExperimentId,
+    setBaselineExperimentId,
+    setExperiments,
+    runExperiment,
+  } = useContext(LabContext);
   const experiment = useMemo(
     () => experiments.find((exp) => exp.id === experimentId),
     [experiments, experimentId]
@@ -73,7 +79,7 @@ export const useExperiment = (experimentId: string) => {
         exp.id === experimentId ? { ...exp, label } : exp
       )
     );
-  }
+  };
 
   const handleChangeExperimentAgent = (agentId: string) => {
     setExperiments((currentExperiments) =>
@@ -81,21 +87,21 @@ export const useExperiment = (experimentId: string) => {
         exp.id === experimentId ? { ...exp, agentId } : exp
       )
     );
-  }
+  };
 
-  const handleChangeExperimentFeatureFlag = (featureFlagJSON?: string) => {
+  const handleChangeExperimentAppConfig = (appConfigJSON?: string) => {
     setExperiments((currentExperiments) =>
       currentExperiments.map((exp) =>
-        exp.id === experimentId ? { ...exp, featureFlagJSON } : exp
+        exp.id === experimentId ? { ...exp, appConfigJSON } : exp
       )
     );
-  }
+  };
 
   const handleRemoveExperiment = () => {
     setExperiments((currentExperiments) =>
       currentExperiments.filter((exp) => exp.id !== experimentId)
     );
-  }
+  };
 
   return {
     experiment,
@@ -103,13 +109,13 @@ export const useExperiment = (experimentId: string) => {
     setBaselineExperimentId,
     handleChangeExperimentLabel,
     handleChangeExperimentAgent,
-    handleChangeExperimentFeatureFlag,
+    handleChangeExperimentAppConfig,
     handleRemoveExperiment,
     runTests: () => {
       runExperiment(experimentId);
     },
   };
-}
+};
 
 export type UseTestResultReturn = {
   result?: LabExperimentTestResult;
@@ -120,9 +126,7 @@ export const useExpTestResult = (
   experimentId: string,
   testCaseId: string
 ): UseTestResultReturn => {
-  const { experimentTestResults, runExperimentTest } = useContext(
-    LabContext
-  );
+  const { experimentTestResults, runExperimentTest } = useContext(LabContext);
   return {
     result: experimentTestResults[experimentId]?.[testCaseId],
     runTest: () => {
@@ -132,10 +136,11 @@ export const useExpTestResult = (
 };
 
 export const useBaselineTestResult = (testCaseId: string) => {
-  const { baselineExperimentId, experimentTestResults } = useContext(LabContext);
-  console.log(baselineExperimentId)
-  if(!baselineExperimentId) {
-    return
+  const { baselineExperimentId, experimentTestResults } =
+    useContext(LabContext);
+  console.log(baselineExperimentId);
+  if (!baselineExperimentId) {
+    return;
   }
-  return experimentTestResults[baselineExperimentId]?.[testCaseId]
-}
+  return experimentTestResults[baselineExperimentId]?.[testCaseId];
+};

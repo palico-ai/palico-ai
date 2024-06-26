@@ -8,10 +8,10 @@ import {
 } from './types';
 import { createAPIFetcher } from './request';
 import {
-  AgentConversationRequestBody,
-  AgentConversationRequestResponse,
-  WorkflowConverationRequestBody,
-  WorkflowRequestResponse,
+  AgentConversationAPIRequestBody,
+  AgentConversationAPIRequestResponse,
+  WorkflowConverationAPIRequestBody,
+  WorkflowRequestAPIResponse,
 } from '@palico-ai/common';
 
 interface ClientConfig {
@@ -25,8 +25,8 @@ const createAgentClient = (config: ClientConfig): PalicoAgentClient => {
 
   const newConversation: NewConversationFN = async (params) => {
     return await apiFetch<
-      AgentConversationRequestResponse,
-      AgentConversationRequestBody
+      AgentConversationAPIRequestResponse,
+      AgentConversationAPIRequestBody
     >(`/agent/${params.name}/conversation`, {
       method: 'POST',
       body: {
@@ -41,8 +41,8 @@ const createAgentClient = (config: ClientConfig): PalicoAgentClient => {
 
   const replyAsUser: ReplyAsUserFN = async (params) => {
     return await apiFetch<
-      AgentConversationRequestResponse,
-      AgentConversationRequestBody
+      AgentConversationAPIRequestResponse,
+      AgentConversationAPIRequestBody
     >(`/agent/${params.name}/conversation/${params.conversationId}/reply`, {
       method: 'POST',
       body: {
@@ -92,8 +92,8 @@ const createWorkflowClient = (config: ClientConfig): PalicoWorkflowClient => {
 
   const newConversation: NewConversationFN = async (params) => {
     return await apiFetch<
-      WorkflowRequestResponse,
-      WorkflowConverationRequestBody
+      WorkflowRequestAPIResponse,
+      WorkflowConverationAPIRequestBody
     >(`/workflow/${params.name}/conversation`, {
       method: 'POST',
       body: {
@@ -108,8 +108,8 @@ const createWorkflowClient = (config: ClientConfig): PalicoWorkflowClient => {
 
   const replyAsUser: ReplyAsUserFN = async (params) => {
     return await apiFetch<
-      WorkflowRequestResponse,
-      WorkflowConverationRequestBody
+      WorkflowRequestAPIResponse,
+      WorkflowConverationAPIRequestBody
     >(`/workflow/${params.name}/conversation/${params.conversationId}/reply`, {
       method: 'POST',
       body: {

@@ -25,7 +25,6 @@
   "dependencies": {
     "@opentelemetry/api": "^1.8.0",
     "@palico-ai/common": "1.17.5",
-    "@prisma/client": "^5.15.0",
     "body-parser": "^1.20.2",
     "chalk": "^4.1.2",
     "commander": "^11.1.0",

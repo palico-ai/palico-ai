@@ -1,4 +1,18 @@
-import { AppConfig, ConversationRequestContent, ConversationResponse } from '.';
+import {
+  AppConfig,
+  ConversationRequestContent,
+  ConversationResponse,
+  CreateEvalJobResponse,
+  CreateEvaluationParams,
+  CreateExperimentParams,
+  CreateQuickLabParams,
+  EvalJobStatus,
+  EvaluationMetadata,
+  ExperimentMetadata,
+  QuickLab,
+  QuickLabContentJSON,
+  QuickLabMetadata,
+} from '.';
 import {
   ConversationRequestTraceItem,
   ConversationTraces,
@@ -38,25 +52,73 @@ export interface GetTraceForRequestIdResponse {
 }
 
 // ======== Route: /agent ========
-export interface AgentConversationRequestBody {
+export interface AgentConversationAPIRequestBody {
   appConfig?: AppConfig;
   content: ConversationRequestContent;
 }
 
-export type AgentConversationRequestResponse = ConversationResponse;
+export type AgentConversationAPIRequestResponse = ConversationResponse;
 
 // ======== Route: /workflow ========
 
-export interface WorkflowConverationRequestBody {
+export interface WorkflowConverationAPIRequestBody {
   appConfig?: AppConfig;
   content: ConversationRequestContent;
 }
 
-export type WorkflowRequestResponse = ConversationResponse;
+export type WorkflowRequestAPIResponse = ConversationResponse;
+// ======== Route: /experiments ========
+
+export type CreateEvalAPIRequestBody = Omit<
+  CreateEvaluationParams,
+  'experimentName'
+>;
+
+export type CreateEvalAPIResponse = CreateEvalJobResponse;
+
+export type NewExperimentAPIRequestBody = CreateExperimentParams;
+
+export type NewExperimentAPIResponse = ExperimentMetadata;
+
+export type GetAllExperimentsAPIResponse = {
+  experiments: ExperimentMetadata[];
+};
+
+export type GetExperimentByNameAPIResponse = ExperimentMetadata;
+
+export type GetAllEvalsAPIResponse = {
+  evals: EvaluationMetadata[];
+};
+
+export type GetEvalStatusAPIResponse = {
+  state: EvalJobStatus;
+  message?: string;
+};
+
+// ======== Route: /lab ========
+export type CreateLabAPIRequestBody = CreateQuickLabParams;
+
+export type CreateLabAPIResponse = QuickLab;
+
+export type GetLabByIdAPIResponse = QuickLab;
+
+export type UpdateLabAPIRequestBody = Partial<QuickLabContentJSON>;
+
+export type UpdateLabAPIResponse = MessageAPIResponse;
+
+export type DeleteLabAPIResponse = MessageAPIResponse;
+
+export type GetLabListAPIResponse = {
+  labs: QuickLabMetadata[];
+};
 
 // Common
 
 export interface PaginationParams {
   limit: number;
   offset: number;
+}
+
+export interface MessageAPIResponse {
+  message: string;
 }

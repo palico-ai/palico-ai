@@ -17,6 +17,7 @@ export const createAPIFetcher =
     fetchOptions: APIFetchOptions<RequestBody>
   ): Promise<Response> => {
     const response = await fetch(`${options.rootURL}${path}`, {
+      method: fetchOptions.method,
       cache: 'no-store',
       headers: {
         'Content-Type': 'application/json',

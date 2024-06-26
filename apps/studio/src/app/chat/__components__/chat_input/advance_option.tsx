@@ -6,15 +6,15 @@ import React from 'react';
 export interface AdvanceOptionProps {
   requestPayload?: string;
   onChangeRequestPayload: (payload?: string) => void;
-  featureFlag?: string;
-  onChangeFeatureFlag: (featureFlag?: string) => void;
+  appConfig?: string;
+  onChangeAppConfig: (appConfig?: string) => void;
 }
 
 const AdvanceOption: React.FC<AdvanceOptionProps> = ({
   requestPayload,
   onChangeRequestPayload,
-  featureFlag,
-  onChangeFeatureFlag,
+  appConfig,
+  onChangeAppConfig,
 }) => {
   return (
     <Card>
@@ -25,8 +25,8 @@ const AdvanceOption: React.FC<AdvanceOptionProps> = ({
             value: 'request_payload',
           },
           {
-            label: 'Feature Flag',
-            value: 'feature_flag',
+            label: 'App Config',
+            value: 'app_config',
           },
         ]}
       >
@@ -45,12 +45,12 @@ const AdvanceOption: React.FC<AdvanceOptionProps> = ({
               defaultValue={JSON.stringify({}, null, 2)}
             />
           </TabPanel>
-          <TabPanel value="feature_flag">
+          <TabPanel value="app_config">
             <Editor
               theme="vs-dark"
               height={200}
-              value={featureFlag}
-              onChange={(value) => onChangeFeatureFlag(value ?? '')}
+              value={appConfig}
+              onChange={(value) => onChangeAppConfig(value ?? '')}
               defaultLanguage="json"
               options={{
                 ariaLabel: 'User Message',

@@ -1,7 +1,7 @@
 import {
   ConversationRequestContentSchema,
-  WorkflowConverationRequestBody,
-  WorkflowRequestResponse,
+  WorkflowConverationAPIRequestBody,
+  WorkflowRequestAPIResponse,
 } from '@palico-ai/common';
 import { RequestHandler } from 'express';
 import { Application } from '../../../app';
@@ -17,8 +17,8 @@ interface WorkflowConversationRouteParams {
 
 export const newConversationWorkflowHandler: RequestHandler<
   WorkflowRouteParams,
-  WorkflowRequestResponse,
-  WorkflowConverationRequestBody
+  WorkflowRequestAPIResponse,
+  WorkflowConverationAPIRequestBody
 > = async (req, res, next) => {
   try {
     const { appConfig, content } = req.body;
@@ -37,8 +37,8 @@ export const newConversationWorkflowHandler: RequestHandler<
 
 export const replyConversationWorkflowHandler: RequestHandler<
   WorkflowConversationRouteParams,
-  WorkflowRequestResponse,
-  WorkflowConverationRequestBody
+  WorkflowRequestAPIResponse,
+  WorkflowConverationAPIRequestBody
 > = async (req, res, next) => {
   try {
     const { appConfig, content } = req.body;

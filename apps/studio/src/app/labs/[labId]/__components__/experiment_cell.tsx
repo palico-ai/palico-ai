@@ -125,7 +125,7 @@ const ExperimentCell: React.FC<ExperimentCellProps> = ({
     handleChangeExperimentLabel,
     handleChangeExperimentAgent,
     handleRemoveExperiment,
-    handleChangeExperimentFeatureFlag,
+    handleChangeExperimentAppConfig,
   } = useExperiment(experimentId);
 
   if (!experiment) {
@@ -164,7 +164,7 @@ const ExperimentCell: React.FC<ExperimentCellProps> = ({
           }}
         >
           <Typography variant="caption" color="textSecondary">
-            FeatureFlag JSON
+            AppConfig JSON
           </Typography>
         </Divider>
         <Box>
@@ -172,8 +172,8 @@ const ExperimentCell: React.FC<ExperimentCellProps> = ({
           <Editor
             theme="vs-dark"
             height={HEIGHT}
-            value={experiment.featureFlagJSON}
-            onChange={(value) => handleChangeExperimentFeatureFlag(value)}
+            value={experiment.appConfigJSON}
+            onChange={(value) => handleChangeExperimentAppConfig(value)}
             defaultLanguage="json"
             options={{
               ariaLabel: 'User Message',

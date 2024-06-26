@@ -109,14 +109,15 @@ export const LabContextProvider: React.FC<LabContextProviderProps> = ({
       if (!experiment) {
         throw new Error('Experiment not found');
       }
+      console.log('Running test case', testCase, 'for experiment', experiment);
       const response = await newConversation(
         {
           type: ConversationalEntityType.AGENT,
           name: experiment.agentId,
         },
         {
-          featureFlags: experiment.featureFlagJSON
-            ? JSON.parse(experiment.featureFlagJSON)
+          appConfig: experiment.appConfigJSON
+            ? JSON.parse(experiment.appConfigJSON)
             : undefined,
           userMessage: testCase.userMessage,
           payload: testCase.payloadString

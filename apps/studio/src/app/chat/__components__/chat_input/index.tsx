@@ -4,15 +4,12 @@ import { Box, Button, InputAdornment, TextField, Tooltip } from '@mui/material';
 import React, { useEffect, useMemo } from 'react';
 import ExpandIcon from '@mui/icons-material/Expand';
 import AdvanceOption from './advance_option';
-import {
-  ConversationContext,
-  ConversationRequestContent,
-} from '@palico-ai/common';
+import { AppConfig, ConversationRequestContent } from '@palico-ai/common';
 
 export interface ChatInputProps {
   onSend: (
     content: ConversationRequestContent,
-    featureFlag: ConversationContext['featureFlags']
+    appConfig: AppConfig
   ) => Promise<void>;
   disabled?: boolean;
   placeholder?: string;
@@ -28,7 +25,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({
   const [loading, setLoading] = React.useState(false);
   const [requestPayloadString, setRequestPayloadString] =
     React.useState<string>();
-  const [featureFlagString, setFeatureFlagString] = React.useState<string>();
+  const [appConfigString, setAppConfigString] = React.useState<string>();
 
   const handleFormSubmit = async (
     event: React.FormEvent<HTMLFormElement>
@@ -41,7 +38,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({
           userMessage: message,
           payload: JSON.parse(requestPayloadString ?? '{}'),
         },
-        JSON.parse(featureFlagString ?? '{}')
+        JSON.parse(appConfigString ?? '{}')
       );
       setMessage('');
     } finally {
@@ -66,8 +63,8 @@ export const ChatInput: React.FC<ChatInputProps> = ({
       <AdvanceOption
         requestPayload={requestPayloadString}
         onChangeRequestPayload={setRequestPayloadString}
-        featureFlag={featureFlagString}
-        onChangeFeatureFlag={setFeatureFlagString}
+        appConfig={appConfigString}
+        onChangeAppConfig={setAppConfigString}
       />
       <TextField
         sx={{ mt: 1 }}
