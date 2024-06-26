@@ -20,7 +20,8 @@
         "commands": [
           "npx nx affected -t lint",
           "npx nx affected -t test  --passWithNoTests",
-          "npx nx affected -t build"
+          "npx nx affected -t build",
+          "npx nx run typedoc"
         ],
         "parallel": true
       }
