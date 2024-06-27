@@ -141,7 +141,7 @@ const EvidenceSection: React.FC = () => {
 
   return (
     <SectionLayout
-      title="Iterative Testing leads to Accuracy Improvements"
+      title="Experimentation leads to accurate LLM applications"
       titleHeader="h4"
       alignTitle={'center'}
       disableTitleGutter

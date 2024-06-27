@@ -1,12 +1,11 @@
 import React from 'react';
-import HowItWorksStepWithMedia from './side_by_side_layout';
+import { HowItWorksStepWithMedia } from '../__components__/layouts';
 import { Box } from '@mui/material';
 
 const CompareAndAnalyze: React.FC = () => {
   return (
     <Box>
       <HowItWorksStepWithMedia
-        maxHeight={400}
         title="Compare and analyze results from different experiments"
         descriptions={[
           'Review the results of your experiments',

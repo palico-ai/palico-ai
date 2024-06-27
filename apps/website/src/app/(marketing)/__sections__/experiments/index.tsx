@@ -3,14 +3,14 @@ import DefineYourApplication from './define';
 import UnitestAccuracySection from './unitest';
 import CreateExperiments from './experiments';
 import SectionLayout from '../section_layout';
-import { HowItWorksTextStep } from './side_by_side_layout';
+import { HowItWorksTextStep } from '../__components__/layouts';
 import { Grid } from '@mui/material';
 
 const HowItWorks: React.FC = () => {
   return (
     <SectionLayout
-      title="Streamline your Experimentation Process"
-      alignTitle={'center'}
+      title="Improve accuracy with Experiment-Driven Development"
+      alignTitle={'left'}
     >
       <DefineYourApplication />
       <UnitestAccuracySection />
@@ -20,7 +20,7 @@ const HowItWorks: React.FC = () => {
           <HowItWorksTextStep
             title="Collaborate with your Team"
             descriptions={[
-              'All your changes and experiments are automatically version-controlled alongside your code, allowing anyone in your team to review experiments independently',
+              'All your changes and experiments are automatically version-controlled alongside your code, allowing anyone in your team to review or run experiments independently',
             ]}
           />
         </Grid>

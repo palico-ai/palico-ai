@@ -2,9 +2,10 @@
 
 import React from 'react';
 import SectionLayout from '../section_layout';
-import { Button, Link, TextField, Typography } from '@palico-ai/components';
+import { Button, Link, Typography } from '@palico-ai/components';
 import { Box, Container } from '@mui/material';
 import RoutePath from '../../../../utils/route_path';
+import SignupForNewsletter from './newsletter';
 
 const LearnMore: React.FC = () => {
   return (
@@ -47,14 +48,7 @@ const LearnMore: React.FC = () => {
           Subscribe to our newsletter to get the latest updates on Palico AI
         </Typography>
         <Container maxWidth="md">
-          <Link href={RoutePath.newsletter()} target="_blank">
-            <TextField
-              variant="standard"
-              value={''}
-              placeholder="Enter your email"
-              fullWidth
-            />
-          </Link>
+          <SignupForNewsletter />
         </Container>
       </Box>
       <Box />

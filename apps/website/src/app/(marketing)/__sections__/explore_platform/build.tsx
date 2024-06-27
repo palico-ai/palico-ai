@@ -204,7 +204,7 @@ export const Prototype: React.FC = () => {
               justifyContent: 'center',
             }}
           >
-            <CardHeader sx={{ px: 0 }} title={'Prototype'} />
+            <CardHeader sx={{ px: 0 }} title={'Prototyping'} />
             <Typography variant="body2">
               Chat with your Agent without writing any extra code using Palico
               Studio
