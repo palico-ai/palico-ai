@@ -57,7 +57,7 @@ const customMetricCodeSnippet = `class ResponseLengthEvalMetric implements EvalM
 const UnitestAccuracySection: React.FC = () => {
   return (
     <HowItWorksStepWithMedia
-      title="Measure your accuracy"
+      title="Define your Accuracy Benchmarks"
       descriptions={[
         'Define test-cases that model the expected behaviors from your LLM Agent',
         'Measure accuracy with out-of-the-box metrics or define your own custom metrics',
