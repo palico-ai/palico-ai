@@ -64,6 +64,7 @@
     "react-syntax-highlighter": "^15.5.0",
     "react-toastify": "^10.0.5",
     "sequelize": "^6.37.3",
+    "use-mailchimp-form": "^3.1.0",
     "usehooks-ts": "^3.1.0",
     "uuidv4": "^6.2.13",
     "zip-a-folder": "^3.1.5",

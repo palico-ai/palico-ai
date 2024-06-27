@@ -1,25 +1,24 @@
 import { Box, Grid, Typography } from '@mui/material';
-import { Editor, LoomEmbed } from '@palico-ai/components';
+import { Editor, LoomEmbed, TabPanel, TabView } from '@palico-ai/components';
 import React, { useMemo } from 'react';
+import { CodeSnippetTabFragment } from './client_fragments';
 
 interface HowItWorksSectionLayoutProps {
   title: string;
   descriptions: string[];
   codeSnippet?: string;
-  maxHeight?: number;
+  media?: React.ReactNode;
   embedURL?: string;
   disableGutter?: boolean;
 }
 
-const HowItWorksStepWithMedia: React.FC<HowItWorksSectionLayoutProps> = ({
-  title,
-  descriptions,
-  codeSnippet,
-  maxHeight = 250,
-  embedURL,
-  disableGutter,
-}) => {
+export const HowItWorksStepWithMedia: React.FC<
+  HowItWorksSectionLayoutProps
+> = ({ title, descriptions, codeSnippet, media, embedURL, disableGutter }) => {
   const demoContent = useMemo(() => {
+    if (media) {
+      return media;
+    }
     if (embedURL) {
       return <LoomEmbed url={embedURL} />;
     }
@@ -38,7 +37,7 @@ const HowItWorksStepWithMedia: React.FC<HowItWorksSectionLayoutProps> = ({
       );
     }
     return null;
-  }, [codeSnippet, embedURL]);
+  }, [codeSnippet, embedURL, media]);
 
   return (
     <Grid
@@ -58,20 +57,7 @@ const HowItWorksStepWithMedia: React.FC<HowItWorksSectionLayoutProps> = ({
           </Typography>
         ))}
       </Grid>
-      <Grid
-        item
-        md={6}
-        sm={12}
-        xs={12}
-        sx={{
-          ...(codeSnippet !== undefined
-            ? {
-                height: maxHeight ?? '100%',
-                maxWidth: '100%',
-              }
-            : {}),
-        }}
-      >
+      <Grid item md={6} sm={12} xs={12}>
         {demoContent}
       </Grid>
     </Grid>
@@ -101,4 +87,33 @@ export const HowItWorksTextStep: React.FC<HowItWorksTextStepProps> = ({
   );
 };
 
-export default HowItWorksStepWithMedia;
+export interface CodeSnippetTabProps {
+  tabs: {
+    label: string;
+    codeSnippet: string;
+  }[];
+  height?: number;
+}
+
+export const CodeSnippetTab: React.FC<CodeSnippetTabProps> = ({
+  tabs,
+  height = 250,
+}) => {
+  return (
+    <TabView
+      tabs={tabs.map((tab) => ({
+        label: tab.label,
+        value: tab.label,
+      }))}
+    >
+      {tabs.map((tab) => (
+        <TabPanel key={tab.label} value={tab.label}>
+          <CodeSnippetTabFragment
+            codeSnippet={tab.codeSnippet}
+            height={height}
+          />
+        </TabPanel>
+      ))}
+    </TabView>
+  );
+};

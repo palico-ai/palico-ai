@@ -53,27 +53,29 @@ export const TabView: React.FC<TabViewProps> = ({
   return (
     <TabContext.Provider value={{ activeTab }}>
       <Box sx={{ width: '100%' }}>
-        <Tabs
-          sx={{
-            mb: 1,
-          }}
-          value={activeTab}
-          onChange={handleChangeTab}
-          variant="fullWidth"
-          textColor={textColor}
-          indicatorColor={indicatorColor}
+        <Box
+          sx={(theme) => ({
+            border: `1px solid ${theme.palette.divider}`,
+            borderRadius: theme.shape.borderRadius,
+            overflow: 'hidden',
+          })}
         >
-          {tabs.map((tab) => (
-            <Tab key={tab.value} label={tab.label} value={tab.value} />
-          ))}
-        </Tabs>
-        <Box>{children}</Box>
+          <Tabs
+            value={activeTab}
+            onChange={handleChangeTab}
+            variant="fullWidth"
+            textColor={textColor}
+            indicatorColor={indicatorColor}
+          >
+            {tabs.map((tab) => (
+              <Tab key={tab.value} label={tab.label} value={tab.value} />
+            ))}
+          </Tabs>
+        </Box>
+        <Box mt={1}>{children}</Box>
       </Box>
     </TabContext.Provider>
   );
 };
 
-export {
-  Tabs,
-  Tab,
-} from '@mui/material'
+export { Tabs, Tab } from '@mui/material';

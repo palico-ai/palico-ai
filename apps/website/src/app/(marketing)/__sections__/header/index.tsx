@@ -39,10 +39,10 @@ const LandingPageHeader: React.FC = () => {
           </Typography>
           <Divider sx={{ my: 2 }} />
           <Typography variant="subtitle1" fontSize={18} whiteSpace={'pre-line'}>
-            Building accurate LLM applications requires running{' '}
-            <b>hundreds of experiments</b> testing different prompt techniques,
-            LLM models, rag-pipeline versions, and more.{' '}
-            <b>Streamline your experimentation</b> process to{' '}
+            Building an accurate LLM application requires testing{' '}
+            <b>hundreds of experiments</b> with different combinations of
+            prompts, models, business logic, RAG context, and more.{' '}
+            <b>Streamlines your experimentation</b> process to{' '}
             <b>reach production-level accuracy</b> in weeks instead of months
           </Typography>
           <Box
