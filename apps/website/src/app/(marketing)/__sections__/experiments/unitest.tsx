@@ -7,19 +7,6 @@ import {
 const testCaseCodeSnippet = `[
   {
     input: {
-      userMessage: 'What is the capital of France?',
-    },
-    tags: {
-      category: 'history',
-    },
-    metrics: [
-      new ContainsMetric({
-        substring: 'France',
-      }),
-    ],
-  },
-  {
-    input: {
       userMessage:
         'Given the equation 2x + 3 = 7, solve for x. Only respond with the final value of x.',
     },
@@ -32,6 +19,19 @@ const testCaseCodeSnippet = `[
         "x = 2",
         "2",
       ]),
+    ],
+  },
+  {
+    input: {
+      userMessage: 'What is the capital of France?',
+    },
+    tags: {
+      category: 'history',
+    },
+    metrics: [
+      new ContainsMetric({
+        substring: 'Paris',
+      }),
     ],
   },
   ...
