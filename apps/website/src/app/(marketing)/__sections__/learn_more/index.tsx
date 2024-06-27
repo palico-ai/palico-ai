@@ -10,7 +10,7 @@ import SignupForNewsletter from './newsletter';
 const LearnMore: React.FC = () => {
   return (
     <SectionLayout
-      title="Build Experiment-Driven LLM Applications"
+      title="Build Accurate LLM Applications with Experiment-Driven Development"
       disableGutter
       alignTitle={'center'}
     >

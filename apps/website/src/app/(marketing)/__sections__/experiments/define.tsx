@@ -61,7 +61,7 @@ const workflowCodeSnippets = `ChainWorkflow
 const DefineYourApplication: React.FC = () => {
   return (
     <HowItWorksStepWithMedia
-      title={'Build your application for rapid experimentation'}
+      title={'Build your application for experimentation'}
       descriptions={[
         'We help you build a modular application layer. This allows you to rapidly test different components of your LLM stack and measure the impact on accuracy.',
         'Build simple LLM applications with Palico Agent or complex applications with Workflows',
