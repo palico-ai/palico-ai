@@ -23,7 +23,7 @@ export default function Index() {
       <EvidenceSection />
       <ApplicationAttributes />
       <HowItWorks />
-      <FrameworkComponents />
+      {/* <FrameworkComponents /> */}
       {/* <InceptionToProduction /> */}
       <Divider sx={{ my: 8 }} />
       <LearnMore />
