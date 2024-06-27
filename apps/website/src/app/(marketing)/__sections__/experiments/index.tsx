@@ -9,7 +9,7 @@ import { Grid } from '@mui/material';
 const HowItWorks: React.FC = () => {
   return (
     <SectionLayout
-      title="Improve accuracy with Experiment-Driven Development"
+      title="Improve Accuracy with Experiment-Driven Development"
       alignTitle={'left'}
     >
       <DefineYourApplication />

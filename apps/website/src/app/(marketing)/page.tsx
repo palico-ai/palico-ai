@@ -2,7 +2,6 @@ import { Container, Divider } from '@mui/material';
 import LandingPageHeader from './__sections__/header';
 import HowItWorks from './__sections__/experiments';
 import LearnMore from './__sections__/learn_more';
-import FrameworkComponents from './__sections__/explore_platform';
 import EvidenceSection from './__sections__/evidence';
 import ApplicationAttributes from './__sections__/attributes';
 

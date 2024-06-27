@@ -109,7 +109,7 @@ const attributes: AttributeCardProps[] = [
 const ApplicationAttributes = () => {
   return (
     <SectionLayout
-      title="Take your app from Prototype to Production"
+      title="Build an Experiment-Focused LLM Application"
       disableTitleGutter
     >
       <Grid container spacing={4} mt={1}>
