@@ -25,7 +25,7 @@ In the following section we dig a little bit deeper into the following topics:
 - [Palico vs evaluation frameworks](#how-does-palico-compare-to-evaluation-frameworks)
 - [Palico vs LangChain or LlamaIndex](#how-does-palico-compare-to-libraries-like-langchain-or-llamaindex)
 
-If you would rather jump straight into building, you can get started by following the [installation guide](./getting_started/00_installation.md).
+If you would rather jump straight into building, you can get started by following the [installation guide](./getting_started/00_installation.mdx).
 
 ## Motivation
 
