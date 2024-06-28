@@ -38,12 +38,15 @@ const LandingPageHeader: React.FC = () => {
             Build <AccuracySpan>Accurate</AccuracySpan> LLM Applications
           </Typography>
           <Divider sx={{ my: 2 }} />
-          <Typography variant="subtitle1" fontSize={18} whiteSpace={'pre-line'}>
-            Building an accurate LLM application requires testing{' '}
-            <b>hundreds of experiments</b> with different combinations of
-            prompts, models, business logic, RAG context, and more.{' '}
-            <b>Streamlines your experimentation</b> process to{' '}
-            <b>reach production-level accuracy</b> in weeks instead of months
+          <Typography
+            variant="subtitle1"
+            fontSize={'1.18em'}
+            whiteSpace={'pre-line'}
+          >
+            Improving accuracy requires running <b>hundreds of experiments</b>{' '}
+            with different combinations of prompts, models, business logic, RAG
+            context, and more. <b>Streamlines your experimentation</b> process
+            to <b>reach production-level accuracy</b> in weeks instead of months
           </Typography>
           <Box
             sx={{

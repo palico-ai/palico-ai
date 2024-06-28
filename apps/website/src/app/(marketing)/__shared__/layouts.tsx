@@ -4,17 +4,26 @@ import React, { useMemo } from 'react';
 import { CodeSnippetTabFragment } from './client_fragments';
 
 interface HowItWorksSectionLayoutProps {
-  title: string;
+  title?: string;
   descriptions: string[];
   codeSnippet?: string;
   media?: React.ReactNode;
+  centerContent?: boolean;
   embedURL?: string;
   disableGutter?: boolean;
 }
 
-export const HowItWorksStepWithMedia: React.FC<
-  HowItWorksSectionLayoutProps
-> = ({ title, descriptions, codeSnippet, media, embedURL, disableGutter }) => {
+const DESCRIPTION_FONT_SIZE = 17;
+
+export const ContentWithMedia: React.FC<HowItWorksSectionLayoutProps> = ({
+  title,
+  descriptions,
+  codeSnippet,
+  media,
+  embedURL,
+  centerContent,
+  disableGutter,
+}) => {
   const demoContent = useMemo(() => {
     if (media) {
       return media;
@@ -47,12 +56,29 @@ export const HowItWorksStepWithMedia: React.FC<
         mb: disableGutter ? 0 : 12,
       }}
     >
-      <Grid item md={6} sm={12} xs={12}>
-        <Typography variant="h4" gutterBottom>
-          {title}
-        </Typography>
+      <Grid
+        item
+        md={6}
+        sm={12}
+        xs={12}
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: centerContent ? 'center' : 'flex-start',
+        }}
+      >
+        {title && (
+          <Typography variant="h4" mb={2}>
+            {title}
+          </Typography>
+        )}
         {descriptions.map((description, index) => (
-          <Typography key={index} variant="body2" mb={2}>
+          <Typography
+            key={index}
+            variant="body1"
+            mb={2}
+            fontSize={DESCRIPTION_FONT_SIZE}
+          >
             {description}
           </Typography>
         ))}
@@ -75,11 +101,16 @@ export const HowItWorksTextStep: React.FC<HowItWorksTextStepProps> = ({
 }) => {
   return (
     <Box>
-      <Typography variant="h4" gutterBottom>
+      <Typography variant="h4" mb={2}>
         {title}
       </Typography>
       {descriptions.map((description, index) => (
-        <Typography key={index} variant="body2" mb={2}>
+        <Typography
+          key={index}
+          variant="body1"
+          mb={2}
+          fontSize={DESCRIPTION_FONT_SIZE}
+        >
           {description}
         </Typography>
       ))}

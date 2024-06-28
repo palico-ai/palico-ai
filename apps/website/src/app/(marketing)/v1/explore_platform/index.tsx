@@ -1,5 +1,5 @@
 import React from 'react';
-import SectionLayout from '../section_layout';
+import SectionLayout from '../../__shared__/section_layout';
 import { Grid } from '@mui/material';
 import {
   APIAndSDK,

@@ -1,9 +1,11 @@
 import { Container, Divider } from '@mui/material';
-import LandingPageHeader from './__sections__/header';
-import HowItWorks from './__sections__/experiments';
-import LearnMore from './__sections__/learn_more';
-import EvidenceSection from './__sections__/evidence';
-import ApplicationAttributes from './__sections__/attributes';
+import LandingPageHeader from './__shared__/header';
+import EvidenceSection from './__shared__/evidence';
+import ApplicationAttributes from './__shared__/attributes';
+import BuildModularApp from './__v2__/build_app';
+import ExperimentSection from './__v2__/experiment';
+import DeployAndIntegrate from './__v2__/deploy';
+import LearnMore from './__shared__/learn_more';
 
 export default function Index() {
   /*
@@ -21,11 +23,13 @@ export default function Index() {
       <LandingPageHeader />
       <EvidenceSection />
       <ApplicationAttributes />
-      <HowItWorks />
-      {/* <FrameworkComponents /> */}
-      {/* <InceptionToProduction /> */}
+      <BuildModularApp />
+      <ExperimentSection />
+      <DeployAndIntegrate />
       <Divider sx={{ my: 8 }} />
       <LearnMore />
+      {/* <FrameworkComponents /> */}
+      {/* <InceptionToProduction /> */}
     </Container>
   );
 }

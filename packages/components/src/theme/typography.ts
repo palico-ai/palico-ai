@@ -1,7 +1,7 @@
-import { ThemeOptions } from "@mui/material";
-import { pxToRem, rgba } from "./functions";
+import { ThemeOptions } from '@mui/material';
+import { pxToRem, rgba } from './functions';
 
-const white = "#FFFFFF";
+const white = '#FFFFFF';
 
 const baseProperties = {
   fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
@@ -13,7 +13,7 @@ const baseProperties = {
   fontSizeXXS: pxToRem(10.4),
   fontSizeXS: pxToRem(12),
   fontSizeSM: pxToRem(14),
-  fontSizeMD: pxToRem(16),
+  fontSizeMD: pxToRem(16.5),
   fontSizeLG: pxToRem(18),
   fontSizeXL: pxToRem(20),
   fontSize2XL: pxToRem(24),
@@ -26,7 +26,7 @@ const baseHeadingProperties = {
   fontWeight: baseProperties.fontWeightBold,
 };
 
-const typography : ThemeOptions['typography'] = {
+const typography: ThemeOptions['typography'] = {
   fontFamily: baseProperties.fontFamily,
   // fontWeightLighter: baseProperties.fontWeightLighter,
   fontWeightLight: baseProperties.fontWeightLight,
@@ -80,7 +80,7 @@ const typography : ThemeOptions['typography'] = {
 
   subtitle2: {
     fontFamily: baseProperties.fontFamily,
-    fontSize: baseProperties.fontSizeMD,
+    fontSize: baseProperties.fontSizeLG,
     fontWeight: baseProperties.fontWeightLight,
     color: white,
     lineHeight: 1.6,
@@ -89,7 +89,7 @@ const typography : ThemeOptions['typography'] = {
   body1: {
     fontFamily: baseProperties.fontFamily,
     fontSize: baseProperties.fontSizeMD,
-    fontWeight: baseProperties.fontWeightRegular,
+    fontWeight: baseProperties.fontWeightLight,
     color: rgba(white, 0.85),
     lineHeight: 1.625,
   },
@@ -107,7 +107,7 @@ const typography : ThemeOptions['typography'] = {
     fontSize: baseProperties.fontSizeSM,
     fontWeight: baseProperties.fontWeightRegular,
     lineHeight: 1.5,
-    textTransform: "uppercase",
+    textTransform: 'uppercase',
   },
 
   caption: {
@@ -121,7 +121,7 @@ const typography : ThemeOptions['typography'] = {
   overline: {
     fontFamily: baseProperties.fontFamily,
     color: white,
-  }
+  },
 };
 
 export default typography;
