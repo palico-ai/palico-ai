@@ -45,8 +45,8 @@ const LandingPageHeader: React.FC = () => {
           >
             Improving accuracy requires running <b>hundreds of experiments</b>{' '}
             with different combinations of prompts, models, business logic, RAG
-            context, and more. <b>Streamlines your experimentation</b> process
-            to <b>reach production-level accuracy</b> in weeks instead of months
+            context, and more. <b>Streamline your experimentation</b> process to{' '}
+            <b>reach production-level accuracy</b> in weeks instead of months
           </Typography>
           <Box
             sx={{

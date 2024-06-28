@@ -10,8 +10,8 @@ const CreateExperiments: React.FC = () => {
     <ContentWithMedia
       title={'Run Experiments'}
       descriptions={[
-        'Tests how different variables (prompt, model, business logic, etc) affect your application accuracy at scale and find the most effective combination.',
-        'Review, compare, and analyze the results of your experiments from your dashboard, or export them to Jupyter notebook for more powerful analysis.',
+        'Tests how different variables (prompt, model, business logic, etc) affect your application accuracy at scale and find the most effective combination',
+        'Review, compare, and analyze the results of your experiments from your dashboard, or export them to Jupyter notebook for more powerful analysis',
       ]}
       embedURL={ExperimentDemoVideoURL}
     />
@@ -31,7 +31,7 @@ const ExperimentSection: React.FC = () => {
           <HowItWorksTextStep
             title="Debug Issues with Traces"
             descriptions={[
-              'Look under-the-hood of each request to your LLM application with our ready-made tracing, or add your own custom tracing with OpenTelemetry.',
+              'Look under-the-hood of each request of your application with our provided traces, or add your own custom traces to debug issues faster',
             ]}
           />
         </Grid>

@@ -17,7 +17,7 @@ const BuildModularApp: React.FC = () => {
         descriptions={[
           'Build simple LLM applications or complex workflows with Palico Agent or Workflows',
           'Build a modular application layer to easily test different components of your LLM stack',
-          'Use external tools and libraries like AI gateway, Vector Databases, LangChain, to build flexible and dynamic applications',
+          'Use external tools and libraries like AI Gateways, Vector Databases, or libraries like LangChain to build flexible and dynamic applications',
         ]}
         media={
           <CodeSnippetTab

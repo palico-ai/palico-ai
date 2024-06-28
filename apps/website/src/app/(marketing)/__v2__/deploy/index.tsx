@@ -50,7 +50,7 @@ const DeployAndIntegrate: React.FC = () => {
       <ContentWithMedia
         centerContent
         descriptions={[
-          'Deploy your application anywhere with as docker containers',
+          'Deploy your application to any cloud as docker images',
           'Connect to your LLM application via REST API, or Palico Client SDK',
         ]}
         media={

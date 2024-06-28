@@ -6,6 +6,7 @@ import BuildModularApp from './__v2__/build_app';
 import ExperimentSection from './__v2__/experiment';
 import DeployAndIntegrate from './__v2__/deploy';
 import LearnMore from './__shared__/learn_more';
+import ControlPanel from './__v2__/control_panel';
 
 export default function Index() {
   /*
@@ -26,6 +27,7 @@ export default function Index() {
       <BuildModularApp />
       <ExperimentSection />
       <DeployAndIntegrate />
+      <ControlPanel />
       <Divider sx={{ my: 8 }} />
       <LearnMore />
       {/* <FrameworkComponents /> */}

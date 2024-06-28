@@ -110,12 +110,12 @@ const attributes: AttributeCardProps[] = [
 
 const ApplicationAttributes = () => {
   return (
-    <SectionLayout title="Build a Tech Stack for Rapid Experimentation">
+    <SectionLayout title="Setup a Tech Stack for Rapid Experimentation">
       <Grid container spacing={4}>
         <Grid item xs={12}>
           <Typography variant="subtitle1" align="left">
             Palico is an <i>LLM Development Framework</i> that structures your
-            application development for <i>rapid experimentation</i>.
+            application development for <i>rapid experimentation</i>
           </Typography>
         </Grid>
         {attributes.map((attribute, index) => (

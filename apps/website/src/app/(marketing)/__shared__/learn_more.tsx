@@ -23,7 +23,7 @@ const CTA = () => {
       >
         <Link href={RoutePath.quickStart()}>
           <Button variant="contained" color="primary" size="large" fullWidth>
-            Get started in 5 minutes
+            Get Started in 5 minutes
           </Button>
         </Link>
         <Link href={RoutePath.scheduleDemo()} target="_blank">
@@ -57,7 +57,7 @@ const BenefitList = [
   'Measure how each component of your LLM stack (model, prompt, rag, etc) affects accuracy',
   'Find the right input combination for best results through Rapid Experimentation',
   'Debug accuracy issues with analysis tools and tracing',
-  'Deploy your applications with docker and connect via REST API or SDK.',
+  'Deploy your applications with docker and connect via REST API or SDK',
 ];
 
 const BenefitsOfPalico: React.FC = () => {

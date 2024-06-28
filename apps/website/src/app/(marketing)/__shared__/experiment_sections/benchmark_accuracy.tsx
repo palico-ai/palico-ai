@@ -64,7 +64,7 @@ const BenchmarkAccuracySubSection: React.FC<
       centerContent={centerContent}
       descriptions={[
         'Define test-cases that model the expected behaviors from your LLM Agent',
-        'Measure accuracy with out-of-the-box metrics or define your own custom metrics',
+        'Measure accuracy with our provided metrics, or define your own custom metrics',
       ]}
       media={
         <CodeSnippetTab
