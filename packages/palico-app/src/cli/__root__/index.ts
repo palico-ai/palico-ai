@@ -29,7 +29,11 @@ const projectNeedsBootstrap = async () => {
 
 export const BootstrapProject = async () => {
   console.log("Stopping project's containers...");
-  await ProjectBuild.stopDockerCompose();
+  try {
+    await ProjectBuild.stopDockerCompose();
+  } catch (e) {
+    console.log('No containers to stop');
+  }
   await wait(2000);
   console.log('Creating Containers...');
   await ProjectBuild.createDockerCompose();
