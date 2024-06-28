@@ -3,11 +3,12 @@ import SectionLayout from '../../__shared__/section_layout';
 import { CodeSnippetTab, ContentWithMedia } from '../../__shared__/layouts';
 
 const requestCodeSnippets = `const client = createClient({
-  apiURL: <agent-api-url>,
+  apiURL: <your-palico-app-url>,
   serviceKey: <service-key>,
 });
 
-await client.agent.newConversation({
+// Agents
+const response = await client.agent.newConversation({
   name: entity.name,
   userMessage: '...',
   payload: {
@@ -19,13 +20,14 @@ await client.agent.newConversation({
   },
 });
 
-await client.workflows.newConversation({
+// Workflows
+const response = await client.workflows.newConversation({
   name: entity.name,
   // ...
 });
 `;
 
-const chatCodeSnippets = `await client.workflows.replyAsUser({
+const chatCodeSnippets = `const response = await client.agent.replyAsUser({
   name: entity.name,
   userMessage: '...',
   conversationId: '...',
@@ -42,7 +44,7 @@ const chatCodeSnippets = `await client.workflows.replyAsUser({
 const DeployAndIntegrate: React.FC = () => {
   return (
     <SectionLayout
-      title="Deploy to Production | Integrate with REST API or SDK"
+      title="Deploy to Production | Integrate with API or SDK"
       alignTitle={'left'}
     >
       <ContentWithMedia

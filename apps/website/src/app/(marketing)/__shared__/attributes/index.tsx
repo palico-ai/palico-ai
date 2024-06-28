@@ -54,10 +54,10 @@ const AttributeItem: React.FC<AttributeCardProps> = ({
 
 const attributes: AttributeCardProps[] = [
   {
-    label: 'Build any LLM Application',
+    label: 'Build your LLM Application',
     icon: <CodeIcon color="success" />,
     description:
-      'Build any LLM application with Palico and integrate it with your existing systems via REST API or Palico SDK',
+      'Build any LLM application with Palico and connect to it via REST API or Palico SDK',
   },
   {
     label: 'Benchmark your Accuracy',
@@ -66,16 +66,16 @@ const attributes: AttributeCardProps[] = [
       'Create metrics to benchmark your accuracy and run experiments to improve it',
   },
   {
-    label: 'Deep-dive with Tracing',
-    icon: <BugReportIcon color="warning" />,
-    description:
-      'Palico provides tracing out-of-the box, and lets you add any custom traces of your own using OpenTelemetry',
-  },
-  {
-    label: 'Portable Deployment',
+    label: 'Deploy Anywhere',
     icon: <DeployIcon color="primary" />,
     description:
       'Compile your LLM application as a Docker container and deploy it anywhere',
+  },
+  {
+    label: 'Deep-dive with Tracing',
+    icon: <BugReportIcon color="warning" />,
+    description:
+      'Get out-of-the box tracing and add any custom traces in your application',
   },
   {
     label: 'Build with Typescript',
