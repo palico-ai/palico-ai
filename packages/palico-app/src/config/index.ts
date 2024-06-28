@@ -13,7 +13,7 @@ class Config {
   }
 
   getStudioDigest(): string {
-    return 'sha256:bdd24a7657b8c45627cc1770501be89b96cfd0b387df3b053a9e8f30041eba18';
+    return 'sha256:1ee3eb6454f23f09923ec3331fa925c4fb52912b8c014b8da936ddf8348a7e18';
   }
 
   getAPIPort(): number {

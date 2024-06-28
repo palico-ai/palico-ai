@@ -1,9 +1,9 @@
 name: CI
 
 on:
-  push:
-    branches:
-      - main
+  # push: # Removing CI cause low on NX credits
+  #   branches:
+  #     - main
   pull_request:
 
 permissions:
