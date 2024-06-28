@@ -29,7 +29,7 @@ const TestCaseDataset: EvalTestCase[] = [
     },
     metrics: [
       new ContainsMetric({
-        substring: 'France',
+        substring: 'Paris',
       }),
     ],
   },
