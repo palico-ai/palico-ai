@@ -41,6 +41,10 @@ const config: Config = {
           editUrl:
             'https://github.com/palico-ai/palico-main/tree/main/apps/docs',
         },
+        gtag: {
+          trackingID: 'G-Q39NFM4PTV',
+          anonymizeIP: true,
+        },
         blog: false,
         theme: {
           customCss: './src/css/custom.css',
