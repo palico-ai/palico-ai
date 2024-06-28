@@ -21,7 +21,7 @@ const CreateExperiments: React.FC = () => {
 const ExperimentSection: React.FC = () => {
   return (
     <SectionLayout
-      title="Systematically Improve Accuracy with Experiments"
+      title="Improve Accuracy with Iterative Experimentation"
       alignTitle={'left'}
     >
       <BenchmarkAccuracySubSection />

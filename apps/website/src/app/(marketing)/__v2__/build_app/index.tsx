@@ -9,7 +9,7 @@ import {
 const BuildModularApp: React.FC = () => {
   return (
     <SectionLayout
-      title="Build LLM Application for Experimentability"
+      title="Build Your LLM Applications and Workflows"
       alignTitle={'left'}
     >
       <ContentWithMedia
