@@ -72,7 +72,7 @@ const attributes: AttributeCardProps[] = [
       'Compile your LLM application as a Docker container and deploy it anywhere',
   },
   {
-    label: 'Deep-dive with Tracing',
+    label: 'Debug with Tracing',
     icon: <BugReportIcon color="warning" />,
     description:
       'Get out-of-the box tracing and add any custom traces in your application',

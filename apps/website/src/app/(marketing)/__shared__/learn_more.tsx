@@ -55,8 +55,8 @@ const CTA = () => {
 const BenefitList = [
   'Build complex LLM applications with flexible and dynamic prompts',
   'Measure how each component of your LLM stack (model, prompt, rag, etc) affects accuracy',
-  'Scale experiments and find the right input combination for best results',
-  'Deep-dive into accuracy issues with analysis tools and tracing',
+  'Find the right input combination for best results through Rapid Experimentation',
+  'Debug accuracy issues with analysis tools and tracing',
   'Deploy your applications with docker and connect via REST API or SDK.',
 ];
 
