@@ -34,45 +34,48 @@ const AttributeItem: React.FC<AttributeCardProps> = ({
         }}
       >
         {icon}
-        <Typography variant="h5" gutterBottom>
-          {label}
-        </Typography>
+        <Box>
+          <Typography variant="h5" gutterBottom>
+            {label}
+          </Typography>
+          <Typography
+            variant="body1"
+            sx={{
+              opacity: 0.7,
+            }}
+          >
+            {description}
+          </Typography>
+        </Box>
       </Box>
-      <Typography
-        variant="body2"
-        sx={{
-          opacity: 0.5,
-        }}
-      >
-        {description}
-      </Typography>
     </Paper>
   );
 };
 
 const attributes: AttributeCardProps[] = [
   {
-    label: 'Build any LLM Applications',
+    label: 'Build any LLM Application',
     icon: <CodeIcon color="success" />,
     description:
-      'Build any text-based LLM application with Palico and connect to it with REST API and SDK',
+      'Build any LLM application with Palico and integrate it with your existing systems via REST API or Palico SDK',
   },
   {
     label: 'Benchmark your Accuracy',
     icon: <ExperimentIcon color="info" />,
     description:
-      "Make data-driven decisions by benchmarking your LLM accuracy with Palico's evaluation library",
+      'Create metrics to benchmark your accuracy and run experiments to improve it',
   },
   {
     label: 'Deep-dive with Tracing',
     icon: <BugReportIcon color="warning" />,
     description:
-      'Palico provides default tracing out-of-the box, and lets you add any custom traces of your own',
+      'Palico provides tracing out-of-the box, and lets you add any custom traces of your own using OpenTelemetry',
   },
   {
     label: 'Portable Deployment',
     icon: <DeployIcon color="primary" />,
-    description: 'Deploy your LLM application anywhere as a Docker container',
+    description:
+      'Compile your LLM application as a Docker container and deploy it anywhere',
   },
   {
     label: 'Build with Typescript',
@@ -96,8 +99,7 @@ const attributes: AttributeCardProps[] = [
         </svg>
       </SvgIcon>
     ),
-    description:
-      'Build production-ready LLM applications with your team in Typescript',
+    description: 'Build production-ready LLM applications with Typescript',
   },
   {
     label: 'Open Source',
@@ -108,15 +110,12 @@ const attributes: AttributeCardProps[] = [
 
 const ApplicationAttributes = () => {
   return (
-    <SectionLayout
-      title="Build a Tech Stack for Rapid Experimentation"
-      disableTitleGutter
-    >
-      <Grid container spacing={4} mt={1}>
+    <SectionLayout title="Build a Tech Stack for Rapid Experimentation">
+      <Grid container spacing={4}>
         <Grid item xs={12}>
-          <Typography variant="body2" fontSize={'1.2rem'} align="left">
+          <Typography variant="subtitle1" align="left">
             Palico is an <i>LLM Development Framework</i> that structures your
-            application layer for <i>rapid experimentation</i>.
+            application development for <i>rapid experimentation</i>.
           </Typography>
         </Grid>
         {attributes.map((attribute, index) => (

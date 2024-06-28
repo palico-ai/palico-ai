@@ -1,19 +1,19 @@
 import React from 'react';
-import DefineYourApplication from './define';
-import UnitestAccuracySection from './unitest';
+import DefineYourApplication from './build_your_app';
+import BenchmarkAccuracySubSection from '../../__shared__/experiment_sections/benchmark_accuracy';
 import CreateExperiments from './experiments';
-import SectionLayout from '../section_layout';
-import { HowItWorksTextStep } from '../__components__/layouts';
+import SectionLayout from '../../__shared__/section_layout';
+import { HowItWorksTextStep } from '../../__shared__/layouts';
 import { Grid } from '@mui/material';
 
 const HowItWorks: React.FC = () => {
   return (
     <SectionLayout
-      title="Improve Accuracy with Experiments-Driven Development"
+      title="Improve Accuracy with Experiment-Driven Development"
       alignTitle={'left'}
     >
       <DefineYourApplication />
-      <UnitestAccuracySection />
+      <BenchmarkAccuracySubSection />
       <CreateExperiments />
       <Grid container spacing={12}>
         <Grid item md={6} sm={12} xs={12}>

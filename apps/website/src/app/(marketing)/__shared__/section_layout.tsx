@@ -28,7 +28,7 @@ const SectionLayout: React.FC<SectionLayoutProps> = ({
       {title && (
         <Box
           sx={{
-            mb: disableTitleGutter ? 0 : 14,
+            mb: disableTitleGutter ? 0 : 12,
           }}
         >
           <Typography variant={titleHeader} textAlign={alignTitle}>

@@ -1,11 +1,11 @@
 import React from 'react';
-import { HowItWorksStepWithMedia } from '../__components__/layouts';
+import { ContentWithMedia } from '../../__shared__/layouts';
 import { Box } from '@mui/material';
 
 const CompareAndAnalyze: React.FC = () => {
   return (
     <Box>
-      <HowItWorksStepWithMedia
+      <ContentWithMedia
         title="Compare and analyze results from different experiments"
         descriptions={[
           'Review the results of your experiments',

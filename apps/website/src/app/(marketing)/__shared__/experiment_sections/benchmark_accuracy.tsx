@@ -1,14 +1,11 @@
 import React from 'react';
-import {
-  CodeSnippetTab,
-  HowItWorksStepWithMedia,
-} from '../__components__/layouts';
+import { CodeSnippetTab, ContentWithMedia } from '../layouts';
 
 const testCaseCodeSnippet = `[
   {
     input: {
       userMessage:
-        'Given the equation 2x + 3 = 7, solve for x. Only respond with the final value of x.',
+        'Given the equation 2x + 3 = 7, solve for x.',
     },
     tags: {
       category: 'math',
@@ -54,10 +51,17 @@ const customMetricCodeSnippet = `class ResponseLengthEvalMetric implements EvalM
 }
 `;
 
-const UnitestAccuracySection: React.FC = () => {
+interface BenchmarkAccuracySubSectionProps {
+  centerContent?: boolean;
+}
+
+const BenchmarkAccuracySubSection: React.FC<
+  BenchmarkAccuracySubSectionProps
+> = ({ centerContent }) => {
   return (
-    <HowItWorksStepWithMedia
+    <ContentWithMedia
       title="Define your Accuracy Benchmarks"
+      centerContent={centerContent}
       descriptions={[
         'Define test-cases that model the expected behaviors from your LLM Agent',
         'Measure accuracy with out-of-the-box metrics or define your own custom metrics',
@@ -66,19 +70,19 @@ const UnitestAccuracySection: React.FC = () => {
         <CodeSnippetTab
           tabs={[
             {
-              label: 'Test Cases',
+              label: 'Create a Benchmark',
               codeSnippet: testCaseCodeSnippet,
             },
             {
-              label: 'Custom Metrics',
+              label: 'Build Custom Metric',
               codeSnippet: customMetricCodeSnippet,
             },
           ]}
-          height={250}
+          height={300}
         />
       }
     />
   );
 };
 
-export default UnitestAccuracySection;
+export default BenchmarkAccuracySubSection;

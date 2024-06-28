@@ -1,10 +1,10 @@
 import React from 'react';
-import { HowItWorksStepWithMedia } from '../__components__/layouts';
+import { ContentWithMedia } from '../../__shared__/layouts';
 import { LandingPageData } from '../../data';
 
 const CreateExperiments: React.FC = () => {
   return (
-    <HowItWorksStepWithMedia
+    <ContentWithMedia
       title={'Run Experiments'}
       descriptions={[
         'Tests how independent variables (prompt, model, business logic, etc) affect your agent’s performance at scale. Find and implement the most effective permutation.',
