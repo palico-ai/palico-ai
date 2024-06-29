@@ -8,6 +8,7 @@ With Palico you can:
 - [Improve accuracy](#experiment) with Experiments
 - [Deploy](#deploy) with Docker Containers
 - [Integrate](#client-sdk) your LLM application to your other systems via REST API or SDK
+- [Trace](#tracing) the runtime execution of your application
 - [Manage](#palico-studio) via Palico Studio - your application control panel
 
 ## Quick Start
@@ -118,7 +119,7 @@ Evaluation is the process of running your LLM application with a specific `appCo
 
 https://github.com/palico-ai/palico-main/assets/32821894/3a9dc1c5-319b-4c0b-8096-845f34542ae9
 
-**Analyze**
+### Analyze
 
 This is the review process for understanding the impact a given change has had on your LLM application. This is often done by reviewing the output metrics of an LLM application and comparing it against other tests. We have built-in support for evaluation in Palico Studio, but you can also run your own analysis in Jupyter Notebook.
 
