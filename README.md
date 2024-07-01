@@ -1,15 +1,24 @@
-# Palico
+# Palico AI - Maximize your LLM Application Performance
 
-**Improving the accuracy** of your LLM application requires running **hundreds of experiments** to test different combination of LLM models, prompt techniques, prompt context, RAG architecture, and more. Palico is an **LLM Development Framework** that **streamlines your experimentation** so you can **reach your accuracy** targets faster.
+LLM Application development is extremely iterative, more so than any other types of development. This is because to improve an LLM application performance (accuracy, hallucinations, latency, cost), you need to trial and error various combinations of LLM models, prompt templates (e.g., few-shot, chain-of-thought), prompt context with different RAG architecture, try different agent architecture, and more. **There are thousands of combinations to try**. 
 
-With Palico you can:
+Palico is an LLM Development Framework that structures your application development for rapid experimentation so you can quickly iterate towards your accuracy targets.
 
-- [Build](#build) your LLM Application and LLM Workflows
-- [Improve accuracy](#experiment) with Experiments
-- [Deploy](#deploy) with Docker Containers
-- [Integrate](#client-sdk) your LLM application to your other systems via REST API or SDK
-- [Trace](#tracing) the runtime execution of your application
-- [Manage](#palico-studio) via Palico Studio - your application control panel
+#### With Palico you can
+
+- [Build](#build) modular LLM Applications and Workflows so you can easily test different combination of models, prompts, context, business logic, and more.
+- [Improve accuracy](#experiment) by running lots of experiments on different configuration of your application, and empirically evaluating your application performance
+- [Deploy](#deploy) to any cloud provider with Docker
+- [Integrate](#client-sdk) your LLM application with your other services via REST API or SDK
+- [Trace](#tracing) runtime executions of your application to debug accuracy or hallucinations issues
+- [Manage](#palico-studio) your LLM application via Palico Studio - your application control panel
+
+#### We help you build a modular tech-stack built for rapid iteration
+
+![image](https://github.com/palico-ai/palico-main/assets/32821894/22c1c3b1-2021-4531-8011-47b41ed422c4)
+
+
+
 
 ## Quick Start
 
@@ -88,7 +97,7 @@ Read more about [Agents](https://docs.palico.ai/build_app/agents).
 
 Experiments are how you iteratively improve the accuracy of your application. Experimentation has three steps.
 
-#### Create your accuracy benchmark**
+#### Create your accuracy benchmark
 
 Benchmark is basically outlining the expected behavior of your application. This consists of creating a list of test-cases where you define an input to your LLM application, and measuring it’s output. Here’s an example
 
