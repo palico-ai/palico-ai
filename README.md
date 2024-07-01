@@ -14,7 +14,8 @@ Palico is an LLM Development Framework that structures your application developm
 
 #### We help you build a modular tech-stack built for rapid iteration
 
-![image](https://github.com/palico-ai/palico-main/assets/32821894/3ffabe3e-8ae1-4cc4-987f-3d01b1a217b5)
+![image](https://github.com/palico-ai/palico-main/assets/32821894/3d037333-48c8-4045-8ba5-3696e9d97636)
+
 
 ## Quick Start
 
