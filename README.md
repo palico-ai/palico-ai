@@ -6,11 +6,10 @@ Palico is an LLM Development Framework that structures your application developm
 
 #### With Palico you can
 
-- [Build](#build) modular LLM Applications and Workflows so you can easily test different combination of models, prompts, context, business logic, and more.
-- [Improve accuracy](#experiment) by running lots of experiments on different configuration of your application, and empirically evaluating your application performance
+- [Build](#build) modular LLM applications or workflows that allows you to try different combination of models, prompts, context, business logic, and more.
+- [Improve accuracy](#experiment) by running lots of experiments and empirically evaluating your application performance with data
 - [Deploy](#deploy) to any cloud provider with Docker
 - [Integrate](#client-sdk) your LLM application with your other services via REST API or SDK
-- [Trace](#tracing) runtime executions of your application to debug accuracy or hallucinations issues
 - [Manage](#palico-studio) your LLM application via Palico Studio - your application control panel
 
 #### We help you build a modular tech-stack built for rapid iteration
