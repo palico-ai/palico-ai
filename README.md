@@ -1,23 +1,20 @@
 # Palico AI - Maximize your LLM Application Performance
 
-LLM Application development is extremely iterative, more so than any other types of development. This is because to improve an LLM application performance (accuracy, hallucinations, latency, cost), you need to trial and error various combinations of LLM models, prompt templates (e.g., few-shot, chain-of-thought), prompt context with different RAG architecture, try different agent architecture, and more. **There are thousands of combinations to try**. 
+LLM Application development is extremely iterative, more so than any other types of development. This is because to improve an LLM application performance (accuracy, hallucinations, latency, cost), you need to trial and error various combinations of LLM models, prompt templates (e.g., few-shot, chain-of-thought), prompt context with different RAG architecture, different agent architecture, and more. **There are thousands of possible combinations to try**. 
 
-Palico is an LLM Development Framework that structures your application development for rapid experimentation so you can quickly iterate towards your accuracy targets.
+Palico is an LLM Development Framework that structures your application development for rapid experimentation so you can easily test different combination of your LLM application stack and quickly iterate towards your accuracy goals.
 
 #### With Palico you can
 
-- [Build](#build) modular LLM applications or workflows that allows you to try different combination of models, prompts, context, business logic, and more.
-- [Improve accuracy](#experiment) by running lots of experiments and empirically evaluating your application performance with data
-- [Deploy](#deploy) to any cloud provider with Docker
-- [Integrate](#client-sdk) your LLM application with your other services via REST API or SDK
+- [Build](#build) modular LLM applications or workflows that can easily swap out different combination of models, prompts, context, business logic, architecture, and more.
+- [Improve accuracy](#experiment) by running lots of experiments and objectively evaluating your application performance with data
+- [Deploy](#deploy) to any cloud provider as docker images
+- [Integrate](#client-sdk) your LLM application or workflows with your other services via REST API or SDK
 - [Manage](#palico-studio) your LLM application via Palico Studio - your application control panel
 
 #### We help you build a modular tech-stack built for rapid iteration
 
-![image](https://github.com/palico-ai/palico-main/assets/32821894/22c1c3b1-2021-4531-8011-47b41ed422c4)
-
-
-
+![image](https://github.com/palico-ai/palico-main/assets/32821894/3ffabe3e-8ae1-4cc4-987f-3d01b1a217b5)
 
 ## Quick Start
 
