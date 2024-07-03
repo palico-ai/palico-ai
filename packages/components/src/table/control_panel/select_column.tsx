@@ -4,9 +4,8 @@ import { Checkbox, FormControlLabel, Tooltip } from '@mui/material';
 import { Table } from '@tanstack/react-table';
 import React from 'react';
 import ViewColumnIcon from '@mui/icons-material/ViewColumn';
-import Typography from '../../typography';
+import { Typography } from '../../typography';
 import { OptionPanel } from './option_drawer';
-import { col } from 'sequelize';
 
 interface SelectColumnProps<D> {
   table: Table<D>;

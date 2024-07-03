@@ -16,8 +16,9 @@ import {
   QuickLabMetadata,
 } from '.';
 import {
-  ConversationRequestTraceItem,
-  ConversationTraces,
+  ConversationRequestSpan,
+  ConversationRequestTelemetryItem,
+  ConversationTelemetry,
   ConversationTracesWithoutRequests,
 } from './telemetry';
 
@@ -37,20 +38,24 @@ export interface GetAllTestSuitesResponse {
   datasets: MetadataListItemCommon[];
 }
 
-export interface GetConversationRequestTraces {
-  requests: ConversationRequestTraceItem[];
+export interface GetRecentRequestTelemetryResponse {
+  requests: ConversationRequestTelemetryItem[];
 }
 
-export interface GetTracesByConversationResponse {
-  conversation: ConversationTraces;
+export interface GetConversationTelemetryResponse {
+  conversation: ConversationTelemetry;
 }
 
 export interface GetRecentConversationResponse {
   conversations: ConversationTracesWithoutRequests[];
 }
 
-export interface GetTraceForRequestIdResponse {
-  request: ConversationRequestTraceItem;
+export interface GetTelemetryForRequestIdResponse {
+  request: ConversationRequestTelemetryItem;
+}
+
+export interface GetRequestSpanResponse {
+  spans: ConversationRequestSpan[];
 }
 
 // ======== Route: /agent ========

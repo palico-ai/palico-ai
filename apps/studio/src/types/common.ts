@@ -1,3 +1,5 @@
+import { PaginationParams } from '@palico-ai/common';
+
 export interface RequireLabId {
   labId: string;
 }
@@ -30,4 +32,9 @@ export enum ConversationalEntityType {
 export interface ConversationalEntity {
   name: string;
   type: ConversationalEntityType;
+}
+
+export interface PaginatedResponse<T> {
+  items: T[];
+  nextPage?: PaginationParams;
 }

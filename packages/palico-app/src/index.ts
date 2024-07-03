@@ -1,4 +1,3 @@
-import './instrumentation';
 export * from './agent';
 export * from './app';
 export * from './api/error';
@@ -7,3 +6,4 @@ export * from './experiments';
 export * from './workflows';
 export * from './data_store';
 export * from './types';
+export * from './tracing';

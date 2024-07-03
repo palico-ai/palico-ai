@@ -1,8 +1,9 @@
 import { Sequelize, DataTypes, Optional, ModelDefined } from 'sequelize';
 import * as dotenv from 'dotenv';
 import {
-  ConversationTraces,
-  ConversationRequestTraceItem,
+  ConversationTelemetry,
+  ConversationRequestTelemetryItem,
+  ConversationRequestSpan,
 } from '@palico-ai/common';
 import config from '../../config';
 
@@ -16,41 +17,102 @@ if (!dbURL) {
 
 export const sequelize = new Sequelize(dbURL);
 
-export interface StudioLabAttriutes {
-  id: string;
-  name: string;
-  experimentListJSON: string;
-  testCasesJSON: string;
-  experimentTestResultJSON: string;
-  baselineExperimentId?: string;
-  createdAt: string;
-  updatedAt: string;
-}
+// ================== Table Schema ==================
 
-export type StudioLabCreationAttributes = Optional<
-  StudioLabAttriutes,
-  'id' | 'createdAt' | 'updatedAt'
+/**
+ * Top level container for conversation traces that holds all child request traces
+ */
+export type ConversationTracingTableSchema = Omit<
+  ConversationTelemetry,
+  'requests'
 >;
 
+/**
+ * Table schema for individual request traces within a conversation
+ */
 export type ConversationRequestTraceTableSchema = Omit<
-  ConversationRequestTraceItem,
+  ConversationRequestTelemetryItem,
   'requestInput' | 'responseOutput' | 'appConfig'
 > & {
   requestInput: string; // JSON stringified
   responseOutput: string; // JSON stringified
   appConfig: string; // JSON stringified
 };
+
+export type ConversationRequestSpanTableSchema = Omit<
+  ConversationRequestSpan,
+  'attributes' | 'events'
+> & {
+  attributes: string; // JSON stringified
+  events: string; // JSON stringified
+};
+
+/**
+ * Table schema for storing Chat History for conversational agents
+ */
+export interface SimpleChatHistorySchema {
+  conversationId: string;
+  messagesJSON: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// ================== Define Tables ==================
+export type CreateRequestSpanParams = ConversationRequestSpanTableSchema;
+
+export const RequestSpanTable: ModelDefined<
+  ConversationRequestSpanTableSchema,
+  CreateRequestSpanParams
+> = sequelize.define(
+  'request_span',
+  {
+    spanId: {
+      type: DataTypes.STRING,
+      primaryKey: true,
+    },
+    requestId: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    conversationId: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    parentSpanId: {
+      type: DataTypes.STRING,
+    },
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    attributes: {
+      type: DataTypes.JSONB,
+      allowNull: false,
+    },
+    events: {
+      type: DataTypes.JSONB,
+      allowNull: false,
+    },
+    timestamp: {
+      type: DataTypes.BIGINT,
+      allowNull: false,
+    },
+    duration: {
+      type: DataTypes.DOUBLE,
+      allowNull: false,
+    },
+    statusCode: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+  },
+  {
+    timestamps: false,
+  }
+);
+
 export type CreateConversationRequestTraceParams = Omit<
   ConversationRequestTraceTableSchema,
-  'createdAt' | 'updatedAt'
->;
-
-export type ConversationTracingTableSchema = Omit<
-  ConversationTraces,
-  'requests'
->;
-export type CreateConversationTracingParams = Omit<
-  ConversationTracingTableSchema,
   'createdAt' | 'updatedAt'
 >;
 
@@ -76,9 +138,11 @@ export const ConversationRequestTracingTable: ModelDefined<
     appConfig: {
       type: DataTypes.JSONB,
     },
+    // @deprecated
     traceId: {
       type: DataTypes.STRING,
     },
+    // @deprecated
     tracePreviewUrl: {
       type: DataTypes.STRING,
     },
@@ -87,6 +151,11 @@ export const ConversationRequestTracingTable: ModelDefined<
     timestamps: true,
   }
 );
+
+export type CreateConversationTracingParams = Omit<
+  ConversationTracingTableSchema,
+  'createdAt' | 'updatedAt'
+>;
 
 export const ConversationTracingTable: ModelDefined<
   ConversationTracingTableSchema,
@@ -110,20 +179,13 @@ export const ConversationTracingTable: ModelDefined<
   }
 );
 
-export interface SimpleChatHistory {
-  conversationId: string;
-  messagesJSON: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
 export type SimpleChatHistoryCreationAttributes = Optional<
-  SimpleChatHistory,
+  SimpleChatHistorySchema,
   'createdAt' | 'updatedAt'
 >;
 
 export const SimpleChatHistoryTable: ModelDefined<
-  SimpleChatHistory,
+  SimpleChatHistorySchema,
   SimpleChatHistoryCreationAttributes
 > = sequelize.define(
   'simple_chat_history',
@@ -148,4 +210,21 @@ ConversationTracingTable.hasMany(ConversationRequestTracingTable, {
 
 ConversationRequestTracingTable.belongsTo(ConversationTracingTable, {
   foreignKey: 'conversationId',
+});
+
+ConversationTracingTable.hasMany(RequestSpanTable, {
+  foreignKey: 'conversationId',
+});
+
+RequestSpanTable.belongsTo(ConversationTracingTable, {
+  foreignKey: 'conversationId',
+});
+
+ConversationRequestTracingTable.hasMany(RequestSpanTable, {
+  foreignKey: 'requestId',
+  onDelete: 'CASCADE',
+});
+
+RequestSpanTable.belongsTo(ConversationRequestTracingTable, {
+  foreignKey: 'requestId',
 });

@@ -3,7 +3,7 @@ import { Box, Chip, Stack } from '@mui/material';
 import { Table } from '@tanstack/react-table';
 import { TextField } from '../../form';
 import SelectColumnControl from './select_column';
-import Typography from '../../typography';
+import { Typography } from '../../typography';
 import GroupingSettings from './grouping_options';
 
 export interface TableControlPanelProps<Data> {

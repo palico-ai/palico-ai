@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getTracesForConversation } from '../../services/telemetry';
+import { getConversationTelemetry } from '../../services/telemetry';
 import { Link } from '@palico-ai/components';
 
 interface EvalTraceLinkCellProps {
@@ -12,7 +12,7 @@ const EvalTraceLinkCell = ({ conversationId }: EvalTraceLinkCellProps) => {
   useEffect(() => {
     const handleSetTraceURL = async () => {
       try {
-        const trace = await getTracesForConversation(conversationId);
+        const trace = await getConversationTelemetry(conversationId);
         setTraceURL(trace.requests[0].tracePreviewUrl);
       } catch (error) {
         console.error(error);

@@ -12,6 +12,7 @@ import {
   TextDiff,
 } from '@palico-ai/components';
 import LabItemViewConfig from '../constants';
+import { RoutePath } from '../../../../../utils/route_path';
 
 interface ResultCellParams {
   experimentId: string;
@@ -157,8 +158,13 @@ const ResultCell: React.FC<ResultCellParams> = ({ experimentId, testId }) => {
             gap: 1,
           }}
         >
-          {result?.metadata?.tracePreviewUrl && (
-            <Link href={result.metadata.tracePreviewUrl} target="_blank">
+          {result?.metadata?.requestId && (
+            <Link
+              href={RoutePath.requestTraceItem({
+                requestId: result.metadata.requestId,
+              })}
+              target="_blank"
+            >
               <Chip size="small" label="Traces" />
             </Link>
           )}

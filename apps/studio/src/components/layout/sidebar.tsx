@@ -50,7 +50,7 @@ const SIDEBAR_ITEMS: SidebarNavItemParams[] = [
   },
   {
     label: 'Tracing',
-    path: RoutePath.tracing(),
+    path: RoutePath.requestTraceList(),
     icon: <TracerIcon />,
   },
   {

@@ -25,6 +25,8 @@
     "@opentelemetry/sdk-metrics": "^1.24.0",
     "@opentelemetry/sdk-node": "^0.51.0",
     "@opentelemetry/sdk-trace-node": "^1.24.0",
+    "@tanstack/react-query": "^5.56.2",
+    "@tanstack/react-query-devtools": "^5.56.2",
     "@tanstack/react-table": "^8.17.3",
     "@xyflow/react": "^12.2.0",
     "ag-grid-community": "^31.2.1",

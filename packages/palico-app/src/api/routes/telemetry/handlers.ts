@@ -1,21 +1,22 @@
 import { RequestHandler } from 'express';
-import { ConversationTracker } from '../../../services/database/conversation_tracker';
+import { ConversationTelemetryModel } from '../../../services/database/conversation_telemetry';
 import { APIError } from '../../error';
 import {
-  GetTracesByConversationResponse,
-  GetConversationRequestTraces,
+  GetConversationTelemetryResponse,
+  GetRecentRequestTelemetryResponse,
   GetRecentConversationResponse,
-  GetTraceForRequestIdResponse,
+  GetTelemetryForRequestIdResponse,
+  GetRequestSpanResponse,
 } from '@palico-ai/common';
 import { ConversationIDRequired, RequestIDRequired } from '../../types';
 
-export const getTracesByConversationId: RequestHandler<
+export const getRequestsByConversationId: RequestHandler<
   ConversationIDRequired,
-  GetTracesByConversationResponse
+  GetConversationTelemetryResponse
 > = async (req, res, next) => {
   try {
     const conversationId = req.params['conversationId'];
-    const traces = await ConversationTracker.getTracesByConversationId(
+    const traces = await ConversationTelemetryModel.getRequestsByConversationId(
       conversationId
     );
     if (!traces) {
@@ -29,13 +30,13 @@ export const getTracesByConversationId: RequestHandler<
   }
 };
 
-export const getRecentTraces: RequestHandler<
+export const getRecentRequests: RequestHandler<
   unknown,
-  GetConversationRequestTraces
+  GetRecentRequestTelemetryResponse
 > = async (req, res, next) => {
   try {
     const { limit = 25, offset = 0 } = req.query;
-    const traces = await ConversationTracker.getRecentTraces({
+    const traces = await ConversationTelemetryModel.getRecentRequests({
       limit: Number(limit),
       offset: Number(offset),
     });
@@ -53,7 +54,7 @@ export const getRecentConversations: RequestHandler<
 > = async (req, res, next) => {
   try {
     const { limit = 25, offset = 0 } = req.query;
-    const traces = await ConversationTracker.getRecentConversations({
+    const traces = await ConversationTelemetryModel.getRecentConversations({
       limit: Number(limit),
       offset: Number(offset),
     });
@@ -65,13 +66,15 @@ export const getRecentConversations: RequestHandler<
   }
 };
 
-export const getTraceForRequestId: RequestHandler<
+export const getRequestTelemetry: RequestHandler<
   RequestIDRequired,
-  GetTraceForRequestIdResponse
+  GetTelemetryForRequestIdResponse
 > = async (req, res, next) => {
   try {
     const requestId = req.params['requestId'];
-    const trace = await ConversationTracker.getTraceForRequestId(requestId);
+    const trace = await ConversationTelemetryModel.getRequestTelemetry(
+      requestId
+    );
     if (!trace) {
       throw APIError.notFound('Trace not found');
     }
@@ -81,4 +84,19 @@ export const getTraceForRequestId: RequestHandler<
   } catch (error) {
     return next(error);
   }
-}
+};
+
+export const getRequestSpans: RequestHandler<
+  RequestIDRequired,
+  GetRequestSpanResponse
+> = async (req, res, next) => {
+  try {
+    const requestId = req.params['requestId'];
+    const spans = await ConversationTelemetryModel.getRequestSpans(requestId);
+    return res.status(200).json({
+      spans,
+    });
+  } catch (error) {
+    return next(error);
+  }
+};

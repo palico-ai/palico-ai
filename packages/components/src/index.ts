@@ -19,3 +19,4 @@ export * from './list';
 export * from './code';
 export * from './accordion_list';
 export * from './embed';
+export * from './loading';

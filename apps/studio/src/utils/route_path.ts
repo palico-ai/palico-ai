@@ -6,6 +6,10 @@ import {
   RequireNoteobokName,
 } from '../types/common';
 
+export enum QueryParam {
+  requestId = 'requestId',
+}
+
 export class RoutePath {
   static chat() {
     return '/chat';
@@ -59,8 +63,14 @@ export class RoutePath {
     return `${RoutePath.experimentEvalList(params)}/${params.testReportName}`;
   }
 
-  static tracing() {
-    return '/tracing';
+  static requestTraceList() {
+    return '/telemetry/requests';
+  }
+
+  static requestTraceItem(params: { requestId: string }) {
+    return `${RoutePath.requestTraceList()}?${QueryParam.requestId}=${
+      params.requestId
+    }`;
   }
 
   static evaluation() {
