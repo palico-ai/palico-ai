@@ -1,6 +1,6 @@
 # Chat History Store
 
-For conversational applications like chatbots, you need to often store conversation states in a database. Palico provides a conversation store out-of-the-box for you to easily store and retrieve conversation states. You can view the API Reference [here](https://palico-ai.github.io/palico-main/classes/ChatHistoryStore.html)
+For conversational applications like chatbots, you need to often store conversation states in a database. Palico provides a conversation store out-of-the-box for you to easily store and retrieve conversation states. You can view the API Reference [here](https://palico-ai.github.io/palico-ai/classes/ChatHistoryStore.html)
 
 ## Getting a Conversation State
 

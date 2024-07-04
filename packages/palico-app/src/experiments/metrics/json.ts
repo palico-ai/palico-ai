@@ -17,7 +17,7 @@ export interface ValidJSONMetricParams {
  */
 export class ValidJSONMetric implements EvalMetric {
   private params: ValidJSONMetricParams;
-  label = 'valid-json';
+  label = 'Valid JSON';
 
   constructor(params: ValidJSONMetricParams) {
     this.params = params;

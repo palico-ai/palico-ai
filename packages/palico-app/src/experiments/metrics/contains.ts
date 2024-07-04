@@ -15,7 +15,7 @@ export interface ContainsMetricParams {
  */
 export class ContainsMetric implements EvalMetric {
   private params: ContainsMetricParams;
-  label = 'substring';
+  label = 'Contains';
 
   constructor(params: ContainsMetricParams) {
     this.params = params;
@@ -43,7 +43,7 @@ export interface ContainsAnyMetricParams {
  */
 export class ContainsAnyMetric implements EvalMetric {
   private params: ContainsAnyMetricParams;
-  label = 'contains-any';
+  label = 'Contains Any';
 
   constructor(params: ContainsAnyMetricParams) {
     this.params = params;
@@ -71,7 +71,7 @@ export interface ContainsAllMetricParams {
  */
 export class ContainsAllMetric implements EvalMetric {
   private params: ContainsAllMetricParams;
-  label = 'contains-all';
+  label = 'Contains All';
 
   constructor(params: ContainsAllMetricParams) {
     this.params = params;

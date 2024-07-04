@@ -38,8 +38,7 @@ const config: Config = {
           sidebarPath: './sidebars.ts',
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
-          editUrl:
-            'https://github.com/palico-ai/palico-main/tree/main/apps/docs',
+          editUrl: 'https://github.com/palico-ai/palico-ai/tree/main/apps/docs',
         },
         gtag: {
           trackingID: 'G-Q39NFM4PTV',
@@ -81,13 +80,13 @@ const config: Config = {
           label: 'Docs',
         },
         {
-          to: 'https://palico-ai.github.io/palico-main/',
+          to: 'https://palico-ai.github.io/palico-ai/',
           label: 'API Reference',
           position: 'left',
         },
         { to: 'https://palico.ai/', label: 'Palico.AI', position: 'right' },
         {
-          href: 'https://github.com/palico-ai/palico-main',
+          href: 'https://github.com/palico-ai/palico-ai',
           label: 'GitHub',
           position: 'right',
         },
@@ -127,7 +126,7 @@ const config: Config = {
             },
             {
               label: 'GitHub',
-              href: 'https://github.com/palico-ai/palico-main',
+              href: 'https://github.com/palico-ai/palico-ai',
             },
           ],
         },

@@ -13,6 +13,7 @@ import {
 import { Application } from '../app';
 import JobQueue from '../services/job_queue';
 import ExperimentModel from './model';
+import { ResponseMetadataKey } from '../types';
 
 interface RunTestCaseParams {
   testCase: EvalTestCase;
@@ -20,6 +21,34 @@ interface RunTestCaseParams {
   agentName?: string;
   workflowName?: string;
 }
+
+interface MetadataSystemMetric {
+  label: string;
+  metatadataKey: ResponseMetadataKey;
+}
+
+const SYSTEM_METRICS: MetadataSystemMetric[] = [
+  {
+    label: 'Execution Time',
+    metatadataKey: ResponseMetadataKey.ExecutionTime,
+  },
+  {
+    label: 'Total Tokens',
+    metatadataKey: ResponseMetadataKey.TotalTokens,
+  },
+  {
+    label: 'Input Tokens',
+    metatadataKey: ResponseMetadataKey.InputTokens,
+  },
+  {
+    label: 'Output Tokens',
+    metatadataKey: ResponseMetadataKey.OutputTokens,
+  },
+  {
+    label: 'Total Cost',
+    metatadataKey: ResponseMetadataKey.TotalCost,
+  },
+];
 
 export class ExperimentExecutor {
   static async startTestJob(
@@ -106,6 +135,15 @@ export class ExperimentExecutor {
         };
       })
     );
+    SYSTEM_METRICS.forEach((metric) => {
+      const value = response.metadata?.[metric.metatadataKey];
+      if (value) {
+        metrics.push({
+          name: metric.label,
+          value,
+        });
+      }
+    });
     const metricsReport: Record<string, EvalMetricOutput> = {};
     metrics.forEach((metric) => {
       metricsReport[metric.name] = metric.value;
