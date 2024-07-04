@@ -14,7 +14,7 @@ export interface ExactMatchParams {
  */
 export class ExactMatchMetric implements EvalMetric {
   private params: ExactMatchParams;
-  label = 'exact-match';
+  label = 'Exact Match';
 
   constructor(params: ExactMatchParams) {
     this.params = params;

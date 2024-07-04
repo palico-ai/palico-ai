@@ -27,7 +27,7 @@ const client = createClient({
   serviceKey,
 });
 ```
-You can view the full API Reference for Palico Client [here](https://palico-ai.github.io/palico-main/interfaces/_palico_ai_client_js.IPalicoClient.html)
+You can view the full API Reference for Palico Client [here](https://palico-ai.github.io/palico-ai/interfaces/_palico_ai_client_js.IPalicoClient.html)
 
 ### Sending a message
 ```typescript
