@@ -36,15 +36,7 @@ export const SimpleDialogForm: React.FC<SimpleDialogFormProps> = ({
       open={isOpen}
       onClose={closeForm}
     >
-      <DialogTitle>
-        {title}
-        {/* <Typography variant="h5">{title}</Typography>
-        {subtitle?.length && (
-          <Typography variant="subtitle2" pt={2}>
-            {subtitle}
-          </Typography>
-        )} */}
-      </DialogTitle>
+      <DialogTitle>{title}</DialogTitle>
       <DialogContent>
         <FormBuilder onSubmit={handleFormSubmit} {...formBuilderProps} />
       </DialogContent>

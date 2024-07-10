@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { Box, IconButton, Menu, MenuItem } from '@mui/material';
 import React, { useRef } from 'react';
@@ -10,23 +10,28 @@ interface MenuItemProps {
 
 export interface MenuButtonProps {
   icon?: React.ReactNode;
+  children?: React.ReactNode;
   menuItems: MenuItemProps[];
 }
 
-export const MenuButton: React.FC<MenuButtonProps> = ({ icon, menuItems }) => {
+export const MenuButton: React.FC<MenuButtonProps> = ({
+  icon,
+  menuItems,
+  children,
+}) => {
   const anchorRef = useRef<HTMLButtonElement>(null);
   const [open, setOpen] = React.useState(false);
 
   return (
     <Box>
-      <IconButton
+      <Box
+        ref={anchorRef}
         onClick={() => {
           setOpen(!open);
         }}
-        ref={anchorRef}
       >
-        {icon}
-      </IconButton>
+        {icon ? <IconButton>{icon}</IconButton> : children}
+      </Box>
       <Menu
         anchorEl={anchorRef.current}
         open={open}
@@ -35,7 +40,13 @@ export const MenuButton: React.FC<MenuButtonProps> = ({ icon, menuItems }) => {
         }}
       >
         {menuItems.map((item, index) => (
-          <MenuItem key={index} onClick={item.onClick}>
+          <MenuItem
+            key={index}
+            onClick={async () => {
+              await item.onClick();
+              setOpen(false);
+            }}
+          >
             {item.label}
           </MenuItem>
         ))}

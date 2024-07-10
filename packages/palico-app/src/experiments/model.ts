@@ -1,6 +1,6 @@
 import {
   ExperimentJSON,
-  EvalJobKeyID,
+  EvalCompositeKey,
   EvalResultJSON,
   CreateEvaluationParams,
   CreateExperimentParams,
@@ -114,7 +114,7 @@ export default class ExperimentModel {
   }
 
   static async updateTestJSON(
-    key: EvalJobKeyID,
+    key: EvalCompositeKey,
     content: Partial<EvalJSON>
   ): Promise<EvalJSON> {
     const { experimentName, evalName: testName } = key;
@@ -132,7 +132,7 @@ export default class ExperimentModel {
   }
 
   static async updateTestResultJSON(
-    key: EvalJobKeyID,
+    key: EvalCompositeKey,
     content: EvalResultJSON
   ): Promise<EvalResultJSON> {
     const { experimentName, evalName: testName } = key;
@@ -161,7 +161,7 @@ export default class ExperimentModel {
     };
   }
 
-  static async getAllTests(): Promise<EvalJobKeyID[]> {
+  static async getAllTests(): Promise<EvalCompositeKey[]> {
     const allExperiments = await this.getAllExperiments();
     const tests = await Promise.all(
       allExperiments.map(async (exp) => {

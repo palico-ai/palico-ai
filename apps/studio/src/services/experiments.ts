@@ -84,10 +84,10 @@ export const runEval = async (params: CreateEvaluationParams) => {
   );
 };
 
-export const getEvalByName = async (expName: string, testName: string) => {
+export const getEvalByName = async (expName: string, evalName: string) => {
   await verifySession();
   return await palicoFetch<Evaluation>(
-    `/dev/experiments/${expName}/evals/${testName}`,
+    `/dev/experiments/${expName}/evals/${evalName}`,
     {
       method: 'GET',
     }

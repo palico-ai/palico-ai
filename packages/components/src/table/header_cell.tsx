@@ -34,6 +34,7 @@ export function HeaderCell<Data>(
       key={header.id}
       sortDirection={sortDirection}
       colSpan={header.colSpan}
+      width={header.getSize()}
     >
       <Box
         sx={{

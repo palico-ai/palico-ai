@@ -12,6 +12,7 @@
     "@dropzone-ui/react": "^7.0.4",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.0",
+    "@hello-pangea/dnd": "^16.6.0",
     "@mdx-js/react": "^3.0.0",
     "@monaco-editor/react": "^4.6.0",
     "@mui/icons-material": "^5.15.12",

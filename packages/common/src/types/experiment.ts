@@ -27,7 +27,7 @@ export interface EvalMetric {
 
 export type EvalMetricResultMap = Record<string, EvalMetricOutput>;
 
-export interface EvalResult {
+export interface EvalTestCaseResult {
   input: ConversationRequestContent;
   tags: EvalTestCaseTag;
   output: ConversationResponse;
@@ -64,7 +64,7 @@ export interface EvalJSON {
 }
 
 export interface EvalResultJSON {
-  result: EvalResult[];
+  result: EvalTestCaseResult[];
 }
 
 export interface Evaluation extends EvalJSON, EvalResultJSON {
@@ -84,11 +84,11 @@ export interface CreateEvalJobResponse {
   evalName: EvaluationMetadata;
 }
 
-export interface EvalJobKeyID {
+export interface EvalCompositeKey {
   experimentName: string;
   evalName: string;
 }
 
 export interface GetAllEvalsResponse {
-  evals: EvalJobKeyID[];
+  evals: EvalCompositeKey[];
 }

@@ -1,6 +1,6 @@
 'use client';
 
-import { EvalJobKeyID } from '@palico-ai/common';
+import { EvalCompositeKey } from '@palico-ai/common';
 import {
   Button,
   CheckboxAutocomplete,
@@ -21,7 +21,7 @@ export interface NewAnalysisFormProps {
   experimentName: string;
   isOpen: boolean;
   closeForm: () => void;
-  initialEvals?: EvalJobKeyID[];
+  initialEvals?: EvalCompositeKey[];
 }
 
 const NewAnalysisForm: React.FC<NewAnalysisFormProps> = ({
@@ -40,7 +40,7 @@ const NewAnalysisForm: React.FC<NewAnalysisFormProps> = ({
   } = useAsyncTask({
     task: getAllEvals,
   });
-  const [selectedTests, setSelectedTests] = React.useState<EvalJobKeyID[]>(
+  const [selectedTests, setSelectedTests] = React.useState<EvalCompositeKey[]>(
     initialTests ?? []
   );
   const router = useRouter();
@@ -54,7 +54,7 @@ const NewAnalysisForm: React.FC<NewAnalysisFormProps> = ({
   const datasetOptions: CheckboxAutocompleteProps['options'] =
     React.useMemo(() => {
       return (
-        allTests?.map((test: EvalJobKeyID) => ({
+        allTests?.map((test: EvalCompositeKey) => ({
           label: test.evalName,
           value: test,
         })) ?? []
@@ -77,12 +77,12 @@ const NewAnalysisForm: React.FC<NewAnalysisFormProps> = ({
             label: 'Evaluations',
           }}
           groupBy={(option) => {
-            const test = option.value as EvalJobKeyID;
+            const test = option.value as EvalCompositeKey;
             return test.experimentName;
           }}
           value={selectedTests}
           onChange={(values) => {
-            setSelectedTests(values.map((value) => value as EvalJobKeyID));
+            setSelectedTests(values.map((value) => value as EvalCompositeKey));
           }}
           options={datasetOptions}
         />

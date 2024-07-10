@@ -1,0 +1,118 @@
+{
+    "rows": [
+        {
+            "type": "text",
+            "data": {
+                "text": "Flat Table of all Datasets"
+            }
+        },
+        {
+            "type": "table",
+            "data": {
+                "tableState": {
+                    "columnSizing": {},
+                    "columnSizingInfo": {
+                        "startOffset": null,
+                        "startSize": null,
+                        "deltaOffset": null,
+                        "deltaPercentage": null,
+                        "isResizingColumn": false,
+                        "columnSizingStart": []
+                    },
+                    "rowSelection": {},
+                    "rowPinning": {
+                        "top": [],
+                        "bottom": []
+                    },
+                    "expanded": {},
+                    "grouping": [],
+                    "sorting": [],
+                    "columnFilters": [],
+                    "columnPinning": {
+                        "left": [],
+                        "right": []
+                    },
+                    "columnOrder": [],
+                    "columnVisibility": {
+                        "payload": false,
+                        "responseData": false
+                    },
+                    "pagination": {
+                        "pageIndex": 0,
+                        "pageSize": 10
+                    }
+                },
+                "columnAggregationFn": {}
+            }
+        },
+        {
+            "type": "text",
+            "data": {
+                "text": "Aggregated by category and dataset"
+            }
+        },
+        {
+            "type": "table",
+            "data": {
+                "tableState": {
+                    "columnSizing": {},
+                    "columnSizingInfo": {
+                        "startOffset": null,
+                        "startSize": null,
+                        "deltaOffset": null,
+                        "deltaPercentage": null,
+                        "isResizingColumn": false,
+                        "columnSizingStart": []
+                    },
+                    "rowSelection": {},
+                    "rowPinning": {
+                        "top": [],
+                        "bottom": []
+                    },
+                    "expanded": {
+                        "tag.category:math:algebra": true,
+                        "tag.category:math:arithmetic": true,
+                        "tag.category:math:trigonometry": true
+                    },
+                    "grouping": [
+                        "tag.category",
+                        "label"
+                    ],
+                    "sorting": [],
+                    "columnFilters": [],
+                    "columnPinning": {
+                        "left": [],
+                        "right": []
+                    },
+                    "columnOrder": [],
+                    "columnVisibility": {
+                        "payload": false,
+                        "responseData": false
+                    },
+                    "pagination": {
+                        "pageIndex": 0,
+                        "pageSize": 10
+                    }
+                },
+                "columnAggregationFn": {}
+            }
+        }
+    ],
+    "datasets": [
+        {
+            "experimentName": "Demo with Headstarter",
+            "evalName": "T1",
+            "label": "T1"
+        },
+        {
+            "experimentName": "Demo with Headstarter",
+            "evalName": "Control",
+            "label": "Control"
+        },
+        {
+            "experimentName": "New EXP",
+            "evalName": "Test with System Metrics",
+            "label": "T4"
+        }
+    ]
+}

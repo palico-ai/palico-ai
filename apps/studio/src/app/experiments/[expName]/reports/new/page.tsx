@@ -1,4 +1,4 @@
-import { EvalJobKeyID } from '@palico-ai/common';
+import { EvalCompositeKey } from '@palico-ai/common';
 import { getEvalByName } from '../../../../../services/experiments';
 import React from 'react';
 import PageContent from '../../../../../components/layout/page_content';
@@ -15,7 +15,7 @@ export interface TestReportItemPageProps extends ExperimentItemChildPage {
 
 const NewTestReportPage: React.FC<TestReportItemPageProps> = async (props) => {
   const { evals: evalString } = props.searchParams;
-  const tests = JSON.parse(evalString) as EvalJobKeyID[];
+  const tests = JSON.parse(evalString) as EvalCompositeKey[];
   const testDatasets = await Promise.all(
     tests.map((test) => getEvalByName(test.experimentName, test.evalName))
   );

@@ -1,9 +1,9 @@
 import { WorkHandler } from 'pg-boss';
 import ExperimentModel from '../../experiments/model';
 import { ExperimentExecutor } from '../../experiments/executor';
-import { EvalJobKeyID } from '@palico-ai/common';
+import { EvalCompositeKey } from '@palico-ai/common';
 
-export const ExperimentTestRunner: WorkHandler<EvalJobKeyID> = async ({
+export const ExperimentTestRunner: WorkHandler<EvalCompositeKey> = async ({
   id,
   data: testKey,
 }) => {
