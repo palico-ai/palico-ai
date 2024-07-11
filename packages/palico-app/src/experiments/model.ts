@@ -14,6 +14,7 @@ import { CreateEvalJobConfigResult } from '.';
 import OS from '../utils/os';
 import Project from '../utils/project';
 import omit from 'lodash/omit';
+import path from 'path';
 
 export default class ExperimentModel {
   private static readonly TEST_DIR = 'evals';
@@ -51,12 +52,14 @@ export default class ExperimentModel {
     const expDir = await Project.getExperimentRootDir();
     const dirs = await OS.getDirectories(expDir);
     const experimentNames = dirs.filter((dir) => {
-      return OS.doesFileExist(`${expDir}/${dir}/${this.EXPERIMENT_FILE_NAME}`);
+      return OS.doesFileExist(
+        path.join(expDir, dir, this.EXPERIMENT_FILE_NAME)
+      );
     });
     const experiments = await Promise.all(
       experimentNames.map(async (dir) => {
         const content = await OS.readJsonFile<ExperimentJSON>(
-          `${expDir}/${dir}/${this.EXPERIMENT_FILE_NAME}`
+          path.join(expDir, dir, this.EXPERIMENT_FILE_NAME)
         );
         return {
           ...content,
@@ -185,7 +188,9 @@ export default class ExperimentModel {
     );
     const tests: EvaluationMetadata[] = await Promise.all(
       testFiles.map(async (file) => {
-        const content = await OS.readJsonFile<EvalJSON>(`${testDir}/${file}`);
+        const content = await OS.readJsonFile<EvalJSON>(
+          path.join(testDir, file)
+        );
         return {
           ...omit(content, 'result'),
           experimentName,
@@ -222,19 +227,19 @@ export default class ExperimentModel {
 
   private static async buildExpDirPath(expDirName: string): Promise<string> {
     const expDir = await Project.getExperimentRootDir();
-    return `${expDir}/${expDirName}`;
+    return path.join(expDir, expDirName);
   }
 
   private static async buildExpertimentFilePath(
     expDirName: string
   ): Promise<string> {
     const rootPath = await ExperimentModel.buildExpDirPath(expDirName);
-    return `${rootPath}/${this.EXPERIMENT_FILE_NAME}`;
+    return path.join(rootPath, this.EXPERIMENT_FILE_NAME);
   }
 
   private static async buildTestDirPath(expDirName: string): Promise<string> {
     const rootPath = await ExperimentModel.buildExpDirPath(expDirName);
-    return `${rootPath}/${this.TEST_DIR}`;
+    return path.join(rootPath, this.TEST_DIR);
   }
 
   static async buildTestFilePath(
@@ -250,7 +255,10 @@ export default class ExperimentModel {
     testName: string
   ): Promise<string> {
     const rootPath = await ExperimentModel.buildTestDirPath(expName);
-    return `${rootPath}/${testName}.${ExperimentModel.EVAL_RESULT_FILE_NAME}`;
+    return path.join(
+      rootPath,
+      `${testName}.${ExperimentModel.EVAL_RESULT_FILE_NAME}`
+    );
   }
 
   private static parseEvalName(filename: string): string {

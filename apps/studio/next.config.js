@@ -12,7 +12,14 @@ const nextConfig = {
     // See: https://github.com/gregberge/svgr
     svgr: false,
   },
-  output: "standalone"
+  output: "standalone",
+  experimental: {
+    serverActions: {
+      ...process.env.SERVER_ACTION_ORIGINS ? {
+        allowedOrigins: process.env.SERVER_ACTION_ORIGINS.split(','),
+      } : {},
+    }
+  }
 };
 
 const plugins = [

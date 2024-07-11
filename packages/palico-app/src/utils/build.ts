@@ -6,6 +6,7 @@ import YAML from 'json-to-pretty-yaml';
 import { v2 as compose } from 'docker-compose';
 import { exec, execSync } from 'child_process';
 import chalk from 'chalk';
+import path from 'path';
 
 enum ProjectService {
   POSTGRES_DB = 'postgres_db',
@@ -136,9 +137,9 @@ export class ProjectBuild {
   }
 
   static showResourceDetails() {
-    console.log(chalk.green('Database URL:'), ProjectBuild.databaseURL);
-    console.log(chalk.green('Jaeger URL:'), 'http://localhost:16686');
     console.log(chalk.green('Studio URL:'), 'http://localhost:5173');
+    console.log(chalk.green('Jaeger URL:'), 'http://localhost:16686');
+    console.log(chalk.green('Database URL:'), ProjectBuild.databaseURL);
     console.log(
       chalk.green('API URL:'),
       `http://localhost:${config.getAPIPort()}`
@@ -187,7 +188,7 @@ export class ProjectBuild {
 
   private static async getDockerComposePath() {
     const rootDir = await Project.getPalicoTempDir();
-    const composeFilePath = `${rootDir}/docker-compose.yml`;
+    const composeFilePath = path.join(rootDir, 'docker-compose.yml');
     return {
       composeFilePath,
       rootDir,

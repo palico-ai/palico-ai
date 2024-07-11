@@ -1,3 +1,4 @@
+import './instrumentation';
 export * from './agent';
 export * from './app';
 export * from './api/error';

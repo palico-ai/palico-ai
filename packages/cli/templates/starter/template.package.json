@@ -12,21 +12,15 @@
     "reinstall": "npm remove @palico-ai/app && npm install @palico-ai/app"
   },
   "nodemonConfig": {
-    "ignore": [
-      "appdata/**/*"
-    ]
+    "ignore": ["appdata/**/*", ".palico"]
   },
   "dependencies": {
     "@opentelemetry/api": "^1.8.0",
-    "@opentelemetry/auto-instrumentations-node": "^0.44.0",
-    "@opentelemetry/exporter-zipkin": "^1.24.0",
-    "@opentelemetry/sdk-metrics": "^1.24.0",
-    "@opentelemetry/sdk-node": "^0.51.0",
-    "@opentelemetry/sdk-trace-node": "^1.24.0",
     "openai": "^4.52.0"
   },
   "devDependencies": {
     "@types/nodemon": "^1.19.6",
+    "ts-node": "^10.9.1",
     "nodemon": "^3.1.0"
   }
 }
