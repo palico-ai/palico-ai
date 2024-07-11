@@ -1,13 +1,13 @@
 {
   "name": "palico",
-  "version": "1.18.3",
+  "version": "1.18.4",
   "bugs": {
-    "url": "https://github.com/palico-ai/palico-main/issues"
+    "url": "https://github.com/palico-ai/palico-ai/issues"
   },
-  "homepage": "https://github.com/palico-ai/palico-main#readme",
+  "homepage": "https://github.com/palico-ai/palico-ai#readme",
   "repository": {
     "type": "git",
-    "url": "https://github.com/palico-ai/palico-main"
+    "url": "https://github.com/palico-ai/palico-ai"
   },
   "publishConfig": {
     "access": "public"

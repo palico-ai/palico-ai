@@ -1,15 +1,15 @@
 {
   "name": "@palico-ai/app",
-  "version": "1.18.3",
+  "version": "1.18.4",
   "main": "./src/index.js",
   "typings": "./src/index.d.ts",
   "bugs": {
-    "url": "https://github.com/palico-ai/palico-main/issues"
+    "url": "https://github.com/palico-ai/palico-ai/issues"
   },
-  "homepage": "https://github.com/palico-ai/palico-main#readme",
+  "homepage": "https://github.com/palico-ai/palico-ai#readme",
   "repository": {
     "type": "git",
-    "url": "https://github.com/palico-ai/palico-main"
+    "url": "https://github.com/palico-ai/palico-ai"
   },
   "publishConfig": {
     "access": "public"
@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "@opentelemetry/api": "^1.8.0",
-    "@palico-ai/common": "1.18.3",
+    "@palico-ai/common": "1.18.4",
     "body-parser": "^1.20.2",
     "chalk": "^4.1.2",
     "commander": "^11.1.0",
