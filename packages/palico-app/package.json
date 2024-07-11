@@ -42,7 +42,11 @@
     "sequelize": "^6.37.3",
     "tslib": "^2.3.0",
     "uuidv4": "^6.2.13",
-    "zod": "^3.23.8"
+    "zod": "^3.23.8",
+    "@opentelemetry/sdk-node": "^0.51.0",
+    "@opentelemetry/resources": "1.24.0",
+    "@opentelemetry/semantic-conventions": "1.24.0",
+    "@opentelemetry/exporter-trace-otlp-proto": "0.51.0"
   },
   "devDependencies": {
     "prisma": "^5.15.0",

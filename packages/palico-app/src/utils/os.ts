@@ -1,5 +1,6 @@
 import { existsSync } from 'fs';
 import { mkdir, readFile, readdir, rmdir, writeFile } from 'fs/promises';
+import { dirname } from 'path';
 import Project from './project';
 
 export default class OS {
@@ -28,7 +29,7 @@ export default class OS {
   static async createFile(path: string, content: string) {
     // check if directory exists
     await Project.validatePathWithinProject(path);
-    const dir = path.substring(0, path.lastIndexOf('/'));
+    const dir = dirname(path);
     const dirExists = await this.doesDirectoryExist(dir);
     if (!dirExists) {
       await this.createDirectory(dir);
@@ -39,7 +40,7 @@ export default class OS {
   static async createJsonFile(path: string, content: unknown) {
     // check if directory exists
     await Project.validatePathWithinProject(path);
-    const dir = path.substring(0, path.lastIndexOf('/'));
+    const dir = dirname(path);
     const dirExists = await this.doesDirectoryExist(dir);
     if (!dirExists) {
       await this.createDirectory(dir);

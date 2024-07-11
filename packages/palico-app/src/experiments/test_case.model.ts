@@ -1,6 +1,7 @@
 import { EvalTestCase } from '@palico-ai/common';
 import OS from '../utils/os';
 import Project from '../utils/project';
+import path from 'path';
 
 export default class TestSuiteModel {
   static readonly fileName = 'index.ts';
@@ -9,7 +10,7 @@ export default class TestSuiteModel {
     const datasetDirName = await Project.getTestSuiteRootDir();
     const dirs = await OS.getDirectories(datasetDirName);
     const datasets = dirs.filter((dir) =>
-      OS.doesFileExist(`${datasetDirName}/${dir}/${TestSuiteModel.fileName}`)
+      OS.doesFileExist(path.join(datasetDirName, dir, TestSuiteModel.fileName))
     );
     return datasets;
   }
@@ -27,6 +28,6 @@ export default class TestSuiteModel {
 
   private static async filePath(name: string) {
     const datasetDir = await Project.getTestSuiteRootDir();
-    return `${datasetDir}/${name}/${TestSuiteModel.fileName}`;
+    return path.join(datasetDir, name, TestSuiteModel.fileName);
   }
 }

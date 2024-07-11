@@ -1,6 +1,7 @@
-import OS from "../utils/os";
-import Project from "../utils/project";
-import { ChainWorkflow } from "../workflows";
+import path from 'path';
+import OS from '../utils/os';
+import Project from '../utils/project';
+import { ChainWorkflow } from '../workflows';
 
 export default class WorkflowModel {
   private static readonly workflowFile = 'index.ts';
@@ -9,7 +10,9 @@ export default class WorkflowModel {
     const workflowDirName = await Project.getWorkflowRootDir();
     const dirs = await OS.getDirectories(workflowDirName);
     const workflows = dirs.filter((dir) =>
-      OS.doesFileExist(`${workflowDirName}/${dir}/${WorkflowModel.workflowFile}`)
+      OS.doesFileExist(
+        path.join(workflowDirName, dir, WorkflowModel.workflowFile)
+      )
     );
     return workflows;
   }
@@ -19,9 +22,7 @@ export default class WorkflowModel {
     return OS.doesFileExist(filePath);
   }
 
-  static async getWorkflowByName(
-    name: string
-  ): Promise<ChainWorkflow> {
+  static async getWorkflowByName(name: string): Promise<ChainWorkflow> {
     const filePath = await WorkflowModel.workflowFilePath(name);
     const workflow = await import(filePath);
     return workflow.default;
@@ -29,6 +30,6 @@ export default class WorkflowModel {
 
   private static async workflowFilePath(name: string) {
     const workflowDir = await Project.getWorkflowRootDir();
-    return `${workflowDir}/${name}/${WorkflowModel.workflowFile}`;
+    return path.join(workflowDir, name, WorkflowModel.workflowFile);
   }
 }

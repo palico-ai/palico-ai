@@ -2,6 +2,7 @@ import { execSync } from 'child_process';
 import Project from './project';
 import { JWTAuthenticator, commonConfig } from '@palico-ai/common';
 import config from '../config';
+import path from 'path';
 
 interface ApplyDBMigraitonParams {
   DB_URL: string;
@@ -9,7 +10,7 @@ interface ApplyDBMigraitonParams {
 
 export const ApplyDBMigraiton = async (params?: ApplyDBMigraitonParams) => {
   const nodeModulesDir = await Project.getPackageNodeModulesDir();
-  const schemaPath = `${nodeModulesDir}/prisma/schema.prisma`;
+  const schemaPath = path.join(nodeModulesDir, 'prisma', 'schema.prisma');
   let command = `npx prisma migrate deploy --schema ${schemaPath}`;
   if (params?.DB_URL) {
     command = `${config.getDBEnvName()}=${params.DB_URL} ${command}`;

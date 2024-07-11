@@ -1,4 +1,5 @@
 import findup from 'find-up';
+import path from 'path';
 
 // This class is used to work with the file system of the project from package.json level
 export default class Project {
@@ -9,47 +10,47 @@ export default class Project {
       return this.projectPath;
     }
     const fullPath = await findup('package.json');
-    const path = fullPath?.replace(/\/package.json$/, '');
-    if (!path) {
+    if (!fullPath) {
       throw new Error('Failed to find project root');
     }
-    this.projectPath = path;
-    return path;
+    const workspaceDir = path.dirname(fullPath);
+    this.projectPath = workspaceDir;
+    return workspaceDir;
   }
 
   static async getExperimentRootDir(): Promise<string> {
     const root = await this.getWorkspaceRootDir();
-    return `${root}/appdata/experiments`;
+    return path.join(root, 'appdata', 'experiments');
   }
 
   static async getPalicoTempDir(): Promise<string> {
     const root = await this.getWorkspaceRootDir();
-    return `${root}/.palico`;
+    return path.join(root, '.palico');
   }
 
   static async getQuickLabRootDir(): Promise<string> {
     const root = await this.getWorkspaceRootDir();
-    return `${root}/appdata/quicklabs`;
+    return path.join(root, 'appdata', 'quicklabs');
   }
 
   static async getTestSuiteRootDir(): Promise<string> {
     const root = await this.getWorkspaceRootDir();
-    return `${root}/src/eval_tests`;
+    return path.join(root, 'src', 'eval_tests');
   }
 
   static async getWorkflowRootDir(): Promise<string> {
     const root = await this.getWorkspaceRootDir();
-    return `${root}/src/workflows`;
+    return path.join(root, 'src', 'workflows');
   }
 
   static async getAgentRootDir(): Promise<string> {
     const root = await this.getWorkspaceRootDir();
-    return `${root}/src/agents`;
+    return path.join(root, 'src', 'agents');
   }
 
   static async getPackageNodeModulesDir(): Promise<string> {
     const root = await this.getWorkspaceRootDir();
-    return `${root}/node_modules/@palico-ai/app`;
+    return path.join(root, 'node_modules', '@palico-ai', 'app');
   }
 
   static async validatePathWithinProject(path: string): Promise<void> {
