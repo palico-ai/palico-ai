@@ -11,12 +11,12 @@ interface ApplyDBMigraitonParams {
 export const ApplyDBMigraiton = async (params?: ApplyDBMigraitonParams) => {
   const nodeModulesDir = await Project.getPackageNodeModulesDir();
   const schemaPath = path.join(nodeModulesDir, 'prisma', 'schema.prisma');
-  let command = `npx prisma migrate deploy --schema ${schemaPath}`;
-  if (params?.DB_URL) {
-    command = `${config.getDBEnvName()}=${params.DB_URL} ${command}`;
-  }
+  const command = `npx prisma migrate deploy --schema ${schemaPath}`;
   execSync(command, {
     stdio: 'inherit',
+    env: {
+      ...(params?.DB_URL ? { [config.getDBEnvName()]: params?.DB_URL } : {}),
+    },
   });
 };
 
