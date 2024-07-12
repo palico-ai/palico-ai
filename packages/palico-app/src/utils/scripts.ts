@@ -12,11 +12,15 @@ export const ApplyDBMigraiton = async (params?: ApplyDBMigraitonParams) => {
   const nodeModulesDir = await Project.getPackageNodeModulesDir();
   const schemaPath = path.join(nodeModulesDir, 'prisma', 'schema.prisma');
   const command = `npx prisma migrate deploy --schema ${schemaPath}`;
+  const env: NodeJS.ProcessEnv = {
+    ...process.env,
+  };
+  if (params?.DB_URL) {
+    env[config.getDBEnvName()] = params.DB_URL;
+  }
   execSync(command, {
     stdio: 'inherit',
-    env: {
-      ...(params?.DB_URL ? { [config.getDBEnvName()]: params?.DB_URL } : {}),
-    },
+    env,
   });
 };
 
