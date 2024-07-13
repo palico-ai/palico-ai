@@ -1,6 +1,6 @@
 import React from 'react';
-import SectionLayout from '../../__shared__/section_layout';
-import { ContentWithMedia } from '../../__shared__/layouts';
+import SectionLayout from '../section_layout';
+import { ContentWithMedia } from '../layouts';
 import { LoomEmbed, TabPanel, TabView } from '@palico-ai/components';
 
 const ControlPanel: React.FC = () => {

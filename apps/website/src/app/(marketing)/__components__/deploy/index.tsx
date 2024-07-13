@@ -1,13 +1,14 @@
 import React from 'react';
-import SectionLayout from '../../__shared__/section_layout';
-import { CodeSnippetTab, ContentWithMedia } from '../../__shared__/layouts';
+import SectionLayout from '../section_layout';
+import { ContentWithMedia, CodeSnippetTab } from '../layouts';
 
-const requestCodeSnippets = `const client = createClient({
+const requestCodeSnippets = `import { createClient } from '@palico-ai/client-js';
+
+const client = createClient({
   apiURL: <your-palico-app-url>,
   serviceKey: <service-key>,
 });
 
-// Agents
 const response = await client.agent.newConversation({
   name: entity.name,
   userMessage: '...',
@@ -18,12 +19,6 @@ const response = await client.agent.newConversation({
     feature1: '...',
     feature2: '...',
   },
-});
-
-// Workflows
-const response = await client.workflows.newConversation({
-  name: entity.name,
-  // ...
 });
 `;
 
@@ -44,7 +39,7 @@ const chatCodeSnippets = `const response = await client.agent.replyAsUser({
 const DeployAndIntegrate: React.FC = () => {
   return (
     <SectionLayout
-      title="Deploy to Production | Integrate with API or SDK"
+      title="Deploy and Integrate with REST API or SDK"
       alignTitle={'left'}
     >
       <ContentWithMedia
@@ -57,7 +52,7 @@ const DeployAndIntegrate: React.FC = () => {
           <CodeSnippetTab
             tabs={[
               {
-                label: 'New Request',
+                label: 'Call your Application',
                 codeSnippet: requestCodeSnippets,
               },
               {

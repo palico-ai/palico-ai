@@ -1,9 +1,8 @@
 'use client';
 
 import React from 'react';
-import SectionLayout from '../section_layout';
 import { Button, Link, Typography } from '@palico-ai/components';
-import { Box, Container, MobileStepper, Paper } from '@mui/material';
+import { Box, MobileStepper, Paper } from '@mui/material';
 import Image, { ImageProps } from 'next/image';
 import MicrosoftIcon from '../../../../../public/logos/microsoft.svg';
 import OpenAIIcon from '../../../../../public/logos/openai.svg';
@@ -136,59 +135,45 @@ const EvidenceQuote: React.FC<EvidenceQuoteProps> = ({
     </Box>
   );
 };
-const EvidenceSection: React.FC = () => {
+const EvidenceBlog: React.FC = () => {
   const [activeStep, setActiveStep] = React.useState(0);
 
   return (
-    <SectionLayout
-      title="Improving Accuracy requires Iterative Experimentation"
-      titleHeader="h4"
-      alignTitle={'center'}
-      disableTitleGutter
-    >
-      <Container
-        maxWidth="md"
-        sx={{
-          mt: 4,
-        }}
-      >
-        <Paper elevation={1}>
-          <MobileStepper
-            sx={(theme) => ({
-              backgroundColor: theme.palette.background.paper,
-            })}
-            variant="dots"
-            steps={quotes.length}
-            position="static"
-            activeStep={activeStep}
-            nextButton={
-              <Button
-                size="small"
-                onClick={() =>
-                  setActiveStep((prevActiveStep) => prevActiveStep + 1)
-                }
-                disabled={activeStep === quotes.length - 1}
-              >
-                Next
-              </Button>
+    <Paper elevation={1}>
+      <MobileStepper
+        sx={(theme) => ({
+          backgroundColor: theme.palette.background.paper,
+        })}
+        variant="dots"
+        steps={quotes.length}
+        position="static"
+        activeStep={activeStep}
+        nextButton={
+          <Button
+            size="small"
+            onClick={() =>
+              setActiveStep((prevActiveStep) => prevActiveStep + 1)
             }
-            backButton={
-              <Button
-                size="small"
-                onClick={() =>
-                  setActiveStep((prevActiveStep) => prevActiveStep - 1)
-                }
-                disabled={activeStep === 0}
-              >
-                Back
-              </Button>
+            disabled={activeStep === quotes.length - 1}
+          >
+            Next
+          </Button>
+        }
+        backButton={
+          <Button
+            size="small"
+            onClick={() =>
+              setActiveStep((prevActiveStep) => prevActiveStep - 1)
             }
-          />
-          <EvidenceQuote {...quotes[activeStep]} />
-        </Paper>
-      </Container>
-    </SectionLayout>
+            disabled={activeStep === 0}
+          >
+            Back
+          </Button>
+        }
+      />
+      <EvidenceQuote {...quotes[activeStep]} />
+    </Paper>
   );
 };
 
-export default EvidenceSection;
+export default EvidenceBlog;

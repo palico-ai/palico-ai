@@ -51,7 +51,7 @@ export default class RoutePath {
   }
 
   static github() {
-    return 'https://github.com/palico-ai/palico-main';
+    return 'https://github.com/palico-ai/palico-ai';
   }
 
   static scheduleDemo() {

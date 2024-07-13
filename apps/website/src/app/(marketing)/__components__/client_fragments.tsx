@@ -19,6 +19,8 @@ export const CodeSnippetTabFragment: React.FC<CodeSnippetTabFragmentProps> = ({
         minimap: {
           enabled: false,
         },
+        fontSize: 14,
+        wordWrap: 'on',
       }}
       defaultLanguage="typescript"
       onMount={(_, monoco) => {

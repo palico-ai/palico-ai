@@ -5,7 +5,7 @@ import { CodeSnippetTabFragment } from './client_fragments';
 
 interface HowItWorksSectionLayoutProps {
   title?: string;
-  descriptions: string[];
+  descriptions: (string | React.ReactElement)[];
   codeSnippet?: string;
   media?: React.ReactNode;
   centerContent?: boolean;
