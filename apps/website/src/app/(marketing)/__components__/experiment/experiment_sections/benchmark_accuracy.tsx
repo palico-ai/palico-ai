@@ -1,22 +1,22 @@
 import React from 'react';
-import { CodeSnippetTab, ContentWithMedia } from '../layouts';
+import { CodeSnippetTab, ContentWithMedia } from '../../layouts';
 
 const testCaseCodeSnippet = `[
   {
-    input: {
+    input: { // input to the application
       userMessage:
         'Given the equation 2x + 3 = 7, solve for x.',
     },
-    tags: {
-      category: 'math',
-    },
-    metrics: [
+    metrics: [ // measure response performance
       new SemanticSimilarity([
         "Answer: x = 2",
         "x = 2",
         "2",
       ]),
     ],
+    tags: { // tags to categorize the test-case
+      category: 'math',
+    },
   },
   {
     input: {
@@ -35,9 +35,6 @@ const testCaseCodeSnippet = `[
 ]`;
 
 const customMetricCodeSnippet = `class ResponseLengthEvalMetric implements EvalMetric {
-  label = "response_length";
-
-  constructor(private readonly maxResponseLength: number) {}
 
   async evaluate(
     input: ConversationRequestContent<Record<string, unknown>>,
@@ -60,21 +57,21 @@ const BenchmarkAccuracySubSection: React.FC<
 > = ({ centerContent }) => {
   return (
     <ContentWithMedia
-      title="Define your Accuracy Benchmarks"
+      title="Define your Benchmark"
       centerContent={centerContent}
       descriptions={[
-        'Define test-cases that model the expected behaviors from your LLM Agent',
-        'Measure accuracy with our provided metrics, or define your own custom metrics',
+        'Model the expected behavior of your application by writing "unit-tests" for performance',
+        'Measure the performance of a test-case by using metrics we provide, or by defining your own custom metrics',
       ]}
       media={
         <CodeSnippetTab
           tabs={[
             {
-              label: 'Create a Benchmark',
+              label: 'Create a Test Suite',
               codeSnippet: testCaseCodeSnippet,
             },
             {
-              label: 'Build Custom Metric',
+              label: 'Define Custom Metric',
               codeSnippet: customMetricCodeSnippet,
             },
           ]}

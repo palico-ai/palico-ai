@@ -1,10 +1,10 @@
 'use client';
 
 import React from 'react';
-import SectionLayout from './section_layout';
+import SectionLayout from '../section_layout';
 import { Button, Link, Typography } from '@palico-ai/components';
 import { Box, Container, Divider, Grid } from '@mui/material';
-import RoutePath from '../../../utils/route_path';
+import RoutePath from '../../../../utils/route_path';
 import SignupForNewsletter from './newsletter';
 
 const CTA = () => {
@@ -54,9 +54,9 @@ const CTA = () => {
 
 const BenefitList = [
   'Build complex LLM applications with flexible and dynamic prompts',
-  'Measure how each component of your LLM stack (model, prompt, rag, etc) affects accuracy',
+  'Measure how each component of your LLM stack (model, prompt, rag, etc) affects performance',
   'Find the right input combination for best results through Rapid Experimentation',
-  'Debug accuracy issues with analysis tools and tracing',
+  'Debug performance issues with analysis tools and tracing',
   'Deploy your applications with docker and connect via REST API or SDK',
 ];
 
