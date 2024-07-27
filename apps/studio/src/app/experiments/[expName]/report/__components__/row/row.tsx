@@ -1,11 +1,11 @@
 import { Box, Divider } from '@mui/material';
 import { Button } from '@palico-ai/components';
 import React, { useMemo } from 'react';
-import { NotebookWidget } from '../types';
 import RowHeaderActions from './row_header';
 import EmptyRowWidget from './empty';
 import TableNotebookWidget from './table';
 import TextboxNotebookWidget from './textbox';
+import { NotebookWidget } from '@palico-ai/common';
 
 interface NotebookRowProps {
   rowIndex: number;

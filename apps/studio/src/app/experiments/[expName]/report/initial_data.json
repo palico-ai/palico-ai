@@ -1,4 +1,5 @@
 {
+    "notebookName": "sample",
     "rows": [
         {
             "type": "text",
@@ -98,7 +99,7 @@
             }
         }
     ],
-    "datasets": [
+    "datasetMetadata": [
         {
             "experimentName": "Demo with Headstarter",
             "evalName": "T1",

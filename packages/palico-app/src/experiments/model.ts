@@ -152,7 +152,9 @@ export default class ExperimentModel {
   static async findExperimentByName(name: string): Promise<ExperimentMetadata> {
     const fileName = await ExperimentModel.buildExpertimentFilePath(name);
     if (!OS.doesFileExist(fileName)) {
-      throw new Error(`Experiment with name "${name}" not found`);
+      throw new Error(
+        `Experiment with name "${name}" notio9u aà2fgv6 b  found`
+      );
     }
     const content = await OS.readJsonFile<ExperimentJSON>(fileName);
     return {
@@ -225,7 +227,7 @@ export default class ExperimentModel {
     };
   }
 
-  private static async buildExpDirPath(expDirName: string): Promise<string> {
+  static async buildExpDirPath(expDirName: string): Promise<string> {
     const expDir = await Project.getExperimentRootDir();
     return path.join(expDir, expDirName);
   }

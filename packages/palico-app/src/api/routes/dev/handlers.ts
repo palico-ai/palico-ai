@@ -5,14 +5,21 @@ import { APIError } from '../../error';
 import {
   CreateEvalAPIRequestBody,
   CreateEvalAPIResponse,
+  CreateNotebookAPIRequestBody,
+  CreateNotebookAPIResponse,
   GetAllEvalsAPIResponse,
   GetAllExperimentsAPIResponse,
   GetEvalStatusAPIResponse,
   GetExperimentByNameAPIResponse,
+  GetNotebookAPIResponse,
+  GetNotebooksForExperimentAPIResponse,
   MessageAPIResponse,
   NewExperimentAPIRequestBody,
   NewExperimentAPIResponse,
+  RemoveNotebookAPIResponse,
+  UpdateNotebookAPIRequestBody,
 } from '@palico-ai/common';
+import NotebookModel from '../../../experiments/notebooks/model';
 
 type ExperimentRouteParams = {
   expName: string;
@@ -20,6 +27,10 @@ type ExperimentRouteParams = {
 
 type EvalRouteParams = ExperimentRouteParams & {
   evalName: string;
+};
+
+type NotebookRouteParams = ExperimentRouteParams & {
+  notebookName: string;
 };
 
 export const newExperimentRouteHandler: RequestHandler<
@@ -142,6 +153,89 @@ export const removeExperimentHandler: RequestHandler<
     const { expName } = req.params;
     await ExperimentModel.removeExperiment(expName);
     return res.status(200).json({ message: 'Experiment removed' });
+  } catch (error) {
+    return next(error);
+  }
+};
+
+export const createNotebookRequestHandler: RequestHandler<
+  ExperimentRouteParams,
+  CreateNotebookAPIResponse,
+  CreateNotebookAPIRequestBody
+> = async (req, res, next) => {
+  try {
+    const { expName } = req.params;
+    const { notebookName, datasetMetadata, rows } = req.body;
+    const notebook = await NotebookModel.createNewNotebook({
+      experimentName: expName,
+      notebookName,
+      rows,
+      datasetMetadata,
+    });
+    return res.status(200).json(notebook);
+  } catch (error) {
+    return next(error);
+  }
+};
+
+export const getNotebooksForExperimentHandler: RequestHandler<
+  ExperimentRouteParams,
+  GetNotebooksForExperimentAPIResponse
+> = async (req, res, next) => {
+  try {
+    const { expName } = req.params;
+    const notebooks = await NotebookModel.getNotebooksForExperiment(expName);
+    return res.status(200).json({ notebooks });
+  } catch (error) {
+    return next(error);
+  }
+};
+
+export const getNotebookHandler: RequestHandler<
+  NotebookRouteParams,
+  GetNotebookAPIResponse
+> = async (req, res, next) => {
+  try {
+    const { expName, notebookName } = req.params;
+    const notebook = await NotebookModel.getNotebook({
+      experimentName: expName,
+      notebookName,
+    });
+    return res.status(200).json(notebook);
+  } catch (error) {
+    return next(error);
+  }
+};
+
+export const updateNotebookHandler: RequestHandler<
+  NotebookRouteParams,
+  GetNotebookAPIResponse,
+  UpdateNotebookAPIRequestBody
+> = async (req, res, next) => {
+  try {
+    const { expName, notebookName } = req.params;
+    const { rows, datasetMetadata } = req.body;
+    const notebook = await NotebookModel.updateNotebook(
+      { experimentName: expName, notebookName },
+      { rows, datasetMetadata }
+    );
+    return res.status(200).json(notebook);
+  } catch (error) {
+    return next(error);
+  }
+};
+
+export const removeNotebookHandler: RequestHandler<
+  NotebookRouteParams,
+  RemoveNotebookAPIResponse
+> = async (req, res, next) => {
+  try {
+    const { expName, notebookName } = req.params;
+    await NotebookModel.removeNotebook({
+      experimentName: expName,
+      notebookName,
+    });
+    return res.status(200).json({ message: 'Notebook removed' });
   } catch (error) {
     return next(error);
   }

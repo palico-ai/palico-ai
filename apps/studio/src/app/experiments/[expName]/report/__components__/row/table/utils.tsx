@@ -1,12 +1,15 @@
 import {
+  EvalTestCaseWithDatasetLabel,
+  TableNotebookWidgetColumnAggregatorFNMap,
+} from '@palico-ai/common';
+import {
   ANALYSIS_TABLE_COL_ID,
   EVAL_RESULT_ACCESSOR_KEYS,
   getAllMetrics,
   getAllTags,
 } from '../../../../../../../utils/evaluation';
-import { Dataset, TableNotebookWidgetColumnAggregatorFNMap } from '../../types';
+import { Dataset } from '../../types';
 import { RenderAnalysisTableCell } from './render_cell';
-import { EvalTestCaseWithDatasetLabel } from './types';
 import { ColumnDef } from '@tanstack/react-table';
 
 export const getMergedEvaluationResult = (

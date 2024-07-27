@@ -2,13 +2,12 @@
 
 import React, { useEffect, useMemo } from 'react';
 import {
-  Dataset,
   DatasetMetadata,
   NotebookWidget,
   NotebookWidgetType,
   TableNotebookWidget,
   TextboxNotebookWidget,
-} from './types';
+} from '@palico-ai/common';
 import { getEvalByName } from '../../../../../services/experiments';
 import { createColumnDefs, getMergedEvaluationResult } from './row/table/utils';
 import {
@@ -18,7 +17,8 @@ import {
 } from '@palico-ai/components';
 import { ANALYSIS_TABLE_COL_ID } from '../../../../../utils/evaluation';
 import { AggregationFnOption } from '@tanstack/react-table';
-import { EvalTestCaseWithDatasetLabel } from './row/table/types';
+import { EvalTestCaseWithDatasetLabel } from '@palico-ai/common';
+import { Dataset } from './types';
 
 interface NotebookContextProps {
   datasets: Dataset[];

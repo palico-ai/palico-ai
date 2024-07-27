@@ -7,13 +7,14 @@ import { NotebookProvider } from './__components__/notebook.context';
 import ExperimentReportPageAction from './__components__/pg_action';
 import initialData from './initial_data.json';
 import { getEvalByName } from '../../../../services/experiments';
-import { Dataset, NotebookWidget } from './__components__/types';
+import { Dataset } from './__components__/types';
+import { NotebookWidget } from '@palico-ai/common';
 
 const ExperimentAnalysisPage: React.FC<ExperimentItemChildPage> = async ({
   params: { expName },
 }) => {
   const datasets: Dataset[] = await Promise.all(
-    initialData.datasets.map(async (d) => {
+    initialData.datasetMetadata.map(async (d) => {
       const ds = await getEvalByName(d.experimentName, d.evalName);
       return {
         ...d,

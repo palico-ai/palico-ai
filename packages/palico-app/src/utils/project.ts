@@ -43,6 +43,11 @@ export default class Project {
     return path.join(root, 'src', 'workflows');
   }
 
+  static async getWorkspaceDBPath(): Promise<string> {
+    const root = await this.getWorkspaceRootDir();
+    return path.join(root, 'appdata', 'database.sqlite');
+  }
+
   static async getAgentRootDir(): Promise<string> {
     const root = await this.getWorkspaceRootDir();
     return path.join(root, 'src', 'agents');

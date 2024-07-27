@@ -8,6 +8,11 @@ import {
   getEvalByNameHandler,
   getEvalStatusHandler,
   removeExperimentHandler,
+  getNotebooksForExperimentHandler,
+  createNotebookRequestHandler,
+  getNotebookHandler,
+  updateNotebookHandler,
+  removeNotebookHandler,
 } from './handlers';
 
 const router = Router();
@@ -36,5 +41,16 @@ router.route('/experiments/:expName/evals/:evalName').get(getEvalByNameHandler);
 router
   .route('/experiments/:expName/evals/:evalName/status')
   .get(getEvalStatusHandler);
+
+router
+  .route('/experiments/:expName/notebook')
+  .get(getNotebooksForExperimentHandler)
+  .post(createNotebookRequestHandler);
+
+router
+  .route('/experiments/:expName/notebook/:notebookName')
+  .get(getNotebookHandler)
+  .put(updateNotebookHandler)
+  .delete(removeNotebookHandler);
 
 export default router;

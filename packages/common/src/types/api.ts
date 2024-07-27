@@ -9,6 +9,8 @@ import {
   EvalJobStatus,
   EvaluationMetadata,
   ExperimentMetadata,
+  NotebookJSON,
+  NotebookMetadata,
   QuickLab,
   QuickLabContentJSON,
   QuickLabMetadata,
@@ -94,6 +96,23 @@ export type GetEvalStatusAPIResponse = {
   state: EvalJobStatus;
   message?: string;
 };
+
+// ======== Route: /experiments/:id/notebook ========
+export type CreateNotebookAPIRequestBody = Omit<NotebookJSON, 'experimentName'>;
+export type CreateNotebookAPIResponse = NotebookJSON;
+
+export type GetNotebookAPIResponse = NotebookJSON;
+
+export type UpdateNotebookAPIRequestBody = Partial<NotebookJSON>;
+export type UpdateNotebookAPIResponse = MessageAPIResponse;
+
+export type DeleteNotebookAPIResponse = MessageAPIResponse;
+
+export type GetNotebooksForExperimentAPIResponse = {
+  notebooks: NotebookMetadata[];
+};
+
+export type RemoveNotebookAPIResponse = MessageAPIResponse;
 
 // ======== Route: /lab ========
 export type CreateLabAPIRequestBody = CreateQuickLabParams;

@@ -2,8 +2,8 @@ import React, { useRef } from 'react';
 import { useRowManipulation } from '../notebook.context';
 import { Box, IconButton } from '@mui/material';
 import { Button, MenuButton } from '@palico-ai/components';
-import { NotebookWidgetType } from '../types';
 import VerticalAlignCenterIcon from '@mui/icons-material/VerticalAlignCenter';
+import { NotebookWidgetType } from '@palico-ai/common';
 
 interface RowHeaderActionProps {
   rowIndex: number;
