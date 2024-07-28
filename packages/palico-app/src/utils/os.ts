@@ -1,5 +1,5 @@
 import { existsSync } from 'fs';
-import { mkdir, readFile, readdir, rmdir, writeFile } from 'fs/promises';
+import { mkdir, readFile, readdir, rmdir, writeFile, rm } from 'fs/promises';
 import { dirname } from 'path';
 import Project from './project';
 
@@ -88,6 +88,11 @@ export default class OS {
   static async removeDirectory(path: string) {
     await Project.validatePathWithinProject(path);
     await rmdir(path, { recursive: true });
+  }
+
+  static async removeFile(path: string) {
+    await Project.validatePathWithinProject(path);
+    await rm(path);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

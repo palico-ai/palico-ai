@@ -28,7 +28,11 @@ export interface FormField {
   name: string;
   label: string;
   required?: boolean;
-  initialValue?: string;
+  initialValue?: string; // Initial value for the field -- useful for non-controlled components
+  controlledTextInput?: {
+    value?: string;
+    onChange: (value?: string) => void;
+  };
   type?: PropsOf<typeof TextField>['type'];
   autoComplete?: boolean;
   helperText?: string;
@@ -97,7 +101,9 @@ const FormBuilder: React.FC<FormBuilderProps> = ({
   const [errorMessage, setErrorMessage] = React.useState<string>('');
   const [loading, setLoading] = React.useState<boolean>(false);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ): void => {
     setFormInputs({
       ...formInputs,
       [e.target.name]: e.target.value,
@@ -142,6 +148,7 @@ const FormBuilder: React.FC<FormBuilderProps> = ({
   };
 
   const renderTextField = (field: FormField, index: number): JSX.Element => {
+    const { controlledTextInput } = field;
     return (
       <TextField
         key={index}
@@ -161,8 +168,15 @@ const FormBuilder: React.FC<FormBuilderProps> = ({
         multiline={field.multiline !== undefined}
         rows={field.multiline?.rows}
         maxRows={field.multiline?.rowsMax}
-        value={formInputs[field.name]}
-        onChange={handleInputChange}
+        value={
+          controlledTextInput
+            ? controlledTextInput.value
+            : formInputs[field.name]
+        }
+        onChange={(e) => {
+          handleInputChange(e);
+          controlledTextInput?.onChange(e.target.value);
+        }}
         selectOptions={field.selectOptions}
         gutterBottom
       />
@@ -193,12 +207,13 @@ const FormBuilder: React.FC<FormBuilderProps> = ({
         </Typography>
         <Editor
           theme="vs-dark"
-          value={formInputs[field.name]}
+          value={field.controlledTextInput?.value ?? formInputs[field.name]}
           onChange={(value) => {
             setFormInputs({
               ...formInputs,
               [field.name]: value,
             });
+            field.controlledTextInput?.onChange(value);
           }}
           height={field.editor?.height ?? DEFAULT_EDITOR_HEIGHT}
           language={field.editor?.language ?? DEFAULT_EDITOR_LANGUAGE}

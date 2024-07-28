@@ -11,7 +11,7 @@ export {
   EvalMetricOutput,
   EvalMetric,
   EvalMetricResultMap,
-  EvalResult,
+  EvalTestCaseResult as EvalResult,
   EvalTestCaseTag,
   EvalJobStatus,
   EvalTestCase,

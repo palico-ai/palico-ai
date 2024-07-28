@@ -20,3 +20,10 @@ export interface EvalChildPage {
     evalName: string;
   };
 }
+
+export interface NotebookChildPage {
+  params: {
+    expName: string;
+    notebookName: string;
+  };
+}

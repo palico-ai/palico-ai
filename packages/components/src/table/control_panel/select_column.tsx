@@ -6,6 +6,7 @@ import React from 'react';
 import ViewColumnIcon from '@mui/icons-material/ViewColumn';
 import Typography from '../../typography';
 import { OptionPanel } from './option_drawer';
+import { col } from 'sequelize';
 
 interface SelectColumnProps<D> {
   table: Table<D>;
@@ -35,7 +36,11 @@ function SelectColumnControl<D>(props: SelectColumnProps<D>) {
       {table.getAllLeafColumns().map((column) => (
         <FormControlLabel
           key={column.id}
-          label={<Typography variant="body2">{column.id}</Typography>}
+          label={
+            <Typography variant="body2">
+              {column.columnDef.header?.toString() ?? column.id}
+            </Typography>
+          }
           control={
             <Checkbox
               color="info"

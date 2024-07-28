@@ -3,6 +3,7 @@ import {
   RequireLabId,
   RequireEvalName,
   RequireTestReportName,
+  RequireNoteobokName,
 } from '../types/common';
 
 export class RoutePath {
@@ -32,6 +33,16 @@ export class RoutePath {
 
   static experimentEvalItem(params: RequireExperimentName & RequireEvalName) {
     return `${RoutePath.experimentEvalList(params)}/${params.evalName}`;
+  }
+
+  static experimentNotebookList(params: RequireExperimentName) {
+    return `${RoutePath.experimentItem(params)}/notebooks`;
+  }
+
+  static experimentNotebookItem(
+    params: RequireExperimentName & RequireNoteobokName
+  ) {
+    return `${RoutePath.experimentNotebookList(params)}/${params.notebookName}`;
   }
 
   static experimentReportItem(params: RequireExperimentName) {

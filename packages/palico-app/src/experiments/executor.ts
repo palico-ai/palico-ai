@@ -1,12 +1,12 @@
 import {
   ConversationResponse,
-  EvalJobKeyID,
+  EvalCompositeKey,
   CreateEvaluationParams,
   CreateEvalJobResponse,
   EvalTestCase,
   EvalJSON,
   EvalJobStatus,
-  EvalResult,
+  EvalTestCaseResult,
   EvalMetricOutput,
   AppConfig,
 } from '@palico-ai/common';
@@ -66,7 +66,7 @@ export class ExperimentExecutor {
     };
   }
 
-  static async runEvaluation(key: EvalJobKeyID): Promise<EvalJSON> {
+  static async runEvaluation(key: EvalCompositeKey): Promise<EvalJSON> {
     try {
       let test = await ExperimentModel.updateTestJSON(key, {
         status: {
@@ -108,7 +108,7 @@ export class ExperimentExecutor {
 
   private static runTestCase = async (
     params: RunTestCaseParams
-  ): Promise<EvalResult> => {
+  ): Promise<EvalTestCaseResult> => {
     const { testCase, agentName, workflowName, appConfig } = params;
     let response: ConversationResponse;
     if (agentName) {

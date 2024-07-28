@@ -2,11 +2,11 @@
 
 import { Box } from '@mui/material';
 import { Button, useDialogController } from '@palico-ai/components';
-import NewAnalysisForm from '../../../../../components/forms/new_analysis';
 import {
   useExperimentName,
   useEvalName,
 } from '../../../../../hooks/use_params';
+import AnalyzeEvalForm from './analyze_form';
 
 const ExperimentTestTopbarAction: React.FC = () => {
   const {
@@ -18,16 +18,11 @@ const ExperimentTestTopbarAction: React.FC = () => {
   const evalName = useEvalName();
   return (
     <Box>
-      <NewAnalysisForm
-        experimentName={experimentName}
-        initialEvals={[
-          {
-            experimentName: decodeURIComponent(experimentName),
-            evalName: decodeURIComponent(evalName),
-          },
-        ]}
+      <AnalyzeEvalForm
         isOpen={isCreateAnalysisFormOpen}
         closeForm={closeCreateAnalysisForm}
+        experimentName={experimentName}
+        evalName={evalName}
       />
       <Button
         size="small"
@@ -35,7 +30,7 @@ const ExperimentTestTopbarAction: React.FC = () => {
         color="primary"
         onClick={openCreateAnalysisForm}
       >
-        Comapre
+        Analyze in Notebook
       </Button>
     </Box>
   );

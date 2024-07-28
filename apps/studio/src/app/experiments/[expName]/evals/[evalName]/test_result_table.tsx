@@ -3,12 +3,13 @@
 import { Paper } from '@mui/material';
 import { Evaluation } from '@palico-ai/common';
 import { RenderCellFN, Table, useTableModel } from '@palico-ai/components';
-import {
-  TestTableColumnHeader,
-  flattenExperimentColumns,
-} from '../../../../../utils/experiments';
+import { TestTableColumnHeader } from '../../../../../utils/experiments';
 import React from 'react';
 import TestCellConversationID from '../../../../../components/table/test_cell_conversation_id';
+import {
+  ANALYSIS_TABLE_COL_ID,
+  getEvalTestColumnDefFragment,
+} from '../../../../../utils/evaluation';
 
 export interface TestResultTableProps {
   test: Evaluation;
@@ -16,10 +17,15 @@ export interface TestResultTableProps {
 
 const TestResultTable: React.FC<TestResultTableProps> = ({ test }) => {
   const [data] = React.useState(test.result);
-  const columns = flattenExperimentColumns(test.result);
   const table = useTableModel({
     data,
-    columns,
+    columns: getEvalTestColumnDefFragment(test.result),
+    initialState: {
+      columnVisibility: {
+        [ANALYSIS_TABLE_COL_ID.responseData]: false,
+        [ANALYSIS_TABLE_COL_ID.payload]: false,
+      },
+    },
   });
 
   const renderCell: RenderCellFN<Evaluation['result'][0]> = (

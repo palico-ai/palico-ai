@@ -1,6 +1,6 @@
 import {
   ExperimentJSON,
-  EvalJobKeyID,
+  EvalCompositeKey,
   EvalResultJSON,
   CreateEvaluationParams,
   CreateExperimentParams,
@@ -114,7 +114,7 @@ export default class ExperimentModel {
   }
 
   static async updateTestJSON(
-    key: EvalJobKeyID,
+    key: EvalCompositeKey,
     content: Partial<EvalJSON>
   ): Promise<EvalJSON> {
     const { experimentName, evalName: testName } = key;
@@ -132,7 +132,7 @@ export default class ExperimentModel {
   }
 
   static async updateTestResultJSON(
-    key: EvalJobKeyID,
+    key: EvalCompositeKey,
     content: EvalResultJSON
   ): Promise<EvalResultJSON> {
     const { experimentName, evalName: testName } = key;
@@ -152,7 +152,9 @@ export default class ExperimentModel {
   static async findExperimentByName(name: string): Promise<ExperimentMetadata> {
     const fileName = await ExperimentModel.buildExpertimentFilePath(name);
     if (!OS.doesFileExist(fileName)) {
-      throw new Error(`Experiment with name "${name}" not found`);
+      throw new Error(
+        `Experiment with name "${name}" notio9u aà2fgv6 b  found`
+      );
     }
     const content = await OS.readJsonFile<ExperimentJSON>(fileName);
     return {
@@ -161,7 +163,7 @@ export default class ExperimentModel {
     };
   }
 
-  static async getAllTests(): Promise<EvalJobKeyID[]> {
+  static async getAllTests(): Promise<EvalCompositeKey[]> {
     const allExperiments = await this.getAllExperiments();
     const tests = await Promise.all(
       allExperiments.map(async (exp) => {
@@ -225,7 +227,7 @@ export default class ExperimentModel {
     };
   }
 
-  private static async buildExpDirPath(expDirName: string): Promise<string> {
+  static async buildExpDirPath(expDirName: string): Promise<string> {
     const expDir = await Project.getExperimentRootDir();
     return path.join(expDir, expDirName);
   }

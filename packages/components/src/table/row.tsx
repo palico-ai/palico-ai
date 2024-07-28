@@ -76,7 +76,11 @@ function TableRow<D>(props: TableRowParams<D>): React.ReactElement {
       onClick={onClickRow ? () => onClickRow(row.original) : undefined}
     >
       {row.getVisibleCells().map((cell) => {
-        return <TableCell key={cell.id}>{renderCellContent(cell)}</TableCell>;
+        return (
+          <TableCell width={cell.column.getSize()} key={cell.id}>
+            {renderCellContent(cell)}
+          </TableCell>
+        );
       })}
     </MUITableRow>
   );

@@ -1,3 +1,4 @@
+import { AggregationFnOption, TableState } from '@tanstack/react-table';
 import { AppConfig, ConversationRequestContent, ConversationResponse } from '.';
 
 export interface CreateExperimentParams {
@@ -27,7 +28,7 @@ export interface EvalMetric {
 
 export type EvalMetricResultMap = Record<string, EvalMetricOutput>;
 
-export interface EvalResult {
+export interface EvalTestCaseResult {
   input: ConversationRequestContent;
   tags: EvalTestCaseTag;
   output: ConversationResponse;
@@ -64,7 +65,7 @@ export interface EvalJSON {
 }
 
 export interface EvalResultJSON {
-  result: EvalResult[];
+  result: EvalTestCaseResult[];
 }
 
 export interface Evaluation extends EvalJSON, EvalResultJSON {
@@ -84,11 +85,70 @@ export interface CreateEvalJobResponse {
   evalName: EvaluationMetadata;
 }
 
-export interface EvalJobKeyID {
+export interface EvalCompositeKey {
   experimentName: string;
   evalName: string;
 }
 
 export interface GetAllEvalsResponse {
-  evals: EvalJobKeyID[];
+  evals: EvalCompositeKey[];
 }
+
+export enum NotebookWidgetType {
+  Empty = 'empty',
+  Table = 'table',
+  Text = 'text',
+}
+
+export interface EmptyNotebookWidget {
+  type: NotebookWidgetType.Empty;
+}
+
+export interface EvalTestCaseWithDatasetLabel extends EvalTestCaseResult {
+  label: string;
+}
+
+export type TableNotebookWidgetColumnAggregatorFNMap = Record<
+  string,
+  AggregationFnOption<EvalTestCaseWithDatasetLabel>
+>;
+
+export interface TableNotebookWidget {
+  type: NotebookWidgetType.Table;
+  data: {
+    tableState: Partial<TableState>;
+    columnAggregationFn: TableNotebookWidgetColumnAggregatorFNMap;
+  };
+}
+
+export interface TextboxNotebookWidget {
+  type: NotebookWidgetType.Text;
+  data: {
+    text: string;
+  };
+}
+
+export type NotebookWidget =
+  | EmptyNotebookWidget
+  | TableNotebookWidget
+  | TextboxNotebookWidget;
+
+export interface DatasetMetadata extends EvalCompositeKey {
+  label: string;
+}
+
+export interface NotebookCompositeKey {
+  experimentName: string;
+  notebookName: string;
+}
+
+export interface NotebookJSON extends NotebookMetadata {
+  datasetMetadata: DatasetMetadata[];
+  rows: NotebookWidget[];
+}
+
+export type UpdateNotebookJSONParams = Partial<
+  Pick<NotebookJSON, 'rows' | 'datasetMetadata'>
+>;
+
+export type NotebookMetadata = NotebookCompositeKey;

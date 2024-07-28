@@ -14,7 +14,6 @@ import React, { useMemo } from 'react';
 import { CreateEvalJobResponse } from '@palico-ai/common';
 import { runEval } from '../../../../services/experiments';
 import { useExperimentName } from '../../../../hooks/use_params';
-import NewAnalysisForm from '../../../../components/forms/new_analysis';
 
 export interface TestListTableHeaderProps {
   onEvalCreated: (test: CreateEvalJobResponse) => void;
@@ -31,11 +30,6 @@ const TestListTableHeader: React.FC<TestListTableHeaderProps> = ({
   const [agentList, setAgentList] = React.useState<string[]>([]);
   const [workflowList, setWorkflowList] = React.useState<string[]>([]);
   const [datasetList, setDatasetList] = React.useState<string[]>([]);
-  const {
-    isOpen: isCreateAnalysisFormOpen,
-    open: openCreateAnalysisForm,
-    close: closeCreateAnalysisForm,
-  } = useDialogController();
   const experimentName = useExperimentName();
 
   React.useEffect(() => {
@@ -134,19 +128,6 @@ const TestListTableHeader: React.FC<TestListTableHeaderProps> = ({
         formFields={createEvalFormFields}
         onSubmit={handleCreateTest}
       />
-      <NewAnalysisForm
-        experimentName={experimentName}
-        isOpen={isCreateAnalysisFormOpen}
-        closeForm={closeCreateAnalysisForm}
-      />
-      <Button
-        variant="contained"
-        color="secondary"
-        size="small"
-        onClick={openCreateAnalysisForm}
-      >
-        Comapre
-      </Button>
       <Button variant="contained" size="small" onClick={openDialog}>
         Create Evaluation
       </Button>
