@@ -3,8 +3,8 @@ import { Typography, useDialogController } from '@palico-ai/components';
 import DeleteIcon from '@mui/icons-material/DeleteOutline';
 import React from 'react';
 import ImportDatasetForm from './dataset_form';
-import { DatasetMetadata } from '../types';
 import { useDatasetManipulation } from '../notebook.context';
+import { DatasetMetadata } from '@palico-ai/common';
 
 interface ImportedDatasetProps extends DatasetMetadata {
   handleDeleteDataset: () => void;
@@ -28,6 +28,7 @@ const ImportedDataset: React.FC<ImportedDatasetProps> = ({
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
+          gap: 0.5,
         }}
       >
         <Typography variant="subtitle2" fontWeight={'bold'}>
@@ -46,8 +47,12 @@ const ImportedDataset: React.FC<ImportedDatasetProps> = ({
           gap: 1,
         }}
       >
-        <Typography variant="body1">Experiment: {experimentName}</Typography>
-        <Typography variant="body1">Evaluation: {evaluationName}</Typography>
+        <Typography variant="body1">
+          Experiment: {decodeURIComponent(experimentName)}
+        </Typography>
+        <Typography variant="body1">
+          Evaluation: {decodeURIComponent(evaluationName)}
+        </Typography>
       </Box>
     </Paper>
   );

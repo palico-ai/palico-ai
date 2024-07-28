@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dialog, DialogContent, DialogTitle } from '../dialog';
+import { Dialog, DialogContent, DialogTitle } from '../dialog/dialog';
 import FormBuilder, { FormBuilderProps } from './form_builder';
 import { DialogProps } from '@mui/material';
 

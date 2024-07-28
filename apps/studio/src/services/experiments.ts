@@ -12,9 +12,15 @@ import {
   GetExperimentByNameAPIResponse,
   GetAllEvalsAPIResponse,
   GetEvalStatusAPIResponse,
+  GetNotebooksForExperimentAPIResponse,
+  CreateNotebookAPIResponse,
+  CreateNotebookAPIRequestBody,
+  GetNotebookAPIResponse,
+  UpdateNotebookAPIRequestBody,
 } from '@palico-ai/common';
 import { verifySession } from './auth';
 import { palicoFetch } from './palico';
+import { RequireExperimentName, RequireNoteobokName } from '../types/common';
 
 export const getExperimentList = async (): Promise<ExperimentMetadata[]> => {
   await verifySession();
@@ -100,6 +106,76 @@ export const getEvalStatus = async (expName: string, testName: string) => {
     `/dev/experiments/${expName}/evals/${testName}/status`,
     {
       method: 'GET',
+    }
+  );
+};
+
+export const getNotebooksForExperiment = async (expName: string) => {
+  await verifySession();
+  const response = await palicoFetch<GetNotebooksForExperimentAPIResponse>(
+    `/dev/experiments/${expName}/notebook`,
+    {
+      method: 'GET',
+    }
+  );
+  return response.notebooks;
+};
+
+export const createNotebook = async (
+  params: CreateNotebookAPIRequestBody & RequireExperimentName
+) => {
+  await verifySession();
+  return await palicoFetch<
+    CreateNotebookAPIResponse,
+    CreateNotebookAPIRequestBody
+  >(`/dev/experiments/${params.experimentName}/notebook`, {
+    method: 'POST',
+    body: {
+      notebookName: params.notebookName,
+      rows: params.rows,
+      datasetMetadata: params.datasetMetadata,
+    },
+  });
+};
+
+export const getNotebook = async (
+  params: RequireExperimentName & RequireNoteobokName
+) => {
+  await verifySession();
+  return await palicoFetch<GetNotebookAPIResponse>(
+    `/dev/experiments/${params.experimentName}/notebook/${params.notebookName}`,
+    {
+      method: 'GET',
+    }
+  );
+};
+
+export const updateNotebook = async (
+  params: UpdateNotebookAPIRequestBody &
+    RequireExperimentName &
+    RequireNoteobokName
+) => {
+  await verifySession();
+  await palicoFetch<CreateNotebookAPIResponse>(
+    `/dev/experiments/${params.experimentName}/notebook/${params.notebookName}`,
+    {
+      method: 'PUT',
+      body: {
+        rows: params.rows,
+        datasetMetadata: params.datasetMetadata,
+      },
+    }
+  );
+};
+
+export const deleteNotebook = async (
+  params: RequireExperimentName & RequireNoteobokName
+) => {
+  await verifySession();
+  return await palicoFetch(
+    `/dev/experiments/${params.experimentName}/notebook/${params.notebookName}`,
+    {
+      method: 'DELETE',
     }
   );
 };

@@ -9,3 +9,8 @@ export const useEvalName = () => {
   const { evalName } = useParams<{ evalName: string }>();
   return evalName;
 };
+
+export const useNotebookName = () => {
+  const { notebookName } = useParams<{ notebookName: string }>();
+  return notebookName;
+};

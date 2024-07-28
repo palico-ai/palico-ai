@@ -8,14 +8,17 @@ import {
   TableNotebookWidget,
   TextboxNotebookWidget,
 } from '@palico-ai/common';
-import { getEvalByName } from '../../../../../services/experiments';
-import { createColumnDefs, getMergedEvaluationResult } from './row/table/utils';
+import { getEvalByName } from '../../../../../../services/experiments';
+import {
+  createColumnDefForDatasets,
+  getMergedEvaluationResult,
+} from './row/table/utils';
 import {
   useControlledStateTable,
   useControlledTableColumns,
   useTableModel,
 } from '@palico-ai/components';
-import { ANALYSIS_TABLE_COL_ID } from '../../../../../utils/evaluation';
+import { ANALYSIS_TABLE_COL_ID } from '../../../../../../utils/evaluation';
 import { AggregationFnOption } from '@tanstack/react-table';
 import { EvalTestCaseWithDatasetLabel } from '@palico-ai/common';
 import { Dataset } from './types';
@@ -163,7 +166,7 @@ export const useTableWidget = (index: number) => {
   const { datasets, rows, setRows } = React.useContext(NotebookContext);
   const row = useMemo(() => rows[index], [rows, index]) as TableNotebookWidget;
   const { columns, onChangeColumnAggregationFn } = useControlledTableColumns(
-    createColumnDefs(
+    createColumnDefForDatasets(
       getMergedEvaluationResult(datasets),
       row.data.columnAggregationFn
     )
@@ -227,7 +230,7 @@ export const useTableWidget = (index: number) => {
 export const useDatasetManipulation = () => {
   const { datasets, setDatasets } = React.useContext(NotebookContext);
 
-  const handleAddDataset = async (dataset: DatasetMetadata) => {
+  const handleAddDataset = async (dataset: DatasetMetadata): Promise<void> => {
     const existingDataset = datasets.find(
       (current) => current.label === dataset.label
     );

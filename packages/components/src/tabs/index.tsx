@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, Tab, Tabs, TabsProps } from '@mui/material';
+import { Box, Tab, Tabs as MUITabs, TabsProps } from '@mui/material';
 import React from 'react';
 
 interface TabContextParams {
@@ -78,4 +78,18 @@ export const TabView: React.FC<TabViewProps> = ({
   );
 };
 
-export { Tabs, Tab } from '@mui/material';
+export const Tabs: React.FC<TabsProps> = ({ sx, ...props }) => {
+  return (
+    <MUITabs
+      sx={(theme) => ({
+        border: `1px solid ${theme.palette.divider}`,
+        borderRadius: theme.shape.borderRadius,
+        overflow: 'hidden',
+        ...(sx as object),
+      })}
+      {...props}
+    />
+  );
+};
+
+export { Tab } from '@mui/material';

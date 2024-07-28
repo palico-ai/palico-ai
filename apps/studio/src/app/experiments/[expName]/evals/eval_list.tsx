@@ -15,6 +15,7 @@ import { getEvalStatus } from '../../../../services/experiments';
 import PageContent from '../../../../components/layout/page_content';
 import { Paper } from '@mui/material';
 import Breadcrumb from '../../../../utils/breadcrumb';
+import ExperimentSubpageLayout from '../../../../components/layout/experiment_page_tab';
 
 interface TestListProps {
   initialTests: EvaluationMetadata[];
@@ -90,6 +91,7 @@ const EvalList: React.FC<TestListProps> = ({ initialTests }) => {
 
   return (
     <PageContent
+      disablePadding
       breadcrumb={[
         Breadcrumb.experimentList({ includeHref: true }),
         Breadcrumb.experimentItem({
@@ -100,9 +102,11 @@ const EvalList: React.FC<TestListProps> = ({ initialTests }) => {
       ]}
       actions={<TopbarAction onEvalCreated={handleTestCreated} />}
     >
-      <Paper sx={{ p: 2 }}>
-        <EvalTable data={data} />
-      </Paper>
+      <ExperimentSubpageLayout>
+        <Paper sx={{ p: 2 }}>
+          <EvalTable data={data} />
+        </Paper>
+      </ExperimentSubpageLayout>
     </PageContent>
   );
 };

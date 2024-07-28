@@ -1,20 +1,26 @@
-import Breadcrumb from '../../../../utils/breadcrumb';
-import PageContent from '../../../../components/layout/page_content';
+import Breadcrumb from '../../../../../utils/breadcrumb';
+import PageContent from '../../../../../components/layout/page_content';
 import React from 'react';
-import { ExperimentItemChildPage } from '../../../../types/component_types';
+import { NotebookChildPage } from '../../../../../types/component_types';
 import Notebook from './__components__/notebook';
 import { NotebookProvider } from './__components__/notebook.context';
 import ExperimentReportPageAction from './__components__/pg_action';
-import initialData from './initial_data.json';
-import { getEvalByName } from '../../../../services/experiments';
+import {
+  getEvalByName,
+  getNotebook,
+} from '../../../../../services/experiments';
 import { Dataset } from './__components__/types';
-import { NotebookWidget } from '@palico-ai/common';
 
-const ExperimentAnalysisPage: React.FC<ExperimentItemChildPage> = async ({
-  params: { expName },
+const ExperimentAnalysisPage: React.FC<NotebookChildPage> = async ({
+  params: { expName, notebookName },
 }) => {
+  const notebook = await getNotebook({
+    experimentName: expName,
+    notebookName: notebookName,
+  });
+
   const datasets: Dataset[] = await Promise.all(
-    initialData.datasetMetadata.map(async (d) => {
+    notebook.datasetMetadata.map(async (d) => {
       const ds = await getEvalByName(d.experimentName, d.evalName);
       return {
         ...d,
@@ -24,10 +30,7 @@ const ExperimentAnalysisPage: React.FC<ExperimentItemChildPage> = async ({
   );
 
   return (
-    <NotebookProvider
-      initialDatasets={datasets}
-      initialRows={initialData.rows as NotebookWidget[]}
-    >
+    <NotebookProvider initialDatasets={datasets} initialRows={notebook.rows}>
       <PageContent
         breadcrumb={[
           Breadcrumb.experimentList({ includeHref: true }),
@@ -35,6 +38,11 @@ const ExperimentAnalysisPage: React.FC<ExperimentItemChildPage> = async ({
             experimentName: expName,
             includeHref: true,
           }),
+          Breadcrumb.experimentNotebookList({
+            includeHref: true,
+            options: { experimentName: expName },
+          }),
+          Breadcrumb.experimentNotebookItem({ notebookName }),
         ]}
         actions={<ExperimentReportPageAction />}
       >

@@ -1,22 +1,39 @@
-import { useState } from 'react';
+'use client';
+
+import { Box } from '@mui/material';
+import { useMemo, useState } from 'react';
 
 interface ExpandableTextCellProps {
   fullContent: string;
+  maxLength?: number;
 }
 
-const ExpandableTextCell: React.FC<ExpandableTextCellProps> = ({
+export const ExpandableTextCell: React.FC<ExpandableTextCellProps> = ({
+  maxLength = 100,
   fullContent,
 }) => {
   const [expanded, setExpanded] = useState(false);
 
+  const value = useMemo(() => {
+    if (expanded) {
+      return fullContent;
+    }
+    if (fullContent.length > maxLength) {
+      return fullContent.slice(0, maxLength) + '...';
+    }
+    return fullContent;
+  }, [expanded, fullContent, maxLength]);
+
+  const shouldShowExpandButton = useMemo(() => {
+    return fullContent.length > maxLength && !expanded;
+  }, [expanded, fullContent.length, maxLength]);
+
   return (
-    <span>
-      {expanded ? fullContent : fullContent.slice(0, 100)}
-      <button onClick={() => setExpanded(!expanded)}>
-        {expanded ? 'Show less' : 'Show more'}
-      </button>
-    </span>
+    <Box>
+      {value}
+      {shouldShowExpandButton && (
+        <button onClick={() => setExpanded(true)}>Expand</button>
+      )}
+    </Box>
   );
 };
-
-export default ExpandableTextCell;

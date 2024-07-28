@@ -103,9 +103,11 @@ export function Table<Data>(props: TableParams<Data>): React.ReactElement {
         >
           <MUITable
             stickyHeader={maxHeight !== undefined}
-            sx={{
-              width: table.getCenterTotalSize(),
-            }}
+            sx={
+              {
+                // width: table.getCenterTotalSize(),
+              }
+            }
           >
             <TableHead>
               {table.getHeaderGroups().map((headerGroup) => (

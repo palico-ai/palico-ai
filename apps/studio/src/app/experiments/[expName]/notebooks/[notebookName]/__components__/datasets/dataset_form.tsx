@@ -1,4 +1,4 @@
-import { EvalCompositeKey } from '@palico-ai/common';
+import { DatasetMetadata, EvalCompositeKey } from '@palico-ai/common';
 import {
   Autocomplete,
   Button,
@@ -11,9 +11,8 @@ import {
   Typography,
 } from '@palico-ai/components';
 import React, { useMemo } from 'react';
-import useAsyncTask from '../../../../../../hooks/use_async_task';
-import { getAllEvals } from '../../../../../../services/metadata';
-import { DatasetMetadata } from '../types';
+import useAsyncTask from '../../../../../../../hooks/use_async_task';
+import { getAllEvals } from '../../../../../../../services/metadata';
 
 interface ImportDatasetFormProps {
   isOpen: boolean;

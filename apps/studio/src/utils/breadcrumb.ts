@@ -3,6 +3,7 @@ import {
   RequireExperimentName,
   RequireLabName,
   RequireEvalName,
+  RequireNoteobokName,
 } from '../types/common';
 import { RoutePath } from './route_path';
 
@@ -73,6 +74,35 @@ export default class Breadcrumb {
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             experimentName: params.options!.experimentName,
             evalName: params.evalName,
+          })
+        : undefined,
+    };
+  }
+
+  static experimentNotebookList(
+    params?: IncludeHrefWithOptions<RequireExperimentName>
+  ): BreadcrumbItem {
+    return {
+      label: 'Notebooks',
+      href: params?.includeHref
+        ? RoutePath.experimentNotebookList({
+            experimentName: params.options.experimentName,
+          })
+        : undefined,
+    };
+  }
+
+  static experimentNotebookItem(
+    params: RequireNoteobokName &
+      Partial<IncludeHrefWithOptions<RequireExperimentName>>
+  ): BreadcrumbItem {
+    return {
+      label: params.notebookName,
+      href: params.includeHref
+        ? RoutePath.experimentNotebookItem({
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            experimentName: params.options!.experimentName,
+            notebookName: params.notebookName,
           })
         : undefined,
     };

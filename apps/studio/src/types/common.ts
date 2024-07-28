@@ -10,6 +10,10 @@ export interface RequireExperimentName {
   experimentName: string;
 }
 
+export interface RequireNoteobokName {
+  notebookName: string;
+}
+
 export interface RequireEvalName {
   evalName: string;
 }
