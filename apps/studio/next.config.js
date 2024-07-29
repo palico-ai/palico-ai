@@ -15,9 +15,10 @@ const nextConfig = {
   output: "standalone",
   experimental: {
     serverActions: {
-      ...process.env.SERVER_ACTION_ORIGINS ? {
-        allowedOrigins: process.env.SERVER_ACTION_ORIGINS.split(','),
-      } : {},
+      // ...process.env.SERVER_ACTION_ORIGINS ? {
+      //   allowedOrigins: process.env.SERVER_ACTION_ORIGINS.split(','),
+      // } : {},
+      allowedOrigins: ["*"],
     }
   }
 };
