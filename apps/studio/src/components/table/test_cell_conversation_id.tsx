@@ -1,26 +1,18 @@
-import { Cell } from '@tanstack/react-table';
 import { useEffect, useState } from 'react';
 import { getTracesForConversation } from '../../services/telemetry';
 import { Link } from '@palico-ai/components';
 
-interface TestCellConversationIdProps {
-  cell: Cell<any, unknown>;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  renderContent: () => React.ReactNode;
+interface EvalTraceLinkCellProps {
+  conversationId: string;
 }
 
-const TestCellConversationID = ({
-  cell,
-  renderContent,
-}: TestCellConversationIdProps) => {
+const EvalTraceLinkCell = ({ conversationId }: EvalTraceLinkCellProps) => {
   const [traceUrl, setTraceURL] = useState<string | undefined>(undefined);
 
   useEffect(() => {
     const handleSetTraceURL = async () => {
       try {
-        const trace = await getTracesForConversation(
-          cell.row.original.output.conversationId
-        );
+        const trace = await getTracesForConversation(conversationId);
         setTraceURL(trace.requests[0].tracePreviewUrl);
       } catch (error) {
         console.error(error);
@@ -28,16 +20,16 @@ const TestCellConversationID = ({
     };
 
     void handleSetTraceURL();
-  }, [cell.row.original.output.conversationId]);
+  }, [conversationId]);
 
   if (!traceUrl) {
-    return renderContent();
+    return <>{conversationId}</>;
   }
   return (
     <Link href={traceUrl} target="_blank">
-      {renderContent()}
+      {conversationId}
     </Link>
   );
 };
 
-export default TestCellConversationID;
+export default EvalTraceLinkCell;

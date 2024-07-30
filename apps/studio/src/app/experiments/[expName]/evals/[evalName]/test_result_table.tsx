@@ -2,10 +2,8 @@
 
 import { Paper } from '@mui/material';
 import { Evaluation } from '@palico-ai/common';
-import { RenderCellFN, Table, useTableModel } from '@palico-ai/components';
-import { TestTableColumnHeader } from '../../../../../utils/experiments';
+import { Table, useTableModel } from '@palico-ai/components';
 import React from 'react';
-import TestCellConversationID from '../../../../../components/table/test_cell_conversation_id';
 import {
   ANALYSIS_TABLE_COL_ID,
   getEvalTestColumnDefFragment,
@@ -28,21 +26,9 @@ const TestResultTable: React.FC<TestResultTableProps> = ({ test }) => {
     },
   });
 
-  const renderCell: RenderCellFN<Evaluation['result'][0]> = (
-    cell,
-    renderContent
-  ) => {
-    if (cell.column.columnDef.header === TestTableColumnHeader.ConversationId) {
-      return (
-        <TestCellConversationID cell={cell} renderContent={renderContent} />
-      );
-    }
-    return renderContent();
-  };
-
   return (
     <Paper sx={{ p: 2 }}>
-      <Table table={table} renderCell={renderCell} />
+      <Table table={table} />
     </Paper>
   );
 };
