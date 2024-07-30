@@ -1,6 +1,7 @@
 import { EvalTestCaseResult } from '@palico-ai/common';
 import { ColumnDef } from '@tanstack/react-table';
 import { EvalResultTableCell } from '../components/table/eval_result_table_cell';
+import EvalTraceLinkCell from '../components/table/test_cell_conversation_id';
 
 export const EVAL_RESULT_ACCESSOR_KEYS = {
   userMessage: 'input.userMessage',
@@ -113,6 +114,11 @@ export function getEvalTestColumnDefFragment<D extends EvalTestCaseResult>(
       accessorKey: EVAL_RESULT_ACCESSOR_KEYS.conversationId,
       header: 'ConversationId',
       size: 120,
+      cell: ({ row }) => (
+        <EvalTraceLinkCell
+          conversationId={row.original.output.conversationId}
+        />
+      ),
     },
   ];
   const overrideColumnDefMap: Record<string, ColumnDef<D>> = {};
