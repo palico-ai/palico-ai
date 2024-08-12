@@ -4,7 +4,7 @@ import Project from './project';
 import { ApplyDBMigraiton, getServiceKey } from './scripts';
 import YAML from 'json-to-pretty-yaml';
 import { v2 as compose } from 'docker-compose';
-import { exec, execSync } from 'child_process';
+import { exec } from 'child_process';
 import chalk from 'chalk';
 import path from 'path';
 
@@ -93,8 +93,10 @@ export class ProjectBuild {
 
   static async buildDockerImages() {
     const { composeFilePath } = await ProjectBuild.getDockerComposePath();
-    execSync(`docker-compose -f ${composeFilePath} build --no-cache`, {
-      stdio: 'inherit',
+    await compose.buildAll({
+      cwd: path.dirname(composeFilePath),
+      commandOptions: ['--no-cache'],
+      log: true,
     });
   }
 
@@ -118,8 +120,9 @@ export class ProjectBuild {
 
   static async stopDockerCompose() {
     const { composeFilePath } = await ProjectBuild.getDockerComposePath();
-    execSync(`docker-compose -f ${composeFilePath} down`, {
-      stdio: 'inherit',
+    await compose.down({
+      cwd: path.dirname(composeFilePath),
+      log: true,
     });
   }
 
@@ -128,8 +131,8 @@ export class ProjectBuild {
     await ProjectBuild.startDockerCompose({
       services: [ProjectService.POSTGRES_DB],
     });
-    // wait 5 seconds for the database to start
-    await new Promise((resolve) => setTimeout(resolve, 5000));
+    // wait 8 seconds for the database to start
+    await new Promise((resolve) => setTimeout(resolve, 8000));
     console.log('Applying Migrations...');
     await ApplyDBMigraiton({ DB_URL: ProjectBuild.databaseURL });
     console.log('Stopping Database Service...');
@@ -154,7 +157,7 @@ export class ProjectBuild {
       ['TRACE_PREVIEW_URL_PREFIX']: 'http://localhost:16686/trace',
     };
     console.log('Starting Server...');
-    const command = `nodemon --exec ts-node src/main.ts`;
+    const command = `npx nodemon --exec ts-node src/main.ts`;
     const serverPs = exec(command, {
       cwd: projectRoot,
       env: {
