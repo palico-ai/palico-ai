@@ -1,21 +1,24 @@
-# Palico AI - Maximize your LLM Application Performance
+# Palico AI - Build Performant LLM Applications
 
-LLM Application development is extremely iterative, more so than any other types of development. This is because to improve an LLM application performance (accuracy, hallucinations, latency, cost), you need to trial and error various combinations of LLM models, prompt templates (e.g., few-shot, chain-of-thought), prompt context with different RAG architecture, different agent architecture, and more. **There are thousands of possible combinations to try**. 
+## What is Palico?
 
-Palico is an LLM Development Framework that structures your application development for rapid experimentation so you can easily test different combination of your LLM application stack and quickly iterate towards your accuracy goals.
+LLM application by default has a lot of performance issues (accuracy / hallucinations, latency, cost). To improve its performance, developers need to be able to experiment with many variations of their build layer. This involves testing different prompt techniques, LLM models, RAG pipeline, and more. Since you need to trial-and-error so many components of your application, iterative development is key to building a performant LLM application.
+
+Building an LLM Application has three core activities:
+
+- **Building**: The components used to create the application such as prompt, LLM model, RAG, etc.
+- **Experimenting**: Testing different variations of the build layer to improve the performance of the LLM application
+- **Deploying**: Moving the LLM application to production, integrating with other services, and monitoring its performance
+
+Palico is a framework that standardizes the lifecycle of building, experimenting, and deploying an LLM application such that you can maximize the speed of the iterative loop for developing an LLM application that meets your performance targets.
 
 #### With Palico you can
 
-- [Build](#build) modular LLM applications or workflows that can easily swap out different combination of models, prompts, context, business logic, architecture, and more.
-- [Improve accuracy](#experiment) by running lots of experiments and objectively evaluating your application performance with data
-- [Deploy](#deploy) to any cloud provider as docker images
-- [Integrate](#client-sdk) your LLM application or workflows with your other services via REST API or SDK
+- [Build](#build) a modular LLM applications where you can easily swap in/out different combination of models, prompts, context, business logic, architecture, and more.
+- [Improve accuracy](#experiment) by running experiments and objectively measuring the performance of your LLM application
+- [Deploy](#deploy) your application to any cloud provider as docker images
+- [Integrate](#client-sdk) your LLM application with your other services via REST API or SDK
 - [Manage](#palico-studio) your LLM application via Palico Studio - your application control panel
-
-#### We help you build a modular tech-stack built for rapid iteration
-
-![image](https://github.com/palico-ai/palico-main/assets/32821894/3d037333-48c8-4045-8ba5-3696e9d97636)
-
 
 ## Quick Start
 
