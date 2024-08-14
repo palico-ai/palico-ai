@@ -23,7 +23,7 @@ export const Editor: React.FC<EditorProps> = ({
         ...restOptions,
       }}
       {...rest}
-      theme="vs-dark"
+      // theme="vs-dark"
     />
   );
 };
