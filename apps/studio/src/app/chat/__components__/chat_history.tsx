@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useEffect, useMemo } from 'react';
-import { Box } from '@mui/material';
-import { Typography } from '@palico-ai/components';
+import { Box, Divider } from '@mui/material';
+import { SyntaxHighlighter, Typography } from '@palico-ai/components';
 
 export interface ChatMessage {
   role: 'user' | 'assistant';
@@ -11,7 +11,8 @@ export interface ChatMessage {
 
 export type ConversationHistoryItem = {
   role: 'user' | 'assistant' | 'tool';
-  message: string;
+  message?: string;
+  data?: Record<string, unknown>;
 };
 
 export interface ChatHistoryProps {
@@ -19,17 +20,10 @@ export interface ChatHistoryProps {
   history: ConversationHistoryItem[];
 }
 
-type ChatItemToolCallProps = {
-  id: string;
-  functionName: string;
-  arguments: Record<string, unknown>;
-  result?: Record<string, unknown>;
-};
-
 interface ChatHistoryUIItemProps {
   role: 'user' | 'assistant';
   message?: string;
-  toolCalls?: ChatItemToolCallProps[];
+  data?: Record<string, unknown>;
 }
 
 type ChatListItemProps = ChatHistoryUIItemProps & {
@@ -37,42 +31,34 @@ type ChatListItemProps = ChatHistoryUIItemProps & {
 };
 
 const ChatListItem: React.FC<ChatListItemProps> = (item) => {
-  const { role, message, toolCalls, itemRef } = item;
+  const { role, message, data, itemRef } = item;
 
   const roleLabel = useMemo(() => {
     if (role === 'user') {
       return 'User Message';
     }
-    if (toolCalls) {
-      return 'Assistant (Tool)';
-    }
     return 'Assistant';
-  }, [role, toolCalls]);
+  }, [role]);
 
   const contentUI = useMemo(() => {
-    if (message) {
-      return <Typography variant="body1">{message}</Typography>;
-    }
-    if (toolCalls) {
-      return toolCalls.map((toolCall, index) => {
-        return (
-          <Box key={index}>
-            <Typography variant="body1">
-              <code>
-                {toolCall.functionName}({JSON.stringify(toolCall.arguments)})
-              </code>
-            </Typography>
-            {toolCall.result && (
-              <Typography variant="body1" sx={{ ml: 6 }}>
-                <code>{String(toolCall.result)}</code>
-              </Typography>
-            )}
+    return (
+      <Box>
+        {message && (
+          <Typography variant="body1" whiteSpace={'pre-wrap'}>
+            {message}
+          </Typography>
+        )}
+        {data && (
+          <Box>
+            <Divider>Data</Divider>
+            <SyntaxHighlighter language="json">
+              {JSON.stringify(data, null, 2)}
+            </SyntaxHighlighter>
           </Box>
-        );
-      });
-    }
-    return <></>;
-  }, [message, toolCalls]);
+        )}
+      </Box>
+    );
+  }, [data, message]);
 
   return (
     <Box
@@ -110,13 +96,15 @@ export const ChatHistory: React.FC<ChatHistoryProps> = ({
       if (item.role === 'user') {
         reformattedHistory.push({
           role: 'user',
-          message: item.message as string,
+          message: item.message,
+          data: item.data,
         });
       }
       if (item.role === 'assistant') {
         reformattedHistory.push({
           role: 'assistant',
           message: item.message,
+          data: item.data,
         });
       } else if (item.role === 'tool') {
         throw new Error('Toolcall not supported');

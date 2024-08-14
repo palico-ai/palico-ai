@@ -2,7 +2,6 @@
 
 import {
   AppConfig,
-  ConversationContext as ConversationContextType,
   ConversationRequestContent,
   ConversationResponse,
 } from '@palico-ai/common';
@@ -50,12 +49,10 @@ export const ConversationContextProvider: React.FC<
   const agentResponseToHistoryItem = (
     response: ConversationResponse
   ): ConversationHistoryItem => {
-    if (!response.message) {
-      throw new Error('Message is required -- we only support conversations');
-    }
     return {
-      role: response.message ? 'assistant' : 'tool',
+      role: 'assistant',
       message: response.message,
+      data: response.data,
     };
   };
 
@@ -73,6 +70,7 @@ export const ConversationContextProvider: React.FC<
       {
         role: 'user',
         message: content.userMessage ?? '',
+        data: content.payload,
       },
     ]);
     try {

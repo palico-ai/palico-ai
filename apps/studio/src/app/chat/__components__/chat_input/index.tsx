@@ -36,7 +36,9 @@ export const ChatInput: React.FC<ChatInputProps> = ({
       await onSend(
         {
           userMessage: message,
-          payload: JSON.parse(requestPayloadString ?? '{}'),
+          payload: requestPayloadString?.length
+            ? JSON.parse(requestPayloadString ?? '{}')
+            : undefined,
         },
         JSON.parse(appConfigString ?? '{}')
       );
