@@ -1,4 +1,3 @@
-import { Editor } from '@monaco-editor/react';
 import {
   Box,
   Divider,
@@ -9,7 +8,7 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material';
-import { MenuButton } from '@palico-ai/components';
+import { Editor, MenuButton } from '@palico-ai/components';
 import OptionMenuIcon from '@mui/icons-material/MoreVert';
 import RunIcon from '@mui/icons-material/PlayCircleFilledWhite';
 import { useExperiment } from './hooks';
@@ -170,7 +169,6 @@ const ExperimentCell: React.FC<ExperimentCellProps> = ({
         <Box>
           {/* TODO: Add tabs between cotnext and user message */}
           <Editor
-            theme="vs-dark"
             height={HEIGHT}
             value={experiment.appConfigJSON}
             onChange={(value) => handleChangeExperimentAppConfig(value)}
