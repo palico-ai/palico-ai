@@ -82,7 +82,7 @@ export function getEvalTestColumnDefFragment<D extends EvalTestCaseResult>(
       cell: ({ row }) => (
         <EvalResultTableCell
           isCode
-          value={JSON.stringify(row.original.output.data, null, 2)}
+          value={JSON.stringify(row.original.input.payload, null, 2)}
         />
       ),
     },
