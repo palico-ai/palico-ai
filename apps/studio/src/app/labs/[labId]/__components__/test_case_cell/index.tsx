@@ -45,6 +45,7 @@ const TestCaseCell: React.FC<TestCaseCellParams> = ({ testCaseId }) => {
             display: 'flex',
             flexDirection: 'row',
             alignItems: 'center',
+            mb: 1,
           }}
         >
           <TextField

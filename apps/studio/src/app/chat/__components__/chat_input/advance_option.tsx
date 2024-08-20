@@ -1,6 +1,5 @@
-import { Editor } from '@monaco-editor/react';
 import { Card, CardContent } from '@mui/material';
-import { TabPanel, TabView } from '@palico-ai/components';
+import { Editor, TabPanel, TabView } from '@palico-ai/components';
 import React from 'react';
 
 export interface AdvanceOptionProps {
@@ -9,6 +8,8 @@ export interface AdvanceOptionProps {
   appConfig?: string;
   onChangeAppConfig: (appConfig?: string) => void;
 }
+
+const EDITOR_HEIGHT = '18vh';
 
 const AdvanceOption: React.FC<AdvanceOptionProps> = ({
   requestPayload,
@@ -33,8 +34,7 @@ const AdvanceOption: React.FC<AdvanceOptionProps> = ({
         <CardContent>
           <TabPanel value="request_payload">
             <Editor
-              theme="vs-dark"
-              height={'15vh'}
+              height={EDITOR_HEIGHT}
               defaultLanguage="json"
               value={requestPayload}
               onChange={(value) => onChangeRequestPayload(value ?? '')}
@@ -47,8 +47,7 @@ const AdvanceOption: React.FC<AdvanceOptionProps> = ({
           </TabPanel>
           <TabPanel value="app_config">
             <Editor
-              theme="vs-dark"
-              height={200}
+              height={EDITOR_HEIGHT}
               value={appConfig}
               onChange={(value) => onChangeAppConfig(value ?? '')}
               defaultLanguage="json"
