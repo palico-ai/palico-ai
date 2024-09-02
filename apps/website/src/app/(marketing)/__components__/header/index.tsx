@@ -1,108 +1,88 @@
 'use client';
 
-import { Box, Divider, Grid } from '@mui/material';
-import { Button, Link, Typography } from '@palico-ai/components';
-import Image from 'next/image';
+import { Box, Container, Divider, styled } from '@mui/material';
+import { Button, LinkButton, Typography } from '@palico-ai/components';
 import React from 'react';
-import HeaderImage from '../../../../../public/landing_page/header.png';
-import EvidenceBlog from './evidence';
+import DocsIcon from '@mui/icons-material/ImportContacts';
+import GitHubIcon from '@mui/icons-material/GitHub';
 import RoutePath from '../../../../utils/route_path';
+
+const HighlightSpan = styled('span')(({ theme }) => ({
+  color: theme.palette.primary.main,
+}));
 
 const LandingPageHeader: React.FC = () => {
   return (
-    <Grid
-      container
-      sx={{
-        py: {
-          xs: 8,
-          md: 12,
-          lg: 16,
-          xl: 20,
-        },
-      }}
-      spacing={6}
-    >
-      <Grid item xs={12} sm={12} md={6}>
+    <Box>
+      <Container
+        maxWidth="md"
+        sx={{
+          my: {
+            xs: 8,
+            sm: 16,
+            md: 20,
+          },
+          gap: 3,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          textAlign: 'center',
+        }}
+      >
+        <Typography variant="h1">
+          Rapidly <HighlightSpan>Iterate</HighlightSpan> on your{' '}
+          <HighlightSpan>LLM Development</HighlightSpan>
+        </Typography>
+        <Typography variant="body2" fontSize={20}>
+          Streamline your process for iterating through hundreds of combinations
+          of models, prompts, and custom logic to find the best performing
+          configuration for your application
+        </Typography>
+        <Divider
+          sx={{
+            my: 3,
+            width: '100%',
+            boxSizing: 'border-box',
+          }}
+        />
+        <LinkButton
+          href={RoutePath.quickStart()}
+          color="primary"
+          variant="contained"
+          size="large"
+        >
+          Start Your Project
+        </LinkButton>
         <Box
           sx={{
             display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'space-between',
-            gap: 4,
-            height: '100%',
-            py: 4,
-            boxSizing: 'border-box',
+            flexDirection: {
+              xs: 'column',
+              md: 'row',
+            },
+            gap: 2,
+            mt: 2,
           }}
         >
-          <Box
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 3,
-            }}
+          <LinkButton
+            href={RoutePath.docs()}
+            startIcon={<DocsIcon />}
+            size="large"
+            color="secondary"
           >
-            <Typography
-              variant="h3"
-              gutterBottom
-              sx={(theme) => ({
-                color: theme.palette.info.light,
-              })}
-            >
-              LLM Development Is Highly Iterative
-            </Typography>
-            <Typography variant="body2" fontSize={18}>
-              Improving LLM performance (accuracy, latency, cost) requires
-              experimenting with{' '}
-              <u>
-                <i>hundreds of combinations</i>
-              </u>{' '}
-              of prompt techniques, contexts, models, architectures, and more
-            </Typography>
-            <Typography
-              variant="h2"
-              sx={(theme) => ({
-                color: theme.palette.primary.light,
-              })}
-            >
-              Streamline Iterative Development
-            </Typography>
-            <Typography variant="subtitle1">
-              Reach production-ready performance in weeks instead of months
-            </Typography>
-            <Divider />
-            <Box
-              sx={{
-                display: 'flex',
-                gap: 2,
-              }}
-            >
-              <Link href={RoutePath.quickStart()}>
-                <Button color="primary" variant="contained">
-                  Get Started in 5 Minutes
-                </Button>
-              </Link>
-              <Link href={RoutePath.github()}>
-                <Button color="info" variant="outlined">
-                  Checkout Github Repo
-                </Button>
-              </Link>
-            </Box>
-          </Box>
-          <EvidenceBlog />
+            Read the Docs
+          </LinkButton>
+          <Button
+            href={RoutePath.github()}
+            startIcon={<GitHubIcon />}
+            size="large"
+            color="secondary"
+          >
+            We Are Open Source
+          </Button>
         </Box>
-      </Grid>
-      <Grid item xs={12} sm={12} md={6}>
-        <Image
-          src={HeaderImage}
-          alt="Header Image"
-          style={{
-            maxWidth: '100%',
-            height: 'auto',
-            borderRadius: 8,
-          }}
-        />
-      </Grid>
-    </Grid>
+      </Container>
+    </Box>
   );
 };
 

@@ -46,6 +46,34 @@ export default class RoutePath {
     return `${RoutePath.docs()}/getting_started/concepts#version-control`;
   }
 
+  static cookbook() {
+    return `${RoutePath.docs()}/cookbooks`;
+  }
+
+  static docsChatbot() {
+    return `${RoutePath.cookbook()}/building_a_chatbot_with_memory`;
+  }
+
+  static docsBuildARagApp() {
+    return `${RoutePath.cookbook()}/building_a_rag_application`;
+  }
+
+  static docsAiTextEditor() {
+    return `${RoutePath.cookbook()}/building_ai_text_editor`;
+  }
+
+  static docsClassifyDocuments() {
+    return `${RoutePath.cookbook()}/classify_news_articles`;
+  }
+
+  static docsConvertTextToSQL() {
+    return `${RoutePath.cookbook()}/text_to_sql`;
+  }
+
+  static docsUnstructuredToJSON() {
+    return `${RoutePath.cookbook()}/unstructured_to_json`;
+  }
+
   static quickStart() {
     return RoutePath.docsInstallation();
   }

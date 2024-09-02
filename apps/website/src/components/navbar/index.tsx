@@ -29,14 +29,14 @@ const NavItems = [
     href: RoutePath.github(),
   },
   {
-    label: 'Quickstart',
-    href: RoutePath.quickStart(),
-  },
-  {
     label: 'Book a demo',
     href: RoutePath.scheduleDemo(),
-    highlight: true,
     target: '_blank',
+  },
+  {
+    label: 'Quickstart',
+    href: RoutePath.quickStart(),
+    highlight: true,
   },
 ];
 
