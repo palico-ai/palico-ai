@@ -26,6 +26,15 @@ const LogoImage: React.FC<{
 const quotes: EvidenceQuoteProps[] = [
   {
     quote:
+      'Sometimes it can be hard to tell whether a change — e.g., a new instruction or a new design — makes your system better or worse. Looking at a few examples may hint at which is better, but with small sample sizes it can be hard to distinguish between a true improvement or random luck.',
+    quotee: 'Open AI',
+    icon: <LogoImage backgroundColor="white" src={OpenAIIcon} />,
+    referenceTitle: 'Strategy: Test Changes Systematically',
+    learnMoreURL:
+      'https://platform.openai.com/docs/guides/prompt-engineering/strategy-use-external-tools',
+  },
+  {
+    quote:
       'It’s time to recognize that evaluation is not a one-time endeavor but a multi-step, iterative process that has a significant impact on the performance and longevity of your LLM application.',
     quotee: 'Jane Huang',
     icon: <LogoImage src={MicrosoftIcon} />,
@@ -41,15 +50,6 @@ const quotes: EvidenceQuoteProps[] = [
     referenceTitle: 'Best Practices and Challenges of Evaluation Flows',
     learnMoreURL:
       'https://techcommunity.microsoft.com/t5/ai-azure-ai-services-blog/evaluation-flows-for-large-language-models-llm-in-azure-ai/ba-p/4153110#:~:text=Conducting%20iterative%20and%20continuous%20evaluation.%20Users%20should%20conduct%20evaluation%20in%20an%20iterative%20and%20continuous%20manner%2C%20and%20update%20and%20refine%20their%20evaluation%20data%2C%20metrics%2C%20methods%2C%20and%20actions%20based%20on%20the%20feedback%20and%20findings%20from%20the%20evaluation.%C2%A0',
-  },
-  {
-    quote:
-      'Sometimes it can be hard to tell whether a change — e.g., a new instruction or a new design — makes your system better or worse. Looking at a few examples may hint at which is better, but with small sample sizes it can be hard to distinguish between a true improvement or random luck.',
-    quotee: 'Open AI',
-    icon: <LogoImage backgroundColor="white" src={OpenAIIcon} />,
-    referenceTitle: 'Strategy: Test Changes Systematically',
-    learnMoreURL:
-      'https://platform.openai.com/docs/guides/prompt-engineering/strategy-use-external-tools',
   },
   {
     quote:

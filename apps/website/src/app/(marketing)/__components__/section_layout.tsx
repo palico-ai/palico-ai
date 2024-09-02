@@ -4,6 +4,7 @@ import React from 'react';
 
 export interface SectionLayoutProps {
   title?: string;
+  subtitle?: TypographyProps['children'];
   titleHeader?: TypographyProps['variant'];
   children: React.ReactNode;
   alignTitle?: TypographyProps['textAlign'];
@@ -13,6 +14,7 @@ export interface SectionLayoutProps {
 
 const SectionLayout: React.FC<SectionLayoutProps> = ({
   title,
+  subtitle,
   disableGutter,
   disableTitleGutter,
   titleHeader = 'h2',
@@ -22,7 +24,7 @@ const SectionLayout: React.FC<SectionLayoutProps> = ({
   return (
     <Box
       sx={{
-        mb: disableGutter ? 0 : 18,
+        mb: disableGutter ? 0 : 24,
       }}
     >
       {title && (
@@ -34,6 +36,16 @@ const SectionLayout: React.FC<SectionLayoutProps> = ({
           <Typography variant={titleHeader} textAlign={alignTitle}>
             {title}
           </Typography>
+          {subtitle && (
+            <Typography
+              variant="body2"
+              fontSize={20}
+              textAlign={alignTitle}
+              mt={4}
+            >
+              {subtitle}
+            </Typography>
+          )}
         </Box>
       )}
       {children}

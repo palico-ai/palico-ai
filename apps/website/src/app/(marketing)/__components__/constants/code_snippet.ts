@@ -6,6 +6,20 @@ const chatWrapperCodeSnippet = (content: string) => `async function chat(
 }
 `;
 
+export const simpleAgentCodeSnippet = `class MyLLMApplication implements Agent {
+  async chat(content, context) {
+    const { userMessage, payload } = content;
+    // build your prompt
+    // call an llm model
+    // post processing
+    return {
+      message: "...",
+      data: "..."
+    }
+  }
+}
+`;
+
 export const agentCodeSnippets = `class MathTutorLLMAgent implements Agent {
   async chat(
     content: ConversationRequestContent,
@@ -124,3 +138,23 @@ export const workflowCodeSnippets = `ChainWorkflow
     };
   });
 `;
+
+export const callAgentWithAppConfig = (options: {
+  model: string;
+  prompt: string;
+  dataset: string;
+  postProcess: boolean;
+}) => {
+  return `palico.agents.newConversation({
+  name: "MyApp",
+  // swapping configuration
+  appConfig: {
+    model: "${options.model}",
+    prompt: "${options.prompt}",
+    dataset: "${options.dataset}",
+    postProcess: ${options.postProcess},
+  },
+  userMessage: "...",
+  payload: {...},
+});`;
+};

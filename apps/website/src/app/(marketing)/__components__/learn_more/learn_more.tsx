@@ -53,11 +53,8 @@ const CTA = () => {
 };
 
 const BenefitList = [
-  'Build complex LLM applications with flexible and dynamic prompts',
-  'Measure how each component of your LLM stack (model, prompt, rag, etc) affects performance',
-  'Find the right input combination for best results through Rapid Experimentation',
-  'Debug performance issues with analysis tools and tracing',
-  'Deploy your applications with docker and connect via REST API or SDK',
+  'Build any LLM applications, use any tools',
+  'Easily swap components in your applications',
 ];
 
 const BenefitsOfPalico: React.FC = () => {
@@ -91,14 +88,14 @@ const LearnMore: React.FC = () => {
       title="Take your Application from Prototype to Production with Palico"
     >
       <Grid container spacing={12}>
-        <Grid item xs={12} sm={12} md={6}>
+        {/* <Grid item xs={12} sm={12} md={6}>
           <BenefitsOfPalico />
-        </Grid>
+        </Grid> */}
         <Grid
           item
           xs={12}
           sm={12}
-          md={6}
+          md={12}
           sx={{
             display: 'flex',
             flexDirection: 'column',

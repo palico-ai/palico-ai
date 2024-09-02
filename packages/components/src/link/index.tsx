@@ -3,7 +3,7 @@ import React from 'react';
 import NextLink from 'next/link';
 import { PropsOf } from '@emotion/react';
 
-interface LinkProps extends Omit<PropsOf<typeof NextLink>, 'href'> {
+export interface LinkProps extends Omit<PropsOf<typeof NextLink>, 'href'> {
   href: string;
 }
 
