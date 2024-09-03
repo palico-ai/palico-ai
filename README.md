@@ -1,56 +1,26 @@
-# Palico AI - Build Performant LLM Applications
+# Palico AI - Rapidly Iterate on your LLM Development
 
-## What is Palico?
-
-LLM application by default has a lot of performance issues (accuracy / hallucinations, latency, cost). To improve its performance, developers need to be able to experiment with many variations of their build layer. This involves testing different prompt techniques, LLM models, RAG pipeline, and more. Since you need to trial-and-error so many components of your application, iterative development is key to building a performant LLM application.
-
-Building an LLM Application has three core activities:
-
-- **Building**: The components used to create the application such as prompt, LLM model, RAG, etc.
-- **Experimenting**: Testing different variations of the build layer to improve the performance of the LLM application
-- **Deploying**: Moving the LLM application to production, integrating with other services, and monitoring its performance
-
-Palico is a framework that standardizes the lifecycle of building, experimenting, and deploying an LLM application such that you can maximize the speed of the iterative loop for developing an LLM application that meets your performance targets.
+LLM application by default has a lot of performance issues (accuracy / hallucinations, latency, cost). To improve its performance, developers need iterate through hundreds of combinations of prompts, models, RAG pipeline, and more. Since you need to test so many variation of your application layer, a process is needed to help you efficiently iterate through these combinations. We provide the framework that helps you streamline this iterative process.
 
 #### With Palico you can
 
-- [Build](#build) a modular LLM applications where you can easily swap in/out different combination of models, prompts, context, business logic, architecture, and more.
-- [Improve accuracy](#experiment) by running experiments and objectively measuring the performance of your LLM application
+- [Build](#build) an application layer where you can easily swap out different combination of models, prompts, and custom logic
+- [Improve performance](#experiment) by setting up data-driven metrics to measuring the performance of your LLM application
 - [Deploy](#deploy) your application to any cloud provider as docker images
 - [Integrate](#client-sdk) your LLM application with your other services via REST API or SDK
-- [Manage](#palico-studio) your LLM application via Palico Studio - your application control panel
+- [Manage](#palico-studio) your LLM application via Palico Studio - a control panel for your application
 
-## Quick Start
+#### Get started in seconds
+```bash
+npx palico init <project-name>
+```
 
-Setup a simple starter application with an OpenAI Chatbot
+## Documentation
+For full documentation, checkout [docs.palico.ai](https://docs.palico.ai)
 
-1. Create a Palico App
+Setup your own Palico app by following our [quickstart guide](https://docs.palico.ai/getting_started/installation)
 
-   ```bash
-   npx palico init <project-name>
-   ```
-
-2. Add your OpenAI API key to `.env` file. You can get your OpenAI API key from [OpenAI](https://platform.openai.com/api-keys)
-
-   ```tsx
-   OPENAI_API_KEY=<your-openai-api-key>
-   ```
-
-3. Initialize required services for your Palico App. You only need to run this once when you first setup a new Palico App in a new environment.
-
-   ```tsx
-   npm run bootstrap
-   ```
-
-4. Start your Palico App
-
-   ```tsx
-   npm start
-   ```
-
-You can now chat with your chatbot in the Palico Studio at http://localhost:5173/chat. You can also modify your chat application in `src/agents/chatbot/index.ts`.
-
-### Overview of your Palico Starter App
+## Overview of Palico Started Application
 
 https://github.com/palico-ai/palico-main/assets/32821894/54f35583-41c1-48a3-9565-95c484a4909b
 
@@ -87,15 +57,19 @@ class ChatbotAgent implements LLMAgent {
 
 Note that we are using Portkey to make our LLM call. Similarly, you can use LangChain or LlamaIndex to help you build your prompt and manage your model calls.
 
-Our goal is to help developers create a more modular system so they can easily test different configuration of their LLM system to find the best input combination. That is where the `appConfig` parameter comes in. Developers should treat this like a feature flag and use this to programmatically build a more modular LLM application.
-
-In addition to Agents, we have `Workflows` for more complex control flows and multi-agent applications.
+Our goal is to help developers create a more modular system so they can easily test different configuration of their LLM system to find the best input combination. That is where the `appConfig` parameter comes in. Developers should treat this like a feature flag and use this to programmatically build a more modular application layer.
 
 Read more about [Agents](https://docs.palico.ai/build_app/agents).
 
 ### Experiment
 
-Experiments are how you iteratively improve the accuracy of your application. Experimentation has three steps.
+Experiments are how you iteratively improve the performance (accuracy, latency, cost) of your application. You want to create a process that let's you continously improve it's performance.
+
+![LandPageAssets-Page-2 drawio (7)](https://github.com/user-attachments/assets/493a578a-3c0d-4df8-8b98-8fb27bbde916)
+
+
+
+Setting up an experiments has three steps.
 
 #### Create your accuracy benchmark
 
@@ -165,19 +139,3 @@ https://github.com/palico-ai/palico-main/assets/32821894/0423cd2d-e5cf-4589-855e
 
 
 Read more about [Palico Studio](https://docs.palico.ai/build_app/studio).
-
-## FAQ
-
-### How does libraries like LangChain compared to Palico
-
-LangChain and LlamaIndex are more like libraries that helps you achieve different tasks with LLM Development. For example, they provide you tools to connect with different LLM providers, connect to vector database, create evaluations, and more. They are more like a swiss army knife that helps you achieve different tasks with LLM Development. It's up to you to use these tools to structure your LLM application development for maximum productivity.
-
-We are a framework (not a library) that has strong opinions on how you should structure your LLM application development. Our opinion is biased towards accuracy improvement through rapid experimentations. With our framework, you have a standard process, and an integrated set of tools, that helps you build your LLM application, measure accuracy, and run experiments. These processes all work together to maximize experiment-ability of your LLM application so you can reach your accuracy goals faster.
-
-As we are a framework and LangChain or LlamaIndex are libraries, you can directly use LangChain or LlamaIndex within our application to help with tasks such as calling LLM models or managing your RAG layer while using our framework to streamline your experimentation process.
-
-### How does evaluation libraries compared to Palico
-
-Evaluation frameworks are often just a tool to help you grade the response of your LLM application. They may provide some proprietary observability and tracing tools. They however do not help you structure your LLM application development for rapid experimentation. They do not help you build your LLM application. They do not help you deploy your LLM application. The responsibility you have when using an evaluation framework is you need to build your own experiment management system that helps you scale your experimentation process across your team. You will have lots of fragmented tools that you need to integrate together to get a full picture of your LLM application.
-
-We are a more integrated framework that helps you build, scale experimentation, and deploy your LLM application. We provide a more integrated experience for your team to work on LLM applications.
