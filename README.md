@@ -2,7 +2,7 @@
 
 LLM application by default has a lot of performance issues (accuracy / hallucinations, latency, cost). To improve its performance, developers need iterate through hundreds of combinations of prompts, models, RAG pipeline, and more. Since you need to test so many variation, a process is needed to help you efficiently iterate through these combinations. We provide the framework that helps you streamline this iterative process.
 
-#### With Palico you can
+#### ⚡ With Palico you can ⚡
 
 - [Build](#build) an application layer where you can easily swap out different combination of models, prompts, and custom logic
 - [Improve performance](#experiment) by benchmarking your performance and creating an iterative loop to improve it
@@ -10,21 +10,21 @@ LLM application by default has a lot of performance issues (accuracy / hallucina
 - [Integrate](#client-sdk) your application with your other services via REST APIs or SDKs
 - [Manage](#palico-studio) your application via Palico Studio - a control panel for your application
 
-#### Get started in seconds
+#### 🕑 Get started in seconds
 ```bash
 npx palico init <project-name>
 ```
 
-## Documentation
+## 📖 Documentation
 For full documentation, checkout [docs.palico.ai](https://docs.palico.ai)
 
 Setup your own Palico app by following our [quickstart guide](https://docs.palico.ai/getting_started/installation)
 
-## Overview of your Palico Starter Application
+## 🤔 Overview of your Palico Starter Application
 
 https://github.com/palico-ai/palico-main/assets/32821894/54f35583-41c1-48a3-9565-95c484a4909b
 
-## Components of a Palico Application
+## 🧱 Components of a Palico Application
 
 ### Build
 
