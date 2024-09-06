@@ -3,9 +3,10 @@
 import React from 'react';
 import SectionLayout from '../section_layout';
 import { Button, Link, Typography } from '@palico-ai/components';
-import { Box, Container, Divider, Grid } from '@mui/material';
+import { Box, Container, Grid } from '@mui/material';
 import RoutePath from '../../../../utils/route_path';
 import SignupForNewsletter from './newsletter';
+import { HighlightSpan } from '../client_fragments';
 
 const CTA = () => {
   return (
@@ -23,7 +24,7 @@ const CTA = () => {
       >
         <Link href={RoutePath.quickStart()}>
           <Button variant="contained" color="primary" size="large" fullWidth>
-            Get Started in 5 minutes
+            Start your project
           </Button>
         </Link>
         <Link href={RoutePath.scheduleDemo()} target="_blank">
@@ -40,8 +41,14 @@ const CTA = () => {
           alignItems: 'center',
         }}
       >
-        <Typography variant="subtitle1" textAlign="center" mb={4}>
-          Subscribe to our newsletter to get the latest updates on Palico AI
+        <Typography
+          variant="h5"
+          fontWeight={'regular'}
+          textAlign="center"
+          mb={4}
+        >
+          Stay up to date with <HighlightSpan>best practices</HighlightSpan> in
+          LLM development
         </Typography>
         <Container maxWidth="md">
           <SignupForNewsletter />
@@ -49,34 +56,6 @@ const CTA = () => {
       </Box>
       <Box />
     </>
-  );
-};
-
-const BenefitList = [
-  'Build any LLM applications, use any tools',
-  'Easily swap components in your applications',
-];
-
-const BenefitsOfPalico: React.FC = () => {
-  return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-
-        gap: 3,
-      }}
-    >
-      {BenefitList.map((benefit, index) => (
-        <Box key={index}>
-          <Typography variant="subtitle2" mb={3}>
-            {benefit}
-          </Typography>
-          {index !== BenefitList.length - 1 && <Divider variant="fullWidth" />}
-        </Box>
-      ))}
-    </Box>
   );
 };
 

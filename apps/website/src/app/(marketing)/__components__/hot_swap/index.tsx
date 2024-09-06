@@ -6,7 +6,9 @@ import { Box, Grid } from '@mui/material';
 import HotswapFlowDiagram, { HOTSWAP_NODE_LIST } from './flow_diagram';
 import { Button } from '@palico-ai/components';
 import { sample } from 'lodash';
-import { HighlightSpan } from '../client_fragments';
+import { HighlightSpan, LearnMoreButton } from '../client_fragments';
+import RefreshIcon from '@mui/icons-material/Refresh';
+import RoutePath from '../../../../utils/route_path';
 
 const pickNodes = () => {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -48,6 +50,7 @@ const AppConfigHotSwap: React.FC = () => {
           }}
         >
           <Button
+            startIcon={<RefreshIcon />}
             variant="outlined"
             color="secondary"
             size="small"
@@ -55,7 +58,7 @@ const AppConfigHotSwap: React.FC = () => {
               setNodeConfig(pickNodes());
             }}
           >
-            Refresh
+            Swap
           </Button>
         </Grid>
         <Grid item xs={12} md={12}>
@@ -124,6 +127,9 @@ const AppConfigHotSwap: React.FC = () => {
             }}
           />
         </Grid> */}
+        <Grid item xs={12} md={12}>
+          <LearnMoreButton href={RoutePath.docsAppConfig()} />
+        </Grid>
       </Grid>
     </SectionLayout>
   );

@@ -15,9 +15,10 @@ import {
 } from '@mui/material';
 import LifecycleDiagram from './iterate.svg';
 import Image from 'next/image';
-import { HighlightSpan } from '../client_fragments';
+import { HighlightSpan, LearnMoreButton } from '../client_fragments';
 import EvalGif from './evaluation.gif';
 import AnalyzeExp from './analyze.gif';
+import RoutePath from '../../../../utils/route_path';
 
 const testCaseCodeSnippet = `[
   {
@@ -91,12 +92,20 @@ const StepSplitContent: React.FC<StepSplitContentProps> = ({
           md={4}
           sx={{
             display: 'flex',
-            alignItems: 'center',
+            gap: 2,
+            flexDirection: 'column',
+            justifyContent: 'center',
           }}
         >
           <Typography variant="body2" fontSize={20} gutterBottom>
             {description}
           </Typography>
+          <Box>
+            <LearnMoreButton
+              label="Learn more"
+              href={RoutePath.docsExperiment()}
+            />
+          </Box>
         </Grid>
         <Grid item xs={12} md={8}>
           <Paper
@@ -228,7 +237,7 @@ const Evaluation: React.FC = () => {
             stepControl={stepControllerButtons}
             description="Change / Swap models, prompts, or other components from your application layer, and run it against your test cases"
           >
-            <GifImage src={EvalGif} alt="Evaluation Gif" />
+            <GifImage unoptimized src={EvalGif} alt="Evaluation Gif" />
           </StepSplitContent>
         </Step>
         <Step>
@@ -242,6 +251,7 @@ const Evaluation: React.FC = () => {
             stepControl={stepControllerButtons}
           >
             <GifImage
+              unoptimized
               src={AnalyzeExp}
               alt="Analyze Experiments"
               width={800}
@@ -250,6 +260,13 @@ const Evaluation: React.FC = () => {
           </StepSplitContent>
         </Step>
       </Stepper>
+      <Box
+        mt={2}
+        sx={{
+          display: 'flex',
+          justifyContent: 'flex-end',
+        }}
+      ></Box>
     </SectionLayout>
   );
 };

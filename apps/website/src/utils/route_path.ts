@@ -74,6 +74,18 @@ export default class RoutePath {
     return RoutePath.docs();
   }
 
+  static docsBuildApp() {
+    return `${RoutePath.docs()}/guides/build`;
+  }
+
+  static docsAppConfig() {
+    return `${RoutePath.docs()}/guides/feature_flag`;
+  }
+
+  static docsExperiment() {
+    return `${RoutePath.docs()}/guides/experiments`;
+  }
+
   static github() {
     return 'https://github.com/palico-ai/palico-ai';
   }
