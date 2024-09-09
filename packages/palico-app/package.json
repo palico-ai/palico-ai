@@ -46,7 +46,8 @@
     "@opentelemetry/sdk-node": "^0.51.0",
     "@opentelemetry/resources": "1.24.0",
     "@opentelemetry/semantic-conventions": "1.24.0",
-    "@opentelemetry/exporter-trace-otlp-proto": "0.51.0"
+    "@opentelemetry/exporter-trace-otlp-proto": "0.51.0",
+    "portfinder": "^1.0.32"
   },
   "devDependencies": {
     "prisma": "^5.15.0",

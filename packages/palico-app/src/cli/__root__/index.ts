@@ -1,5 +1,5 @@
 import OS from '../../utils/os';
-import { ProjectBuild } from '../../utils/build';
+import { AppServiceManager } from '../../utils/app_services';
 import Project from '../../utils/project';
 import path from 'path';
 import chalk from 'chalk';
@@ -30,17 +30,18 @@ const projectNeedsBootstrap = async () => {
 export const BootstrapProject = async () => {
   console.log("Stopping project's containers...");
   try {
-    await ProjectBuild.stopDockerCompose();
+    await AppServiceManager.stopDockerCompose();
   } catch (e) {
     console.log('No containers to stop');
   }
   await wait(2000);
   console.log('Creating Containers...');
-  await ProjectBuild.createDockerCompose();
+  await AppServiceManager.createDockerComposeDef();
   console.log("Building project's containers...");
-  await ProjectBuild.buildDockerImages();
-  console.log('Applying migrations...');
-  await ProjectBuild.applyDBMigrations();
+  await AppServiceManager.buildDockerImages();
+  console.group('Applying migrations...');
+  await AppServiceManager.applyDBMigrations();
+  console.groupEnd();
   await markBootstrapCompleted();
 };
 
@@ -53,10 +54,9 @@ export const StartPalicoApp = async () => {
       ) + chalk.greenBright('npm run palico bootstrap')
     );
   }
-  await ProjectBuild.startDockerCompose();
-  await ProjectBuild.startLocalServer();
+  await AppServiceManager.startApplication();
 };
 
 export const ShowStatus = async () => {
-  ProjectBuild.showResourceDetails();
+  await AppServiceManager.showResourceDetails();
 };

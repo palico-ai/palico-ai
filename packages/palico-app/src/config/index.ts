@@ -1,15 +1,12 @@
+import { ENVName, getEnvOrThrow } from '../utils/environment';
+
 class Config {
   async getTraceBasePreviewURL(): Promise<string | undefined> {
     return process.env['TRACE_PREVIEW_URL_PREFIX'];
   }
 
   getDBUrl(): string | undefined {
-    const envName = this.getDBEnvName();
-    return process.env[envName];
-  }
-
-  getDBEnvName(): string {
-    return 'PALICO_DATABASE_URL';
+    return process.env[ENVName.DATABASE_URL];
   }
 
   getStudioDigest(): string {
@@ -17,7 +14,7 @@ class Config {
   }
 
   getAPIPort(): number {
-    return parseInt(process.env['API_PORT'] || '8000');
+    return parseInt(getEnvOrThrow(ENVName.PUBLIC_API_PORT));
   }
 }
 
