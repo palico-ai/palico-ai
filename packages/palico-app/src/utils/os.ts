@@ -2,6 +2,7 @@ import { existsSync } from 'fs';
 import { mkdir, readFile, readdir, rmdir, writeFile, rm } from 'fs/promises';
 import { dirname } from 'path';
 import Project from './project';
+import portfinder from 'portfinder';
 
 export default class OS {
   static async createDirectory(path: string) {
@@ -59,6 +60,11 @@ export default class OS {
     return JSON.parse(content);
   }
 
+  static async readFile(path: string): Promise<string> {
+    await Project.validatePathWithinProject(path);
+    return readFile(path, 'utf-8');
+  }
+
   static async getDirectories(path: string): Promise<string[]> {
     try {
       await Project.validatePathWithinProject(path);
@@ -93,6 +99,19 @@ export default class OS {
   static async removeFile(path: string) {
     await Project.validatePathWithinProject(path);
     await rm(path);
+  }
+
+  static async getLocallyOpenPort(
+    params: {
+      port?: number;
+      maxPort?: number;
+    } = {}
+  ) {
+    const port = await portfinder.getPortPromise({
+      port: params.port,
+      stopPort: params.maxPort,
+    });
+    return port;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

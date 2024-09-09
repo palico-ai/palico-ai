@@ -1,10 +1,10 @@
 import { Command } from 'commander';
-import { ApplyDBMigraiton } from '../../utils/scripts';
+import { RunMigration } from '../../utils/scripts';
 
 const UpdateCommand = new Command('update');
 
 UpdateCommand.command('db')
   .description('Updates Palico Database')
-  .action(ApplyDBMigraiton);
+  .action(RunMigration);
 
 export default UpdateCommand;
