@@ -17,6 +17,8 @@ import { Button, Link } from '@palico-ai/components';
 import MenuIcon from '@mui/icons-material/Menu';
 import React from 'react';
 import RoutePath from '../../utils/route_path';
+import Image from 'next/image';
+import Logo from '../../../public/logos/palico.png';
 
 const NavItems = [
   {
@@ -110,7 +112,23 @@ const Navbar: React.FC = () => {
             <MenuIcon />
           </IconButton>
           <Link href="/">
-            <Typography>Palico AI</Typography>
+            <Box
+              sx={{
+                display: 'flex',
+                gap: 1,
+                alignItems: 'center',
+              }}
+            >
+              <Image width={28} height={28} src={Logo} alt="Palico AI" />
+              <Typography
+                variant="h6"
+                fontSize={18}
+                fontWeight={'regular'}
+                color={'primary.light'}
+              >
+                Palico AI
+              </Typography>
+            </Box>
           </Link>
           <Box sx={{ flexGrow: 1 }} />
           <Box

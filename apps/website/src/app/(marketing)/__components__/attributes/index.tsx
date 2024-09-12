@@ -67,14 +67,14 @@ const attributes: AttributeCardProps[] = [
     description: 'Test your changes locally with our playground UI',
   },
   {
-    label: 'Benchmark Performance',
+    label: 'Improve Performance',
     icon: <BenchmarkIcon color="info" />,
-    description: 'Setup data-driven metrics to measure impact of a changes',
+    description: 'Iteratively performance with our experimentation tools',
   },
   {
-    label: 'Debug with Telemetry',
+    label: 'Debug with Tracing',
     icon: <BugReportIcon color="info" />,
-    description: 'Look under-the-hood of any request with traces',
+    description: 'Look under-the-hood of any request with open-telemetry',
   },
   {
     label: 'Deploy Anywhere',
