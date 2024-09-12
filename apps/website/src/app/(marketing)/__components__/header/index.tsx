@@ -43,7 +43,7 @@ const LandingPageHeader: React.FC = () => {
             opacity: 0.8,
           }}
         >
-          Streamlines iterating through hundreds of combinations of models,
+          Streamline iterating through hundreds of combinations of models,
           prompts, and custom business logic. Reach production-ready performance
           faster.
         </Typography>
