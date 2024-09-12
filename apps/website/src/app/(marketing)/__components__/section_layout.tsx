@@ -1,3 +1,5 @@
+'use client';
+
 import { Box, TypographyProps } from '@mui/material';
 import { Typography } from '@palico-ai/components';
 import React from 'react';
@@ -33,7 +35,17 @@ const SectionLayout: React.FC<SectionLayoutProps> = ({
             mb: disableTitleGutter ? 0 : 12,
           }}
         >
-          <Typography variant={titleHeader} textAlign={alignTitle}>
+          <Typography
+            sx={(theme) => ({
+              // color: theme.palette.primary.main,
+              // textShadow: `0px 0px 5px ${theme.palette.primary.main}`,
+              background: `linear-gradient(75deg, ${theme.palette.primary.light} 0%, ${theme.palette.info.light} 100%)`,
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+            })}
+            variant={titleHeader}
+            textAlign={alignTitle}
+          >
             {title}
           </Typography>
           {subtitle && (

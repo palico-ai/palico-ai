@@ -9,6 +9,9 @@ import RoutePath from '../../../../utils/route_path';
 
 const HighlightSpan = styled('span')(({ theme }) => ({
   color: theme.palette.primary.main,
+  background: `linear-gradient(90deg, ${theme.palette.primary.main} 0%, #e03466 100%)`,
+  WebkitBackgroundClip: 'text',
+  WebkitTextFillColor: 'transparent',
 }));
 
 const LandingPageHeader: React.FC = () => {
@@ -33,10 +36,16 @@ const LandingPageHeader: React.FC = () => {
           Rapidly <HighlightSpan>Iterate</HighlightSpan> on your{' '}
           <HighlightSpan>LLM Development</HighlightSpan>
         </Typography>
-        <Typography variant="body2" fontSize={20}>
-          Streamline your process for iterating through hundreds of combinations
-          of models, prompts, and custom logic to find the best performing
-          configuration for your application
+        <Typography
+          variant="body2"
+          fontSize={20}
+          sx={{
+            opacity: 0.8,
+          }}
+        >
+          Streamlines iterating through hundreds of combinations of models,
+          prompts, and custom business logic. Reach production-ready performance
+          faster.
         </Typography>
         <Divider
           sx={{

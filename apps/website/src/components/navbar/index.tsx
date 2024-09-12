@@ -125,7 +125,7 @@ const Navbar: React.FC = () => {
             {NavItems.map((item, index) => (
               <Link key={index} href={item.href} target={item.target}>
                 <Button
-                  color={item.highlight ? 'info' : 'inherit'}
+                  color={item.highlight ? 'primary' : 'inherit'}
                   variant={item.highlight ? 'contained' : 'text'}
                 >
                   {item.label}

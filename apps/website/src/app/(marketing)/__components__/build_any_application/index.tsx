@@ -8,7 +8,8 @@ import {
   simpleAgentCodeSnippet,
 } from '../constants';
 import { Grid } from '@mui/material';
-import { HighlightSpan } from '../client_fragments';
+import { HighlightSpan, LearnMoreButton } from '../client_fragments';
+import RoutePath from '../../../../utils/route_path';
 
 const BuildAnyApplicationFragment: React.FC = () => {
   return (
@@ -22,6 +23,7 @@ const BuildAnyApplicationFragment: React.FC = () => {
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center',
+            gap: 3,
           }}
         >
           <Typography variant="body1" fontSize={20} gutterBottom>
@@ -30,6 +32,7 @@ const BuildAnyApplicationFragment: React.FC = () => {
             over your implementation details, and can utilize any external
             libraries.
           </Typography>
+          <LearnMoreButton href={RoutePath.docsBuildApp()} />
         </Grid>
         <Grid item xs={12} md={7}>
           <CodeSnippetTab
