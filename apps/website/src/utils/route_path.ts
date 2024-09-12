@@ -6,10 +6,6 @@ export default class RoutePath {
     return 'https://docs.palico.ai';
   }
 
-  static docsInstallation() {
-    return `${RoutePath.docs()}/getting_started/installation`;
-  }
-
   static docsConcepts() {
     return `${RoutePath.docs()}/getting_started/concepts`;
   }
@@ -75,7 +71,7 @@ export default class RoutePath {
   }
 
   static quickStart() {
-    return RoutePath.docsInstallation();
+    return RoutePath.docs();
   }
 
   static github() {

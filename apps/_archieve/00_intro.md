@@ -85,19 +85,3 @@ An LLM Stack is constantly evolving as you experiment with different variations 
 
 You can get started by following the [installation guide](./getting_started/00_installation.mdx) or get familiar with all the core concepts of Palico by running through the [tutorial](./tutorials/00_intro.md).
 
-
-## The role of Palico vs other tools
-
-### How does Palico compare to evaluation frameworks
-
-Evaluation frameworks are often just a tool to help you grade the response of your LLM application. They may provide some proprietary observability and tracing tools. They however do not help you structure your LLM application development for rapid experimentation. They do not help you build your LLM application. They do not help you deploy your LLM application. The responsibility you have when using an evaluation framework is you need to build your own experiment management system that helps you scale your experimentation process across your team. You will have lots of fragmented tools that you need to integrate together to get a full picture of your LLM application.
-
-We are a more integrated framework that helps you build, scale experimentation, and deploy your LLM application. We provide a more integrated experience for your team to work on LLM applications.
-
-### How does Palico compare to libraries like LangChain or LlamaIndex
-
-LangChain and LlamaIndex are more like libraries that helps you achieve different tasks with LLM Development. For example, they provide you tools to connect with different LLM providers, connect to vector database, create evaluations, and more. They are more like a swiss army knife that helps you achieve different tasks with LLM Development. It's up to you to use these tools to structure your LLM application development for maximum productivity.
-
-We are a framework (not a library) that has strong opinions on how you should structure your LLM application development. Our opinion is biased towards accuracy improvement through rapid experimentations. With our framework, you have a standard process for how you build your LLM application, measure accuracy, and run experiments. These processes all work together to maximize experiment-ability of your LLM application so you can reach your accuracy goals faster.
-
-As we are a framework and LangChain or LlamaIndex are libraries, you can directly use LangChain or LlamaIndex within our application to help with tasks such as calling LLM models or managing your RAG layer. Our framework will help you streamline your experimentation process.

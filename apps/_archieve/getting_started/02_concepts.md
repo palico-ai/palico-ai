@@ -1,4 +1,4 @@
-# Components
+# Component Overview
 
 ## Project Structure
 
@@ -31,9 +31,6 @@ Palico App expects a specific project structure to be able to run your applicati
 Agents are the core building blocks of your Palico App. Agents are just an encapsulation of your LLM application. Agents are generally your prompt logic and a call to your LLM model.
 
 In an LLM application, your call to an LLM model is the main non-deterministic part of your application. As such, for a given agent, you should have a single LLM model call. This will let you systematically improve the accuracy of that LLM component of your overall application. For applications with multiple LLM models, you should have multiple agents and orchestrate them using workflows.
-
-## Workflows
-Workflows are a way to orchestrate more complex LLM applications by chaining multiple agents, business-logic, and tasks together. You can also run experiments like you would with agents, and create conversational workflows.
 
 ## Tracing
 Tracing helps you understand the runtime behavior of your LLM application. You can log events, errors, inputs and outputs, the time it took to run different parts of your application, and more. We provide traces through OpenTelemetry, which is a standard for distributed tracing.
