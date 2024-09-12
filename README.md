@@ -18,8 +18,6 @@ npx palico init <project-name>
 ## 📖 Documentation
 For full documentation, checkout [docs.palico.ai](https://docs.palico.ai)
 
-Setup your own Palico app by following our [quickstart guide](https://docs.palico.ai/getting_started/installation)
-
 ## 🤔 Overview of your Palico Starter Application
 
 https://github.com/palico-ai/palico-main/assets/32821894/54f35583-41c1-48a3-9565-95c484a4909b

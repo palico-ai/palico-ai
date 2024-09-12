@@ -4,42 +4,213 @@
  * work well for content-centric websites.
  */
 
-/* You can override the default Infima variables here. */
-:root {
-  --ifm-color-primary: #2e8555;
-  --ifm-color-primary-dark: #29784c;
-  --ifm-color-primary-darker: #277148;
-  --ifm-color-primary-darkest: #205d3b;
-  --ifm-color-primary-light: #33925d;
-  --ifm-color-primary-lighter: #359962;
-  --ifm-color-primary-lightest: #3cad6e;
-  --ifm-code-font-size: 95%;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
-}
+/**
+Copied from: https://github.com/glasskube/glasskube/blob/main/website/src/css/custom.css
+*/
+ 
+ 
+ /* You can override the default Infima variables here. */
+ :root {
+   --palico-main-1: #a37ce7;
+   --palico-main-2: #8e5ee2;
+   --palico-main-3: #834fdf;
+   --palico-main-4: #6526d2;
+   --palico-main-light: #b89aec;
+   --palico-info: #1A73E8;
+   --palico-info-light: #3d88ec;
+   --palico-grey-0: #101010;
+   --palico-grey-7: #fbfbfb;
+   --palico-white: #ffffff;
+   --palico-red: #ff4136;
+   --palico-pink: #e03466;
+ 
+   --palico-background-dark: #1C1A1D;
+   --palico-surface-dark: #242526;
 
-/* For readability concerns, you should choose a lighter palette in dark mode. */
-[data-theme='dark'] {
-  --ifm-color-primary: #a37ce7;
-  --ifm-color-primary-dark: #8e5ee2;
-  --ifm-color-primary-darker: #834fdf;
-  --ifm-color-primary-darkest: #6526d2;
-  --ifm-color-primary-light: #b89aec;
-  --ifm-color-primary-lighter: #c3a9ef;
-  --ifm-color-primary-lightest: #e2d6f7;
-  --ifm-background-color: #08070B;
-  
-  .footer {
-    background-color: #242526;
-    /* background-color: #1B1B1D; */
-    /* box-shadow: 0px 0px 2px 0px rgba(35, 34, 34, 0.75); */
-  }
-  /* --ifm-background-color: #08070B; */
+   /* --imf-font-weight-light: 300;
+    --imf-font-weight-normal: 400;
+    --imf-font-weight-semi-bold: 600;
+    --imf-font-weight-bold: 700;
+    --imf-font-weight-base: var(--imf-font-weight-normal); */
 
-  --ifm-color-secondary: #e4e4e6;
-  --ifm-color-secondary-dark: #ccccd0;
-  --ifm-color-secondary-darker: #c0c0c5;
-  --ifm-color-secondary-darkest: #9d9da4;
-  --ifm-color-secondary-light: #fcfcfc;
-  --ifm-color-secondary-lighter: #ffffff;
-  --ifm-color-secondary-lightest: #ffffff;
-}
+   --ifm-code-font-size: 95%;
+   /* --ifm-font-family-base: Roboto, Helvetica, Arial, sans-serif; */
+   /* --ifm-heading-font-family: Poppins, Inter, system-ui, sans-serif; */
+ 
+   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+   --doc-sidebar-width: 325px !important;
+ }
+ 
+ 
+ @media (min-width: 997px) {
+   :root {
+     --docusaurus-announcement-bar-height: auto !important;
+   }
+ }
+ 
+ .footer--dark {
+   --ifm-footer-background-color: var(--palico-surface-dark);
+ }
+ 
+ /* For readability concerns, you should choose a lighter palette in dark mode. */
+ [data-theme='dark'] {
+   --ifm-color-primary: var(--palico-main-1);
+   --ifm-color-primary-dark: var(--palico-main-2);
+   --ifm-color-primary-darker: var(--palico-main-3);
+   --ifm-color-primary-darkest: var(--palico-main-4);
+   --ifm-color-primary-light: var(--palico-main-4);
+   --ifm-color-primary-lighter: var(--palico-main-4);
+   --ifm-color-primary-lightest: var(--palico-main-4);
+   --ifm-font-color-base: var(--palico-white);
+   /* --ifm-menu-color-background-active: #1A73E8; */
+   /* --ifm-menu-color: #52555A; */
+   --ifm-menu-color-active: var(--palico-info-light);
+   /* --ifm-menu-color-active: var(--palico-main-light); */
+   --ifm-breadcrumb-color-active: var(--palico-info-light);
+   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+ }
+ 
+ html[data-theme='dark'] {
+   --ifm-background-color: var(--palico-background-dark);
+   --ifm-background-surface-color: var(--palico-surface-dark);
+ }
+ 
+ [data-theme='dark'] .hero--primary {
+   /*--ifm-hero-background-color: var(--ifm-color-primary-darker);*/
+   /*--ifm-hero-text-color: var(--ifm-font-color-base);*/
+   --ifm-hero-background-color: var(--ifm-color-base);
+ }
+ 
+ div[class^='announcementBar_'] {
+   color: var(--ifm-font-color-base);
+   background: linear-gradient(60deg, var(--palico-main-3), var(--palico-pink));
+   font-weight: var(--ifm-font-weight-bold);
+ }
+ 
+ @media (min-width: 997px) {
+   div[class^='announcementBar_'] {
+     font-size: 1.25rem;
+   }
+ }
+ 
+ .hero__title {
+   font-size: 1.25rem;
+ }
+ 
+ @media (min-width: 997px) {
+   .hero__title {
+     font-size: 1.6rem;
+   }
+ }
+ 
+ .hero__title > pre {
+   white-space: normal;
+   height: 4.6em;
+   margin: 0;
+ }
+ 
+ @media (min-width: 997px) {
+   .hero__title > pre {
+     white-space: unset;
+     height: auto;
+   }
+ }
+ 
+ .hero__subtitle {
+   font-size: 1rem;
+ }
+ 
+ @media (min-width: 997px) {
+   .hero__subtitle {
+     font-size: 1.3rem;
+   }
+ }
+ 
+ a.button--outline.light, .light {
+   color: var(--palico-main-light);
+ }
+ 
+ /* .table-of-contents__link--active {
+   color: var(--palico-info-light);
+ } */
+ 
+ .typewriter-command {
+   color: var(--palico-main-4);
+ 
+ }
+ 
+ .typewriter-argument {
+   color: var(--palico-main-3);
+   font-weight: var(--ifm-font-weight-bold);
+ }
+ 
+ .screen-reader-only {
+   border: 0;
+   clip: rect(0 0 0 0);
+   clip-path: polygon(0 0, 0 0, 0 0);
+   height: 1px;
+   margin: -1px;
+   overflow: hidden;
+   padding: 0;
+   position: absolute;
+   width: 1px;
+   white-space: nowrap;
+ }
+ 
+ .footer-logo {
+   width: 250px;
+   margin: 1rem;
+ }
+ 
+ @media (min-width: 997px) {
+   .footer-logo {
+     margin: 2rem;
+   }
+ }
+ 
+ .button.button--accent {
+   background-color: var(--palico-pink);
+   color: var(--palico-main-light);
+ }
+ 
+ .button.button--outline {
+   position: relative;
+   color: var(--ifm-navbar-link-color);
+ }
+ 
+ .button.button--outline::before {
+   content: "";
+   position: absolute;
+   inset: 0;
+   border-radius: 8px;
+   border: 3px solid transparent;
+   background: linear-gradient(to right, var(--palico-main-3), var(--palico-pink)) border-box;
+   mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+   mask-composite: exclude;
+ }
+ 
+ h1 {
+   background: linear-gradient(60deg, var(--palico-main-3), var(--palico-pink));
+   background-clip: text;
+   -webkit-text-fill-color: transparent;
+ }
+ 
+ h2 {
+   padding-bottom: 5px;
+ }
+ 
+ [data-theme='dark'] h2 {
+   text-shadow: 0 0 5px var(--palico-pink);
+   /* text-shadow: 0 0 5px var(--palico-main-2); */
+ }
+ 
+ canary-root {
+   --canary-color-primary-c: 0.08;
+   --canary-color-primary-h: 250;
+ }
+ canary-trigger-searchbar::part(button) {
+   background-color: var(--ifm-color-emphasis-100);
+ }
+ canary-trigger-searchbar::part(kbd) {
+   background-color: var(--ifm-color-emphasis-200);
+ }
