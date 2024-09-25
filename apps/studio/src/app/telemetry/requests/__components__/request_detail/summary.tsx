@@ -24,6 +24,7 @@ enum TabValue {
 
 const [EDITOR_MIN_HEIGHT, EDITOR_MAX_HEIGHT] = [150, 300];
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const EditorSnippet: React.FC<{ value: Record<any, any> }> = ({ value }) => {
   return (
     <Editor

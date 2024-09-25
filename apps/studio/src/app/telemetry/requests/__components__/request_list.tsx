@@ -8,6 +8,7 @@ import {
   ListItemButton,
   ListItemText,
   Typography,
+  Skeleton,
 } from '@palico-ai/components';
 import { ConversationRequestTelemetryItem } from '@palico-ai/common';
 import { useRouter } from 'next/navigation';
@@ -15,7 +16,7 @@ import { RoutePath } from '../../../../utils/route_path';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { RECENT_REQUEST_TELEMETRIES } from '../../../../constants/query_keys';
 import { getRecentRequests } from '../../../../services/telemetry';
-import { Box, Skeleton } from '@mui/material';
+import { Box } from '@mui/material';
 import { useSelectedRequestId } from '../context';
 
 const RequestListItem: React.FC<ConversationRequestTelemetryItem> = ({
@@ -89,9 +90,10 @@ const RequestTelemetryList: React.FC = () => {
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
+          px: 2,
         }}
       >
-        <Skeleton variant="rectangular" height="100%" width="100%" />
+        <Skeleton count={20} />
       </Box>
     );
   }

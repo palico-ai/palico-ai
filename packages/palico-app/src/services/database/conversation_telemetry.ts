@@ -1,6 +1,7 @@
 import {
   AppConfig,
   ConversationRequestContent,
+  RequestLogs,
   ConversationRequestSpan,
   ConversationRequestTelemetryItem,
   ConversationResponse,
@@ -10,6 +11,7 @@ import {
 } from '@palico-ai/common';
 import config from '../../config';
 import {
+  RequestLogsTable,
   ConversationRequestSpanTableSchema,
   ConversationRequestTraceTableSchema,
   ConversationRequestTracingTable,
@@ -136,6 +138,24 @@ export class ConversationTelemetryModel {
         events: JSON.stringify(span.events),
       }))
     );
+  }
+
+  static async saveRequestLogs(item: RequestLogs): Promise<void> {
+    await RequestLogsTable.create({
+      ...item,
+      logs: JSON.stringify(item.logs),
+    });
+  }
+
+  static async getRequestLogs(requestId: string): Promise<RequestLogs> {
+    const item = await RequestLogsTable.findByPk(requestId);
+    if (!item) {
+      throw new Error('Logs not found');
+    }
+    return {
+      ...item.dataValues,
+      logs: JSON.parse(item?.dataValues.logs || '[]'),
+    };
   }
 
   private static parseRequesTraceItem(

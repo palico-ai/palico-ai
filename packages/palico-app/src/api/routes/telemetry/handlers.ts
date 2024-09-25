@@ -7,6 +7,7 @@ import {
   GetRecentConversationResponse,
   GetTelemetryForRequestIdResponse,
   GetRequestSpanResponse,
+  GetRequestLogsResponse,
 } from '@palico-ai/common';
 import { ConversationIDRequired, RequestIDRequired } from '../../types';
 
@@ -95,6 +96,21 @@ export const getRequestSpans: RequestHandler<
     const spans = await ConversationTelemetryModel.getRequestSpans(requestId);
     return res.status(200).json({
       spans,
+    });
+  } catch (error) {
+    return next(error);
+  }
+};
+
+export const getRequestLogs: RequestHandler<
+  RequestIDRequired,
+  GetRequestLogsResponse
+> = async (req, res, next) => {
+  try {
+    const requestId = req.params['requestId'];
+    const logs = await ConversationTelemetryModel.getRequestLogs(requestId);
+    return res.status(200).json({
+      logs,
     });
   } catch (error) {
     return next(error);
