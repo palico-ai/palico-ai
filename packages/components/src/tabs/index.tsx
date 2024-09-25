@@ -24,7 +24,7 @@ interface TabPanelProps {
 
 export const TabPanel: React.FC<TabPanelProps> = ({ children, value }) => {
   const { activeTab } = React.useContext(TabContext);
-  return <div hidden={value !== activeTab}>{children}</div>;
+  return <Box hidden={value !== activeTab}>{children}</Box>;
 };
 
 interface TabItemProps {

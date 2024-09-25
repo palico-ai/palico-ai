@@ -5,7 +5,7 @@ import { ExtFile } from '@dropzone-ui/react';
 import { FileUpload } from './file_upload';
 import { Box } from '@mui/material';
 import { Button } from '../button';
-import { TextField } from '..';
+import { TextField } from './textfield';
 import { Editor } from '@monaco-editor/react';
 
 export enum AcceptFileTypes {

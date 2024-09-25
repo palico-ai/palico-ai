@@ -4,6 +4,7 @@ import {
   ConversationTelemetry,
   ConversationRequestTelemetryItem,
   ConversationRequestSpan,
+  RequestLogs,
 } from '@palico-ai/common';
 import config from '../../config';
 
@@ -45,6 +46,10 @@ export type ConversationRequestSpanTableSchema = Omit<
 > & {
   attributes: string; // JSON stringified
   events: string; // JSON stringified
+};
+
+export type RequestLogsTableSchema = Omit<RequestLogs, 'logs'> & {
+  logs: string; // JSON stringified
 };
 
 /**
@@ -104,6 +109,27 @@ export const RequestSpanTable: ModelDefined<
     statusCode: {
       type: DataTypes.INTEGER,
       allowNull: false,
+    },
+  },
+  {
+    timestamps: false,
+  }
+);
+
+export type CreateRequestLogsParams = RequestLogsTableSchema;
+
+export const RequestLogsTable: ModelDefined<
+  RequestLogsTableSchema,
+  CreateRequestLogsParams
+> = sequelize.define(
+  'request_logs',
+  {
+    requestId: {
+      type: DataTypes.STRING,
+      primaryKey: true,
+    },
+    logs: {
+      type: DataTypes.JSONB,
     },
   },
   {
@@ -226,5 +252,14 @@ ConversationRequestTracingTable.hasMany(RequestSpanTable, {
 });
 
 RequestSpanTable.belongsTo(ConversationRequestTracingTable, {
+  foreignKey: 'requestId',
+});
+
+ConversationRequestTracingTable.hasOne(RequestLogsTable, {
+  foreignKey: 'requestId',
+  onDelete: 'CASCADE',
+});
+
+RequestLogsTable.belongsTo(ConversationRequestTracingTable, {
   foreignKey: 'requestId',
 });

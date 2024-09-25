@@ -7,6 +7,8 @@ import TestSuiteModel from '../experiments/test_case.model';
 import { ResponseMetadataKey } from '../types';
 import { uuid } from '../utils/common';
 import { startConversationSpan } from '../tracing/internal.span';
+import { LogQueue } from '../tracing/logger/log_queue';
+import { Logger } from '../tracing/logger';
 
 export interface ApplicationChatParams
   extends Omit<AgentExecutorChatParams, 'conversationId' | 'requestId'> {
@@ -24,20 +26,30 @@ export class Application {
       requestId,
       'Application.chat',
       async () => {
-        const startTime = performance.now();
-        const response = await AgentExecutor.chat({
-          ...params,
-          conversationId,
-          requestId,
-        });
-        const endTime = performance.now();
-        return {
-          ...response,
-          metadata: {
-            ...response.metadata,
-            [ResponseMetadataKey.ExecutionTime]: endTime - startTime,
-          },
-        };
+        try {
+          const startTime = performance.now();
+          const response = await AgentExecutor.chat({
+            ...params,
+            conversationId,
+            requestId,
+          });
+          const endTime = performance.now();
+          return {
+            ...response,
+            metadata: {
+              ...response.metadata,
+              [ResponseMetadataKey.ExecutionTime]: endTime - startTime,
+            },
+          };
+        } catch (e) {
+          if (e instanceof Error) {
+            const stackTrace = e.stack;
+            Logger.error('Application.chat', e.message, stackTrace);
+          }
+          throw e;
+        } finally {
+          await LogQueue.tryFlushingLogs(requestId);
+        }
       }
     );
   }

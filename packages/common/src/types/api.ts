@@ -16,6 +16,7 @@ import {
   QuickLabMetadata,
 } from '.';
 import {
+  RequestLogs,
   ConversationRequestSpan,
   ConversationRequestTelemetryItem,
   ConversationTelemetry,
@@ -56,6 +57,10 @@ export interface GetTelemetryForRequestIdResponse {
 
 export interface GetRequestSpanResponse {
   spans: ConversationRequestSpan[];
+}
+
+export interface GetRequestLogsResponse {
+  logs: RequestLogs;
 }
 
 // ======== Route: /agent ========

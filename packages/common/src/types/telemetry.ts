@@ -26,6 +26,25 @@ export interface ConversationRequestSpan {
   statusCode: number;
 }
 
+export enum LogType {
+  Log = 'LOG',
+  INFO = 'INFO',
+  ERROR = 'ERROR',
+  WARNING = 'WARNING',
+}
+
+export interface LogItem {
+  type: LogType;
+  message: string;
+  timestamp: number;
+  callerName?: string;
+}
+
+export interface RequestLogs {
+  requestId: string;
+  logs: LogItem[];
+}
+
 export interface ConversationTelemetry {
   conversationId: string;
   agentName?: string;

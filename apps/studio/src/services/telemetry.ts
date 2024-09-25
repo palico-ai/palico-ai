@@ -8,6 +8,7 @@ import {
   GetRecentRequestTelemetryResponse,
   ConversationRequestTelemetryItem,
   GetRequestSpanResponse,
+  GetRequestLogsResponse,
 } from '@palico-ai/common';
 import { verifySession } from './auth';
 import { palicoFetch } from './palico';
@@ -69,4 +70,15 @@ export const getRequestSpans = async (requestId: string) => {
     }
   );
   return response.spans;
+};
+
+export const getRequestLogs = async (requestId: string) => {
+  await verifySession();
+  const response = await palicoFetch<GetRequestLogsResponse>(
+    `/telemetry/request/${requestId}/logs`,
+    {
+      method: 'GET',
+    }
+  );
+  return response.logs;
 };
