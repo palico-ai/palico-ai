@@ -18,6 +18,7 @@ model conversation_request_tracings {
   createdAt             DateTime               @db.Timestamptz(6)
   updatedAt             DateTime               @db.Timestamptz(6)
   conversation_tracings conversation_tracings? @relation(fields: [conversationId], references: [conversationId], onDelete: Cascade)
+  request_spans         request_spans[]
 }
 
 model conversation_tracings {
@@ -27,6 +28,7 @@ model conversation_tracings {
   createdAt                     DateTime                        @db.Timestamptz(6)
   updatedAt                     DateTime                        @db.Timestamptz(6)
   conversation_request_tracings conversation_request_tracings[]
+  request_spans                 request_spans[]
 }
 
 model simple_chat_histories {
@@ -34,4 +36,19 @@ model simple_chat_histories {
   messagesJSON   Json?
   createdAt      DateTime @db.Timestamptz(6)
   updatedAt      DateTime @db.Timestamptz(6)
+}
+
+model request_spans {
+  spanId                        String                        @id @db.VarChar(255)
+  requestId                     String                        @db.VarChar(255)
+  conversationId                String                        @db.VarChar(255)
+  parentSpanId                  String?                       @db.VarChar(255)
+  name                          String                        @db.VarChar(255)
+  attributes                    Json
+  events                        Json
+  timestamp                     BigInt
+  duration                      Float
+  statusCode                    Int
+  conversation_tracings         conversation_tracings         @relation(fields: [conversationId], references: [conversationId], onDelete: Cascade)
+  conversation_request_tracings conversation_request_tracings @relation(fields: [requestId], references: [requestId], onDelete: Cascade)
 }

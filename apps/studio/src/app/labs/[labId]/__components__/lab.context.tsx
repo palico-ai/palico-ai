@@ -7,7 +7,7 @@ import {
 } from '@palico-ai/common';
 import React from 'react';
 import { uuid } from 'uuidv4';
-import { getTraceForRequestId } from '../../../../services/telemetry';
+import { getRequestTelemetry } from '../../../../services/telemetry';
 import { newConversation } from '../../../../services/conversation';
 import { ConversationalEntityType } from '../../../../types/common';
 
@@ -125,7 +125,7 @@ export const LabContextProvider: React.FC<LabContextProviderProps> = ({
             : undefined,
         }
       );
-      const trace = await getTraceForRequestId(response.requestId);
+      const trace = await getRequestTelemetry(response.requestId);
       setExperimentTestResults((currentResult) => ({
         ...currentResult,
         [experimentId]: {

@@ -2,6 +2,9 @@ import { EvalTestCaseResult } from '@palico-ai/common';
 import { ColumnDef } from '@tanstack/react-table';
 import { EvalResultTableCell } from '../components/table/eval_result_table_cell';
 import EvalTraceLinkCell from '../components/table/test_cell_conversation_id';
+import { Box } from '@mui/material';
+import { LinkButton } from '@palico-ai/components';
+import { RoutePath } from './route_path';
 
 export const EVAL_RESULT_ACCESSOR_KEYS = {
   userMessage: 'input.userMessage',
@@ -112,12 +115,19 @@ export function getEvalTestColumnDefFragment<D extends EvalTestCaseResult>(
     {
       id: ANALYSIS_TABLE_COL_ID.conversationId,
       accessorKey: EVAL_RESULT_ACCESSOR_KEYS.conversationId,
-      header: 'ConversationId',
-      size: 120,
+      header: 'Actions',
+      size: 240,
       cell: ({ row }) => (
-        <EvalTraceLinkCell
-          conversationId={row.original.output.conversationId}
-        />
+        <Box>
+          <LinkButton
+            openInNewTab
+            href={RoutePath.requestTraceItem({
+              requestId: row.original.output.requestId,
+            })}
+          >
+            Traces
+          </LinkButton>
+        </Box>
       ),
     },
   ];

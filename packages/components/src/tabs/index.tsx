@@ -1,6 +1,12 @@
 'use client';
 
-import { Box, Tab, Tabs as MUITabs, TabsProps } from '@mui/material';
+import {
+  Box,
+  Tab as MUITab,
+  TabProps,
+  Tabs as MUITabs,
+  TabsProps,
+} from '@mui/material';
 import React from 'react';
 
 interface TabContextParams {
@@ -53,13 +59,7 @@ export const TabView: React.FC<TabViewProps> = ({
   return (
     <TabContext.Provider value={{ activeTab }}>
       <Box sx={{ width: '100%' }}>
-        <Box
-          sx={(theme) => ({
-            border: `1px solid ${theme.palette.divider}`,
-            borderRadius: theme.shape.borderRadius,
-            overflow: 'hidden',
-          })}
-        >
+        <Box>
           <Tabs
             value={activeTab}
             onChange={handleChangeTab}
@@ -68,7 +68,18 @@ export const TabView: React.FC<TabViewProps> = ({
             indicatorColor={indicatorColor}
           >
             {tabs.map((tab) => (
-              <Tab key={tab.value} label={tab.label} value={tab.value} />
+              <Tab
+                sx={() => ({
+                  minHeight: '38px',
+                  maxHeight: '38px',
+                  '&.MuiButtonBase-root': {
+                    fontSize: '12px',
+                  },
+                })}
+                key={tab.value}
+                label={tab.label}
+                value={tab.value}
+              />
             ))}
           </Tabs>
         </Box>
@@ -82,6 +93,8 @@ export const Tabs: React.FC<TabsProps> = ({ sx, ...props }) => {
   return (
     <MUITabs
       sx={(theme) => ({
+        minHeight: '40px',
+        maxHeight: '40px',
         border: `1px solid ${theme.palette.divider}`,
         borderRadius: theme.shape.borderRadius,
         overflow: 'hidden',
@@ -92,4 +105,18 @@ export const Tabs: React.FC<TabsProps> = ({ sx, ...props }) => {
   );
 };
 
-export { Tab } from '@mui/material';
+export const Tab: React.FC<TabProps> = ({ sx, ...props }) => {
+  return (
+    <MUITab
+      sx={() => ({
+        minHeight: '40px',
+        maxHeight: '40px',
+        '&.MuiButtonBase-root': {
+          fontSize: '12px',
+        },
+        ...(sx as object),
+      })}
+      {...props}
+    />
+  );
+};

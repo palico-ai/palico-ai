@@ -15,7 +15,7 @@ const handleSyncDatabase = async () => {
   await compose.upAll({
     cwd: __dirname,
   });
-  await wait(3000);
+  await wait(5000);
   logEvent('Syncing sequelize schema');
   await sequelize.sync({ force: false });
   logEvent('Syncing prisma schema');

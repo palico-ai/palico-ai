@@ -9,7 +9,7 @@ import { uuid } from '../utils/common';
 import { ChainNode } from './types';
 import { get as objGet, set as objSet } from 'lodash';
 import WorkflowModel from '../models/workflow';
-import { ConversationTracker } from '../services/database/conversation_tracker';
+import { ConversationTelemetryModel } from '../services/database/conversation_telemetry';
 
 export interface RunWorkflowParams {
   workflowName: string;
@@ -138,7 +138,7 @@ export default class ChainWorkflowExecutor {
         // TODO: Validate output is a ConversationResponse using zod
         const finalOutput = await workflow.resultParser(workflowInput, context);
         await ConversationResponseSchema.parseAsync(finalOutput);
-        await ConversationTracker.logRequest({
+        await ConversationTelemetryModel.logRequest({
           conversationId,
           requestId,
           traceId,

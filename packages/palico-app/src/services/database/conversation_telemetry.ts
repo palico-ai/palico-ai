@@ -1,17 +1,20 @@
 import {
   AppConfig,
   ConversationRequestContent,
-  ConversationRequestTraceItem,
+  ConversationRequestSpan,
+  ConversationRequestTelemetryItem,
   ConversationResponse,
-  ConversationTraces,
+  ConversationTelemetry,
   ConversationTracesWithoutRequests,
   PaginationParams,
 } from '@palico-ai/common';
 import config from '../../config';
 import {
+  ConversationRequestSpanTableSchema,
   ConversationRequestTraceTableSchema,
   ConversationRequestTracingTable,
   ConversationTracingTable,
+  RequestSpanTable,
 } from './tables';
 
 export interface LogRequestParams {
@@ -22,11 +25,11 @@ export interface LogRequestParams {
   requestInput: ConversationRequestContent;
   responseOutput: ConversationResponse;
   appConfig?: AppConfig;
-  traceId: string;
+  traceId?: string;
   tracePreviewUrl?: string;
 }
 
-export class ConversationTracker {
+export class ConversationTelemetryModel {
   static async logRequest(request: LogRequestParams): Promise<void> {
     const basePreviewURL = await config.getTraceBasePreviewURL();
     const tracePreviewUrl = request.tracePreviewUrl
@@ -55,12 +58,12 @@ export class ConversationTracker {
     });
   }
 
-  static async getTracesByConversationId(
+  static async getRequestsByConversationId(
     conversationId: string
-  ): Promise<ConversationTraces> {
+  ): Promise<ConversationTelemetry> {
     const [conversation, requests] = await Promise.all([
       ConversationTracingTable.findByPk(conversationId),
-      ConversationTracker.getRequestsForConversation(conversationId),
+      ConversationTelemetryModel.getRequestsForConversation(conversationId),
     ]);
     if (!conversation) {
       throw new Error('Conversation not found');
@@ -71,15 +74,16 @@ export class ConversationTracker {
     };
   }
 
-  static async getRecentTraces(
+  static async getRecentRequests(
     pagination?: PaginationParams
-  ): Promise<ConversationRequestTraceItem[]> {
+  ): Promise<ConversationRequestTelemetryItem[]> {
     const requests = await ConversationRequestTracingTable.findAll({
       limit: pagination?.limit,
       offset: pagination?.offset,
+      order: [['createdAt', 'DESC']],
     });
     return requests.map((request) =>
-      ConversationTracker.parseRequesTraceItem(request.dataValues)
+      ConversationTelemetryModel.parseRequesTraceItem(request.dataValues)
     );
   }
 
@@ -99,28 +103,59 @@ export class ConversationTracker {
       where: { conversationId },
     });
     return requests.map((request) =>
-      ConversationTracker.parseRequesTraceItem(request.dataValues)
+      ConversationTelemetryModel.parseRequesTraceItem(request.dataValues)
     );
   }
 
-  static async getTraceForRequestId(
+  static async getRequestTelemetry(
     requestId: string
-  ): Promise<ConversationRequestTraceItem> {
+  ): Promise<ConversationRequestTelemetryItem> {
     const request = await ConversationRequestTracingTable.findByPk(requestId);
     if (!request) {
       throw new Error('Request not found');
     }
-    return ConversationTracker.parseRequesTraceItem(request.dataValues);
+    return ConversationTelemetryModel.parseRequesTraceItem(request.dataValues);
+  }
+
+  static async getRequestSpans(
+    requestId: string
+  ): Promise<ConversationRequestSpan[]> {
+    const spans = await RequestSpanTable.findAll({
+      where: { requestId },
+    });
+    return spans.map((span) =>
+      ConversationTelemetryModel.parseRequestSpan(span.dataValues)
+    );
+  }
+
+  static async logSpans(spans: ConversationRequestSpan[]): Promise<void> {
+    await RequestSpanTable.bulkCreate(
+      spans.map((span) => ({
+        ...span,
+        attributes: JSON.stringify(span.attributes),
+        events: JSON.stringify(span.events),
+      }))
+    );
   }
 
   private static parseRequesTraceItem(
     request: ConversationRequestTraceTableSchema
-  ): ConversationRequestTraceItem {
+  ): ConversationRequestTelemetryItem {
     return {
       ...request,
       requestInput: JSON.parse(request.requestInput),
       responseOutput: JSON.parse(request.responseOutput),
       appConfig: JSON.parse(request.appConfig || '{}'),
+    };
+  }
+
+  private static parseRequestSpan(
+    span: ConversationRequestSpanTableSchema
+  ): ConversationRequestSpan {
+    return {
+      ...span,
+      attributes: JSON.parse(span.attributes),
+      events: JSON.parse(span.events),
     };
   }
 }

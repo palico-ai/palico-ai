@@ -1,7 +1,7 @@
 'use client';
 
 import { Table } from '@tanstack/react-table';
-import Typography from '../../typography';
+import { Typography } from '../../typography';
 import { OptionPanel } from './option_drawer';
 import GroupColumnIcon from '@mui/icons-material/MergeType';
 import { Divider, Tooltip } from '@mui/material';

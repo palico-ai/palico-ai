@@ -1,6 +1,6 @@
 import { PropsOf } from '@emotion/react';
 import React from 'react';
-import Typography from '../typography';
+import { Typography } from '../typography';
 import { ExtFile } from '@dropzone-ui/react';
 import { FileUpload } from './file_upload';
 import { Box } from '@mui/material';

@@ -5,6 +5,7 @@ import './global.css';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import DashboardLayoutContextProvider from '../context/dashboard_layout';
+import ReactQueryProvider from '../context/react_query';
 
 export const metadata = {
   title: 'Palico Studio',
@@ -18,27 +19,29 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <ThemeProvider>
-          <DashboardLayoutContextProvider>
-            <Box
-              sx={{
-                display: 'flex',
-                backgroundColor: 'background.default',
-              }}
-            >
-              <Sidebar />
-              <ToastContainer position="bottom-left" />
+        <ReactQueryProvider>
+          <ThemeProvider>
+            <DashboardLayoutContextProvider>
               <Box
                 sx={{
-                  width: '100%',
-                  overflow: 'auto',
+                  display: 'flex',
+                  backgroundColor: 'background.default',
                 }}
               >
-                {children}
+                <Sidebar />
+                <ToastContainer position="bottom-left" />
+                <Box
+                  sx={{
+                    width: '100%',
+                    overflow: 'auto',
+                  }}
+                >
+                  {children}
+                </Box>
               </Box>
-            </Box>
-          </DashboardLayoutContextProvider>
-        </ThemeProvider>
+            </DashboardLayoutContextProvider>
+          </ThemeProvider>
+        </ReactQueryProvider>
       </body>
     </html>
   );

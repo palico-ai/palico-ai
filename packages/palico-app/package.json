@@ -24,6 +24,10 @@
   },
   "dependencies": {
     "@opentelemetry/api": "^1.8.0",
+    "@opentelemetry/exporter-trace-otlp-proto": "0.51.0",
+    "@opentelemetry/resources": "1.24.0",
+    "@opentelemetry/sdk-node": "^0.51.0",
+    "@opentelemetry/semantic-conventions": "1.24.0",
     "@palico-ai/common": "1.19.6",
     "body-parser": "^1.20.3",
     "chalk": "^4.1.2",
@@ -39,15 +43,14 @@
     "pg": "^8.11.3",
     "pg-boss": "^9.0.3",
     "pg-hstore": "^2.3.4",
+    "portfinder": "^1.0.32",
     "sequelize": "^6.37.3",
     "tslib": "^2.3.0",
     "uuidv4": "^6.2.13",
     "zod": "^3.23.8",
-    "@opentelemetry/sdk-node": "^0.51.0",
-    "@opentelemetry/resources": "1.24.0",
-    "@opentelemetry/semantic-conventions": "1.24.0",
-    "@opentelemetry/exporter-trace-otlp-proto": "0.51.0",
-    "portfinder": "^1.0.32"
+    "@opentelemetry/core": "1.24.0",
+    "@opentelemetry/sdk-trace-base": "1.24.0",
+    "@opentelemetry/sdk-trace-node": "^1.24.0"
   },
   "devDependencies": {
     "prisma": "^5.15.0",

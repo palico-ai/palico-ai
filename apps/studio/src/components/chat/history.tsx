@@ -2,7 +2,7 @@
 
 import { Divider } from '@mui/material';
 import { Box } from '@mui/system';
-import { ConversationRequestTraceItem } from '@palico-ai/common';
+import { ConversationRequestTelemetryItem } from '@palico-ai/common';
 import {
   Button,
   Link,
@@ -71,7 +71,7 @@ const ChatItem: React.FC<ChatItemProps> = (props) => {
 };
 
 export interface ChatHistoryProps {
-  requests: ConversationRequestTraceItem[];
+  requests: ConversationRequestTelemetryItem[];
 }
 
 const ChatHistory: React.FC<ChatHistoryProps> = ({ requests }) => {

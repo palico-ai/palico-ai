@@ -1,12 +1,12 @@
 version: '3.8'
 
 services:
-  postgres_db:
-    image: postgres:15-alpine
-    restart: always
+  database:
+    image: 'postgres:15-alpine'
+    restart: 'always'
     environment:
-      - POSTGRES_USER=root
-      - POSTGRES_PASSWORD=root
-      - POSTGRES_DB=palico-app
+      - 'POSTGRES_USER=root'
+      - 'POSTGRES_PASSWORD=root'
+      - 'POSTGRES_DB=palico-app'
     ports:
-      - 5432:5432
+      - '5432:5432'
