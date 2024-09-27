@@ -6,11 +6,9 @@ import {
   GetAllTestSuitesResponse,
   GetWorkflowMetadataResponse,
 } from '@palico-ai/common';
-import { verifySession } from './auth';
 import { palicoFetch } from './palico';
 
 export const getAllAgents = async () => {
-  await verifySession();
   const response = await palicoFetch<GetAgentMetadataResponse>(
     '/metadata/agents',
     {
@@ -21,7 +19,6 @@ export const getAllAgents = async () => {
 };
 
 export const getAllWorkflows = async () => {
-  await verifySession();
   const response = await palicoFetch<GetWorkflowMetadataResponse>(
     '/metadata/workflows',
     {
@@ -32,7 +29,6 @@ export const getAllWorkflows = async () => {
 };
 
 export const getAllTestSuites = async () => {
-  await verifySession();
   const response = await palicoFetch<GetAllTestSuitesResponse>(
     '/metadata/test-case-dataset',
     {
@@ -43,7 +39,6 @@ export const getAllTestSuites = async () => {
 };
 
 export const getAllEvals = async () => {
-  await verifySession();
   const response = await palicoFetch<GetAllEvalsResponse>('/metadata/tests', {
     method: 'GET',
   });

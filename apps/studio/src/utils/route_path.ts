@@ -11,6 +11,10 @@ export enum QueryParam {
 }
 
 export class RoutePath {
+  static login() {
+    return '/login';
+  }
+
   static chat() {
     return '/chat';
   }

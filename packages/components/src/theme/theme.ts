@@ -72,6 +72,18 @@ export const theme = createTheme({
     },
   },
   components: {
+    MuiTextField: {
+      styleOverrides: {
+        root: {
+          '& .MuiFormLabel-root': {
+            '&.Mui-focused': {
+              color: color.white,
+              opacity: 0.7,
+            },
+          },
+        },
+      },
+    },
     MuiButton: {
       styleOverrides: {
         root: {
@@ -83,6 +95,10 @@ export const theme = createTheme({
         outlinedSecondary: {
           color: color.white,
           opacity: 0.6,
+        },
+        containedWarning: {
+          color: 'rgba(0, 0, 0, 0.87)',
+          fontWeight: 500,
         },
       },
     },

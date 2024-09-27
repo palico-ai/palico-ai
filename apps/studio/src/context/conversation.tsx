@@ -6,7 +6,7 @@ import {
   ConversationResponse,
 } from '@palico-ai/common';
 import React, { useEffect, useState } from 'react';
-import { ConversationHistoryItem } from '../app/chat/__components__/chat_history';
+import { ConversationHistoryItem } from '../app/(dashboard)/chat/__components__/chat_history';
 import { ConversationalEntity } from '../types/common';
 import { newConversation, replyToConversation } from '../services/conversation';
 

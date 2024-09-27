@@ -1,7 +1,8 @@
-'use server';
+'server-only';
 
 import { createClient } from '@palico-ai/client-js';
 import { createAPIFetcher, APIFetchOptions } from '@palico-ai/client-js';
+import { verifySession } from './auth/session';
 
 interface PalicoGetClientParams {
   apiURL?: string;
@@ -9,6 +10,7 @@ interface PalicoGetClientParams {
 }
 
 export async function getPalicoClient(params?: PalicoGetClientParams) {
+  await verifySession();
   const agentAPIURL = params?.apiURL ?? process.env.PALICO_AGENT_API_URL;
   const serviceKey = params?.serviceKey ?? process.env.PALICO_SERVICE_KEY;
   if (!agentAPIURL || !serviceKey) {
@@ -25,6 +27,7 @@ export async function palicoFetch<Response = any, RequestBody = any>(
   path: string,
   fetchOptions: APIFetchOptions<RequestBody>
 ): Promise<Response> {
+  await verifySession();
   const agentAPIURL = process.env.PALICO_AGENT_API_URL;
   const serviceKey = process.env.PALICO_SERVICE_KEY;
   if (!agentAPIURL || !serviceKey) {

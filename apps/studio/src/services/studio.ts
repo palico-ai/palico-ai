@@ -10,11 +10,9 @@ import {
   UpdateLabAPIRequestBody,
   UpdateLabAPIResponse,
 } from '@palico-ai/common';
-import { verifySession } from './auth';
 import { palicoFetch } from './palico';
 
 export const getAllLabViews = async () => {
-  await verifySession();
   const response = await palicoFetch<GetLabListAPIResponse>('/studio/lab', {
     method: 'GET',
   });
@@ -22,14 +20,12 @@ export const getAllLabViews = async () => {
 };
 
 export const getLabView = async (id: string): Promise<QuickLab> => {
-  await verifySession();
   return await palicoFetch<GetLabByIdAPIResponse>(`/studio/lab/${id}`, {
     method: 'GET',
   });
 };
 
 export const createLabView = async (params: CreateLabAPIRequestBody) => {
-  await verifySession();
   return await palicoFetch<CreateLabAPIResponse, CreateLabAPIRequestBody>(
     '/studio/lab',
     {
@@ -43,7 +39,6 @@ export const updateLabView = async (
   id: string,
   params: UpdateLabAPIRequestBody
 ) => {
-  await verifySession();
   return await palicoFetch<UpdateLabAPIResponse, UpdateLabAPIRequestBody>(
     `/studio/lab/${id}`,
     {
@@ -54,7 +49,6 @@ export const updateLabView = async (
 };
 
 export const deleteLabView = async (id: string) => {
-  await verifySession();
   return await palicoFetch<DeleteLabAPIResponse>(`/studio/lab/${id}`, {
     method: 'DELETE',
   });
