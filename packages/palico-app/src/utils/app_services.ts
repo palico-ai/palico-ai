@@ -11,7 +11,6 @@ import { ENVName } from './environment';
 
 export enum ProjectService {
   POSTGRES_DB = 'postgres_db',
-  JAEGER = 'jaeger',
   STUDIO = 'studio',
   API = 'api',
 }
@@ -28,9 +27,6 @@ export interface StartDockerComposeParams {
     };
     [ProjectService.API]?: {
       publicPort: number;
-    };
-    [ProjectService.JAEGER]?: {
-      enabled?: boolean; // default
     };
   };
 }
@@ -77,28 +73,6 @@ export class AppServiceManager {
               this.CONFIG.DATABASE.internalPort,
           ],
           volumes: ['./postgres:/var/lib/postgresql/data'],
-        },
-        [ProjectService.JAEGER]: {
-          image: 'jaegertracing/all-in-one:1.56',
-          environment: [
-            'SPAN_STORAGE_TYPE=badger',
-            'BADGER_EPHEMERAL=false',
-            'BADGER_DIRECTORY_VALUE=/badger/data',
-            'BADGER_DIRECTORY_KEY=/badger/key',
-          ],
-          volumes: ['./badger:/badger'],
-          ports: [
-            '6831:6831',
-            '6832:6832',
-            '5778:5778',
-            '16686:16686',
-            '4317:4317',
-            '4318:4318',
-            '14250:14250',
-            '14268:14268',
-            '14269:14269',
-            '9411:9411',
-          ],
         },
         [ProjectService.STUDIO]: {
           image: `palicoai/studio:main@${AppServiceManager.CONFIG.STUDIO.digest}`,
@@ -147,9 +121,6 @@ export class AppServiceManager {
     if (params.services[ProjectService.API]) {
       envVars[ENVName.PUBLIC_API_PORT] =
         params.services[ProjectService.API].publicPort.toString();
-    }
-    if (params.services[ProjectService.JAEGER]) {
-      serviceList.push(ProjectService.JAEGER);
     }
     const { rootDir } = await this.getDockerComposePath();
     await this.setEnvirnmentVariables(envVars);
@@ -201,9 +172,6 @@ export class AppServiceManager {
         },
         [ProjectService.API]: {
           publicPort: ports.apiPort,
-        },
-        [ProjectService.JAEGER]: {
-          enabled: true,
         },
       },
     });

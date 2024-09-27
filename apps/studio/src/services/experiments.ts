@@ -18,12 +18,10 @@ import {
   GetNotebookAPIResponse,
   UpdateNotebookAPIRequestBody,
 } from '@palico-ai/common';
-import { verifySession } from './auth';
 import { palicoFetch } from './palico';
 import { RequireExperimentName, RequireNoteobokName } from '../types/common';
 
 export const getExperimentList = async (): Promise<ExperimentMetadata[]> => {
-  await verifySession();
   const data = await palicoFetch<GetAllExperimentsAPIResponse>(
     '/dev/experiments',
     {
@@ -34,7 +32,6 @@ export const getExperimentList = async (): Promise<ExperimentMetadata[]> => {
 };
 
 export const createExperiment = async (params: NewExperimentAPIRequestBody) => {
-  await verifySession();
   return await palicoFetch<
     NewExperimentAPIResponse,
     NewExperimentAPIRequestBody
@@ -45,14 +42,12 @@ export const createExperiment = async (params: NewExperimentAPIRequestBody) => {
 };
 
 export const deleteExperiment = async (name: string) => {
-  await verifySession();
   return await palicoFetch(`/dev/experiments/${name}`, {
     method: 'DELETE',
   });
 };
 
 export const getEvalsForExperiments = async (expName: string) => {
-  await verifySession();
   const data = await palicoFetch<GetAllEvalsAPIResponse>(
     `/dev/experiments/${expName}/evals`,
     {
@@ -63,7 +58,6 @@ export const getEvalsForExperiments = async (expName: string) => {
 };
 
 export const getExperimentByName = async (expName: string) => {
-  await verifySession();
   return await palicoFetch<GetExperimentByNameAPIResponse>(
     `/dev/experiments/${expName}`,
     {
@@ -73,7 +67,6 @@ export const getExperimentByName = async (expName: string) => {
 };
 
 export const runEval = async (params: CreateEvaluationParams) => {
-  await verifySession();
   return await palicoFetch<CreateEvalAPIResponse, CreateEvalAPIRequestBody>(
     `/dev/experiments/${params.experimentName}/evals`,
     {
@@ -91,7 +84,6 @@ export const runEval = async (params: CreateEvaluationParams) => {
 };
 
 export const getEvalByName = async (expName: string, evalName: string) => {
-  await verifySession();
   return await palicoFetch<Evaluation>(
     `/dev/experiments/${expName}/evals/${evalName}`,
     {
@@ -101,7 +93,6 @@ export const getEvalByName = async (expName: string, evalName: string) => {
 };
 
 export const getEvalStatus = async (expName: string, testName: string) => {
-  await verifySession();
   return await palicoFetch<GetEvalStatusAPIResponse>(
     `/dev/experiments/${expName}/evals/${testName}/status`,
     {
@@ -111,7 +102,6 @@ export const getEvalStatus = async (expName: string, testName: string) => {
 };
 
 export const getNotebooksForExperiment = async (expName: string) => {
-  await verifySession();
   const response = await palicoFetch<GetNotebooksForExperimentAPIResponse>(
     `/dev/experiments/${expName}/notebook`,
     {
@@ -124,7 +114,6 @@ export const getNotebooksForExperiment = async (expName: string) => {
 export const createNotebook = async (
   params: CreateNotebookAPIRequestBody & RequireExperimentName
 ) => {
-  await verifySession();
   return await palicoFetch<
     CreateNotebookAPIResponse,
     CreateNotebookAPIRequestBody
@@ -141,7 +130,6 @@ export const createNotebook = async (
 export const getNotebook = async (
   params: RequireExperimentName & RequireNoteobokName
 ) => {
-  await verifySession();
   return await palicoFetch<GetNotebookAPIResponse>(
     `/dev/experiments/${params.experimentName}/notebook/${params.notebookName}`,
     {
@@ -155,7 +143,6 @@ export const updateNotebook = async (
     RequireExperimentName &
     RequireNoteobokName
 ) => {
-  await verifySession();
   await palicoFetch<CreateNotebookAPIResponse>(
     `/dev/experiments/${params.experimentName}/notebook/${params.notebookName}`,
     {
@@ -171,7 +158,6 @@ export const updateNotebook = async (
 export const deleteNotebook = async (
   params: RequireExperimentName & RequireNoteobokName
 ) => {
-  await verifySession();
   return await palicoFetch(
     `/dev/experiments/${params.experimentName}/notebook/${params.notebookName}`,
     {

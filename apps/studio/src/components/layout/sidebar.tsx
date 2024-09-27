@@ -203,8 +203,14 @@ const Sidebar: React.FC = () => {
           </Box>
         )}
       </DrawerHeader>
-      <Divider />
-      <List>
+      <Divider
+        sx={{
+          // opacity: open ? 1 : 0,
+          transition: 'opacity 0.3s',
+          margin: '0 16px',
+        }}
+      />
+      <List disablePadding>
         {SIDEBAR_ITEMS.map((item, key) => (
           <SidebarItem
             key={key}

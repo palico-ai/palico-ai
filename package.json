@@ -49,6 +49,7 @@
     "fast-glob": "^3.3.2",
     "find-up": "^5.0.0",
     "fix-esm": "^1.0.1",
+    "jose": "^5.9.3",
     "json-schema": "^0.4.0",
     "json-to-pretty-yaml": "^1.2.2",
     "jsonwebtoken": "^9.0.2",

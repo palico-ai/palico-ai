@@ -84,7 +84,7 @@ const resetFormInputs = (formFields: FormField[]): Record<string, string> => {
   }, {});
 };
 
-const FormBuilder: React.FC<FormBuilderProps> = ({
+export const FormBuilder: React.FC<FormBuilderProps> = ({
   formFields,
   onSubmit,
   submitButtonText = 'Submit',
@@ -263,5 +263,3 @@ const FormBuilder: React.FC<FormBuilderProps> = ({
     </form>
   );
 };
-
-export default FormBuilder;

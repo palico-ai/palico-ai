@@ -10,13 +10,11 @@ import {
   GetRequestSpanResponse,
   GetRequestLogsResponse,
 } from '@palico-ai/common';
-import { verifySession } from './auth';
 import { palicoFetch } from './palico';
 import { PaginatedResponse } from '../types/common';
 import { paginatedResponse } from '../utils/requests';
 
 export const getRecentConversations = async (pagination: PaginationParams) => {
-  await verifySession();
   const response = await palicoFetch<GetRecentConversationResponse>(
     `/telemetry/conversation?limit=${pagination.limit}&offset=${pagination.offset}`,
     {
@@ -27,7 +25,6 @@ export const getRecentConversations = async (pagination: PaginationParams) => {
 };
 
 export const getConversationTelemetry = async (conversationId: string) => {
-  await verifySession();
   const response = await palicoFetch<GetConversationTelemetryResponse>(
     `/telemetry/conversation/${conversationId}`,
     {
@@ -40,7 +37,6 @@ export const getConversationTelemetry = async (conversationId: string) => {
 export const getRecentRequests = async (
   pagination: PaginationParams
 ): Promise<PaginatedResponse<ConversationRequestTelemetryItem>> => {
-  await verifySession();
   const response = await palicoFetch<GetRecentRequestTelemetryResponse>(
     `/telemetry/request?limit=${pagination.limit}&offset=${pagination.offset}`,
     {
@@ -51,7 +47,6 @@ export const getRecentRequests = async (
 };
 
 export const getRequestTelemetry = async (requestId: string) => {
-  await verifySession();
   const response = await palicoFetch<GetTelemetryForRequestIdResponse>(
     `/telemetry/request/${requestId}`,
     {
@@ -62,7 +57,6 @@ export const getRequestTelemetry = async (requestId: string) => {
 };
 
 export const getRequestSpans = async (requestId: string) => {
-  await verifySession();
   const response = await palicoFetch<GetRequestSpanResponse>(
     `/telemetry/request/${requestId}/spans`,
     {
@@ -73,7 +67,6 @@ export const getRequestSpans = async (requestId: string) => {
 };
 
 export const getRequestLogs = async (requestId: string) => {
-  await verifySession();
   const response = await palicoFetch<GetRequestLogsResponse>(
     `/telemetry/request/${requestId}/logs`,
     {

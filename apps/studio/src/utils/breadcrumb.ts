@@ -111,4 +111,8 @@ export default class Breadcrumb {
   static newReport(): BreadcrumbItem {
     return { label: 'New Report' };
   }
+
+  static settings(): BreadcrumbItem {
+    return { label: 'Settings' };
+  }
 }
