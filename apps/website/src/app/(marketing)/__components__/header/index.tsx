@@ -6,6 +6,7 @@ import React from 'react';
 import DocsIcon from '@mui/icons-material/ImportContacts';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import RoutePath from '../../../../utils/route_path';
+import ApplicationAttributes from './attributes';
 
 const HighlightSpan = styled('span')(({ theme }) => ({
   color: theme.palette.primary.main,
@@ -16,15 +17,19 @@ const HighlightSpan = styled('span')(({ theme }) => ({
 
 const LandingPageHeader: React.FC = () => {
   return (
-    <Box>
+    <Box
+      mb={24}
+      sx={{
+        my: {
+          xs: 8,
+          sm: 16,
+          md: 20,
+        },
+      }}
+    >
       <Container
         maxWidth="md"
         sx={{
-          my: {
-            xs: 8,
-            sm: 16,
-            md: 20,
-          },
           gap: 3,
           display: 'flex',
           flexDirection: 'column',
@@ -33,19 +38,19 @@ const LandingPageHeader: React.FC = () => {
         }}
       >
         <Typography variant="h1">
-          Rapidly <HighlightSpan>Iterate</HighlightSpan> on your{' '}
-          <HighlightSpan>LLM Development</HighlightSpan>
+          LLM <HighlightSpan> Tech Stack</HighlightSpan> for{' '}
+          <HighlightSpan>Rapid Iteration</HighlightSpan>
         </Typography>
         <Typography
-          variant="body2"
+          variant="subtitle2"
           fontSize={20}
           sx={{
             opacity: 0.8,
           }}
         >
-          Streamline iterating through hundreds of combinations of models,
-          prompts, and custom business logic. Reach production-ready performance
-          faster.
+          Building an LLM application requires continously trying out different
+          ideas (models, prompts, architectures). Quickly iterate on your LLM
+          project with an integrated tech stack.
         </Typography>
         <Divider
           sx={{
@@ -91,6 +96,7 @@ const LandingPageHeader: React.FC = () => {
           </Button>
         </Box>
       </Container>
+      <ApplicationAttributes />
     </Box>
   );
 };

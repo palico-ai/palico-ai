@@ -11,7 +11,10 @@ import { LogQueue } from '../tracing/logger/log_queue';
 import { Logger } from '../tracing/logger';
 
 export interface ApplicationChatParams
-  extends Omit<AgentExecutorChatParams, 'conversationId' | 'requestId'> {
+  extends Omit<
+    AgentExecutorChatParams,
+    'conversationId' | 'requestId' | 'isNewConversation'
+  > {
   conversationId?: string;
 }
 
@@ -32,6 +35,7 @@ export class Application {
             ...params,
             conversationId,
             requestId,
+            isNewConversation: !params.conversationId,
           });
           const endTime = performance.now();
           return {

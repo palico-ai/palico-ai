@@ -1,8 +1,8 @@
 import { Container, Divider } from '@mui/material';
-import ApplicationAttributes from './__components__/attributes';
+import ApplicationAttributes from './__components__/header/attributes';
 import LearnMore from './__components__/learn_more/learn_more';
 import LandingPageHeader from './__components__/header';
-import BuildAnyApplicationFragment from './__components__/build_any_application';
+import Integrations from './__components__/integrations';
 import PalicoStudio from './__components__/palico_studio';
 import Evaluation from './__components__/evaluation';
 import AppConfigHotSwap from './__components__/hot_swap';
@@ -22,11 +22,10 @@ export default function Index() {
       }}
     >
       <LandingPageHeader />
-      <ApplicationAttributes />
-      <BuildAnyApplicationFragment />
+      <Integrations />
       <AppConfigHotSwap />
-      <PalicoStudio />
       <Evaluation />
+      <PalicoStudio />
       <GettingStartedFragment />
       <Divider sx={{ my: 8 }} />
       <LearnMore />

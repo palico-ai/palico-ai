@@ -15,15 +15,15 @@ const ControlPanelCard: React.FC<ControlPanelCardProps> = ({
 }) => {
   return (
     <Box>
-      <Typography mb={2} variant="h5">
+      {/* <Typography mb={2} variant="h5">
         {title}
-      </Typography>
+      </Typography> */}
       <Paper sx={{ p: 1 }} elevation={1}>
         <Image
           src={image}
           alt={title}
-          height={1535}
-          width={1328}
+          height={747}
+          width={1120}
           style={{
             width: '100%',
             height: 'auto',

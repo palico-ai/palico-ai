@@ -86,6 +86,38 @@ export default class RoutePath {
     return `${RoutePath.docs()}/guides/experiments`;
   }
 
+  static docsLangChain() {
+    return `${RoutePath.docs()}/integrations/langchain`;
+  }
+
+  static docsLlamaIndex() {
+    return `${RoutePath.docs()}/integrations/llamaindex`;
+  }
+
+  static docsPortkey() {
+    return `${RoutePath.docs()}/integrations/llm_providers/portkey`;
+  }
+
+  static docsAwsBedrock() {
+    return `${RoutePath.docs()}/integrations/llm_providers/aws_bedrock`;
+  }
+
+  static docsGcpVertex() {
+    return `${RoutePath.docs()}/integrations/llm_providers/gcp_vertex`;
+  }
+
+  static docsPinecone() {
+    return `${RoutePath.docs()}/integrations/vector_db/pinecone`;
+  }
+
+  static docsPGVector() {
+    return `${RoutePath.docs()}/integrations/vector_db/pg_vector`;
+  }
+
+  static docsChroma() {
+    return `${RoutePath.docs()}/integrations/vector_db/chroma`;
+  }
+
   static github() {
     return 'https://github.com/palico-ai/palico-ai';
   }

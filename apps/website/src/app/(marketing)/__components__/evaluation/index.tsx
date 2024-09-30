@@ -223,6 +223,7 @@ const Evaluation: React.FC = () => {
               options={{
                 readOnly: true,
                 minimap: { enabled: false },
+                wordWrap: 'on',
               }}
             />
           </StepSplitContent>
