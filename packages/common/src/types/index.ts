@@ -17,16 +17,17 @@ export interface ConversationRequestContent<Payload = Record<string, any>> {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type AppConfig = Record<string, any>;
+export type AppConfig<KV extends Record<string, any> = Record<string, any>> =
+  KV;
 
-export interface ConversationContext {
+export interface ConversationContext<AC extends AppConfig = AppConfig> {
   conversationId: string;
   requestId: string;
   isNewConversation: boolean;
   otel: {
     traceId: string;
   };
-  appConfig: AppConfig;
+  appConfig: AppConfig<AC>;
 }
 
 export * from './studio';

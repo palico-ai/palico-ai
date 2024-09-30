@@ -9,6 +9,8 @@ import { uuid } from '../utils/common';
 import { startConversationSpan } from '../tracing/internal.span';
 import { LogQueue } from '../tracing/logger/log_queue';
 import { Logger } from '../tracing/logger';
+import { ConversationTelemetryModel } from '../services/database/conversation_telemetry';
+import { PalicoSpanExporter } from '../tracing/exporter';
 
 export interface ApplicationChatParams
   extends Omit<
@@ -24,6 +26,7 @@ export class Application {
   ): Promise<ConversationResponse> {
     const conversationId = params.conversationId ?? uuid();
     const requestId = uuid();
+    let output: ConversationResponse;
     return await startConversationSpan(
       conversationId,
       requestId,
@@ -38,6 +41,7 @@ export class Application {
             isNewConversation: !params.conversationId,
           });
           const endTime = performance.now();
+          output = response;
           return {
             ...response,
             metadata: {
@@ -52,6 +56,16 @@ export class Application {
           }
           throw e;
         } finally {
+          console.log('Logging request');
+          await ConversationTelemetryModel.logRequest({
+            conversationId,
+            requestId,
+            appConfig: params.appConfig,
+            agentName: params.agentName,
+            requestInput: params.content,
+            responseOutput: output ?? { messages: [] },
+          });
+          console.log('Flushing logs and spans');
           await LogQueue.tryFlushingLogs(requestId);
         }
       }

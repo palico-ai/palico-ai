@@ -33,11 +33,11 @@ export class LogQueue {
     try {
       const logs = this.requestIdLogs[requestId];
       if (!logs) {
-        return;
+        console.warn('no logs to flush');
       }
       await ConversationTelemetryModel.saveRequestLogs({
         requestId,
-        logs,
+        logs: logs ?? [],
       });
     } catch (e) {
       console.error('error flushing logs', e);
