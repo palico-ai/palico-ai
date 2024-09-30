@@ -11,6 +11,7 @@ export interface AgentExecutorChatParams {
   agentName: string;
   content: ConversationRequestContent;
   conversationId: string; // For grouping a conversation
+  isNewConversation: boolean;
   requestId: string;
   appConfig?: Record<string, unknown>;
   traceId?: string;
@@ -41,7 +42,7 @@ export default class AgentExecutor {
         const context: ConversationContext = {
           conversationId,
           requestId,
-          isNewConversation: params.conversationId === undefined,
+          isNewConversation: params.isNewConversation,
           appConfig: params.appConfig ?? {},
           otel: {
             traceId,

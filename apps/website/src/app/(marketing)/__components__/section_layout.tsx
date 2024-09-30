@@ -26,13 +26,21 @@ const SectionLayout: React.FC<SectionLayoutProps> = ({
   return (
     <Box
       sx={{
-        mb: disableGutter ? 0 : 24,
+        mb: disableGutter
+          ? 0
+          : {
+              xs: 12,
+              sm: 16,
+              md: 20,
+              lg: 24,
+              xl: 24,
+            },
       }}
     >
       {title && (
         <Box
           sx={{
-            mb: disableTitleGutter ? 0 : 12,
+            mb: disableTitleGutter ? 0 : 8,
           }}
         >
           <Typography
@@ -50,7 +58,10 @@ const SectionLayout: React.FC<SectionLayoutProps> = ({
           </Typography>
           {subtitle && (
             <Typography
-              variant="body2"
+              variant="body1"
+              sx={{
+                opacity: 0.8,
+              }}
               fontSize={20}
               textAlign={alignTitle}
               mt={4}

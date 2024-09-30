@@ -1,57 +1,63 @@
-import { Grid } from '@mui/material';
+import { Box, Grid } from '@mui/material';
 import React from 'react';
 import SectionLayout from '../section_layout';
-import { HighlightSpan } from '../client_fragments';
-import ControlPanelCard, { ControlPanelCardProps } from './control_panel_card';
+import { ControlPanelCardProps } from './control_panel_card';
 import ChatUI from './chat_ui.png';
 import QuickLab from './comparison.png';
 import ExperimentList from './experiments.png';
 import TraceView from './tracing.png';
+import { TabView } from '@palico-ai/components';
+import PalicoStudioSlideContent from './slide';
 
-const STUDIO_SLIDES: ControlPanelCardProps[] = [
-  {
-    title: 'Preview your Changes in Chat UI',
-    image: ChatUI,
-  },
-  {
-    title: 'Compare Responses Side-By-Side',
-    image: QuickLab,
-  },
-  {
-    title: 'Run, Track, and Analyze Experiments',
-    image: ExperimentList,
-  },
-  {
-    title: 'Review Traces of every Request',
-    image: TraceView,
-  },
-];
+enum StudioSlide {
+  PreviewChanges = 'preview',
+  ManageExperiments = 'experiments',
+  TraceRequests = 'tracing',
+}
 
 const PalicoStudio: React.FC = () => {
   return (
-    <SectionLayout
-      title="Control Panel That Accelerates Your Development"
-      subtitle={
-        <>
-          Your application comes with Palico Studio, a control panel that{' '}
-          <HighlightSpan>runs locally</HighlightSpan> during development, and{' '}
-          <HighlightSpan>in the cloud</HighlightSpan> during production
-        </>
-      }
-    >
-      <Grid
-        container
-        spacing={12}
-        sx={{
-          boxSizing: 'border-box',
-        }}
+    <SectionLayout title="Control Panel That Accelerates Your Development">
+      <TabView
+        tabs={[
+          {
+            label: 'Preview Your Changes',
+            value: StudioSlide.PreviewChanges,
+          },
+          {
+            label: 'Manage Experiments',
+            value: StudioSlide.ManageExperiments,
+          },
+          {
+            label: 'Logs and Tracing',
+            value: StudioSlide.TraceRequests,
+          },
+        ]}
       >
-        {STUDIO_SLIDES.map((slide) => (
-          <Grid item xs={12} md={6} key={slide.title}>
-            <ControlPanelCard title={slide.title} image={slide.image} />
-          </Grid>
-        ))}
-      </Grid>
+        <Box mt={4}>
+          <PalicoStudioSlideContent
+            value={StudioSlide.PreviewChanges}
+            description="Make changes and preview them in real-time with Chat UI"
+            video={
+              'https://utfs.io/f/G2KJHdIpmdEj8ey3FyZ7MqRkiXyWwUnNOlcdh5bJmajvsEBZ'
+            }
+          />
+          <PalicoStudioSlideContent
+            value={StudioSlide.ManageExperiments}
+            description="Run, track, and analyze experiments from an intuitive dashboard"
+            video={
+              'https://utfs.io/f/G2KJHdIpmdEj2ZFhWzLNCgJE1SZrGxBcqA2Pmpfah9RWnouk'
+            }
+          />
+          <PalicoStudioSlideContent
+            value={StudioSlide.TraceRequests}
+            description="Debug issues with detailed logs and traces for every request"
+            video={
+              'https://utfs.io/f/G2KJHdIpmdEjet0DwM6c3O2BRhf4pzkAsYiMLEaWoH5Jvbrd'
+            }
+          />
+        </Box>
+      </TabView>
     </SectionLayout>
   );
 };
