@@ -88,6 +88,7 @@ export class AppServiceManager {
               ENVName.PUBLIC_API_PORT +
               '}',
             `PALICO_SERVICE_KEY=${serviceKey}`,
+            'DEV_MODE=true',
           ],
         },
       },

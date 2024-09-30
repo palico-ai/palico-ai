@@ -54,15 +54,6 @@ export default class AgentExecutor {
           requestId,
           conversationId,
         };
-        await ConversationTelemetryModel.logRequest({
-          conversationId,
-          requestId,
-          traceId,
-          appConfig: params.appConfig,
-          agentName: params.agentName,
-          requestInput: params.content,
-          responseOutput: output,
-        });
         chatSpan.end();
         return output;
       } catch (e) {
