@@ -39,12 +39,7 @@ const AttributeItem: React.FC<AttributeCardProps> = ({
           <Typography variant="h5" gutterBottom>
             {label}
           </Typography>
-          <Typography
-            variant="body1"
-            sx={{
-              opacity: 0.8,
-            }}
-          >
+          <Typography variant="body1" fontSize={17}>
             {description}
           </Typography>
         </Box>
@@ -67,7 +62,7 @@ const attributes: AttributeCardProps[] = [
   {
     label: 'Improve Performance',
     icon: <BenchmarkIcon color="info" />,
-    description: 'Setup experiments to benchmark and iterate on performance',
+    description: 'Run experiments and iterate on performance',
   },
   {
     label: 'Logs and Traces',
@@ -96,16 +91,10 @@ const ApplicationAttributes = () => {
       ))}
       <Grid item xs={12}>
         <Typography
-          variant="caption"
+          variant="subtitle2"
           fontSize={20}
           display={'block'}
           textAlign={'right'}
-          // color={'secondary'}
-          sx={(theme) => ({
-            opacity: 0.5,
-            fontWeight: 500,
-            // color: theme.palette.info.light,
-          })}
         >
           Stay in Flow With An{' '}
           <HighlightSpan>Integrated Tech Stack</HighlightSpan>

@@ -42,10 +42,10 @@ const LandingPageHeader: React.FC = () => {
           <HighlightSpan>Rapid Iteration</HighlightSpan>
         </Typography>
         <Typography
-          variant="subtitle2"
+          variant="subtitle1"
           fontSize={20}
           sx={{
-            opacity: 0.8,
+            opacity: 0.7,
           }}
         >
           Building an LLM application requires continously trying out different

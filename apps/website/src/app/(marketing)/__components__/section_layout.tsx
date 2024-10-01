@@ -59,9 +59,6 @@ const SectionLayout: React.FC<SectionLayoutProps> = ({
           {subtitle && (
             <Typography
               variant="body1"
-              sx={{
-                opacity: 0.8,
-              }}
               fontSize={20}
               textAlign={alignTitle}
               mt={4}

@@ -27,16 +27,14 @@ const CookbookCard: React.FC<CookbookCardProps> = ({
         elevation={1}
         sx={{
           height: '100%',
+          px: 1,
+          boxSizing: 'border-box',
         }}
       >
-        <CardHeader title={<Typography variant="h5">{title}</Typography>} />
+        <CardHeader title={<Typography variant="h6">{title}</Typography>} />
+        <Divider />
         <CardContent>
-          <Typography
-            variant="body2"
-            sx={{
-              opacity: 0.7,
-            }}
-          >
+          <Typography variant="body2" fontSize={16}>
             {description}
           </Typography>
         </CardContent>
