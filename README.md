@@ -13,11 +13,11 @@ Building an LLM application involves continously trying out different ideas (mod
 
 #### With Palico you can
 
-- ✅&nbsp; **Build** any application with complete flexibility in code ([docs](https://docs.palico.ai/guides/build))
+- ✅&nbsp; **Build** any application in code with complete flexibility ([docs](https://docs.palico.ai/guides/build))
 - ✅&nbsp; **Integrate** with any external libraries like LangChain, LlamaIndex, Portkey, and more ([docs](https://docs.palico.ai/integrations/langchain)) <br>
-- ✅&nbsp; **Preview changes** from localhost with Playground UI ([docs](https://docs.palico.ai/guides/preview_changes)) <br>
+- ✅&nbsp; **Preview changes** from instantly with Playground UI ([docs](https://docs.palico.ai/guides/preview_changes)) <br>
 - ✅&nbsp; **Improve performance** with Experiments ([docs](https://docs.palico.ai/guides/experiments)) <br>
-- ✅&nbsp; Debug isues with **request traces** ([docs](https://docs.palico.ai/guides/telemetry)) <br>
+- ✅&nbsp; Debug isues with **request tracing** ([docs](https://docs.palico.ai/guides/telemetry)) <br>
 - ✅&nbsp; Deploy your application behind a **REST API** ([docs](https://docs.palico.ai/guides/client_sdk)) <br>
 - ✅&nbsp; Manage your application with UI **control panel** ([docs](https://docs.palico.ai/components#palico-studio)) <br>
 
@@ -25,17 +25,17 @@ Building an LLM application involves continously trying out different ideas (mod
 > [!TIP]
 >  ⭐️ **Star this repo** to get release notifications for new features.
 >
-> > ![ezgif-4-c4cae043ed](https://github.com/user-attachments/assets/1e9cecd1-d459-4f47-96e4-ffd34a9aed15)
+> ![ezgif-4-c4cae043ed](https://github.com/user-attachments/assets/1e9cecd1-d459-4f47-96e4-ffd34a9aed15)
 
 
-## ⚡ Get started in seconds
+## ⚡ Get started in seconds ⚡
 ```bash
 npx palico init <project-name>
 ```
 
-Checkout our [quickstart guide](https://docs.palico.ai/).
+Checkout our [quickstart](https://docs.palico.ai/) guide.
 
-### 💻 Overview of your Palico Starter Application
+### Overview of your Palico App
 
 https://github.com/palico-ai/palico-main/assets/32821894/54f35583-41c1-48a3-9565-95c484a4909b
 
@@ -102,7 +102,7 @@ Working on LLM application involves testing different variations of models, prom
 
 Learn more about [AppConfig](https://docs.palico.ai/guides/feature_flag).
 
-##  🔄 Improving Performance
+##  🔄 Improving Performance with Experiments
 Palico helps you create an iterative loop to systematically improve performance of your LLM application using experiments.
 
 <div align="center">
