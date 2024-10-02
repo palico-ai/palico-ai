@@ -1,26 +1,58 @@
-# Palico AI - Rapidly Iterate on your LLM Development
+<div align="center">
 
-LLM application by default has a lot of performance issues (accuracy / hallucinations, latency, cost). To improve its performance, developers need iterate through hundreds of combinations of prompts, models, RAG pipeline, and more. Since you need to test so many variation, a process is needed to help you efficiently iterate through these combinations. We provide the framework that helps you streamline this iterative process.
+# Palico AI - LLM Tech Stack for Rapid Iteration
+[![Docs](https://img.shields.io/badge/docs-palico?style=flat&label=palico)](https://docs.palico.ai/)
+[![Website](https://img.shields.io/badge/website-palico?style=flat&label=palico)](https://www.palico.ai/)
+[![X (formerly Twitter) Follow](https://img.shields.io/twitter/follow/PalicoAI)](https://x.com/PalicoAI)
+[![NPM Version](https://img.shields.io/npm/v/@palico-ai/app)](https://www.npmjs.com/package/@palico-ai/app)
+[![GitHub License](https://img.shields.io/github/license/palico-ai/palico-ai)](https://github.com/palico-ai/palico-ai/blob/main/LICENSE)
+<br>
+</div
 
-#### ⚡ With Palico you can ⚡
+Building an LLM application requires continously trying out different ideas (models, prompts, architectures). Palico provides you with an integrated tech stack that helps you quickly iterate on your LLM development.
 
-- [Build](#build) an application layer where you can easily swap out different combination of models, prompts, and custom logic
-- [Improve performance](#experiment) by benchmarking your performance and creating an iterative loop to improve it
-- [Deploy](#deploy) your application to any cloud provider with docker
-- [Integrate](#client-sdk) your application with your other services via REST APIs or SDKs
-- [Manage](#palico-studio) your application via Palico Studio - a control panel for your application
+#### With Palico you can
+
+- ✅&nbsp; **Build** any application -- with complete flexibility -- in code ([docs](https://docs.palico.ai/guides/build))
+- ✅&nbsp; **Integrate** with any external libraries like LangChain, LlamaIndex, Portkey, and more ([docs](https://docs.palico.ai/integrations/langchain)) <br>
+- ✅&nbsp; **Preview changes** from localhost with Playground UI ([docs](https://docs.palico.ai/guides/preview_changes)) <br>
+- ✅&nbsp; **Improve performance** with Experiments ([docs](https://docs.palico.ai/guides/experiments)) <br>
+- ✅&nbsp; Debug isues with **request tracing** ([docs](https://docs.palico.ai/guides/telemetry)) <br>
+- ✅&nbsp; Deploy your app behind a **REST API** ([docs](https://docs.palico.ai/guides/client_sdk)) <br>
+- ✅&nbsp; Manage your application with UI **control panel** ([docs](https://docs.palico.ai/components#palico-studio)) <br>
+
+> [!TIP]
+>  ⭐️ **Star this repo** to get release notifications for new features.
 
 #### 🕑 Get started in seconds
 ```bash
 npx palico init <project-name>
 ```
 
+Checkout our [quickstart guide](https://docs.palico.ai/).
+
 ## 📖 Documentation
 For full documentation, checkout [docs.palico.ai](https://docs.palico.ai)
 
-## 🤔 Overview of your Palico Starter Application
+## 💻 Overview of your Palico Starter Application
 
 https://github.com/palico-ai/palico-main/assets/32821894/54f35583-41c1-48a3-9565-95c484a4909b
+
+## 🛠️ Building with Palico
+
+### Build with complete flexiblity
+
+### Integrates with your favorite tools
+
+### Instantly preview your changes
+
+### Easily swap models, prompts, anything and everything
+
+## Improving Performance
+
+
+
+## Going to Production
 
 ## 🧱 Components of a Palico Application
 
