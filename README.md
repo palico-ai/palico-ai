@@ -99,14 +99,8 @@ https://github.com/user-attachments/assets/c33ae53d-acf5-4c89-9c41-743ea1cb4722
 ### Easily swap models, prompts, anything and everything
 Build an interchangable application layer where you can swap out any components at runtime without changing any code
 
-![LandPageAssets-Page-3 drawio](https://github.com/user-attachments/assets/645a6f60-b6cd-4616-8b65-954441c54130)
-
-
 ##  🔄 Improving Performance
 Palico helps you create an iterative loop to systematically improve performance of your LLM application
-
-![LandPageAssets-Page-2 drawio (7)](https://github.com/user-attachments/assets/493a578a-3c0d-4df8-8b98-8fb27bbde916)
-
 
 
 ## 🚀 Going to Production
