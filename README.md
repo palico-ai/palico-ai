@@ -13,32 +13,33 @@ Building an LLM application involves continously trying out different ideas (mod
 
 #### With Palico you can
 
-- ✅&nbsp; **Build** any application -- with complete flexibility -- in code ([docs](https://docs.palico.ai/guides/build))
+- ✅&nbsp; **Build** any application with complete flexibility in code ([docs](https://docs.palico.ai/guides/build))
 - ✅&nbsp; **Integrate** with any external libraries like LangChain, LlamaIndex, Portkey, and more ([docs](https://docs.palico.ai/integrations/langchain)) <br>
 - ✅&nbsp; **Preview changes** from localhost with Playground UI ([docs](https://docs.palico.ai/guides/preview_changes)) <br>
 - ✅&nbsp; **Improve performance** with Experiments ([docs](https://docs.palico.ai/guides/experiments)) <br>
-- ✅&nbsp; Debug isues with **request tracing** ([docs](https://docs.palico.ai/guides/telemetry)) <br>
-- ✅&nbsp; Deploy your app behind a **REST API** ([docs](https://docs.palico.ai/guides/client_sdk)) <br>
+- ✅&nbsp; Debug isues with **request traces** ([docs](https://docs.palico.ai/guides/telemetry)) <br>
+- ✅&nbsp; Deploy your application behind a **REST API** ([docs](https://docs.palico.ai/guides/client_sdk)) <br>
 - ✅&nbsp; Manage your application with UI **control panel** ([docs](https://docs.palico.ai/components#palico-studio)) <br>
+
 
 > [!TIP]
 >  ⭐️ **Star this repo** to get release notifications for new features.
+>
+> > ![ezgif-4-c4cae043ed](https://github.com/user-attachments/assets/1e9cecd1-d459-4f47-96e4-ffd34a9aed15)
 
-#### 🕑 Get started in seconds
+
+## ⚡ Get started in seconds
 ```bash
 npx palico init <project-name>
 ```
 
 Checkout our [quickstart guide](https://docs.palico.ai/).
 
-## 📖 Documentation
-For full documentation, checkout [docs.palico.ai](https://docs.palico.ai)
-
-## 💻 Overview of your Palico Starter Application
+### 💻 Overview of your Palico Starter Application
 
 https://github.com/palico-ai/palico-main/assets/32821894/54f35583-41c1-48a3-9565-95c484a4909b
 
-## 🛠️ Building with Palico
+## 🛠️ Building your Application
 
 ### Build your application with complete flexiblity
 With Palico, you have complete control over the implementation details of your LLM application. Building an LLM application with Palico just involves implementing the `Agent` interface. Here's an example:
@@ -97,15 +98,34 @@ https://github.com/user-attachments/assets/c33ae53d-acf5-4c89-9c41-743ea1cb4722
 
 
 ### Easily swap models, prompts, anything and everything
-Build an interchangable application layer where you can swap out any components at runtime without changing any code
+Working on LLM application involves testing different variations of models, prompts, and application logic. Palico helps you build an interchangable application layer using "feature-flag-like" feature called AppConfig. Using AppConfig, you can easily swap models, prompts, or any logic in your application layer.
+
+Learn more about [AppConfig](https://docs.palico.ai/guides/feature_flag).
 
 ##  🔄 Improving Performance
-Palico helps you create an iterative loop to systematically improve performance of your LLM application
+Palico helps you create an iterative loop to systematically improve performance of your LLM application using experiments.
 
+<div align="center">
+  
+![LandPageAssets-Page-2 drawio](https://github.com/user-attachments/assets/43e26dd9-8b33-4675-8dec-a0d14df8c4cc)
+
+</div>
+
+With experiments, you can:
+1. Setup a list of test-cases that models the behavior of your application
+2. Make a change to your application
+3. Run an evaluation to measure how well your application performed against your test-cases
+4. Iterate
+
+Learn more about [experiments](https://docs.palico.ai/guides/experiments)
 
 ## 🚀 Going to Production
 
-## Contributing
+You can deploy your Palico app to any cloud provider using Docker or use our managed hosting (coming soon). You can then use our ClientSDK or REST API to communicate with your LLM application.
+
+Learn more from [docs](https://docs.palico.ai/guides/client_sdk).
+
+## 🤝 Contributing
 
 The easiest way to contribute is to pick an issue with the `good first issue` tag 💪. 
 
