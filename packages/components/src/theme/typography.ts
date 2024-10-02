@@ -1,17 +1,15 @@
 import { ThemeOptions } from '@mui/material';
-import { pxToRem, rgba } from './functions';
+import { pxToRem } from './functions';
+import { THEME_COLOR } from './colors';
 
-const color = {
-  heading: '#fff',
-  body: '#a1a1aa',
-};
+export const color = THEME_COLOR.typography;
 
 const fontSize = (size: string, lineHeight: string) => ({
   fontSize: size,
   lineHeight,
 });
 
-const baseProperties = {
+export const TYPOGRAPHY_PROPERTIES = {
   fontFamily:
     'ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',
   fontWeightLighter: 100,
@@ -19,26 +17,26 @@ const baseProperties = {
   fontWeightRegular: 400,
   fontWeightMedium: 600,
   fontWeightBold: 700,
-  fontSizeXS: fontSize('0.85rem', '1.5rem'),
-  fontSizeSM: fontSize('0.95rem', '1.5rem'),
-  fontSizeMD: fontSize('1.125rem', '1.75rem'),
+  fontSizeXS: fontSize('0.8125rem', '1.5rem'),
+  fontSizeSM: fontSize('0.875rem', '1.5rem'),
+  fontSizeMD: fontSize('1rem', '1.75rem'),
   fontSizeLG: fontSize('1.25rem', '1.75rem'),
   fontSizeXL: fontSize('1.5rem', '2rem'),
 };
 
 const baseHeadingProperties = {
-  fontFamily: baseProperties.fontFamily,
+  fontFamily: TYPOGRAPHY_PROPERTIES.fontFamily,
   color: color.heading,
-  fontWeight: baseProperties.fontWeightBold,
+  fontWeight: TYPOGRAPHY_PROPERTIES.fontWeightBold,
 };
 
 const typography: ThemeOptions['typography'] = {
-  fontFamily: baseProperties.fontFamily,
+  fontFamily: TYPOGRAPHY_PROPERTIES.fontFamily,
   // fontWeightLighter: baseProperties.fontWeightLighter,
-  fontWeightLight: baseProperties.fontWeightLight,
-  fontWeightRegular: baseProperties.fontWeightRegular,
-  fontWeightMedium: baseProperties.fontWeightMedium,
-  fontWeightBold: baseProperties.fontWeightBold,
+  fontWeightLight: TYPOGRAPHY_PROPERTIES.fontWeightLight,
+  fontWeightRegular: TYPOGRAPHY_PROPERTIES.fontWeightRegular,
+  fontWeightMedium: TYPOGRAPHY_PROPERTIES.fontWeightMedium,
+  fontWeightBold: TYPOGRAPHY_PROPERTIES.fontWeightBold,
 
   h1: {
     fontSize: pxToRem(48),
@@ -77,56 +75,57 @@ const typography: ThemeOptions['typography'] = {
   },
 
   subtitle1: {
-    fontFamily: baseProperties.fontFamily,
-    fontSize: baseProperties.fontSizeXL.fontSize,
-    lineHeight: baseProperties.fontSizeXL.lineHeight,
-    fontWeight: baseProperties.fontWeightLight,
+    fontFamily: TYPOGRAPHY_PROPERTIES.fontFamily,
+    fontSize: TYPOGRAPHY_PROPERTIES.fontSizeXL.fontSize,
+    lineHeight: TYPOGRAPHY_PROPERTIES.fontSizeXL.lineHeight,
+    fontWeight: TYPOGRAPHY_PROPERTIES.fontWeightLight,
     color: color.heading,
   },
 
   subtitle2: {
-    fontFamily: baseProperties.fontFamily,
-    fontSize: baseProperties.fontSizeLG.fontSize,
-    lineHeight: baseProperties.fontSizeLG.lineHeight,
-    fontWeight: baseProperties.fontWeightLight,
+    fontFamily: TYPOGRAPHY_PROPERTIES.fontFamily,
+    fontSize: TYPOGRAPHY_PROPERTIES.fontSizeLG.fontSize,
+    lineHeight: TYPOGRAPHY_PROPERTIES.fontSizeLG.lineHeight,
+    fontWeight: TYPOGRAPHY_PROPERTIES.fontWeightLight,
     color: color.heading,
   },
 
   body1: {
-    fontFamily: baseProperties.fontFamily,
-    fontSize: baseProperties.fontSizeMD.fontSize,
-    lineHeight: baseProperties.fontSizeMD.lineHeight,
-    fontWeight: baseProperties.fontWeightLight,
-    color: rgba(color.body, 0.9),
+    fontFamily: TYPOGRAPHY_PROPERTIES.fontFamily,
+    fontSize: TYPOGRAPHY_PROPERTIES.fontSizeMD.fontSize,
+    lineHeight: TYPOGRAPHY_PROPERTIES.fontSizeMD.lineHeight,
+    fontWeight: TYPOGRAPHY_PROPERTIES.fontWeightRegular,
+    color: color.bodyMain,
   },
 
   body2: {
-    fontFamily: baseProperties.fontFamily,
-    fontSize: baseProperties.fontSizeMD.fontSize,
-    lineHeight: baseProperties.fontSizeMD.lineHeight,
-    fontWeight: baseProperties.fontWeightLight,
-    color: rgba(color.body, 0.85),
+    fontFamily: TYPOGRAPHY_PROPERTIES.fontFamily,
+    fontSize: TYPOGRAPHY_PROPERTIES.fontSizeMD.fontSize,
+    lineHeight: TYPOGRAPHY_PROPERTIES.fontSizeMD.lineHeight,
+    fontWeight: TYPOGRAPHY_PROPERTIES.fontWeightRegular,
+    color: color.bodySecondary,
   },
 
   button: {
-    fontFamily: baseProperties.fontFamily,
-    fontSize: baseProperties.fontSizeSM.fontSize,
-    lineHeight: baseProperties.fontSizeSM.lineHeight,
-    fontWeight: baseProperties.fontWeightRegular,
+    fontFamily: TYPOGRAPHY_PROPERTIES.fontFamily,
+    fontSize: TYPOGRAPHY_PROPERTIES.fontSizeMD.fontSize,
+    lineHeight: TYPOGRAPHY_PROPERTIES.fontSizeMD.lineHeight,
+    color: color.bodyMain,
+    fontWeight: TYPOGRAPHY_PROPERTIES.fontWeightRegular,
     textTransform: 'uppercase',
   },
 
   caption: {
-    fontFamily: baseProperties.fontFamily,
-    fontSize: baseProperties.fontSizeXS.fontSize,
-    lineHeight: baseProperties.fontSizeXS.lineHeight,
-    fontWeight: baseProperties.fontWeightLight,
-    color: color.body,
+    fontFamily: TYPOGRAPHY_PROPERTIES.fontFamily,
+    fontSize: TYPOGRAPHY_PROPERTIES.fontSizeXS.fontSize,
+    lineHeight: TYPOGRAPHY_PROPERTIES.fontSizeXS.lineHeight,
+    fontWeight: TYPOGRAPHY_PROPERTIES.fontWeightLight,
+    color: color.bodySecondary,
   },
 
   overline: {
-    fontFamily: baseProperties.fontFamily,
-    color: color.body,
+    fontFamily: TYPOGRAPHY_PROPERTIES.fontFamily,
+    color: color.bodySecondary,
   },
 };
 

@@ -1,5 +1,4 @@
 import { Container, Divider } from '@mui/material';
-import ApplicationAttributes from './__components__/header/attributes';
 import LearnMore from './__components__/learn_more/learn_more';
 import LandingPageHeader from './__components__/header';
 import Integrations from './__components__/integrations';

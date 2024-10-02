@@ -48,6 +48,7 @@ export const HighlightSpan = styled('span')(({ theme }) => ({
   '&:hover': {
     opacity: 1,
     backgroundColor: theme.palette.info.main,
+    color: theme.palette.info.contrastText,
     // cursor: "",
   },
 }));

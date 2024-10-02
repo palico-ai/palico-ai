@@ -1,15 +1,6 @@
 import { ThemeOptions, createTheme } from '@mui/material';
-import typography from './typography';
-
-export const color = {
-  white: '#FFFFFF',
-  primary: '#7434DB',
-  secondary: '#52555A',
-  info: '#1A73E8',
-  success: '#4CAF50',
-  warning: '#fb8c00',
-  error: '#F44335',
-};
+import typography, { TYPOGRAPHY_PROPERTIES } from './typography';
+import { THEME_COLOR } from './colors';
 
 const palette: ThemeOptions['palette'] = {
   mode: 'dark',
@@ -19,32 +10,36 @@ const palette: ThemeOptions['palette'] = {
     // paper:"#2A2A2D"
   },
   text: {
-    primary: color.white,
-    secondary: color.white,
+    primary: THEME_COLOR.typography.bodyMain,
+    secondary: THEME_COLOR.typography.bodySecondary,
   },
 
   primary: {
-    main: color.primary,
+    main: THEME_COLOR.primary,
+    light: THEME_COLOR.primaryLight,
+    dark: THEME_COLOR.primaryDark,
   },
 
   secondary: {
-    main: color.secondary,
+    main: THEME_COLOR.secondary,
   },
 
   info: {
-    main: color.info,
+    main: THEME_COLOR.info,
+    light: THEME_COLOR.infoLight,
+    dark: THEME_COLOR.infoDark,
   },
 
   success: {
-    main: color.success,
+    main: THEME_COLOR.success,
   },
 
   warning: {
-    main: color.warning,
+    main: THEME_COLOR.warning,
   },
 
   error: {
-    main: color.error,
+    main: THEME_COLOR.error,
   },
   grey: {
     100: '#f8f9fa',
@@ -77,7 +72,7 @@ export const theme = createTheme({
         root: {
           '& .MuiFormLabel-root': {
             '&.Mui-focused': {
-              color: color.white,
+              color: THEME_COLOR.typography.bodyMain,
               opacity: 0.7,
             },
           },
@@ -88,20 +83,32 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           padding: '8px 16px',
+          fontWeight: 500,
+          fontSize: TYPOGRAPHY_PROPERTIES.fontSizeSM.fontSize,
+          lineHeight: TYPOGRAPHY_PROPERTIES.fontSizeSM.lineHeight,
         },
         text: {
-          color: color.white,
+          color: THEME_COLOR.typography.bodyMain,
         },
         outlinedSecondary: {
-          color: color.white,
-          opacity: 0.6,
+          color: THEME_COLOR.typography.bodyMain,
         },
-        containedWarning: {
-          color: 'rgba(0, 0, 0, 0.87)',
-          fontWeight: 500,
+        sizeMedium: {
+          padding: '8px 16px',
+        },
+        sizeSmall: {
+          padding: '6px 12px',
+          fontSize: TYPOGRAPHY_PROPERTIES.fontSizeXS.fontSize,
+          lineHeight: TYPOGRAPHY_PROPERTIES.fontSizeXS.lineHeight,
+        },
+        sizeLarge: {
+          padding: '10px 20px',
         },
       },
     },
     MuiTypography: {},
+    MuiTab: {
+      styleOverrides: {},
+    },
   },
 });

@@ -16,28 +16,28 @@ import {
 import { Button, Link } from '@palico-ai/components';
 import MenuIcon from '@mui/icons-material/Menu';
 import React from 'react';
-import RoutePath from '../../utils/route_path';
+import AppRoute, { DocRoute } from '../../utils/route_path';
 import Image from 'next/image';
 import Logo from '../../../public/logos/palico.png';
 
 const NavItems = [
   {
     label: 'Docs',
-    href: RoutePath.docs(),
+    href: DocRoute.docs(),
   },
   {
     label: 'Github',
     target: '_blank',
-    href: RoutePath.github(),
+    href: AppRoute.github(),
   },
   {
     label: 'Book a demo',
-    href: RoutePath.scheduleDemo(),
+    href: AppRoute.scheduleDemo(),
     target: '_blank',
   },
   {
     label: 'Quickstart',
-    href: RoutePath.quickStart(),
+    href: DocRoute.quickStart(),
     highlight: true,
   },
 ];
@@ -143,6 +143,7 @@ const Navbar: React.FC = () => {
             {NavItems.map((item, index) => (
               <Link key={index} href={item.href} target={item.target}>
                 <Button
+                  size="small"
                   color={item.highlight ? 'primary' : 'inherit'}
                   variant={item.highlight ? 'contained' : 'text'}
                 >

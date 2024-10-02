@@ -5,7 +5,7 @@ import { Button, LinkButton, Typography } from '@palico-ai/components';
 import React from 'react';
 import DocsIcon from '@mui/icons-material/ImportContacts';
 import GitHubIcon from '@mui/icons-material/GitHub';
-import RoutePath from '../../../../utils/route_path';
+import AppRoute, { DocRoute } from '../../../../utils/route_path';
 import ApplicationAttributes from './attributes';
 
 const HighlightSpan = styled('span')(({ theme }) => ({
@@ -60,10 +60,10 @@ const LandingPageHeader: React.FC = () => {
           }}
         />
         <LinkButton
-          href={RoutePath.quickStart()}
+          href={DocRoute.quickStart()}
           color="primary"
           variant="contained"
-          size="large"
+          // size="large"
         >
           Start Your Project
         </LinkButton>
@@ -79,7 +79,7 @@ const LandingPageHeader: React.FC = () => {
           }}
         >
           <LinkButton
-            href={RoutePath.docs()}
+            href={DocRoute.docs()}
             startIcon={<DocsIcon />}
             size="large"
             color="secondary"
@@ -87,7 +87,7 @@ const LandingPageHeader: React.FC = () => {
             Read the Docs
           </LinkButton>
           <Button
-            href={RoutePath.github()}
+            href={AppRoute.github()}
             startIcon={<GitHubIcon />}
             size="large"
             color="secondary"

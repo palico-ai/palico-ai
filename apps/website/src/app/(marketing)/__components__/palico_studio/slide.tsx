@@ -29,7 +29,9 @@ const PalicoStudioSlideContent: React.FC<SlideContentParams> = ({
 }) => {
   return (
     <TabPanel value={value}>
-      <Typography variant="body1">{description}</Typography>
+      <Typography variant="body2" fontSize={20}>
+        {description}
+      </Typography>
       <Divider sx={{ my: 2 }} />
       <Video autoPlay loop muted playsInline src={video} />
     </TabPanel>

@@ -4,7 +4,7 @@ import React from 'react';
 import SectionLayout from '../section_layout';
 import { Box, Grid, Paper } from '@mui/material';
 import { HighlightSpan, LearnMoreButton } from '../client_fragments';
-import RoutePath from '../../../../utils/route_path';
+import { DocRoute } from '../../../../utils/route_path';
 import Image from 'next/image';
 import HotswapImage from './hotswap.svg';
 import { Typography } from '@palico-ai/components';
@@ -38,7 +38,7 @@ const AppConfigHotSwap: React.FC = () => {
               mt: 2,
             }}
           >
-            <LearnMoreButton href={RoutePath.docsAppConfig()} />
+            <LearnMoreButton href={DocRoute.docsAppConfig()} />
           </Box>
         </Grid>
         <Grid item xs={12} md={8}>

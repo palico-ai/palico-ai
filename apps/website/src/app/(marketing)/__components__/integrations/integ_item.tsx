@@ -33,7 +33,8 @@ const LibraryItem: React.FC<LibraryItemProps> = ({ title, image, link }) => {
         <Image
           style={{
             width: '100%',
-            height: '90px',
+            height: '70px',
+            // height: '80px',
             objectFit: 'contain',
           }}
           src={image}

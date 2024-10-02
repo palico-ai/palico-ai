@@ -3,43 +3,43 @@ import SectionLayout from '../section_layout';
 import { Box, Grid } from '@mui/material';
 import { SyntaxHighlighter, Typography } from '@palico-ai/components';
 import CookbookCard, { CookbookCardProps } from './cookbook_card';
-import RoutePath from '../../../../utils/route_path';
+import AppRoute, { DocRoute } from '../../../../utils/route_path';
 
 const COOKBOOK_LIST: CookbookCardProps[] = [
   {
     title: 'Build A RAG Application',
     description:
       'Learn how to build an LLM application using Vector Database and LLM models',
-    link: RoutePath.docsBuildARagApp(),
+    link: DocRoute.docsBuildARagApp(),
   },
   {
     title: 'Build a Chatbot',
     description:
       'Create a chatbot that can recall previous conversations using external memory',
-    link: RoutePath.docsChatbot(),
+    link: DocRoute.docsChatbot(),
   },
   {
     title: 'AI Text Editor',
     description:
       'Create a text editor with AI that helps users summarize, translate, and more',
-    link: RoutePath.docsAiTextEditor(),
+    link: DocRoute.docsAiTextEditor(),
   },
   {
     title: 'Categorize Articles',
     description:
       'Scrape articles from a website, classify it, and extract metadata',
-    link: RoutePath.docsClassifyDocuments(),
+    link: DocRoute.docsClassifyDocuments(),
   },
   {
     title: 'Unstructured to JSON',
     description: 'Convert unstructured documents to a structured JSON format',
-    link: RoutePath.docsUnstructuredToJSON(),
+    link: DocRoute.docsUnstructuredToJSON(),
   },
   {
     title: 'Text to SQL',
     description:
       'Using natural language to query from a user, and convert it to a valid SQL query',
-    link: RoutePath.docsConvertTextToSQL(),
+    link: DocRoute.docsConvertTextToSQL(),
   },
 ];
 
@@ -74,7 +74,7 @@ const GettingStartedFragment: React.FC = () => {
           {`npx palico init <project-name>`}
         </SyntaxHighlighter>
         <Typography
-          variant="h4"
+          variant="subtitle2"
           sx={{
             mt: 8,
             mb: 4,

@@ -1,9 +1,7 @@
 import { Divider } from '@mui/material';
 import {
-  Button,
   Card,
   CardContent,
-  CardActions,
   CardHeader,
   Link,
   Typography,
@@ -38,17 +36,6 @@ const CookbookCard: React.FC<CookbookCardProps> = ({
             {description}
           </Typography>
         </CardContent>
-        <Divider />
-        <CardActions
-          sx={{
-            display: 'flex',
-            justifyContent: 'flex-end',
-          }}
-        >
-          <Button size="small" variant="text">
-            Read
-          </Button>
-        </CardActions>
       </Card>
     </Link>
   );

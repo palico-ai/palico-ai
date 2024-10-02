@@ -89,9 +89,16 @@ export const TabView: React.FC<TabViewProps> = ({
   );
 };
 
-export const Tabs: React.FC<TabsProps> = ({ sx, ...props }) => {
+export const Tabs: React.FC<TabsProps> = ({
+  sx,
+  textColor = 'inherit',
+  indicatorColor = 'primary',
+  ...props
+}) => {
   return (
     <MUITabs
+      textColor={textColor}
+      indicatorColor={indicatorColor}
       sx={(theme) => ({
         minHeight: '40px',
         maxHeight: '40px',
@@ -109,8 +116,8 @@ export const Tab: React.FC<TabProps> = ({ sx, ...props }) => {
   return (
     <MUITab
       sx={() => ({
-        minHeight: '40px',
-        maxHeight: '40px',
+        minHeight: '38px',
+        maxHeight: '38px',
         '&.MuiButtonBase-root': {
           fontSize: '12px',
         },

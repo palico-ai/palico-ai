@@ -47,7 +47,7 @@ const SectionLayout: React.FC<SectionLayoutProps> = ({
             sx={(theme) => ({
               // color: theme.palette.primary.main,
               // textShadow: `0px 0px 5px ${theme.palette.primary.main}`,
-              background: `linear-gradient(75deg, ${theme.palette.primary.light} 0%, ${theme.palette.info.light} 100%)`,
+              background: `linear-gradient(65deg, ${theme.palette.primary.light} 0%, ${theme.palette.info.dark} 100%)`,
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
             })}
@@ -58,7 +58,7 @@ const SectionLayout: React.FC<SectionLayoutProps> = ({
           </Typography>
           {subtitle && (
             <Typography
-              variant="body1"
+              variant="subtitle1"
               fontSize={20}
               textAlign={alignTitle}
               mt={4}
