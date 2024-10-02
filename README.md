@@ -9,7 +9,7 @@
 <br>
 </div
 
-Building an LLM application requires continously trying out different ideas (models, prompts, architectures). Palico provides you with an integrated tech stack that helps you quickly iterate on your LLM development.
+Building an LLM application involves continously trying out different ideas (models, prompts, architectures). Palico provides you with an integrated tech stack that helps you quickly iterate on your LLM development.
 
 #### With Palico you can
 
@@ -40,130 +40,79 @@ https://github.com/palico-ai/palico-main/assets/32821894/54f35583-41c1-48a3-9565
 
 ## 🛠️ Building with Palico
 
-### Build with complete flexiblity
+### Build your application with complete flexiblity
+With Palico, you have complete control over the implementation details of your LLM application. Building an LLM application with Palico just involves implementing the `Agent` interface. Here's an example:
+```typescript
+import {
+  Agent,
+  AgentResponse,
+  ConversationContext,
+  ConversationRequestContent,
+} from "@palico-ai/app";
 
-### Integrates with your favorite tools
-
-### Instantly preview your changes
-
-### Easily swap models, prompts, anything and everything
-
-## Improving Performance
-
-
-
-## Going to Production
-
-## 🧱 Components of a Palico Application
-
-### Build
-
-Palico let’s you build any LLM application. You have complete control over your implementation details, and can utilize any external libraries. The most basic building block of a Palico Application are `Agent`, which has a single method, `chat()`. Here’s an example of an Agent:
-
-```tsx
-class ChatbotAgent implements LLMAgent {
-  static readonly NAME: string = __dirname.split('/').pop()!;
-
+class MyLLMApp implements Agent {
   async chat(
     content: ConversationRequestContent,
     context: ConversationContext
-  ): Promise<LLMAgentResponse> {
-    const { userMessage } = content;
-    const { appConfig } = context;
-    // Your LLM prompt + model call
-    const response = await portkey.chat.completions.create({
-      messages: [
-        { role: 'system', content: 'You are a pirate' },
-        { role: 'user', content: 'Hello' },
-      ],
-      model: appConfig.model,
-    });
+  ): Promise<AgentResponse> {
+    // Your LLM application logic
+    // 1. Pre-processing
+    // 2. Build your prompt
+    // 3. Call your LLM model
+    // 4. Post-processing
     return {
-      messages: response.messages,
-    };
+      // 5. Return a response to caller
+    }
   }
 }
 ```
+Learn more about building your application with palico ([docs](https://docs.palico.ai/guides/build)).
 
-Note that we are using Portkey to make our LLM call. Similarly, you can use LangChain or LlamaIndex to help you build your prompt and manage your model calls.
+### Integrates with your favorite tools and libraries
 
-Our goal is to help developers create modular application layer so they can easily test different configuration of their application logic. That is where the `appConfig` parameter comes in. Developers should treat this like a feature flag and use this to programmatically build a more modular application layer.
+Since you own the implementation details, you can use Palico with most other external tools and libraries
 
-Read more about [Agents](https://docs.palico.ai/build_app/agents).
+|                                                                  | Tools or Libraries                                                            | Supported |
+| ---------------------------------------------------------------- | ----------------------------------------------------------------------------- | --------- |
+| <img src="apps/website/public/logos/langchain.png" width=35 />   | [Langchain](https://docs.palico.ai/integrations/langchain)                    | ✅         |
+| <img src="apps/website/public/logos/llamaindex.png" width=35 />  | [LlamaIndex](https://docs.palico.ai/integrations/llamaindex)                  | ✅         |
+| <img src="apps/website/public/logos/portkey.png" width=35 />     | [Portkey](https://docs.palico.ai/integrations/llm_providers#portkey)          | ✅         |
+| <img src="apps/website/public/logos/openai.svg" width=35 />      | [OpenAI](https://docs.palico.ai/integrations/llm_providers#open-ai)           | ✅         |
+| <img src="apps/website/public/logos/anthropic.png" width=35 />   | [Anthropic](https://docs.palico.ai/integrations/llm_providers#anthropic)      | ✅         |
+| <img src="apps/website/public/logos/cohere.png" width=35 />      | [Cohere](https://docs.palico.ai/integrations/llm_providers)                   | ✅         |
+| <img src="apps/website/public/logos/azure.png" width=35 />       | [Azure](https://docs.palico.ai/integrations/llm_providers)                    | ✅         |
+| <img src="apps/website/public/logos/bedrock.png" width=35 />     | [AWS Bedrock](https://docs.palico.ai/integrations/llm_providers#aws-bedrock)  | ✅         |
+| <img src="apps/website/public/logos/google_cloud.png" width=35 />| [GCP Vertex](https://docs.palico.ai/integrations/llm_providers#gcp-vertex-ai) | ✅         |
+| <img src="apps/website/public/logos/pinecone.png" width=35 />    | [Pinecone](https://docs.palico.ai/integrations/vector_db)                     | ✅         |
+| <img src="apps/website/public/logos/postgres.png" width=35 />    | [PG Vector](https://docs.palico.ai/integrations/vector_db)                    | ✅         |
+| <img src="apps/website/public/logos/chroma.png" width=35 />      | [Chroma](https://docs.palico.ai/integrations/vector_db)                       | ✅         |
 
-### Experiment
+Learn more from [docs](https://docs.palico.ai/guides/build).
 
-Experiments are how you iteratively improve the performance (accuracy, latency, cost) of your application. We help you setup an iterative loop so you can continously improve the performance of your application
+
+### Instantly preview your changes
+Make a code change and instantly preview it locally on our playground UI
+
+https://github.com/user-attachments/assets/c33ae53d-acf5-4c89-9c41-743ea1cb4722
+
+
+### Easily swap models, prompts, anything and everything
+Build an interchangable application layer where you can swap out any components at runtime without changing any code
+
+![LandPageAssets-Page-3 drawio](https://github.com/user-attachments/assets/645a6f60-b6cd-4616-8b65-954441c54130)
+
+
+##  🔄 Improving Performance
+Palico helps you create an iterative loop to systematically improve performance of your LLM application
 
 ![LandPageAssets-Page-2 drawio (7)](https://github.com/user-attachments/assets/493a578a-3c0d-4df8-8b98-8fb27bbde916)
 
 
 
-Setting up an experiments has three steps.
+## 🚀 Going to Production
 
-#### Create your benchmark
+## Contributing
 
-Benchmark is basically outlining the expected behavior of your application. This consists of creating a list of test-cases where you define an input to your LLM application, and measuring it’s output. Here’s an example
+The easiest way to contribute is to pick an issue with the `good first issue` tag 💪. 
 
-```tsx
-{
-  input: {
-    userMessage:
-      'Given the equation 2x + 3 = 7, solve for x.',
-  },
-  tags: {
-    category: 'math',
-  },
-  metrics: [
-    new SemanticSimilarity([
-      "Answer: x = 2",
-      "x = 2",
-      "2",
-    ]),
-  ],
-}
-```
-
-You can use metrics that we provide out-of-the-box, or you can create your own custom metrics.
-
-#### Run an Evaluation
-
-Evaluation is the process of running your LLM application with a specific specific configuration (e.g. certain LLM model x prompt technique), across a benchmark test-suite. AppConfig helps you quickly create these configurations and Palico Studio helps manage these evaluations through an UI.
-
-https://github.com/palico-ai/palico-main/assets/32821894/3a9dc1c5-319b-4c0b-8096-845f34542ae9
-
-#### Analyze
-
-This is the review process for understanding the impact a given change has had on your LLM application. This is often done by reviewing the output metrics of an LLM application and comparing it against other tests. We have built-in support for running common analysis in Palico Studio, but you can also run your own analysis in Jupyter Notebook.
-
-Read more about [Experiments](https://docs.palico.ai/build_app/experiments/intro).
-
-### Deploy
-
-Your Palico App compiles to docker images, which you can easily deploy to any cloud provider
-
-### Client SDK
-
-We provide a ClientSDK that let’s you easily connect to your LLM Agents or Workflow from your other services
-
-Read more about [Client SDK](https://docs.palico.ai/build_app/sdk).
-
-### Tracing
-
-We provide tracing out-of-the-box, and you can add any custom traces using OpenTelemetry
-
-Read more about [Tracing](https://docs.palico.ai/build_app/tracing).
-
-### Palico Studio
-
-Palico Studio is your Control Panel for your Palico App. During development, Palico Studio runs locally on your machine to help aide in your development. In production you can use this control panel to monitor runtime analytics. With Palico Studio you can:
-
-- Chat with your LLM Application
-- Compare responses side by side
-- Manage experiments
-- Review runtime traces
-
-https://github.com/palico-ai/palico-main/assets/32821894/0423cd2d-e5cf-4589-855e-945fb3a5f392
-
-
-Read more about [Palico Studio](https://docs.palico.ai/build_app/studio).
+Bug Report? [File here](https://github.com/palico-ai/palico-ai/issues) | Feature Request? [File here](https://github.com/palico-ai/palico-ai/issues)
