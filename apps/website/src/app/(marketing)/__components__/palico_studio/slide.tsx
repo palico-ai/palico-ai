@@ -29,12 +29,7 @@ const PalicoStudioSlideContent: React.FC<SlideContentParams> = ({
 }) => {
   return (
     <TabPanel value={value}>
-      <Typography
-        variant="subtitle2"
-        sx={{
-          opacity: 0.8,
-        }}
-      >
+      <Typography variant="body2" fontSize={20}>
         {description}
       </Typography>
       <Divider sx={{ my: 2 }} />

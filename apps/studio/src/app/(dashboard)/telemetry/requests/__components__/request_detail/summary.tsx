@@ -22,7 +22,7 @@ enum TabValue {
   APP_CONFIG = 'appConfig',
 }
 
-const [EDITOR_MIN_HEIGHT, EDITOR_MAX_HEIGHT] = [150, 300];
+const [EDITOR_MIN_HEIGHT, EDITOR_MAX_HEIGHT] = [200, 300];
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const EditorSnippet: React.FC<{ value: Record<any, any> }> = ({ value }) => {
@@ -58,15 +58,13 @@ const CodeSnippetTabs: React.FC<
       <TabPanel value={TabValue.REQUEST_IO}>
         <Grid container spacing={2}>
           <Grid item xs={6}>
-            <Typography variant="body1" fontWeight={'bold'}>
+            <Typography variant="body1" mb={2}>
               Request Input
             </Typography>
-            <Typography variant="body1" fontWeight={100}>
-              <EditorSnippet value={requestInput} />
-            </Typography>
+            <EditorSnippet value={requestInput} />
           </Grid>
           <Grid item xs={6}>
-            <Typography variant="body1" fontWeight={'bold'}>
+            <Typography variant="body1" mb={2}>
               Response Output
             </Typography>
             <EditorSnippet value={responseOutput} />
@@ -74,7 +72,7 @@ const CodeSnippetTabs: React.FC<
         </Grid>
       </TabPanel>
       <TabPanel value={TabValue.APP_CONFIG}>
-        <Typography variant="body1" fontWeight={'bold'}>
+        <Typography variant="body1" mb={2}>
           App Config
         </Typography>
         <EditorSnippet value={appConfig} />
@@ -112,18 +110,12 @@ const RequestSummary: React.FC<RequestSummaryProps> = ({ requestId }) => {
   return (
     <Grid container spacing={2}>
       <Grid item xs={6}>
-        <Typography variant="body1" fontWeight={'bold'}>
-          Conversation ID
-        </Typography>
-        <Typography variant="body1" fontWeight={100}>
-          {data.conversationId}
-        </Typography>
+        <Typography variant="body1">Conversation ID</Typography>
+        <Typography variant="body2">{data.conversationId}</Typography>
       </Grid>
       <Grid item xs={6}>
-        <Typography variant="body1" fontWeight={'bold'}>
-          Created At
-        </Typography>
-        <Typography variant="body1" fontWeight={100}>
+        <Typography variant="body1">Created At</Typography>
+        <Typography variant="body2">
           {new Date(data.createdAt).toLocaleString()}
         </Typography>
       </Grid>

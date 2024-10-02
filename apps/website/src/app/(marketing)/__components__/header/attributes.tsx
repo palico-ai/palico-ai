@@ -9,53 +9,59 @@ import BenchmarkIcon from '@mui/icons-material/Equalizer';
 import PreviewChangesIcon from '@mui/icons-material/QuestionAnswer';
 import TypescriptIcon from './typescript_icon';
 import { HighlightSpan } from '../client_fragments';
+import { Link } from '@palico-ai/components';
+import { DocRoute } from '../../../../utils/route_path';
 export interface AttributeCardProps {
   icon: React.ReactNode;
   label: string;
   description: string;
+  link: string;
 }
 
 const AttributeItem: React.FC<AttributeCardProps> = ({
   icon,
   label,
   description,
+  link,
 }) => {
   return (
-    <Paper
-      sx={{
-        height: '100%',
-        p: 4,
-        boxSizing: 'border-box',
-      }}
-    >
-      <Box
-        sx={{
-          display: 'flex',
-          gap: 2,
-        }}
+    <Link href={link} target="_blank">
+      <Paper
+        sx={(theme) => ({
+          height: '100%',
+          p: 4,
+          boxSizing: 'border-box',
+          borderRadius: theme.shape.borderRadius,
+          '&:hover': {
+            boxShadow: theme.shadows[6],
+          },
+        })}
       >
-        {icon}
-        <Box>
-          <Typography variant="h5" gutterBottom>
-            {label}
-          </Typography>
-          <Typography
-            variant="body1"
-            sx={{
-              opacity: 0.8,
-            }}
-          >
-            {description}
-          </Typography>
+        <Box
+          sx={{
+            display: 'flex',
+            gap: 2,
+          }}
+        >
+          {icon}
+          <Box>
+            <Typography variant="h5" gutterBottom>
+              {label}
+            </Typography>
+            <Typography variant="body2" fontSize={17}>
+              {description}
+            </Typography>
+          </Box>
         </Box>
-      </Box>
-    </Paper>
+      </Paper>
+    </Link>
   );
 };
 
 const attributes: AttributeCardProps[] = [
   {
     label: 'Build Any Application',
+    link: DocRoute.buildingAnApp(),
     icon: <CodeIcon color="info" />,
     description: 'Write your application in code with complete flexibility',
   },
@@ -63,26 +69,31 @@ const attributes: AttributeCardProps[] = [
     label: 'Preview Your Changes',
     icon: <PreviewChangesIcon color="info" />,
     description: 'Test your changes instantly with our playground UI',
+    link: DocRoute.previewChanges(),
   },
   {
     label: 'Improve Performance',
     icon: <BenchmarkIcon color="info" />,
-    description: 'Setup experiments to benchmark and iterate on performance',
+    description: 'Run experiments and iterate on performance',
+    link: DocRoute.docsExperiment(),
   },
   {
     label: 'Logs and Traces',
     icon: <BugReportIcon color="info" />,
     description: 'Look under-the-hood of any request with open-telemetry',
+    link: DocRoute.logsAndTracing(),
   },
   {
     label: 'REST API & SDK',
     icon: <DeployIcon color="info" />,
     description: 'Deploy your application behind a REST API with Docker',
+    link: DocRoute.clientSdk(),
   },
   {
     label: 'Typescript',
     icon: <TypescriptIcon color="info" />,
     description: 'Build a production-ready codebase with type-safety',
+    link: DocRoute.quickStart(),
   },
 ];
 
@@ -96,18 +107,12 @@ const ApplicationAttributes = () => {
       ))}
       <Grid item xs={12}>
         <Typography
-          variant="caption"
+          variant="subtitle1"
           fontSize={20}
           display={'block'}
           textAlign={'right'}
-          // color={'secondary'}
-          sx={(theme) => ({
-            opacity: 0.5,
-            fontWeight: 500,
-            // color: theme.palette.info.light,
-          })}
         >
-          Stay in Flow With An{' '}
+          Stay In Flow With An{' '}
           <HighlightSpan>Integrated Tech Stack</HighlightSpan>
         </Typography>
       </Grid>

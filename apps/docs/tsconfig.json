@@ -1,6 +1,0 @@
-{
-  "extends": ["../../tsconfig.base.json", "@docusaurus/tsconfig"],
-  "compilerOptions": {
-    "baseUrl": "."
-  }
-}

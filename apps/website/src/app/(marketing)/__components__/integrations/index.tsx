@@ -1,7 +1,7 @@
 import React from 'react';
 import SectionLayout from '../section_layout';
 import { Grid } from '@mui/material';
-import RoutePath from '../../../../utils/route_path';
+import { DocRoute } from '../../../../utils/route_path';
 import { LearnMoreButton } from '../client_fragments';
 import LangchainLogo from '../../../../../public/logos/langchain.png';
 import LlamaIndex from '../../../../../public/logos/llamaindex.png';
@@ -21,70 +21,70 @@ const libraries: LibraryItemProps[] = [
   {
     title: 'LangChain',
     image: LangchainLogo,
-    link: RoutePath.docsLangChain(),
+    link: DocRoute.docsLangChain(),
   },
   {
     title: 'LlamaIndex',
     image: LlamaIndex,
-    link: RoutePath.docsLlamaIndex(),
+    link: DocRoute.docsLlamaIndex(),
   },
   {
     title: 'Portkey',
     image: Portkey,
-    link: RoutePath.docsPortkey(),
+    link: DocRoute.docsPortkey(),
   },
   {
     title: 'OpenAI',
     image: OpenAI,
-    link: RoutePath.docsBuildApp(),
+    link: DocRoute.docsOpenAI(),
   },
   {
     title: 'Anthropic',
     image: Anthropic,
-    link: RoutePath.docsBuildApp(),
+    link: DocRoute.docsAnthropic(),
   },
   {
     title: 'Cohere',
     image: Cohere,
-    link: RoutePath.docsBuildApp(),
+    link: DocRoute.docsModelProviders(),
   },
   {
     title: 'Azure',
     image: Azure,
-    link: RoutePath.docsBuildApp(),
+    link: DocRoute.docsModelProviders(),
   },
 
   {
     title: 'AWS Bedrock',
     image: Bedrock,
-    link: RoutePath.docsAwsBedrock(),
+    link: DocRoute.docsAwsBedrock(),
   },
   {
     title: 'GCP Vertex',
     image: GoogleCloud,
-    link: RoutePath.docsGcpVertex(),
+    link: DocRoute.docsGcpVertex(),
   },
   {
     title: 'Pinecone',
     image: Pinecone,
-    link: RoutePath.docsPinecone(),
+    link: DocRoute.docsPinecone(),
   },
   {
     title: 'PG Vector',
     image: PGVector,
-    link: RoutePath.docsPGVector(),
+    link: DocRoute.docsPGVector(),
   },
   {
     title: 'Chroma',
     image: Chroma,
-    link: RoutePath.docsChroma(),
+    link: DocRoute.docsChroma(),
   },
 ];
 
 const Integrations: React.FC = () => {
   return (
     <SectionLayout title="Works With Your Favorite Tools And Libraries">
-      <Grid container spacing={2}>
+      <Grid container spacing={4}>
         {libraries.map((library, index) => (
           <Grid key={index} item xs={6} sm={6} md={3} lg={2}>
             <LibraryItem {...library} />
@@ -100,7 +100,7 @@ const Integrations: React.FC = () => {
         >
           <LearnMoreButton
             label="Explore Integrations"
-            href={RoutePath.docs()}
+            href={DocRoute.docs()}
           />
         </Grid>
       </Grid>

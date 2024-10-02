@@ -18,7 +18,7 @@ import Image from 'next/image';
 import { HighlightSpan, LearnMoreButton } from '../client_fragments';
 import EvalGif from './evaluation.gif';
 import AnalyzeExp from './analyze.gif';
-import RoutePath from '../../../../utils/route_path';
+import { DocRoute } from '../../../../utils/route_path';
 
 const testCaseCodeSnippet = `[
   {
@@ -103,7 +103,7 @@ const StepSplitContent: React.FC<StepSplitContentProps> = ({
           <Box>
             <LearnMoreButton
               label="Learn more"
-              href={RoutePath.docsExperiment()}
+              href={DocRoute.docsExperiment()}
             />
           </Box>
         </Grid>

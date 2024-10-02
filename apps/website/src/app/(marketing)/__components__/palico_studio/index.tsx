@@ -1,11 +1,6 @@
-import { Box, Grid } from '@mui/material';
+import { Box } from '@mui/material';
 import React from 'react';
 import SectionLayout from '../section_layout';
-import { ControlPanelCardProps } from './control_panel_card';
-import ChatUI from './chat_ui.png';
-import QuickLab from './comparison.png';
-import ExperimentList from './experiments.png';
-import TraceView from './tracing.png';
 import { TabView } from '@palico-ai/components';
 import PalicoStudioSlideContent from './slide';
 
