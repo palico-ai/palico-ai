@@ -114,6 +114,27 @@ export default class OS {
     return port;
   }
 
+  static async readEnvFile(path: string) {
+    await Project.validatePathWithinProject(path);
+    const content = await OS.readFile(path);
+    const lines = content.split('\n');
+    const envVars: Record<string, string> = {};
+    for (const line of lines) {
+      const [key, value] = line.split('=');
+      envVars[key] = value;
+    }
+    return envVars;
+  }
+
+  static async createEnvFile(path: string, keyVals: Record<string, string>) {
+    await Project.validatePathWithinProject(path);
+    let envContent = '';
+    for (const key in keyVals) {
+      envContent += `${key}=${keyVals[key]}\n`;
+    }
+    await OS.createFile(path, envContent);
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private static isDirDoesntExistError(error: any) {
     return error?.code === 'ENOENT';
