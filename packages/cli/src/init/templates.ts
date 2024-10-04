@@ -5,6 +5,5 @@ export const StarterTemplateNextSteps = (projectName: string) => [
     `cd ${projectName}`
   )}`,
   `Update ${chalk.greenBright('.env')} with your OpenAI API key and model`,
-  `Run ${chalk.greenBright('npm run bootstrap')} to run project setup`,
   `Run ${chalk.greenBright('npm start')} to start the application`,
 ];
