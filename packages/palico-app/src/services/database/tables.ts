@@ -8,6 +8,10 @@ import {
 } from '@palico-ai/common';
 import config from '../../config';
 
+export interface WaitForDBConnectionParams {
+  dbUrl?: string;
+}
+
 dotenv.config();
 
 const dbURL = config.getDBUrl();

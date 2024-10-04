@@ -10,7 +10,6 @@ import { startConversationSpan } from '../tracing/internal.span';
 import { LogQueue } from '../tracing/logger/log_queue';
 import { Logger } from '../tracing/logger';
 import { ConversationTelemetryModel } from '../services/database/conversation_telemetry';
-import { PalicoSpanExporter } from '../tracing/exporter';
 
 export interface ApplicationChatParams
   extends Omit<

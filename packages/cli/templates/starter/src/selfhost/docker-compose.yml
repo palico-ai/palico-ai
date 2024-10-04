@@ -1,0 +1,36 @@
+version: "3.8"
+
+services:
+  database:
+    image: "postgres:15-alpine"
+    restart: "always"
+    environment:
+      - "POSTGRES_USER=${DOCKER_COMPOSE_DATABASE_USERNAME}"
+      - "POSTGRES_PASSWORD=${DOCKER_COMPOSE_DATABASE_PASSWORD}"
+      - "POSTGRES_DB=${DOCKER_COMPOSE_DATABASE_NAME}"
+    ports:
+      - "${DOCKER_COMPOSE_DATABASE_PORT}:5432"
+  studio:
+    image: "palicoai/studio:main@sha256:4511de0ec0422f22d07bc9f11dbfebce110e048782c437b68c79901043b29065"
+    platform: "linux/amd64"
+    restart: "always"
+    ports:
+      - "${DOCKER_COMPOSE_STUDIO_PORT}:3000"
+    environment:
+      - "PALICO_AGENT_API_URL=http://api:${DOCKER_COMPOSE_API_PORT}"
+      - "DEV_MODE=false"
+      - PALICO_SERVICE_KEY=${DOCKER_COMPOSE_SERVICE_KEY}
+      - STUDIO_USERNAME=${DOCKER_COMPOSE_STUDIO_USERNAME}
+      - STUDIO_PASSWORD=${DOCKER_COMPOSE_STUDIO_PASSWORD}
+      - JWT_SECRET=${DOCKER_COMPOSE_JWT_SECRET}
+  api:
+    build:
+      context: ../
+      dockerfile: Dockerfile
+    restart: "always"
+    ports:
+      - "${DOCKER_COMPOSE_API_PORT}:8000"
+    environment:
+      - DATABASE_URL=postgres://${DOCKER_COMPOSE_DATABASE_USERNAME}:${DOCKER_COMPOSE_DATABASE_PASSWORD}@database:${DOCKER_COMPOSE_DATABASE_PORT}/${DOCKER_COMPOSE_DATABASE_NAME}
+      - PUBLIC_API_PORT=8000
+      - JWT_SECRET=${DOCKER_COMPOSE_JWT_SECRET}

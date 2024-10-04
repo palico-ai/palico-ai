@@ -5,7 +5,7 @@ import path from 'path';
 export default class Project {
   private static projectPath: string;
 
-  static async getWorkspaceRootDir(): Promise<string> {
+  static async getProjectRootDir(): Promise<string> {
     if (this.projectPath) {
       return this.projectPath;
     }
@@ -19,49 +19,54 @@ export default class Project {
   }
 
   static async getExperimentRootDir(): Promise<string> {
-    const root = await this.getWorkspaceRootDir();
+    const root = await this.getProjectRootDir();
     return path.join(root, 'appdata', 'experiments');
   }
 
   static async getPalicoTempDir(): Promise<string> {
-    const root = await this.getWorkspaceRootDir();
+    const root = await this.getProjectRootDir();
     return path.join(root, '.palico');
   }
 
   static async getQuickLabRootDir(): Promise<string> {
-    const root = await this.getWorkspaceRootDir();
+    const root = await this.getProjectRootDir();
     return path.join(root, 'appdata', 'quicklabs');
   }
 
   static async getTestSuiteRootDir(): Promise<string> {
-    const root = await this.getWorkspaceRootDir();
+    const root = await this.getProjectRootDir();
     return path.join(root, 'src', 'eval_tests');
   }
 
   static async getWorkflowRootDir(): Promise<string> {
-    const root = await this.getWorkspaceRootDir();
+    const root = await this.getProjectRootDir();
     return path.join(root, 'src', 'workflows');
   }
 
   static async getWorkspaceDBPath(): Promise<string> {
-    const root = await this.getWorkspaceRootDir();
+    const root = await this.getProjectRootDir();
     return path.join(root, 'appdata', 'database.sqlite');
   }
 
   static async getAgentRootDir(): Promise<string> {
-    const root = await this.getWorkspaceRootDir();
+    const root = await this.getProjectRootDir();
     return path.join(root, 'src', 'agents');
   }
 
   static async getPackageNodeModulesDir(): Promise<string> {
-    const root = await this.getWorkspaceRootDir();
+    const root = await this.getProjectRootDir();
     return path.join(root, 'node_modules', '@palico-ai', 'app');
   }
 
   static async validatePathWithinProject(path: string): Promise<void> {
-    const root = await this.getWorkspaceRootDir();
+    const root = await this.getProjectRootDir();
     if (!path.startsWith(root)) {
       throw new Error(`Path ${path} is not within the project`);
     }
+  }
+
+  static async getSelfhostRootDir(): Promise<string> {
+    const root = await this.getProjectRootDir();
+    return path.join(root, 'selfhost');
   }
 }

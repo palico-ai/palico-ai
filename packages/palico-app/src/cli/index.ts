@@ -3,8 +3,9 @@
 import { Command } from 'commander';
 import { GenerateJWTToken } from './generate/generate_token';
 import UpdateCommand from './update';
-import { BootstrapProject, ShowStatus, StartPalicoApp } from './__root__';
+import { StartDevApp } from './__root__';
 import GenerateCommand from './generate';
+import SelfhostCommand from './selfhost';
 
 const root = new Command();
 
@@ -16,20 +17,14 @@ root
 root
   .command('start')
   .description('Starts the Palico App')
-  .action(StartPalicoApp);
+  .option('--clean', 'Starts the app in clean mode')
+  .action(StartDevApp);
 
-root
-  .command('bootstrap')
-  .description('Provision all services needed to run Palico App')
-  .action(BootstrapProject);
+root.addCommand(SelfhostCommand);
 
-root
-  .command('show')
-  .description('Show status of the Palico App')
-  .action(ShowStatus);
-
+// TODO: Delete
 root.addCommand(UpdateCommand);
-
+// TODO: Delete
 root.addCommand(GenerateCommand);
 
 root.parse();

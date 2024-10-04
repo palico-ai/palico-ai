@@ -1,6 +1,14 @@
 import { existsSync } from 'fs';
-import { mkdir, readFile, readdir, rmdir, writeFile, rm } from 'fs/promises';
-import { dirname } from 'path';
+import {
+  mkdir,
+  readFile,
+  readdir,
+  rmdir,
+  writeFile,
+  rm,
+  copyFile,
+} from 'fs/promises';
+import path, { dirname } from 'path';
 import Project from './project';
 import portfinder from 'portfinder';
 
@@ -112,6 +120,43 @@ export default class OS {
       stopPort: params.maxPort,
     });
     return port;
+  }
+
+  static async readEnvFile(path: string) {
+    await Project.validatePathWithinProject(path);
+    const content = await OS.readFile(path);
+    const lines = content.split('\n');
+    const envVars: Record<string, string> = {};
+    for (const line of lines) {
+      const [key, value] = line.split('=');
+      envVars[key] = value;
+    }
+    return envVars;
+  }
+
+  static async createEnvFile(path: string, keyVals: Record<string, string>) {
+    await Project.validatePathWithinProject(path);
+    let envContent = '';
+    for (const key in keyVals) {
+      envContent += `${key}=${keyVals[key]}\n`;
+    }
+    await OS.createFile(path, envContent);
+  }
+
+  static async copyDirectory(src: string, dest: string): Promise<void> {
+    await Project.validatePathWithinProject(src);
+    await Project.validatePathWithinProject(dest);
+    const entries = await readdir(src, { withFileTypes: true });
+    await mkdir(dest, { recursive: true });
+    for (const entry of entries) {
+      const srcPath = path.join(src, entry.name);
+      const destPath = path.join(dest, entry.name);
+      if (entry.isDirectory()) {
+        await OS.copyDirectory(srcPath, destPath);
+      } else {
+        await copyFile(srcPath, destPath);
+      }
+    }
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
