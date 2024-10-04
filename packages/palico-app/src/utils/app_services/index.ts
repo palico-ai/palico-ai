@@ -44,8 +44,8 @@ export class AppServiceManager {
     console.log('Starting required services...');
     await compose.startDevServices({
       envVars: {
-        [ENVName.DOCKER_PUBLIC_DATABASE_PORT]: ports.dbPort.toString(),
-        [ENVName.DOCKER_PUBLIC_STUDIO_PORT]: ports.studioPort.toString(),
+        [ENVName.DOCKER_COMPOSE_DB_USERNAME]: ports.dbPort.toString(),
+        [ENVName.DOCKER_COMPOSE_STUDIO_PORT]: ports.studioPort.toString(),
         [ENVName.PALICO_STUDIO_API_URL]: DockerCompose.internalHostUrl(
           ports.apiPort
         ),
@@ -72,7 +72,6 @@ export class AppServiceManager {
             publicURL: 'http://localhost:' + ports.apiPort,
           },
         });
-        console.log("Press 'Ctrl+C' to stop the server");
       },
       onExit: async () => {
         await compose.stopServices();

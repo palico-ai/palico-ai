@@ -8,8 +8,11 @@
   "scripts": {
     "palico": "palico-app",
     "start": "palico-app start",
-    "bootstrap": "palico-app bootstrap",
-    "reinstall": "npm remove @palico-ai/app && npm install @palico-ai/app"
+    "selfhost:init": "npm run palico selfhost init",
+    "selfhost:up": "docker compose -f selfhost/docker-compose.yml up",
+    "selfhost:down": "docker compose -f selfhost/docker-compose.yml down",
+    "selfhost:update": "npm run palico selfhost update-compose",
+    "selfhost:migrate": "npm run palico selfhost migrate-db"
   },
   "nodemonConfig": {
     "ignore": ["appdata/**/*", ".palico"]

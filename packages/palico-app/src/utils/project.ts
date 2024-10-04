@@ -64,4 +64,9 @@ export default class Project {
       throw new Error(`Path ${path} is not within the project`);
     }
   }
+
+  static async getSelfhostRootDir(): Promise<string> {
+    const root = await this.getProjectRootDir();
+    return path.join(root, 'selfhost');
+  }
 }

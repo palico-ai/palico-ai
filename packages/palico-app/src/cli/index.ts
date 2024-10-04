@@ -5,6 +5,7 @@ import { GenerateJWTToken } from './generate/generate_token';
 import UpdateCommand from './update';
 import { StartDevApp } from './__root__';
 import GenerateCommand from './generate';
+import SelfhostCommand from './selfhost';
 
 const root = new Command();
 
@@ -19,8 +20,11 @@ root
   .option('--clean', 'Starts the app in clean mode')
   .action(StartDevApp);
 
-root.addCommand(UpdateCommand);
+root.addCommand(SelfhostCommand);
 
+// TODO: Delete
+root.addCommand(UpdateCommand);
+// TODO: Delete
 root.addCommand(GenerateCommand);
 
 root.parse();

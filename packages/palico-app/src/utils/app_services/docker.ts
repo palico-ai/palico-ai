@@ -1,5 +1,5 @@
 import path from 'path';
-import YAML from 'json-to-pretty-yaml';
+import YAML from 'yaml';
 import { v2 as compose } from 'docker-compose';
 import { ENVName } from '../environment';
 import Project from '../project';
@@ -25,8 +25,8 @@ export interface ServiceInfo {
 
 interface StartDevServicesParams {
   envVars: {
-    [ENVName.DOCKER_PUBLIC_DATABASE_PORT]: string;
-    [ENVName.DOCKER_PUBLIC_STUDIO_PORT]: string;
+    [ENVName.DOCKER_COMPOSE_DB_USERNAME]: string;
+    [ENVName.DOCKER_COMPOSE_STUDIO_PORT]: string;
     [ENVName.PALICO_STUDIO_API_URL]: string;
     [ENVName.PALICO_STUDIO_API_SERVICE_KEY]: string;
   };
@@ -73,12 +73,11 @@ export class DockerCompose {
           `POSTGRES_DB=${DockerCompose.config.database.database}`,
         ],
         ports: [
-          '${' +
-            ENVName.DOCKER_PUBLIC_DATABASE_PORT +
-            '}:' +
+          `${DockerCompose.escapedEnvVar(ENVName.DOCKER_COMPOSE_DB_USERNAME)}:${
             DockerCompose.config.containerInternalPort[
               ProjectService.POSTGRES_DB
-            ],
+            ]
+          }`,
         ],
         ...(this.devMode
           ? { volumes: ['./data:/var/lib/postgresql/data'] }
@@ -93,7 +92,7 @@ export class DockerCompose {
         restart: 'always',
         ports: [
           '${' +
-            ENVName.DOCKER_PUBLIC_STUDIO_PORT +
+            ENVName.DOCKER_COMPOSE_STUDIO_PORT +
             '}:' +
             DockerCompose.config.containerInternalPort[ProjectService.STUDIO],
         ],
@@ -219,5 +218,9 @@ export class DockerCompose {
       }
     }
     return this._savedFilePaths;
+  }
+
+  private static escapedEnvVar(varname: ENVName) {
+    return '${' + varname + '}';
   }
 }
