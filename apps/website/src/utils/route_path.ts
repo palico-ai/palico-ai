@@ -10,6 +10,10 @@ export default class AppRoute {
   static newsletter() {
     return 'https://forms.gle/HX3Dn4TYu3o1anoP6';
   }
+
+  static blog() {
+    return 'https://blog.palico.ai';
+  }
 }
 
 export class DocRoute {
