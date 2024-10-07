@@ -31,6 +31,11 @@ const NavItems = [
     href: AppRoute.github(),
   },
   {
+    label: 'Blog',
+    href: AppRoute.blog(),
+    target: '_blank',
+  },
+  {
     label: 'Book a demo',
     href: AppRoute.scheduleDemo(),
     target: '_blank',
@@ -97,8 +102,6 @@ const Navbar: React.FC = () => {
         position="sticky"
         sx={(theme) => ({
           backgroundColor: theme.palette.background.default,
-          // color: theme.palette.text.primary,
-          // borderBottom: `1px solid ${theme.palette.divider}`,
         })}
       >
         <Toolbar>
@@ -115,15 +118,15 @@ const Navbar: React.FC = () => {
             <Box
               sx={{
                 display: 'flex',
-                gap: 1,
+                gap: 2,
                 alignItems: 'center',
               }}
             >
               <Image width={28} height={28} src={Logo} alt="Palico AI" />
               <Typography
-                variant="h6"
+                // variant="h6"
+                fontWeight={700}
                 fontSize={18}
-                fontWeight={'regular'}
                 color={'primary.light'}
               >
                 Palico AI

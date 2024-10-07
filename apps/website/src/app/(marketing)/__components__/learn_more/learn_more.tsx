@@ -3,10 +3,10 @@
 import React from 'react';
 import SectionLayout from '../section_layout';
 import { Button, Link, Typography } from '@palico-ai/components';
-import { Box, Container, Grid } from '@mui/material';
+import { Box, Container } from '@mui/material';
 import AppRoute, { DocRoute } from '../../../../utils/route_path';
-import SignupForNewsletter from './newsletter';
 import { HighlightSpan } from '../client_fragments';
+import SignupForNewsletter from './newsletter';
 
 const CTA = () => {
   return (
@@ -66,24 +66,15 @@ const LearnMore: React.FC = () => {
       alignTitle={'center'}
       title="Take your Application from Prototype to Production with Palico"
     >
-      <Grid container spacing={12}>
-        {/* <Grid item xs={12} sm={12} md={6}>
-          <BenefitsOfPalico />
-        </Grid> */}
-        <Grid
-          item
-          xs={12}
-          sm={12}
-          md={12}
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-          }}
-        >
-          <CTA />
-        </Grid>
-      </Grid>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+        }}
+      >
+        <CTA />
+      </Box>
     </SectionLayout>
   );
 };

@@ -3,6 +3,7 @@ import Navbar from '../components/navbar';
 import './global.css';
 import { ThemeProvider } from '@palico-ai/components';
 import { GoogleAnalytics, GoogleTagManager } from '@next/third-parties/google';
+import ReactQueryProvider from './context/react_query';
 
 export const metadata = {
   title: 'Palico AI',
@@ -20,9 +21,11 @@ export default function RootLayout({
         <GoogleTagManager gtmId="GTM-5C2WKP72" />
         <GoogleAnalytics gaId="G-Q39NFM4PTV" />
         <ThemeProvider>
-          <Navbar />
-          {children}
-          <Footer />
+          <ReactQueryProvider>
+            <Navbar />
+            {children}
+            <Footer />
+          </ReactQueryProvider>
         </ThemeProvider>
       </body>
     </html>
