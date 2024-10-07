@@ -3,6 +3,7 @@ import React from 'react';
 import SectionLayout from '../section_layout';
 import { TabView } from '@palico-ai/components';
 import PalicoStudioSlideContent from './slide';
+import { CDNContent } from '../../../../utils/cdn';
 
 enum StudioSlide {
   PreviewChanges = 'preview',
@@ -33,23 +34,17 @@ const PalicoStudio: React.FC = () => {
           <PalicoStudioSlideContent
             value={StudioSlide.PreviewChanges}
             description="Make changes and preview them in real-time with Chat UI"
-            video={
-              'https://utfs.io/f/G2KJHdIpmdEj8ey3FyZ7MqRkiXyWwUnNOlcdh5bJmajvsEBZ'
-            }
+            video={CDNContent.Video.PreviewApplicationClip}
           />
           <PalicoStudioSlideContent
             value={StudioSlide.ManageExperiments}
             description="Run, track, and analyze experiments from an intuitive dashboard"
-            video={
-              'https://utfs.io/f/G2KJHdIpmdEj2ZFhWzLNCgJE1SZrGxBcqA2Pmpfah9RWnouk'
-            }
+            video={CDNContent.Video.ExperimentVideoClip}
           />
           <PalicoStudioSlideContent
             value={StudioSlide.TraceRequests}
             description="Debug issues with detailed logs and traces for every request"
-            video={
-              'https://utfs.io/f/G2KJHdIpmdEjet0DwM6c3O2BRhf4pzkAsYiMLEaWoH5Jvbrd'
-            }
+            video={CDNContent.Video.TraceRequestClip}
           />
         </Box>
       </TabView>

@@ -17,6 +17,10 @@ const nextConfig = {
       {
         protocol: "https",
         hostname: "placekitten.com",
+      },
+      {
+        protocol: "https",
+        hostname: "d3i78uz5w7h3ks.cloudfront.net",
       }
     ]
   }
