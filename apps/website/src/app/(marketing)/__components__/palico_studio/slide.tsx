@@ -10,8 +10,6 @@ interface SlideContentParams {
 }
 
 const Video = styled('video')(({ theme }) => ({
-  width: '100%',
-  height: 'auto',
   objectFit: 'cover',
   borderRadius: theme.shape.borderRadius * 2,
   boxShadow: theme.shadows[2],
@@ -33,7 +31,15 @@ const PalicoStudioSlideContent: React.FC<SlideContentParams> = ({
         {description}
       </Typography>
       <Divider sx={{ my: 2 }} />
-      <Video autoPlay loop muted playsInline src={video} />
+      <Video
+        width={'100%'}
+        height={'auto'}
+        autoPlay
+        loop
+        muted
+        playsInline
+        src={video}
+      />
     </TabPanel>
   );
 };
