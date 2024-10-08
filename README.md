@@ -15,11 +15,11 @@ Building an LLM application involves continously trying out different ideas (mod
 
 - ✅&nbsp; **Build** any application in code with complete flexibility ([docs](https://docs.palico.ai/guides/build))
 - ✅&nbsp; **Integrate** with any external libraries like LangChain, LlamaIndex, Portkey, and more ([docs](https://docs.palico.ai/integrations/langchain)) <br>
-- ✅&nbsp; **Preview changes** from instantly with Playground UI ([docs](https://docs.palico.ai/guides/preview_changes)) <br>
-- ✅&nbsp; **Improve performance** with Experiments ([docs](https://docs.palico.ai/guides/experiments)) <br>
-- ✅&nbsp; Debug isues with **request tracing** ([docs](https://docs.palico.ai/guides/telemetry)) <br>
+- ✅&nbsp; **Preview changes** instantly with hot-reload and Playground UI ([docs](https://docs.palico.ai/guides/preview_changes)) <br>
+- ✅&nbsp; Systematically **improve performance** with Experiments ([docs](https://docs.palico.ai/guides/experiments)) <br>
+- ✅&nbsp; Debug issues with comprehensive **logs and tracing** ([docs](https://docs.palico.ai/guides/telemetry)) <br>
 - ✅&nbsp; Deploy your application behind a **REST API** ([docs](https://docs.palico.ai/guides/client_sdk)) <br>
-- ✅&nbsp; Manage your application with UI **control panel** ([docs](https://docs.palico.ai/components#palico-studio)) <br>
+- ✅&nbsp; Manage your application with an UI **control panel** ([docs](https://docs.palico.ai/components#palico-studio)) <br>
 
 
 > [!TIP]
