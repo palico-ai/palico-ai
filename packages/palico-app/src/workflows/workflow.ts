@@ -1,70 +1,132 @@
-import { ConversationRequestContent } from '@palico-ai/common';
-import {
-  ChainNode,
-  ChainNodeRequestHandler,
-  ResultNodeRequestHandler,
-} from './types';
+import { AppConfig, ConversationContext } from '@palico-ai/common';
 
-export interface AppendHandlerParams {
-  mapInput?: Record<string, string>;
-  mapOutput?: Record<string, string>;
+export interface TaskResponse<Payload> {
+  payload: Payload;
+  nextChainableId: string;
 }
 
-export interface ChainWorkflowCreateParams {
-  nodes: ChainNode[];
-  resultParser: ResultNodeRequestHandler;
+export interface ITask<Input, Payload, AC extends AppConfig = AppConfig> {
+  run(
+    input: Input,
+    context: ConversationContext<AC>
+  ): Promise<TaskResponse<Payload>>;
 }
 
-class ChainWorkflowBuilder {
-  private readonly nodes: ChainNode[];
+export interface IChainable {
+  id: string;
+  executor: ITask<unknown, unknown>;
+  nextStates: IChainable[];
+}
 
-  constructor(starterNode: ChainNode) {
-    this.nodes = [starterNode];
+export abstract class TaskState<
+  Input = any,
+  Payload = any,
+  AC extends AppConfig = any
+> implements ITask<Input, Payload, AC>, IChainable
+{
+  id: string;
+  executor: ITask<unknown, unknown, AppConfig>;
+  nextStates: IChainable[];
+
+  constructor(id: string) {
+    this.id = id;
+    this.executor = this;
+    this.nextStates = [];
   }
 
-  static create(
-    name: string,
-    handler: ChainNodeRequestHandler<ConversationRequestContent>,
-    params?: AppendHandlerParams
-  ) {
-    const root: ChainNode<ConversationRequestContent> = {
-      name,
-      handler,
-      mapInput: params?.mapInput,
-      mapOutput: params?.mapOutput,
+  abstract handler(
+    input: Input,
+    context: ConversationContext<AC>
+  ): Promise<Payload>;
+
+  async run(
+    input: Input,
+    context: ConversationContext<AC>
+  ): Promise<TaskResponse<Payload>> {
+    const payload = await this.handler(input, context);
+    return {
+      payload,
+      nextChainableId: this.nextStates[0].id,
     };
-    return new ChainWorkflowBuilder(root);
   }
 
-  link(
-    name: string,
-    handler: ChainNodeRequestHandler,
-    params?: AppendHandlerParams
-  ) {
-    const node: ChainNode = {
-      name,
-      handler,
-      mapInput: params?.mapInput,
-      mapOutput: params?.mapOutput,
-    };
-    const lastNode = this.nodes[this.nodes.length - 1];
-    lastNode.next = node;
-    this.nodes.push(node);
+  next(state: IChainable): IChainable {
+    this.nextStates = [state];
+    return state;
+  }
+}
+
+export type ChoiceWhen<Input, AC extends AppConfig> = (
+  input: Input,
+  context: ConversationContext<AC>
+) => Promise<boolean>;
+
+export abstract class Choice<Input = any, AC extends AppConfig = any>
+  implements IChainable, ITask<Input, any, AC>
+{
+  nextStates: IChainable[];
+  matchers: ChoiceWhen<Input, AC>[];
+  defaultChoice?: IChainable;
+  executor: ITask<Input, any, AC>;
+
+  constructor(public id: string) {
+    this.matchers = [];
+    this.nextStates = [];
+    this.executor = this;
+  }
+
+  when(matcher: ChoiceWhen<Input, AC>, chain: IChainable): this {
+    this.matchers.push(matcher);
+    this.nextStates.push(chain);
     return this;
   }
 
-  send(handler: ResultNodeRequestHandler) {
-    return new ChainWorkflow({ nodes: this.nodes, resultParser: handler });
+  otherwise(state: IChainable): this {
+    this.defaultChoice = state;
+    this.nextStates.push(state);
+    return this;
+  }
+
+  async run(
+    input: Input,
+    context: ConversationContext<AC>
+  ): Promise<TaskResponse<unknown>> {
+    for (let i = 0; i < this.matchers.length; i++) {
+      const isMatch = await this.matchers[i](input, context);
+      if (isMatch) {
+        return {
+          payload: null,
+          nextChainableId: this.nextStates[i].id,
+        };
+      }
+    }
+    return {
+      payload: null,
+      nextChainableId: this.defaultChoice?.id ?? this.nextStates[0].id,
+    };
   }
 }
 
-export class ChainWorkflow {
-  readonly nodes: ChainNode[];
-  readonly resultParser: ResultNodeRequestHandler;
-  static create = ChainWorkflowBuilder.create;
+export class Workflow {
+  constructor(readonly startNode: IChainable) {}
 
-  constructor(params: ChainWorkflowCreateParams) {
-    this.nodes = params.nodes;
-    this.resultParser = params.resultParser;
+  printNodeTree() {
+    const nodeStack: IChainable[][] = [];
+    let currentLevel = [this.startNode];
+    nodeStack.push(currentLevel);
+    while (currentLevel.length > 0) {
+      const nextLevel: IChainable[] = [];
+      for (const node of currentLevel) {
+        nextLevel.push(...node.nextStates);
+      }
+      nodeStack.push(nextLevel);
+      currentLevel = nextLevel;
+    }
+    console.log(this.startNode);
+    nodeStack.forEach((level, index) => {
+      console.log(
+        `Level ${index}: ${level.map((node) => node.id).join('\t\t')}`
+      );
+    });
   }
 }

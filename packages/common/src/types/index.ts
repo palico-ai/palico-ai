@@ -16,6 +16,10 @@ export interface ConversationRequestContent<Payload = Record<string, any>> {
   payload?: Payload;
 }
 
+export type JSONAbleObject<
+  KV extends Record<string, any> = Record<string, any>
+> = KV;
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type AppConfig<KV extends Record<string, any> = Record<string, any>> =
   KV;
@@ -24,9 +28,6 @@ export interface ConversationContext<AC extends AppConfig = AppConfig> {
   conversationId: string;
   requestId: string;
   isNewConversation: boolean;
-  otel: {
-    traceId: string;
-  };
   appConfig: AppConfig<AC>;
 }
 

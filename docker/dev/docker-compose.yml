@@ -13,3 +13,12 @@ services:
     environment:
       - PALICO_AGENT_API_URL=http://host.docker.internal:8000
       - PALICO_SERVICE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MTM4MDg3NzB9.GEskObwga-XXXvTM8V6v2d27RNb9-Y8em0Kim5Zazpg
+  database:
+    image: 'postgres:15-alpine'
+    restart: 'always'
+    environment:
+      - 'POSTGRES_USER=root'
+      - 'POSTGRES_PASSWORD=root'
+      - 'POSTGRES_DB=palico-app'
+    ports:
+      - '5432:5432'

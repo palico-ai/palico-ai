@@ -37,16 +37,12 @@ export default class AgentExecutor {
         chatSpan.setAttributes({
           assignedConversationId: conversationId,
         });
-        const traceId = params.traceId || chatSpan.spanContext().traceId;
         const agent = await AgentModel.getAgentByName(params.agentName);
         const context: ConversationContext = {
           conversationId,
           requestId,
           isNewConversation: params.isNewConversation,
           appConfig: params.appConfig ?? {},
-          otel: {
-            traceId,
-          },
         };
         const response = await agent.chat(params.content, context);
         const output = {

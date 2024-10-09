@@ -62,7 +62,11 @@ export class Application {
             appConfig: params.appConfig,
             agentName: params.agentName,
             requestInput: params.content,
-            responseOutput: output ?? { messages: [] },
+            responseOutput: output ?? {
+              conversationId,
+              requestId,
+              message: 'An error occurred',
+            },
           });
           console.log('Flushing logs and spans');
           await LogQueue.tryFlushingLogs(requestId);

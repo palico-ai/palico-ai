@@ -114,9 +114,6 @@ export default class ChainWorkflowExecutor {
           isNewConversation: params.conversationId === undefined,
           requestId,
           appConfig: params.appConfig ?? {},
-          otel: {
-            traceId,
-          },
         };
         let workflowInput: Record<string, unknown> = params.content as Record<
           string,

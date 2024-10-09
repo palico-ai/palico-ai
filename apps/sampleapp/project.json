@@ -1,0 +1,32 @@
+{
+  "name": "sampleapp",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/sampleapp/src",
+  "projectType": "application",
+  "targets": {
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "sampleapp:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "sampleapp:build:development"
+        },
+        "production": {
+          "buildTarget": "sampleapp:build:production"
+        }
+      }
+    },
+    "ts": {
+      "executor": "@nx/node:execute",
+      "options": {
+        "command": "ts-node",
+        "tsConfig": "apps/sampleapp/tsconfig.app.json",
+        
+      }
+    }
+  },
+  "tags": []
+}
