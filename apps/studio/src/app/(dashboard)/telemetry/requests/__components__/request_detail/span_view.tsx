@@ -15,7 +15,7 @@ import {
   Typography,
 } from '@palico-ai/components';
 import { useQuery } from '@tanstack/react-query';
-import { REQUEST_SPANS } from '../../../../../../constants/query_keys';
+import { REQUEST_SPAN_QUERY_KEY } from '../../../../../../constants/query_keys';
 import { getRequestSpans } from '../../../../../../services/telemetry';
 import { createSpanTree } from '../../utils';
 
@@ -136,7 +136,7 @@ export const SpanView: React.FC<SpanViewProps> = ({ requestId }) => {
     isPending: isRequestSpansPending,
     error: requestSpansError,
   } = useQuery({
-    queryKey: [REQUEST_SPANS, requestId],
+    queryKey: [REQUEST_SPAN_QUERY_KEY, requestId],
     queryFn: async () => {
       const response = await getRequestSpans(requestId);
       return response;

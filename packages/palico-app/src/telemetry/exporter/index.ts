@@ -2,7 +2,7 @@ import { ExportResult, hrTimeToMilliseconds } from '@opentelemetry/core';
 import { ReadableSpan, SpanExporter } from '@opentelemetry/sdk-trace-base';
 import { InternalSpanAttribute } from '../internal.span';
 import { ConversationRequestSpan } from '@palico-ai/common';
-import { ConversationTelemetryModel } from '../../services/database/conversation_telemetry';
+import { ConversationTraceModel } from '../conversation_trace';
 
 export class PalicoSpanExporter implements SpanExporter {
   export(
@@ -76,6 +76,6 @@ export class PalicoSpanExporter implements SpanExporter {
         statusCode: spanDetail.status.code,
       });
     });
-    await ConversationTelemetryModel.logSpans(spanDBEntries);
+    await ConversationTraceModel.logSpans(spanDBEntries);
   }
 }

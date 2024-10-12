@@ -1,32 +1,30 @@
 import {
-  ConversationRequestContentSchema,
-  WorkflowConverationAPIRequestBody,
+  GetRecentWorkflowRequestsResponse,
+  GetWorkflowBynameAPIResponse,
+  WorkflowNewConverationRequestBody,
+  WorkflowNodeSerialized,
   WorkflowRequestAPIResponse,
 } from '@palico-ai/common';
 import { RequestHandler } from 'express';
 import { Application } from '../../../app';
+import WorkflowModel from '../../../workflows/model';
+import { ConversationTraceModel } from '../../../telemetry/conversation_trace';
 
 interface WorkflowRouteParams {
   workflowName: string;
 }
 
-interface WorkflowConversationRouteParams {
-  workflowName: string;
-  conversationId: string;
-}
-
 export const newConversationWorkflowHandler: RequestHandler<
   WorkflowRouteParams,
   WorkflowRequestAPIResponse,
-  WorkflowConverationAPIRequestBody
+  WorkflowNewConverationRequestBody
 > = async (req, res, next) => {
   try {
-    const { appConfig, content } = req.body;
+    const { appConfig, input } = req.body;
     const { workflowName } = req.params;
-    await ConversationRequestContentSchema.parseAsync(content);
     const result = await Application.executeWorkflow({
       workflowName,
-      content: content,
+      input,
       appConfig,
     });
     return res.status(200).json(result);
@@ -35,22 +33,48 @@ export const newConversationWorkflowHandler: RequestHandler<
   }
 };
 
-export const replyConversationWorkflowHandler: RequestHandler<
-  WorkflowConversationRouteParams,
-  WorkflowRequestAPIResponse,
-  WorkflowConverationAPIRequestBody
+export const getWorkflowByNameHandler: RequestHandler<
+  WorkflowRouteParams,
+  GetWorkflowBynameAPIResponse
 > = async (req, res, next) => {
   try {
-    const { appConfig, content } = req.body;
-    const { workflowName, conversationId } = req.params;
-    await ConversationRequestContentSchema.parseAsync(content);
-    const result = await Application.executeWorkflow({
-      workflowName,
-      content: content,
-      appConfig,
-      conversationId,
+    const { workflowName } = req.params;
+    const workflow = await WorkflowModel.getWorkflowByName(workflowName);
+    const graph = workflow.getGraph();
+    const nodes: WorkflowNodeSerialized[] = graph.nodes.map((node) => {
+      return {
+        id: node.id,
+      };
     });
-    return res.status(200).json(result);
+    return res.status(200).json({
+      name: workflowName,
+      graph: {
+        nodes,
+        edges: graph.edges,
+      },
+      templates: workflow.templates,
+    });
+  } catch (error) {
+    return next(error);
+  }
+};
+
+export const getRecentExecutionsHandler: RequestHandler<
+  WorkflowRouteParams,
+  GetRecentWorkflowRequestsResponse
+> = async (req, res, next) => {
+  try {
+    const { limit = 25, offset = 0 } = req.query;
+    const requests = await ConversationTraceModel.getRecentRequestsForWorkflow(
+      req.params.workflowName,
+      {
+        limit: Number(limit),
+        offset: Number(offset),
+      }
+    );
+    return res.status(200).json({
+      requests,
+    });
   } catch (error) {
     return next(error);
   }

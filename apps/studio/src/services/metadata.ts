@@ -18,16 +18,6 @@ export const getAllAgents = async () => {
   return response.agents;
 };
 
-export const getAllWorkflows = async () => {
-  const response = await palicoFetch<GetWorkflowMetadataResponse>(
-    '/metadata/workflows',
-    {
-      method: 'GET',
-    }
-  );
-  return response.workflows;
-};
-
 export const getAllTestSuites = async () => {
   const response = await palicoFetch<GetAllTestSuitesResponse>(
     '/metadata/test-case-dataset',

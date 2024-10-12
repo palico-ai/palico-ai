@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import {
   Card as MUICard,
   CardProps as MUICardProps,
@@ -7,13 +7,16 @@ import {
   CardContent,
   CardHeader,
   CardMedia,
-} from '@mui/material'
+  Divider,
+} from '@mui/material';
+import { ComponentWithChildren } from '../types';
+import { Typography } from '../typography';
 
-export type CardProps = MUICardProps
+export type CardProps = MUICardProps;
 
 const Card: React.FC<CardProps> = (props) => {
-  return <MUICard {...props} />
-}
+  return <MUICard {...props} />;
+};
 
 export {
   CardActionArea,
@@ -21,5 +24,5 @@ export {
   CardContent,
   CardHeader,
   CardMedia,
-  Card
-}
+  Card,
+};

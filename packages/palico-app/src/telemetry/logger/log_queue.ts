@@ -1,6 +1,6 @@
 import { getActiveConversationContext } from '../public.span';
 import { LogItem, LogType } from '@palico-ai/common';
-import { ConversationTelemetryModel } from '../../services/database/conversation_telemetry';
+import { ConversationTraceModel } from '../conversation_trace';
 
 interface QueueLogParams {
   callerName?: string;
@@ -35,7 +35,7 @@ export class LogQueue {
       if (!logs) {
         console.warn('no logs to flush');
       }
-      await ConversationTelemetryModel.saveRequestLogs({
+      await ConversationTraceModel.saveRequestLogs({
         requestId,
         logs: logs ?? [],
       });

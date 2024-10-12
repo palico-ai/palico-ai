@@ -14,6 +14,12 @@ export interface ExperimentItemChildPage {
   };
 }
 
+export interface WorkflowItemChildPage {
+  params: {
+    workflowName: string;
+  };
+}
+
 export interface EvalChildPage {
   params: {
     expName: string;

@@ -1,5 +1,10 @@
 import { AggregationFnOption, TableState } from '@tanstack/react-table';
-import { AppConfig, ConversationRequestContent, ConversationResponse } from '.';
+import {
+  AppConfig,
+  ChatRequestContent,
+  ConversationResponse,
+  QueueJobStatus,
+} from '.';
 
 export interface CreateExperimentParams {
   name: string;
@@ -21,7 +26,7 @@ export interface EvalMetric {
   label: string;
 
   evaluate: (
-    input: ConversationRequestContent,
+    input: ChatRequestContent,
     response: ConversationResponse
   ) => Promise<EvalMetricOutput>;
 }
@@ -29,7 +34,7 @@ export interface EvalMetric {
 export type EvalMetricResultMap = Record<string, EvalMetricOutput>;
 
 export interface EvalTestCaseResult {
-  input: ConversationRequestContent;
+  input: ChatRequestContent;
   tags: EvalTestCaseTag;
   output: ConversationResponse;
   metrics: EvalMetricResultMap;
@@ -37,22 +42,15 @@ export interface EvalTestCaseResult {
 
 export type EvalTestCaseTag = Record<string, string>;
 
-export interface EvalTestCase<Input = ConversationRequestContent> {
+export interface EvalTestCase<Input = ChatRequestContent> {
   input: Input;
   tags: EvalTestCaseTag;
   metrics: EvalMetric[];
 }
 
-export enum EvalJobStatus {
-  CREATED = 'created',
-  ACTIVE = 'active',
-  FAILED = 'failed',
-  SUCCESS = 'success',
-}
-
 export interface EvalJSON {
   status: {
-    state: EvalJobStatus;
+    state: QueueJobStatus;
     message?: string;
   };
   jobId?: string;

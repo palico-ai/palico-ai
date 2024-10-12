@@ -1,26 +1,31 @@
 import {
   AppConfig,
-  ConversationRequestContent,
+  ChatRequestContent,
   ConversationResponse,
   CreateEvalJobResponse,
   CreateEvaluationParams,
   CreateExperimentParams,
   CreateQuickLabParams,
-  EvalJobStatus,
+  QueueJobStatus,
   EvaluationMetadata,
   ExperimentMetadata,
+  InputWithAppConfig,
+  JSONAbleObject,
   NotebookJSON,
   NotebookMetadata,
   QuickLab,
   QuickLabContentJSON,
   QuickLabMetadata,
+  RequestTemplate,
+  WorkflowGraphSerialized,
+  WorkflowResponse,
 } from '.';
 import {
   RequestLogs,
   ConversationRequestSpan,
-  ConversationRequestTelemetryItem,
-  ConversationTelemetry,
-  ConversationTracesWithoutRequests,
+  ConversationRequestItem,
+  ConversationTraceWithRequests,
+  ConversationTraceWithoutRequests,
 } from './telemetry';
 
 export interface MetadataListItemCommon {
@@ -40,19 +45,19 @@ export interface GetAllTestSuitesResponse {
 }
 
 export interface GetRecentRequestTelemetryResponse {
-  requests: ConversationRequestTelemetryItem[];
+  requests: ConversationRequestItem[];
 }
 
 export interface GetConversationTelemetryResponse {
-  conversation: ConversationTelemetry;
+  conversation: ConversationTraceWithRequests;
 }
 
 export interface GetRecentConversationResponse {
-  conversations: ConversationTracesWithoutRequests[];
+  conversations: ConversationTraceWithoutRequests[];
 }
 
 export interface GetTelemetryForRequestIdResponse {
-  request: ConversationRequestTelemetryItem;
+  request: ConversationRequestItem;
 }
 
 export interface GetRequestSpanResponse {
@@ -66,19 +71,32 @@ export interface GetRequestLogsResponse {
 // ======== Route: /agent ========
 export interface AgentConversationAPIRequestBody {
   appConfig?: AppConfig;
-  content: ConversationRequestContent;
+  content: ChatRequestContent;
 }
 
 export type AgentConversationAPIRequestResponse = ConversationResponse;
 
 // ======== Route: /workflow ========
 
-export interface WorkflowConverationAPIRequestBody {
+export interface WorkflowNewConverationRequestBody {
   appConfig?: AppConfig;
-  content: ConversationRequestContent;
+  input: JSONAbleObject;
 }
 
-export type WorkflowRequestAPIResponse = ConversationResponse;
+export type WorkflowRequestAPIResponse = {
+  requestId: string;
+};
+
+export interface GetWorkflowBynameAPIResponse {
+  name: string;
+  graph: WorkflowGraphSerialized;
+  templates: RequestTemplate<InputWithAppConfig>[];
+}
+
+export interface GetRecentWorkflowRequestsResponse {
+  requests: ConversationRequestItem[];
+}
+
 // ======== Route: /experiments ========
 
 export type CreateEvalAPIRequestBody = Omit<
@@ -103,7 +121,7 @@ export type GetAllEvalsAPIResponse = {
 };
 
 export type GetEvalStatusAPIResponse = {
-  state: EvalJobStatus;
+  state: QueueJobStatus;
   message?: string;
 };
 

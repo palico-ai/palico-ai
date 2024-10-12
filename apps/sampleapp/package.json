@@ -1,0 +1,6 @@
+{
+  "scripts": {
+    "palico": "npm run palico",
+    "start": "palico start"
+  }
+}

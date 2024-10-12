@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { REQUEST_LOGS } from '../../../../../../constants/query_keys';
+import { REQUEST_LOG_QUERY_KEY } from '../../../../../../constants/query_keys';
 import React, { useMemo } from 'react';
 import { getRequestLogs } from '../../../../../../services/telemetry';
 import { Editor, ErrorMessage, Skeleton } from '@palico-ai/components';
@@ -11,7 +11,7 @@ interface RequestLogsProps {
 
 const RequestLogs: React.FC<RequestLogsProps> = ({ requestId }) => {
   const { data, isPending, error } = useQuery({
-    queryKey: [REQUEST_LOGS, requestId],
+    queryKey: [REQUEST_LOG_QUERY_KEY, requestId],
     queryFn: async () => {
       // fetch request logs
       const response = await getRequestLogs(requestId);

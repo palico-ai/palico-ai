@@ -10,7 +10,7 @@ import { createAPIFetcher } from './request';
 import {
   AgentConversationAPIRequestBody,
   AgentConversationAPIRequestResponse,
-  WorkflowConverationAPIRequestBody,
+  WorkflowNewConverationRequestBody,
   WorkflowRequestAPIResponse,
 } from '@palico-ai/common';
 
@@ -93,7 +93,7 @@ const createWorkflowClient = (config: ClientConfig): PalicoWorkflowClient => {
   const newConversation: NewConversationFN = async (params) => {
     return await apiFetch<
       WorkflowRequestAPIResponse,
-      WorkflowConverationAPIRequestBody
+      WorkflowNewConverationRequestBody
     >(`/workflow/${params.name}/conversation`, {
       method: 'POST',
       body: {
@@ -109,7 +109,7 @@ const createWorkflowClient = (config: ClientConfig): PalicoWorkflowClient => {
   const replyAsUser: ReplyAsUserFN = async (params) => {
     return await apiFetch<
       WorkflowRequestAPIResponse,
-      WorkflowConverationAPIRequestBody
+      WorkflowNewConverationRequestBody
     >(`/workflow/${params.name}/conversation/${params.conversationId}/reply`, {
       method: 'POST',
       body: {

@@ -14,3 +14,8 @@ export const useNotebookName = () => {
   const { notebookName } = useParams<{ notebookName: string }>();
   return notebookName;
 };
+
+export const useWorkflowName = () => {
+  const { workflowName } = useParams<{ workflowName: string }>();
+  return workflowName;
+};

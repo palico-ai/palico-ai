@@ -8,7 +8,6 @@ import {
 import {
   getAllAgents,
   getAllTestSuites,
-  getAllWorkflows,
 } from '../../../../../services/metadata';
 import React, { useMemo } from 'react';
 import { CreateEvalJobResponse } from '@palico-ai/common';
@@ -28,20 +27,17 @@ const TestListTableHeader: React.FC<TestListTableHeaderProps> = ({
     close: closeDialog,
   } = useDialogController();
   const [agentList, setAgentList] = React.useState<string[]>([]);
-  const [workflowList, setWorkflowList] = React.useState<string[]>([]);
   const [datasetList, setDatasetList] = React.useState<string[]>([]);
   const experimentName = useExperimentName();
 
   React.useEffect(() => {
     const fetchInitialData = async (): Promise<void> => {
-      const [agents, workflows, datasets] = await Promise.all([
+      const [agents, datasets] = await Promise.all([
         getAllAgents(),
-        getAllWorkflows(),
         getAllTestSuites(),
       ]);
       console.log(datasets);
       setAgentList(agents.map((agent) => agent.name));
-      setWorkflowList(workflows.map((workflow) => workflow.name));
       setDatasetList(datasets.map((dataset) => dataset.name));
     };
 
@@ -61,16 +57,12 @@ const TestListTableHeader: React.FC<TestListTableHeaderProps> = ({
       },
       {
         name: 'executor',
-        label: 'Agent/Workflow',
+        label: 'Agents',
         type: 'select',
         selectOptions: [
           ...agentList.map((agent) => ({
             label: `Agent - ${agent}`,
             value: `agent:${agent}`,
-          })),
-          ...workflowList.map((workflow) => ({
-            label: `Workflow - ${workflow}`,
-            value: `workflow:${workflow}`,
           })),
         ],
         required: true,
@@ -95,7 +87,7 @@ const TestListTableHeader: React.FC<TestListTableHeaderProps> = ({
     ];
 
     return fields;
-  }, [agentList, datasetList, workflowList]);
+  }, [agentList, datasetList]);
 
   const handleCreateTest = async (
     data: Record<string, unknown>

@@ -1,160 +1,118 @@
 import {
-  AppConfig,
   ConversationContext,
-  ConversationRequestContent,
-  ConversationResponseSchema,
+  JSONAbleObject,
+  QueueJobStatus,
+  WorkflowResponse,
 } from '@palico-ai/common';
-import { SpanStatusCode, trace } from '@opentelemetry/api';
-import { uuid } from '../utils/common';
-import { ChainNode } from './types';
-import { get as objGet, set as objSet } from 'lodash';
-import WorkflowModel from '../models/workflow';
-import { ConversationTelemetryModel } from '../services/database/conversation_telemetry';
+import WorkflowModel from './model';
+import { INode, Workflow } from './workflow';
+import { WorkflowExecutorRunParams } from './types';
+import { getTracer, Logger } from '../telemetry';
+import { WorkflowExecutionDataStore } from '../data_store/workflow_execution';
 
-export interface RunWorkflowParams {
-  workflowName: string;
-  content: ConversationRequestContent;
-  conversationId?: string;
-  appConfig?: AppConfig;
-  traceId?: string;
-}
+const tracer = getTracer('AgentExecutor');
 
-const tracer = trace.getTracer('chain-workflow-executor');
+export default class WorkflowExecutor {
+  __workflow?: Workflow;
 
-export default class ChainWorkflowExecutor {
-  private static getNodeInput(
-    node: ChainNode,
-    workflowInput: Record<string, unknown>
-  ) {
-    let nodeInput = workflowInput;
-    if (node.mapInput) {
-      nodeInput = Object.keys(node.mapInput).reduce((acc, key) => {
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        const value = objGet(workflowInput, node.mapInput![key]);
-        objSet(acc, key, value);
-        return acc;
-      }, {});
-      return nodeInput;
+  constructor(private readonly name: string) {}
+
+  async getWorkflow(): Promise<Workflow> {
+    if (!this.__workflow) {
+      const workflow = await WorkflowModel.getWorkflowByName(this.name);
+      if (!workflow) {
+        throw new Error(`Workflow ${this.name} not found`);
+      }
+      this.__workflow = workflow;
     }
-    return workflowInput;
+    return this.__workflow;
   }
 
-  private static createNewWorkflowInput(
-    currentInput: Record<string, unknown>,
-    result: Record<string, unknown>,
-    mapOutput?: Record<string, string>
-  ) {
-    if (!mapOutput) {
-      return {
-        ...currentInput,
-        ...result,
-      };
-    }
-    return Object.keys(mapOutput).reduce((acc, key) => {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      const value = objGet(result, mapOutput[key]);
-      objSet(acc, key, value);
-      return acc;
-    }, currentInput);
+  async run(params: WorkflowExecutorRunParams): Promise<WorkflowResponse> {
+    return await tracer.trace('WorkflowExecutor->run', async (span) => {
+      const { requestId, conversationId, isNewConversation, input, appConfig } =
+        params;
+      span.setAttributes({
+        workflowName: this.name,
+        input: JSON.stringify(input, null, 2),
+        appConfig: JSON.stringify(appConfig, null, 2),
+      });
+      try {
+        await WorkflowExecutionDataStore.updateStatus(
+          params.requestId,
+          QueueJobStatus.ACTIVE
+        );
+        const output = await this.startRun(input, {
+          conversationId,
+          requestId,
+          isNewConversation,
+          appConfig: appConfig ?? {},
+        });
+        const responseOutput = {
+          requestId,
+          conversationId,
+          data: output['data'],
+          message: output['message'],
+          output,
+        };
+        return responseOutput;
+      } catch (e) {
+        Logger.error('Error in WorkflowExecutor.run', e);
+        throw e;
+      }
+    });
   }
 
-  private static async runNode(
-    node: ChainNode,
-    workflowInput: Record<string, unknown>,
+  async runNode(
+    node: INode,
+    input: JSONAbleObject,
     context: ConversationContext
   ) {
-    return await tracer.startActiveSpan(node.name, async (nodeSpan) => {
-      try {
-        const nodeInput = ChainWorkflowExecutor.getNodeInput(
-          node,
-          workflowInput
-        );
-        nodeSpan.setAttributes({
-          workflowInput: JSON.stringify(workflowInput, null, 2),
-          nodeInput: JSON.stringify(nodeInput, null, 2),
+    return await tracer.trace(
+      `WorkflowExecutor->runNode(${node.id})`,
+      async (span) => {
+        span.setAttributes({
+          nodeId: node.id,
+          input: JSON.stringify(input, null, 2),
+          context: JSON.stringify(context, null, 2),
         });
-        const output = await node.handler(nodeInput, context);
-        const newWorkflowInput = ChainWorkflowExecutor.createNewWorkflowInput(
-          workflowInput,
-          output,
-          node.mapOutput
-        );
-        nodeSpan.setAttributes({
-          nodeOutput: JSON.stringify(output, null, 2),
-          newWorkflowInput: JSON.stringify(newWorkflowInput, null, 2),
-        });
-        return newWorkflowInput;
-      } catch (e) {
-        console.log(e);
-        nodeSpan.setStatus({
-          code: SpanStatusCode.ERROR,
-          message: e instanceof Error ? e.message : 'An error occurred',
-        });
-        throw e;
-      } finally {
-        nodeSpan.end();
+        try {
+          const { payload, nextChainableId } = await node.run(input, context);
+          return {
+            payload,
+            nextChainableId,
+          };
+        } catch (e) {
+          Logger.error('Error in WorkflowExecutor.runNode', e);
+          throw e;
+        }
       }
-    });
+    );
   }
 
-  static async execute(params: RunWorkflowParams) {
-    return await tracer.startActiveSpan('ChainWorkflow', async (span) => {
-      try {
-        span.setAttributes({
-          input: JSON.stringify(params.content, null, 2),
-        });
-        const conversationId = params.conversationId || uuid();
-        const requestId = uuid();
-        const traceId = params.traceId || span.spanContext().traceId;
-        const workflow = await WorkflowModel.getWorkflowByName(
-          params.workflowName
-        );
-        const context: ConversationContext = {
-          conversationId,
-          isNewConversation: params.conversationId === undefined,
-          requestId,
-          appConfig: params.appConfig ?? {},
-        };
-        let workflowInput: Record<string, unknown> = params.content as Record<
-          string,
-          unknown
-        >;
-        let currentNode: ChainNode | undefined = workflow.nodes[0];
-        while (currentNode) {
-          const newWorkflowInput = await ChainWorkflowExecutor.runNode(
-            currentNode,
-            workflowInput,
-            context
-          );
-          workflowInput = newWorkflowInput;
-          currentNode = currentNode.next;
-        }
-        span.setAttributes({
-          output: JSON.stringify(workflowInput, null, 2),
-        });
-        // TODO: Validate output is a ConversationResponse using zod
-        const finalOutput = await workflow.resultParser(workflowInput, context);
-        await ConversationResponseSchema.parseAsync(finalOutput);
-        await ConversationTelemetryModel.logRequest({
-          conversationId,
-          requestId,
-          traceId,
-          appConfig: params.appConfig,
-          agentName: params.workflowName,
-          requestInput: params.content,
-          responseOutput: finalOutput,
-        });
-        return finalOutput;
-      } catch (e) {
-        console.log(e);
-        span.setStatus({
-          code: SpanStatusCode.ERROR,
-          message: e instanceof Error ? e.message : 'An error occurred',
-        });
-        throw e;
-      } finally {
-        span.end();
-      }
-    });
+  private async startRun(input: JSONAbleObject, context: ConversationContext) {
+    const workflow = await this.getWorkflow();
+    const root = workflow.definition();
+    const graph = workflow.getGraph();
+    const nodeIdToNode: Record<string, INode> = {};
+    for (const node of graph.nodes) {
+      nodeIdToNode[node.id] = node;
+    }
+    let currentNode: INode = root;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let currentInput: Record<string, any> = input;
+    while (currentNode) {
+      const { payload, nextChainableId } = await this.runNode(
+        currentNode,
+        currentInput,
+        context
+      );
+      currentInput = {
+        ...currentInput,
+        ...payload,
+      };
+      currentNode = nodeIdToNode[nextChainableId];
+    }
+    return currentInput;
   }
 }

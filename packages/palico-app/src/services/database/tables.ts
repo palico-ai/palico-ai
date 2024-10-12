@@ -1,10 +1,11 @@
 import { Sequelize, DataTypes, Optional, ModelDefined } from 'sequelize';
 import * as dotenv from 'dotenv';
 import {
-  ConversationTelemetry,
-  ConversationRequestTelemetryItem,
+  ConversationTraceWithRequests,
+  ConversationRequestItem,
   ConversationRequestSpan,
   RequestLogs,
+  WorkflowExecution,
 } from '@palico-ai/common';
 import config from '../../config';
 
@@ -27,16 +28,16 @@ export const sequelize = new Sequelize(dbURL);
 /**
  * Top level container for conversation traces that holds all child request traces
  */
-export type ConversationTracingTableSchema = Omit<
-  ConversationTelemetry,
+export type ConversationTraceTableSchema = Omit<
+  ConversationTraceWithRequests,
   'requests'
 >;
 
 /**
  * Table schema for individual request traces within a conversation
  */
-export type ConversationRequestTraceTableSchema = Omit<
-  ConversationRequestTelemetryItem,
+export type ConversationRequestTableSchema = Omit<
+  ConversationRequestItem,
   'requestInput' | 'responseOutput' | 'appConfig'
 > & {
   requestInput: string; // JSON stringified
@@ -64,6 +65,12 @@ export interface SimpleChatHistorySchema {
   messagesJSON: string;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface WorkflowExecutionTableSchema
+  extends Omit<WorkflowExecution, 'graph' | 'executionStack'> {
+  graphJSON: string;
+  executionStackJSON: string;
 }
 
 // ================== Define Tables ==================
@@ -141,14 +148,17 @@ export const RequestLogsTable: ModelDefined<
   }
 );
 
-export type CreateConversationRequestTraceParams = Omit<
-  ConversationRequestTraceTableSchema,
+export type CreateConversationRequestParams = Omit<
+  ConversationRequestTableSchema,
   'createdAt' | 'updatedAt'
 >;
 
-export const ConversationRequestTracingTable: ModelDefined<
-  ConversationRequestTraceTableSchema,
-  CreateConversationRequestTraceParams
+/**
+ * Table for storing individual request made to workflows or agents for a given conversation
+ */
+export const ConversationRequestTable: ModelDefined<
+  ConversationRequestTableSchema,
+  CreateConversationRequestParams
 > = sequelize.define(
   'conversation_request_tracing',
   {
@@ -182,14 +192,17 @@ export const ConversationRequestTracingTable: ModelDefined<
   }
 );
 
-export type CreateConversationTracingParams = Omit<
-  ConversationTracingTableSchema,
+export type CreateConversationTraceParams = Omit<
+  ConversationTraceTableSchema,
   'createdAt' | 'updatedAt'
 >;
 
-export const ConversationTracingTable: ModelDefined<
-  ConversationTracingTableSchema,
-  CreateConversationTracingParams
+/**
+ * Top level data structure for storing conversation for agents and workflows
+ */
+export const ConversationTraceTable: ModelDefined<
+  ConversationTraceTableSchema,
+  CreateConversationTraceParams
 > = sequelize.define(
   'conversation_tracing',
   {
@@ -233,37 +246,78 @@ export const SimpleChatHistoryTable: ModelDefined<
   }
 );
 
-ConversationTracingTable.hasMany(ConversationRequestTracingTable, {
+export type CreateWorkflowExecutionParams = Omit<
+  WorkflowExecutionTableSchema,
+  'createdAt' | 'updatedAt'
+>;
+
+export const WorkflowExecutionTable: ModelDefined<
+  WorkflowExecutionTableSchema,
+  CreateWorkflowExecutionParams
+> = sequelize.define(
+  'workflow_execution',
+  {
+    requestId: {
+      type: DataTypes.STRING,
+      primaryKey: true,
+    },
+    workflowName: {
+      type: DataTypes.STRING,
+    },
+    graphJSON: {
+      type: DataTypes.JSONB,
+    },
+    executionStackJSON: {
+      type: DataTypes.JSONB,
+    },
+    status: {
+      type: DataTypes.STRING,
+    },
+  },
+  {
+    timestamps: true,
+  }
+);
+
+ConversationTraceTable.hasMany(ConversationRequestTable, {
   foreignKey: 'conversationId',
   onDelete: 'CASCADE',
 });
 
-ConversationRequestTracingTable.belongsTo(ConversationTracingTable, {
+ConversationRequestTable.belongsTo(ConversationTraceTable, {
   foreignKey: 'conversationId',
 });
 
-ConversationTracingTable.hasMany(RequestSpanTable, {
+ConversationTraceTable.hasMany(RequestSpanTable, {
   foreignKey: 'conversationId',
 });
 
-RequestSpanTable.belongsTo(ConversationTracingTable, {
+RequestSpanTable.belongsTo(ConversationTraceTable, {
   foreignKey: 'conversationId',
 });
 
-ConversationRequestTracingTable.hasMany(RequestSpanTable, {
+ConversationRequestTable.hasMany(RequestSpanTable, {
   foreignKey: 'requestId',
   onDelete: 'CASCADE',
 });
 
-RequestSpanTable.belongsTo(ConversationRequestTracingTable, {
+RequestSpanTable.belongsTo(ConversationRequestTable, {
   foreignKey: 'requestId',
 });
 
-ConversationRequestTracingTable.hasOne(RequestLogsTable, {
+ConversationRequestTable.hasOne(RequestLogsTable, {
   foreignKey: 'requestId',
   onDelete: 'CASCADE',
 });
 
-RequestLogsTable.belongsTo(ConversationRequestTracingTable, {
+RequestLogsTable.belongsTo(ConversationRequestTable, {
+  foreignKey: 'requestId',
+});
+
+WorkflowExecutionTable.belongsTo(ConversationRequestTable, {
+  foreignKey: 'requestId',
+});
+
+ConversationRequestTable.hasOne(WorkflowExecutionTable, {
   foreignKey: 'requestId',
 });

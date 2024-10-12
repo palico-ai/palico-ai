@@ -1,5 +1,5 @@
 import {
-  ConversationRequestContent,
+  ChatRequestContent,
   ConversationResponse,
   EvalMetric,
   EvalMetricOutput,
@@ -24,7 +24,7 @@ export class ValidJSONMetric implements EvalMetric {
   }
 
   async evaluate(
-    _: ConversationRequestContent,
+    _: ChatRequestContent,
     response: ConversationResponse
   ): Promise<EvalMetricOutput> {
     try {

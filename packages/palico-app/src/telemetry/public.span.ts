@@ -34,6 +34,12 @@ export const getTracer = (name: string) => {
       async (span) => {
         try {
           return await fn(span);
+        } catch (e) {
+          span.setStatus({
+            code: api.SpanStatusCode.ERROR,
+            message: e instanceof Error ? e.message : 'An error occurred',
+          });
+          throw e;
         } finally {
           span.end();
         }

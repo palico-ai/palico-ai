@@ -1,20 +1,19 @@
 import {
   ConversationContext,
-  ConversationRequestContent,
+  ChatRequestContent,
   ConversationResponse,
 } from '@palico-ai/common';
 import { AgentModel } from './model';
-import { ConversationTelemetryModel } from '../services/database/conversation_telemetry';
-import { getTracer } from '../tracing';
+import { getTracer } from '../telemetry';
 
 export interface AgentExecutorChatParams {
   agentName: string;
-  content: ConversationRequestContent;
+  content: ChatRequestContent;
   conversationId: string; // For grouping a conversation
   isNewConversation: boolean;
   requestId: string;
   appConfig?: Record<string, unknown>;
-  traceId?: string;
+  traceId?: string; // @deprecated
 }
 
 const tracer = getTracer('AgentExecutor');
@@ -23,19 +22,13 @@ export default class AgentExecutor {
   static async chat(
     params: AgentExecutorChatParams
   ): Promise<ConversationResponse> {
-    const conversationId = params.conversationId;
     return await tracer.trace('AgentExecutor->chat', async (chatSpan) => {
-      const { requestId } = params;
+      const { requestId, conversationId } = params;
       try {
         chatSpan.setAttributes({
           agentName: params.agentName,
           content: JSON.stringify(params.content, null, 2),
-          inputConversationId: params.conversationId,
           appConfig: JSON.stringify(params.appConfig, null, 2),
-          traceId: params.traceId,
-        });
-        chatSpan.setAttributes({
-          assignedConversationId: conversationId,
         });
         const agent = await AgentModel.getAgentByName(params.agentName);
         const context: ConversationContext = {

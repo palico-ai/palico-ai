@@ -1,7 +1,4 @@
-import {
-  ConversationRequestContent,
-  ConversationResponse,
-} from '@palico-ai/common';
+import { ChatRequestContent, ConversationResponse } from '@palico-ai/common';
 import { EvalMetric, EvalMetricOutput } from '../types';
 
 export interface ExactMatchParams {
@@ -21,7 +18,7 @@ export class ExactMatchMetric implements EvalMetric {
   }
 
   async evaluate(
-    _: ConversationRequestContent,
+    _: ChatRequestContent,
     response: ConversationResponse
   ): Promise<EvalMetricOutput> {
     if (response.message !== this.params.expected.message) {

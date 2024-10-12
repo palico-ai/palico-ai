@@ -4,4 +4,5 @@ export enum ResponseMetadataKey {
   InputTokens = 'meta_inputTokens',
   OutputTokens = 'meta_outputTokens',
   TotalCost = 'meta_totalCost',
+  JobId = 'meta_jobId',
 }

@@ -109,7 +109,11 @@ export function Table<Data>(props: TableParams<Data>): React.ReactElement {
               }
             }
           >
-            <TableHead>
+            <TableHead
+              sx={(theme) => ({
+                backgroundColor: theme.palette.background.default,
+              })}
+            >
               {table.getHeaderGroups().map((headerGroup) => (
                 <MUITableRow key={headerGroup.id}>
                   {headerGroup.headers.map((header) => (

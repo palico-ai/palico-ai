@@ -12,6 +12,10 @@ export interface RequireExperimentName {
   experimentName: string;
 }
 
+export interface RequireWorkflowName {
+  workflowName: string;
+}
+
 export interface RequireNoteobokName {
   notebookName: string;
 }

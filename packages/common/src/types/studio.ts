@@ -1,4 +1,4 @@
-import { ConversationRequestContent, ConversationResponse } from '.';
+import { ChatRequestContent, ConversationResponse } from '.';
 
 export interface LabExperimentModel {
   id: string;
@@ -10,7 +10,7 @@ export interface LabExperimentModel {
 export interface LabTestCaseModel {
   id: string;
   label: string;
-  userMessage: ConversationRequestContent['userMessage'];
+  userMessage: ChatRequestContent['userMessage'];
   payloadString?: string;
 }
 

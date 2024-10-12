@@ -1,6 +1,6 @@
 import { Grid } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
-import { REQUEST_TELEMETRY } from '../../../../../../constants/query_keys';
+import { REQUEST_TELEMETRY_QUERY_KEY } from '../../../../../../constants/query_keys';
 import React from 'react';
 import { getRequestTelemetry } from '../../../../../../services/telemetry';
 import {
@@ -11,7 +11,7 @@ import {
   TabView,
   Typography,
 } from '@palico-ai/components';
-import { ConversationRequestTelemetryItem } from '@palico-ai/common';
+import { ConversationRequestItem } from '@palico-ai/common';
 
 export interface RequestSummaryProps {
   requestId: string;
@@ -42,10 +42,7 @@ const EditorSnippet: React.FC<{ value: Record<any, any> }> = ({ value }) => {
 };
 
 const CodeSnippetTabs: React.FC<
-  Pick<
-    ConversationRequestTelemetryItem,
-    'requestInput' | 'responseOutput' | 'appConfig'
-  >
+  Pick<ConversationRequestItem, 'requestInput' | 'responseOutput' | 'appConfig'>
 > = ({ requestInput, responseOutput, appConfig }) => {
   return (
     <TabView
@@ -87,7 +84,7 @@ const RequestSummary: React.FC<RequestSummaryProps> = ({ requestId }) => {
     isPending: pendingRequestTelemetry,
     error: requestTelemetryError,
   } = useQuery({
-    queryKey: [REQUEST_TELEMETRY, requestId],
+    queryKey: [REQUEST_TELEMETRY_QUERY_KEY, requestId],
     queryFn: async () => {
       const response = await getRequestTelemetry(requestId);
       return response;

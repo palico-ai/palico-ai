@@ -1,6 +1,6 @@
 import { RequestHandler } from 'express';
 import { AgentModel } from '../../..//agent/model';
-import WorkflowModel from '../../../models/workflow';
+import WorkflowModel from '../../../workflows/model';
 import {
   GetAgentMetadataResponse,
   GetAllEvalsResponse,

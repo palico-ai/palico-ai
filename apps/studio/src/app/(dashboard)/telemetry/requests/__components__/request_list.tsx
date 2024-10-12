@@ -10,16 +10,16 @@ import {
   Typography,
   Skeleton,
 } from '@palico-ai/components';
-import { ConversationRequestTelemetryItem } from '@palico-ai/common';
+import { ConversationRequestItem } from '@palico-ai/common';
 import { useRouter } from 'next/navigation';
 import { RoutePath } from '../../../../../utils/route_path';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { RECENT_REQUEST_TELEMETRIES } from '../../../../../constants/query_keys';
+import { RECENT_REQUEST_TELEMETRY_QUERY_KEY } from '../../../../../constants/query_keys';
 import { getRecentRequests } from '../../../../../services/telemetry';
 import { Box } from '@mui/material';
 import { useSelectedRequestId } from '../context';
 
-const RequestListItem: React.FC<ConversationRequestTelemetryItem> = ({
+const RequestListItem: React.FC<ConversationRequestItem> = ({
   requestId,
   createdAt,
 }) => {
@@ -66,7 +66,7 @@ const RequestTelemetryList: React.FC = () => {
     isFetchingNextPage,
     isPending,
   } = useInfiniteQuery({
-    queryKey: [RECENT_REQUEST_TELEMETRIES],
+    queryKey: [RECENT_REQUEST_TELEMETRY_QUERY_KEY],
     queryFn: async ({ pageParam }) => {
       const response = await getRecentRequests(pageParam);
       return response;

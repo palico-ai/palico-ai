@@ -13,7 +13,7 @@ export {
   EvalMetricResultMap,
   EvalTestCaseResult as EvalResult,
   EvalTestCaseTag,
-  EvalJobStatus,
+  QueueJobStatus as EvalJobStatus,
   EvalTestCase,
   EvalJSON,
   Evaluation,

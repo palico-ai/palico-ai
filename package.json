@@ -37,6 +37,7 @@
     "axios": "^1.6.3",
     "body-parser": "^1.20.3",
     "chalk": "^4.1.2",
+    "change-case": "^5.4.4",
     "chroma-js": "^2.4.2",
     "clsx": "^2.0.0",
     "commander": "^11.1.0",

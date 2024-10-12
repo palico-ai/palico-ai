@@ -5,7 +5,7 @@ import {
   CreateEvalJobResponse,
   EvalTestCase,
   EvalJSON,
-  EvalJobStatus,
+  QueueJobStatus,
   EvalTestCaseResult,
   EvalMetricOutput,
   AppConfig,
@@ -70,7 +70,7 @@ export class ExperimentExecutor {
     try {
       let test = await ExperimentModel.updateTestJSON(key, {
         status: {
-          state: EvalJobStatus.ACTIVE,
+          state: QueueJobStatus.ACTIVE,
         },
       });
       const dataset = await Application.fetchTestDataset(test.testSuiteName);
@@ -86,7 +86,7 @@ export class ExperimentExecutor {
       );
       test = await ExperimentModel.updateTestJSON(key, {
         status: {
-          state: EvalJobStatus.SUCCESS,
+          state: QueueJobStatus.SUCCESS,
         },
       });
       await ExperimentModel.updateTestResultJSON(key, {
@@ -98,7 +98,7 @@ export class ExperimentExecutor {
       const message = error instanceof Error ? error.message : 'Unknown error';
       await ExperimentModel.updateTestJSON(key, {
         status: {
-          state: EvalJobStatus.FAILED,
+          state: QueueJobStatus.FAILED,
           message,
         },
       });
@@ -118,11 +118,7 @@ export class ExperimentExecutor {
         appConfig,
       });
     } else if (workflowName) {
-      response = await Application.executeWorkflow({
-        workflowName,
-        content: testCase.input,
-        appConfig,
-      });
+      throw new Error('Running workflows is not supported yet');
     } else {
       throw new Error('Either agentName or workflowName is required');
     }

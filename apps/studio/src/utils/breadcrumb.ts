@@ -4,8 +4,10 @@ import {
   RequireLabName,
   RequireEvalName,
   RequireNoteobokName,
+  RequireWorkflowName,
 } from '../types/common';
 import { RoutePath } from './route_path';
+import { capitalCase } from 'change-case';
 
 export interface IncludeHref {
   includeHref: boolean;
@@ -29,7 +31,7 @@ export default class Breadcrumb {
   }
 
   static quickLabItem(params: RequireLabName): BreadcrumbItem {
-    return { label: params.labName };
+    return { label: capitalCase(params.labName) };
   }
 
   static experimentList(params?: IncludeHref): BreadcrumbItem {
@@ -43,7 +45,7 @@ export default class Breadcrumb {
     params: RequireExperimentName & Partial<IncludeHref>
   ): BreadcrumbItem {
     return {
-      label: params.experimentName,
+      label: capitalCase(params.experimentName),
       href: params.includeHref
         ? RoutePath.experimentItem({ experimentName: params.experimentName })
         : undefined,
@@ -68,7 +70,7 @@ export default class Breadcrumb {
       Partial<IncludeHrefWithOptions<RequireExperimentName>>
   ): BreadcrumbItem {
     return {
-      label: params.evalName,
+      label: capitalCase(params.evalName),
       href: params.includeHref
         ? RoutePath.experimentEvalItem({
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -97,13 +99,32 @@ export default class Breadcrumb {
       Partial<IncludeHrefWithOptions<RequireExperimentName>>
   ): BreadcrumbItem {
     return {
-      label: params.notebookName,
+      label: capitalCase(params.notebookName),
       href: params.includeHref
         ? RoutePath.experimentNotebookItem({
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             experimentName: params.options!.experimentName,
             notebookName: params.notebookName,
           })
+        : undefined,
+    };
+  }
+
+  static workflowList(params?: IncludeHref): BreadcrumbItem {
+    return {
+      label: 'Workflows',
+      href: params?.includeHref ? RoutePath.workflowList() : undefined,
+    };
+  }
+
+  static workflowItem(
+    params: RequireWorkflowName &
+      Partial<IncludeHrefWithOptions<RequireWorkflowName>>
+  ): BreadcrumbItem {
+    return {
+      label: capitalCase(params.workflowName),
+      href: params.includeHref
+        ? RoutePath.workflowItem({ workflowName: params.workflowName })
         : undefined,
     };
   }

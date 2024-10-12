@@ -2,7 +2,7 @@
 
 import {
   AppConfig,
-  ConversationRequestContent,
+  ChatRequestContent,
   ConversationResponse,
 } from '@palico-ai/common';
 import React, { useEffect, useState } from 'react';
@@ -16,7 +16,7 @@ export type ConversationContextParams = {
   conversationEntity?: ConversationalEntity;
   setConversationalEntity: (entity: ConversationalEntity) => void;
   sendMessage: (
-    content: ConversationRequestContent,
+    content: ChatRequestContent,
     appConfig: AppConfig
   ) => Promise<void>;
 };
@@ -57,7 +57,7 @@ export const ConversationContextProvider: React.FC<
   };
 
   const sendMessage = async (
-    content: ConversationRequestContent,
+    content: ChatRequestContent,
     appConfig: AppConfig
   ): Promise<void> => {
     // TODO: This this as an input

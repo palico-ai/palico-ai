@@ -1,5 +1,5 @@
 import { RequestHandler } from 'express';
-import { ConversationTelemetryModel } from '../../../services/database/conversation_telemetry';
+import { ConversationTraceModel } from '../../../telemetry/conversation_trace';
 import { APIError } from '../../error';
 import {
   GetConversationTelemetryResponse,
@@ -17,7 +17,7 @@ export const getRequestsByConversationId: RequestHandler<
 > = async (req, res, next) => {
   try {
     const conversationId = req.params['conversationId'];
-    const traces = await ConversationTelemetryModel.getRequestsByConversationId(
+    const traces = await ConversationTraceModel.getConversationWithRequestList(
       conversationId
     );
     if (!traces) {
@@ -37,7 +37,7 @@ export const getRecentRequests: RequestHandler<
 > = async (req, res, next) => {
   try {
     const { limit = 25, offset = 0 } = req.query;
-    const traces = await ConversationTelemetryModel.getRecentRequests({
+    const traces = await ConversationTraceModel.getRecentRequestList({
       limit: Number(limit),
       offset: Number(offset),
     });
@@ -55,7 +55,7 @@ export const getRecentConversations: RequestHandler<
 > = async (req, res, next) => {
   try {
     const { limit = 25, offset = 0 } = req.query;
-    const traces = await ConversationTelemetryModel.getRecentConversations({
+    const traces = await ConversationTraceModel.getRecentConversationList({
       limit: Number(limit),
       offset: Number(offset),
     });
@@ -73,9 +73,7 @@ export const getRequestTelemetry: RequestHandler<
 > = async (req, res, next) => {
   try {
     const requestId = req.params['requestId'];
-    const trace = await ConversationTelemetryModel.getRequestTelemetry(
-      requestId
-    );
+    const trace = await ConversationTraceModel.getRequest(requestId);
     if (!trace) {
       throw APIError.notFound('Trace not found');
     }
@@ -93,7 +91,7 @@ export const getRequestSpans: RequestHandler<
 > = async (req, res, next) => {
   try {
     const requestId = req.params['requestId'];
-    const spans = await ConversationTelemetryModel.getRequestSpans(requestId);
+    const spans = await ConversationTraceModel.getRequestSpanList(requestId);
     return res.status(200).json({
       spans,
     });
@@ -108,7 +106,7 @@ export const getRequestLogs: RequestHandler<
 > = async (req, res, next) => {
   try {
     const requestId = req.params['requestId'];
-    const logs = await ConversationTelemetryModel.getRequestLogs(requestId);
+    const logs = await ConversationTraceModel.getRequestLogs(requestId);
     return res.status(200).json({
       logs,
     });

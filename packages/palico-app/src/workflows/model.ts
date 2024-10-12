@@ -1,7 +1,7 @@
 import path from 'path';
 import OS from '../utils/os';
 import Project from '../utils/project';
-import { ChainWorkflow } from '../workflows';
+import { Workflow } from '.';
 
 export default class WorkflowModel {
   private static readonly workflowFile = 'index.ts';
@@ -22,10 +22,11 @@ export default class WorkflowModel {
     return OS.doesFileExist(filePath);
   }
 
-  static async getWorkflowByName(name: string): Promise<ChainWorkflow> {
+  static async getWorkflowByName(name: string): Promise<Workflow> {
     const filePath = await WorkflowModel.workflowFilePath(name);
-    const workflow = await import(filePath);
-    return workflow.default;
+    const exports = await import(filePath);
+    const workflow = new exports.default();
+    return workflow;
   }
 
   private static async workflowFilePath(name: string) {

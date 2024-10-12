@@ -1,14 +1,18 @@
 import { Router } from 'express';
-import { newConversationWorkflowHandler } from './handler';
+import {
+  getRecentExecutionsHandler,
+  getWorkflowByNameHandler,
+  newConversationWorkflowHandler,
+} from './handler';
 
 const router = Router();
 
-router
-  .route('/:workflowName/conversation')
-  .post(newConversationWorkflowHandler);
+router.route('/:workflowName').get(getWorkflowByNameHandler);
+
+router.route('/:workflowName/request').get(getRecentExecutionsHandler);
 
 router
-  .route('/:workflowName/conversation/:conversationId/reply')
+  .route('/:workflowName/conversation')
   .post(newConversationWorkflowHandler);
 
 export default router;

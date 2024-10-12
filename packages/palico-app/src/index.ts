@@ -6,4 +6,4 @@ export * from './experiments';
 export * from './workflows';
 export * from './data_store';
 export * from './types';
-export * from './tracing';
+export * from './telemetry';

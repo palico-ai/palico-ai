@@ -4,6 +4,7 @@ import {
   RequireEvalName,
   RequireTestReportName,
   RequireNoteobokName,
+  RequireWorkflowName,
 } from '../types/common';
 
 export enum QueryParam {
@@ -17,6 +18,14 @@ export class RoutePath {
 
   static chat() {
     return '/chat';
+  }
+
+  static workflowList() {
+    return '/workflow';
+  }
+
+  static workflowItem(params: RequireWorkflowName) {
+    return `${RoutePath.workflowList()}/${params.workflowName}`;
   }
 
   static labItem(params: RequireLabId) {

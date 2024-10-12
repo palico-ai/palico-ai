@@ -1,16 +1,19 @@
 import { TimedEvent } from '@opentelemetry/sdk-trace-node';
-import { AppConfig, ConversationRequestContent, ConversationResponse } from '.';
+import { AppConfig, JSONAbleObject } from '.';
 
-export interface ConversationRequestTelemetryItem {
+export interface ConversationRequestItem<
+  Input = JSONAbleObject,
+  Output = JSONAbleObject
+> {
   requestId: string;
   conversationId: string;
-  requestInput: ConversationRequestContent;
-  responseOutput: ConversationResponse;
+  requestInput: Input;
+  responseOutput: Output;
   appConfig: AppConfig;
-  traceId?: string;
-  tracePreviewUrl?: string;
-  createdAt: string;
   updatedAt: string;
+  createdAt: string;
+  tracePreviewUrl?: string; // @deprecated
+  traceId?: string; // @deprecated
 }
 
 export interface ConversationRequestSpan {
@@ -45,16 +48,16 @@ export interface RequestLogs {
   logs: LogItem[];
 }
 
-export interface ConversationTelemetry {
+export interface ConversationTraceWithRequests {
   conversationId: string;
   agentName?: string;
   workflowName?: string;
-  requests: ConversationRequestTelemetryItem[];
+  requests: ConversationRequestItem[];
   createdAt: string;
   updatedAt: string;
 }
 
-export type ConversationTracesWithoutRequests = Omit<
-  ConversationTelemetry,
+export type ConversationTraceWithoutRequests = Omit<
+  ConversationTraceWithRequests,
   'requests'
 >;

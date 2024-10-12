@@ -1,15 +1,19 @@
-import { ConversationResponse, EvalTestCase } from '@palico-ai/common';
-import ChainWorkflowExecutor, {
-  RunWorkflowParams,
-} from '../workflows/executor';
+import {
+  ConversationResponse,
+  EvalTestCase,
+  WorkflowResponse,
+} from '@palico-ai/common';
 import AgentExecutor, { AgentExecutorChatParams } from '../agent/executor';
 import TestSuiteModel from '../experiments/test_case.model';
 import { ResponseMetadataKey } from '../types';
 import { uuid } from '../utils/common';
-import { startConversationSpan } from '../tracing/internal.span';
-import { LogQueue } from '../tracing/logger/log_queue';
-import { Logger } from '../tracing/logger';
-import { ConversationTelemetryModel } from '../services/database/conversation_telemetry';
+import { startConversationSpan } from '../telemetry/internal.span';
+import { LogQueue } from '../telemetry/logger/log_queue';
+import { Logger } from '../telemetry/logger';
+import { ConversationTraceModel } from '../telemetry/conversation_trace';
+import { ApplicationWorkflowParams } from './types';
+import { ExecuteApplicationWorkflow } from './executor_workflow';
+import JobQueue from '../services/job_queue';
 
 export interface ApplicationChatParams
   extends Omit<
@@ -56,7 +60,7 @@ export class Application {
           throw e;
         } finally {
           console.log('Logging request');
-          await ConversationTelemetryModel.logRequest({
+          await ConversationTraceModel.logRequest({
             conversationId,
             requestId,
             appConfig: params.appConfig,
@@ -76,10 +80,15 @@ export class Application {
   }
 
   static async executeWorkflow(
-    params: RunWorkflowParams
-  ): Promise<ConversationResponse> {
-    const result = await ChainWorkflowExecutor.execute(params);
-    return result;
+    params: ApplicationWorkflowParams
+  ): Promise<WorkflowResponse> {
+    const response = await ExecuteApplicationWorkflow(params);
+    return response;
+  }
+
+  static async queueWorkflowJob(params: ApplicationWorkflowParams) {
+    const response = await JobQueue.runWorkflow(params);
+    return response;
   }
 
   static async fetchTestDataset(name: string): Promise<EvalTestCase[]> {

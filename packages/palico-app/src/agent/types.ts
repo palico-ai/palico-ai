@@ -1,5 +1,5 @@
 import {
-  ConversationRequestContent,
+  ChatRequestContent,
   ConversationContext,
   ConversationResponse,
 } from '@palico-ai/common';
@@ -13,13 +13,13 @@ export type AgentResponse<D = any> = Omit<
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export interface Agent<RequestBody = any, Response = any> {
   chat: (
-    content: ConversationRequestContent<RequestBody>,
+    content: ChatRequestContent<RequestBody>,
     context: ConversationContext
   ) => Promise<AgentResponse<Response>>;
 }
 
 export {
-  ConversationRequestContent,
+  ChatRequestContent as ConversationRequestContent,
   ConversationResponse,
   ConversationContext,
 };

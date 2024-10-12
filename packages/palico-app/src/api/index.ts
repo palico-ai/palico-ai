@@ -6,7 +6,7 @@ import agentRouter from './routes/agent';
 import studioRouter from './routes/studio';
 import telemetryRouter from './routes/telemetry';
 import devRouter from './routes/dev';
-// import workflowRouter from './routes/workflow';
+import workflowRouter from './routes/workflow';
 import metadataRouter from './routes/metadata';
 import { defaultErrorMiddleware } from './middlewares/default_error_middeware';
 import JobQueue from '../services/job_queue';
@@ -38,7 +38,7 @@ export class PalicoAPIServer {
     this.expressAPI.use('/studio', studioRouter);
     this.expressAPI.use('/telemetry', telemetryRouter);
     this.expressAPI.use('/metadata', metadataRouter);
-    // this.expressAPI.use('/workflow', workflowRouter);
+    this.expressAPI.use('/workflow', workflowRouter);
     if (params.enableDevMode) {
       this.enableDevMode = true;
       this.expressAPI.use('/dev', devRouter);
@@ -62,9 +62,7 @@ export class PalicoAPIServer {
   }
 
   public async start() {
-    if (this.enableDevMode) {
-      await JobQueue.start();
-    }
+    await JobQueue.start();
     const port = config.getAPIPort();
     this.expressAPI.listen(port, () => {
       console.log('Server started on port ' + port);

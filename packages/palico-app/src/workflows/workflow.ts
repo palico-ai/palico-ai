@@ -1,132 +1,99 @@
-import { AppConfig, ConversationContext } from '@palico-ai/common';
+import {
+  AppConfig,
+  ConversationContext,
+  InputWithAppConfig,
+  JSONAbleObject,
+  RequestTemplate,
+  WorkflowEdge,
+  WorkflowGraphSerialized,
+} from '@palico-ai/common';
+import { Choice, TaskNode } from './node';
 
 export interface TaskResponse<Payload> {
   payload: Payload;
   nextChainableId: string;
 }
 
-export interface ITask<Input, Payload, AC extends AppConfig = AppConfig> {
-  run(
-    input: Input,
-    context: ConversationContext<AC>
-  ): Promise<TaskResponse<Payload>>;
-}
-
-export interface IChainable {
+export interface INode<
+  I extends JSONAbleObject = JSONAbleObject,
+  O extends JSONAbleObject = JSONAbleObject,
+  AC extends AppConfig = AppConfig
+> {
   id: string;
-  executor: ITask<unknown, unknown>;
-  nextStates: IChainable[];
+  run: (input: I, context: ConversationContext<AC>) => Promise<TaskResponse<O>>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  nextNodes: INode<O, any, AC>[];
 }
 
-export abstract class TaskState<
-  Input = any,
-  Payload = any,
-  AC extends AppConfig = any
-> implements ITask<Input, Payload, AC>, IChainable
-{
-  id: string;
-  executor: ITask<unknown, unknown, AppConfig>;
-  nextStates: IChainable[];
-
-  constructor(id: string) {
-    this.id = id;
-    this.executor = this;
-    this.nextStates = [];
-  }
-
-  abstract handler(
-    input: Input,
-    context: ConversationContext<AC>
-  ): Promise<Payload>;
-
-  async run(
-    input: Input,
-    context: ConversationContext<AC>
-  ): Promise<TaskResponse<Payload>> {
-    const payload = await this.handler(input, context);
-    return {
-      payload,
-      nextChainableId: this.nextStates[0].id,
-    };
-  }
-
-  next(state: IChainable): IChainable {
-    this.nextStates = [state];
-    return state;
-  }
+export interface WorkflowGraph {
+  nodes: INode[];
+  edges: WorkflowEdge[];
 }
 
-export type ChoiceWhen<Input, AC extends AppConfig> = (
-  input: Input,
-  context: ConversationContext<AC>
-) => Promise<boolean>;
+export interface ConversationFormat {
+  data?: JSONAbleObject;
+  message?: string;
+}
 
-export abstract class Choice<Input = any, AC extends AppConfig = any>
-  implements IChainable, ITask<Input, any, AC>
-{
-  nextStates: IChainable[];
-  matchers: ChoiceWhen<Input, AC>[];
-  defaultChoice?: IChainable;
-  executor: ITask<Input, any, AC>;
+export abstract class Workflow<AC extends AppConfig = AppConfig> {
+  /**
+   * Define the workflow
+   * @returns The start node of the workflow
+   */
+  abstract definition(): INode;
 
-  constructor(public id: string) {
-    this.matchers = [];
-    this.nextStates = [];
-    this.executor = this;
+  templates: RequestTemplate<InputWithAppConfig>[] = [];
+
+  task<
+    Input extends JSONAbleObject = JSONAbleObject,
+    Payload extends JSONAbleObject = JSONAbleObject
+  >(
+    id: string,
+    runner: (input: Input, context: ConversationContext<AC>) => Promise<Payload>
+  ) {
+    return new TaskNode(id, runner);
   }
 
-  when(matcher: ChoiceWhen<Input, AC>, chain: IChainable): this {
-    this.matchers.push(matcher);
-    this.nextStates.push(chain);
-    return this;
+  format<
+    T extends JSONAbleObject,
+    Input extends JSONAbleObject = JSONAbleObject
+  >(
+    id: string,
+    runner: (input: Input, context: ConversationContext<AC>) => Promise<T>
+  ) {
+    return new TaskNode(id, runner);
   }
 
-  otherwise(state: IChainable): this {
-    this.defaultChoice = state;
-    this.nextStates.push(state);
-    return this;
+  choice<Input extends JSONAbleObject = JSONAbleObject>(id: string) {
+    return new Choice<Input, AC>(id);
   }
 
-  async run(
-    input: Input,
-    context: ConversationContext<AC>
-  ): Promise<TaskResponse<unknown>> {
-    for (let i = 0; i < this.matchers.length; i++) {
-      const isMatch = await this.matchers[i](input, context);
-      if (isMatch) {
-        return {
-          payload: null,
-          nextChainableId: this.nextStates[i].id,
-        };
+  getGraph(): WorkflowGraph {
+    const root = this.definition();
+    const nodes: INode[] = [];
+    const edges: WorkflowEdge[] = [];
+    const visited = new Set<string>();
+    const stack = [root];
+    while (stack.length) {
+      const node = stack.pop();
+      if (!node || visited.has(node.id)) {
+        continue;
+      }
+      visited.add(node.id);
+      nodes.push(node);
+      for (const next of node.nextNodes) {
+        edges.push({ sourceNodeId: node.id, targetNodeId: next.id });
+        stack.push(next);
       }
     }
-    return {
-      payload: null,
-      nextChainableId: this.defaultChoice?.id ?? this.nextStates[0].id,
-    };
+    return { nodes, edges };
   }
-}
 
-export class Workflow {
-  constructor(readonly startNode: IChainable) {}
-
-  printNodeTree() {
-    const nodeStack: IChainable[][] = [];
-    let currentLevel = [this.startNode];
-    nodeStack.push(currentLevel);
-    while (currentLevel.length > 0) {
-      const nextLevel: IChainable[] = [];
-      for (const node of currentLevel) {
-        nextLevel.push(...node.nextStates);
-      }
-      nodeStack.push(nextLevel);
-      currentLevel = nextLevel;
-    }
-    console.log(this.startNode);
-    nodeStack.forEach((level, index) => {
-      console.log(
-        `Level ${index}: ${level.map((node) => node.id).join('\t\t')}`
-      );
-    });
+  getSerializedGraph(): WorkflowGraphSerialized {
+    const graph = this.getGraph();
+    return {
+      nodes: graph.nodes.map((node) => ({ id: node.id })),
+      edges: graph.edges,
+    };
   }
 }

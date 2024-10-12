@@ -1,37 +1,41 @@
 import {
   AppConfig,
-  ConversationRequestContent,
+  ChatRequestContent,
   RequestLogs,
   ConversationRequestSpan,
-  ConversationRequestTelemetryItem,
+  ConversationRequestItem,
   ConversationResponse,
-  ConversationTelemetry,
-  ConversationTracesWithoutRequests,
+  ConversationTraceWithRequests,
+  ConversationTraceWithoutRequests,
   PaginationParams,
+  JSONAbleObject,
 } from '@palico-ai/common';
-import config from '../../config';
+import config from '../config';
 import {
   RequestLogsTable,
   ConversationRequestSpanTableSchema,
-  ConversationRequestTraceTableSchema,
-  ConversationRequestTracingTable,
-  ConversationTracingTable,
+  ConversationRequestTableSchema,
+  ConversationRequestTable,
+  ConversationTraceTable,
   RequestSpanTable,
-} from './tables';
+} from '../services/database/tables';
 
-export interface LogRequestParams {
+export interface LogRequestParams<
+  Input = JSONAbleObject,
+  Output = JSONAbleObject
+> {
   conversationId: string;
   agentName?: string;
   workflowName?: string;
   requestId: string;
-  requestInput: ConversationRequestContent;
-  responseOutput: ConversationResponse;
+  requestInput: Input;
+  responseOutput: Output;
   appConfig?: AppConfig;
-  traceId?: string;
-  tracePreviewUrl?: string;
+  traceId?: string; // @deprecated
+  tracePreviewUrl?: string; // @deprecated
 }
 
-export class ConversationTelemetryModel {
+export class ConversationTraceModel {
   static async logRequest(request: LogRequestParams): Promise<void> {
     const basePreviewURL = await config.getTraceBasePreviewURL();
     const tracePreviewUrl = request.tracePreviewUrl
@@ -39,17 +43,17 @@ export class ConversationTelemetryModel {
       : basePreviewURL
       ? `${basePreviewURL}/${request.traceId}`
       : undefined;
-    let conversation = await ConversationTracingTable.findByPk(
+    let conversation = await ConversationTraceTable.findByPk(
       request.conversationId
     );
     if (!conversation) {
-      conversation = await ConversationTracingTable.create({
+      conversation = await ConversationTraceTable.create({
         conversationId: request.conversationId,
         agentName: request.agentName,
         workflowName: request.workflowName,
       });
     }
-    await ConversationRequestTracingTable.create({
+    await ConversationRequestTable.create({
       requestId: request.requestId,
       conversationId: request.conversationId,
       requestInput: JSON.stringify(request.requestInput),
@@ -60,12 +64,56 @@ export class ConversationTelemetryModel {
     });
   }
 
-  static async getRequestsByConversationId(
+  static async getRecentRequestList(
+    pagination?: PaginationParams
+  ): Promise<ConversationRequestItem[]> {
+    const requests = await ConversationRequestTable.findAll({
+      limit: pagination?.limit,
+      offset: pagination?.offset,
+      order: [['createdAt', 'DESC']],
+    });
+    return requests.map((request) =>
+      ConversationTraceModel.parseRequestTableData(request.dataValues)
+    );
+  }
+
+  static async getRecentRequestsForWorkflow(
+    workflowName: string,
+    pagination?: PaginationParams
+  ): Promise<ConversationRequestItem[]> {
+    const requests = await ConversationRequestTable.findAll({
+      include: [
+        {
+          model: ConversationTraceTable,
+          where: { workflowName },
+        },
+      ],
+      limit: pagination?.limit,
+      offset: pagination?.offset,
+      order: [['createdAt', 'DESC']],
+    });
+    return requests.map((request) =>
+      ConversationTraceModel.parseRequestTableData(request.dataValues)
+    );
+  }
+
+  static async getRecentConversationList(
+    pagination?: PaginationParams
+  ): Promise<ConversationTraceWithoutRequests[]> {
+    const conversations = await ConversationTraceTable.findAll({
+      limit: pagination?.limit,
+      offset: pagination?.offset,
+      order: [['createdAt', 'DESC']],
+    });
+    return conversations.map((conversation) => conversation.dataValues);
+  }
+
+  static async getConversationWithRequestList(
     conversationId: string
-  ): Promise<ConversationTelemetry> {
+  ): Promise<ConversationTraceWithRequests> {
     const [conversation, requests] = await Promise.all([
-      ConversationTracingTable.findByPk(conversationId),
-      ConversationTelemetryModel.getRequestsForConversation(conversationId),
+      ConversationTraceTable.findByPk(conversationId),
+      ConversationTraceModel.getRequestList(conversationId),
     ]);
     if (!conversation) {
       throw new Error('Conversation not found');
@@ -76,57 +124,33 @@ export class ConversationTelemetryModel {
     };
   }
 
-  static async getRecentRequests(
-    pagination?: PaginationParams
-  ): Promise<ConversationRequestTelemetryItem[]> {
-    const requests = await ConversationRequestTracingTable.findAll({
-      limit: pagination?.limit,
-      offset: pagination?.offset,
-      order: [['createdAt', 'DESC']],
-    });
-    return requests.map((request) =>
-      ConversationTelemetryModel.parseRequesTraceItem(request.dataValues)
-    );
-  }
-
-  static async getRecentConversations(
-    pagination?: PaginationParams
-  ): Promise<ConversationTracesWithoutRequests[]> {
-    const conversations = await ConversationTracingTable.findAll({
-      limit: pagination?.limit,
-      offset: pagination?.offset,
-      order: [['createdAt', 'DESC']],
-    });
-    return conversations.map((conversation) => conversation.dataValues);
-  }
-
-  static async getRequestsForConversation(conversationId: string) {
-    const requests = await ConversationRequestTracingTable.findAll({
+  static async getRequestList(
+    conversationId: string
+  ): Promise<ConversationRequestItem[]> {
+    const requests = await ConversationRequestTable.findAll({
       where: { conversationId },
     });
     return requests.map((request) =>
-      ConversationTelemetryModel.parseRequesTraceItem(request.dataValues)
+      ConversationTraceModel.parseRequestTableData(request.dataValues)
     );
   }
 
-  static async getRequestTelemetry(
-    requestId: string
-  ): Promise<ConversationRequestTelemetryItem> {
-    const request = await ConversationRequestTracingTable.findByPk(requestId);
+  static async getRequest(requestId: string): Promise<ConversationRequestItem> {
+    const request = await ConversationRequestTable.findByPk(requestId);
     if (!request) {
       throw new Error('Request not found');
     }
-    return ConversationTelemetryModel.parseRequesTraceItem(request.dataValues);
+    return ConversationTraceModel.parseRequestTableData(request.dataValues);
   }
 
-  static async getRequestSpans(
+  static async getRequestSpanList(
     requestId: string
   ): Promise<ConversationRequestSpan[]> {
     const spans = await RequestSpanTable.findAll({
       where: { requestId },
     });
     return spans.map((span) =>
-      ConversationTelemetryModel.parseRequestSpan(span.dataValues)
+      ConversationTraceModel.parseSpanTableData(span.dataValues)
     );
   }
 
@@ -158,9 +182,9 @@ export class ConversationTelemetryModel {
     };
   }
 
-  private static parseRequesTraceItem(
-    request: ConversationRequestTraceTableSchema
-  ): ConversationRequestTelemetryItem {
+  private static parseRequestTableData(
+    request: ConversationRequestTableSchema
+  ): ConversationRequestItem {
     return {
       ...request,
       requestInput: JSON.parse(request.requestInput),
@@ -169,7 +193,7 @@ export class ConversationTelemetryModel {
     };
   }
 
-  private static parseRequestSpan(
+  private static parseSpanTableData(
     span: ConversationRequestSpanTableSchema
   ): ConversationRequestSpan {
     return {

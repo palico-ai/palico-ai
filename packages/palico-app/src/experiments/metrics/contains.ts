@@ -1,5 +1,5 @@
 import {
-  ConversationRequestContent,
+  ChatRequestContent,
   ConversationResponse,
   EvalMetric,
   EvalMetricOutput,
@@ -22,7 +22,7 @@ export class ContainsMetric implements EvalMetric {
   }
 
   async evaluate(
-    _: ConversationRequestContent,
+    _: ChatRequestContent,
     response: ConversationResponse
   ): Promise<EvalMetricOutput> {
     const exists = response.message
@@ -50,7 +50,7 @@ export class ContainsAnyMetric implements EvalMetric {
   }
 
   async evaluate(
-    _: ConversationRequestContent,
+    _: ChatRequestContent,
     response: ConversationResponse
   ): Promise<EvalMetricOutput> {
     const found = this.params.substrings.some((substring) =>
@@ -78,7 +78,7 @@ export class ContainsAllMetric implements EvalMetric {
   }
 
   async evaluate(
-    _: ConversationRequestContent,
+    _: ChatRequestContent,
     response: ConversationResponse
   ): Promise<EvalMetricOutput> {
     const found = this.params.substrings.every((substring) =>

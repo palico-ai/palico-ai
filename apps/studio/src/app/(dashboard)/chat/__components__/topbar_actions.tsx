@@ -4,6 +4,7 @@ import { Box, MenuItem, TextField } from '@mui/material';
 import { ConversationContext } from '../../../../context/conversation';
 import React, { useContext } from 'react';
 import { ConversationalEntity } from '../../../../types/common';
+import { capitalCase } from 'change-case';
 
 export interface TopbarAgentParams {
   conversationEntities: ConversationalEntity[];
@@ -41,7 +42,7 @@ const TopbarActions: React.FC<TopbarAgentParams> = ({
       >
         {conversationEntities.map((entity, index) => (
           <MenuItem key={index} value={JSON.stringify(entity)}>
-            {entity.name}
+            {capitalCase(entity.name)}
           </MenuItem>
         ))}
       </TextField>
