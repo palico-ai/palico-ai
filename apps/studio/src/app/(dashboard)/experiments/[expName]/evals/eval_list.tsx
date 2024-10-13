@@ -3,7 +3,7 @@
 import {
   CreateEvalJobResponse,
   EvaluationMetadata,
-  EvalJobStatus,
+  JobQueueStatus,
 } from '@palico-ai/common';
 import React, { useEffect } from 'react';
 import EvalTable from './table';
@@ -65,8 +65,8 @@ const EvalList: React.FC<TestListProps> = ({ initialTests }) => {
       setPendingEvals(
         newPendingTest.filter(
           (test) =>
-            test.status.state === EvalJobStatus.ACTIVE ||
-            test.status.state === EvalJobStatus.CREATED
+            test.status.state === JobQueueStatus.ACTIVE ||
+            test.status.state === JobQueueStatus.CREATED
         )
       );
     },

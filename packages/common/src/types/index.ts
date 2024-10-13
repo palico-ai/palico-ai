@@ -1,17 +1,17 @@
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type ConversationResponseMetadata = Record<string, any>;
+export type AgentResponseMetadata = Record<string, any>;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export interface ConversationResponse<Data = Record<string, any>> {
+export interface AgentResponse<Data = Record<string, any>> {
   conversationId: string;
   requestId: string;
   message?: string;
   data?: Data;
-  metadata?: ConversationResponseMetadata;
+  metadata?: AgentResponseMetadata;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export interface ConversationRequestContent<Payload = Record<string, any>> {
+export interface AgentRequestContent<Payload = Record<string, any>> {
   userMessage?: string;
   payload?: Payload;
 }
@@ -20,7 +20,7 @@ export interface ConversationRequestContent<Payload = Record<string, any>> {
 export type AppConfig<KV extends Record<string, any> = Record<string, any>> =
   KV;
 
-export interface ConversationContext<AC extends AppConfig = AppConfig> {
+export interface AgentRequestContext<AC extends AppConfig = AppConfig> {
   conversationId: string;
   requestId: string;
   isNewConversation: boolean;
@@ -34,3 +34,5 @@ export * from './studio';
 export * from './experiment';
 export * from './api';
 export * from './telemetry';
+export * from './common';
+export * from './app_script';

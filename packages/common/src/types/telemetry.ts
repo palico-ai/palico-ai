@@ -1,11 +1,11 @@
 import { TimedEvent } from '@opentelemetry/sdk-trace-node';
-import { AppConfig, ConversationRequestContent, ConversationResponse } from '.';
+import { AppConfig, AgentRequestContent, AgentResponse } from '.';
 
-export interface ConversationRequestTelemetryItem {
+export interface AgentRequestTrace {
   requestId: string;
   conversationId: string;
-  requestInput: ConversationRequestContent;
-  responseOutput: ConversationResponse;
+  requestInput: AgentRequestContent;
+  responseOutput: AgentResponse;
   appConfig: AppConfig;
   traceId?: string;
   tracePreviewUrl?: string;
@@ -13,7 +13,7 @@ export interface ConversationRequestTelemetryItem {
   updatedAt: string;
 }
 
-export interface ConversationRequestSpan {
+export interface RequestSpan {
   spanId: string;
   requestId: string;
   conversationId: string;
@@ -45,16 +45,16 @@ export interface RequestLogs {
   logs: LogItem[];
 }
 
-export interface ConversationTelemetry {
+export interface AgentConversationTraceWithRequest {
   conversationId: string;
   agentName?: string;
-  workflowName?: string;
-  requests: ConversationRequestTelemetryItem[];
+  workflowName?: string; // @ deprecated
+  requests: AgentRequestTrace[];
   createdAt: string;
   updatedAt: string;
 }
 
 export type ConversationTracesWithoutRequests = Omit<
-  ConversationTelemetry,
+  AgentConversationTraceWithRequest,
   'requests'
 >;

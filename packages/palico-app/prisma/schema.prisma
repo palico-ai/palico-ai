@@ -59,3 +59,12 @@ model request_logs {
   logs                          Json?
   conversation_request_tracings conversation_request_tracings @relation(fields: [requestId], references: [requestId], onDelete: Cascade)
 }
+
+model app_script_requests {
+  requestId  String   @id @db.VarChar(255)
+  scriptName String?  @db.VarChar(255)
+  inputJSON  Json?
+  status     String?  @db.VarChar(255)
+  createdAt  DateTime @db.Timestamptz(6)
+  updatedAt  DateTime @db.Timestamptz(6)
+}

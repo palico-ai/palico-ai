@@ -1,6 +1,6 @@
 import {
-  ConversationRequestContent,
-  ConversationResponse,
+  AgentRequestContent,
+  AgentResponse,
   EvalMetric,
   EvalMetricOutput,
 } from '@palico-ai/common';
@@ -22,8 +22,8 @@ export class ContainsMetric implements EvalMetric {
   }
 
   async evaluate(
-    _: ConversationRequestContent,
-    response: ConversationResponse
+    _: AgentRequestContent,
+    response: AgentResponse
   ): Promise<EvalMetricOutput> {
     const exists = response.message
       ?.toLocaleLowerCase()
@@ -50,8 +50,8 @@ export class ContainsAnyMetric implements EvalMetric {
   }
 
   async evaluate(
-    _: ConversationRequestContent,
-    response: ConversationResponse
+    _: AgentRequestContent,
+    response: AgentResponse
   ): Promise<EvalMetricOutput> {
     const found = this.params.substrings.some((substring) =>
       response.message?.toLocaleLowerCase().includes(substring.toLowerCase())
@@ -78,8 +78,8 @@ export class ContainsAllMetric implements EvalMetric {
   }
 
   async evaluate(
-    _: ConversationRequestContent,
-    response: ConversationResponse
+    _: AgentRequestContent,
+    response: AgentResponse
   ): Promise<EvalMetricOutput> {
     const found = this.params.substrings.every((substring) =>
       response.message?.toLocaleLowerCase().includes(substring.toLowerCase())

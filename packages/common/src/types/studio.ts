@@ -1,4 +1,4 @@
-import { ConversationRequestContent, ConversationResponse } from '.';
+import { AgentRequestContent, AgentResponse } from '.';
 
 export interface LabExperimentModel {
   id: string;
@@ -10,7 +10,7 @@ export interface LabExperimentModel {
 export interface LabTestCaseModel {
   id: string;
   label: string;
-  userMessage: ConversationRequestContent['userMessage'];
+  userMessage: AgentRequestContent['userMessage'];
   payloadString?: string;
 }
 
@@ -23,8 +23,8 @@ export interface LabExperimentTestResultMetadata {
 export type LabExperimentTestResult = {
   status: 'RUNNING' | 'SUCCESS' | 'FAILURE';
   metadata?: LabExperimentTestResultMetadata;
-  message?: ConversationResponse['message'];
-  data?: ConversationResponse['data'];
+  message?: AgentResponse['message'];
+  data?: AgentResponse['data'];
 };
 
 export interface QuickLabContentJSON {

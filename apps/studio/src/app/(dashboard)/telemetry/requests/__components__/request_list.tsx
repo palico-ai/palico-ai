@@ -10,7 +10,7 @@ import {
   Typography,
   Skeleton,
 } from '@palico-ai/components';
-import { ConversationRequestTelemetryItem } from '@palico-ai/common';
+import { AgentRequestTrace } from '@palico-ai/common';
 import { useRouter } from 'next/navigation';
 import { RoutePath } from '../../../../../utils/route_path';
 import { useInfiniteQuery } from '@tanstack/react-query';
@@ -19,7 +19,7 @@ import { getRecentRequests } from '../../../../../services/telemetry';
 import { Box } from '@mui/material';
 import { useSelectedRequestId } from '../context';
 
-const RequestListItem: React.FC<ConversationRequestTelemetryItem> = ({
+const RequestListItem: React.FC<AgentRequestTrace> = ({
   requestId,
   createdAt,
 }) => {

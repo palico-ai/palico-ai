@@ -2,8 +2,8 @@
 
 import {
   AppConfig,
-  ConversationRequestContent,
-  ConversationResponse,
+  AgentRequestContent,
+  AgentResponse,
 } from '@palico-ai/common';
 import React, { useEffect, useState } from 'react';
 import { ConversationHistoryItem } from '../app/(dashboard)/chat/__components__/chat_history';
@@ -16,7 +16,7 @@ export type ConversationContextParams = {
   conversationEntity?: ConversationalEntity;
   setConversationalEntity: (entity: ConversationalEntity) => void;
   sendMessage: (
-    content: ConversationRequestContent,
+    content: AgentRequestContent,
     appConfig: AppConfig
   ) => Promise<void>;
 };
@@ -47,7 +47,7 @@ export const ConversationContextProvider: React.FC<
   }, [conversationEntity]);
 
   const agentResponseToHistoryItem = (
-    response: ConversationResponse
+    response: AgentResponse
   ): ConversationHistoryItem => {
     return {
       role: 'assistant',
@@ -57,7 +57,7 @@ export const ConversationContextProvider: React.FC<
   };
 
   const sendMessage = async (
-    content: ConversationRequestContent,
+    content: AgentRequestContent,
     appConfig: AppConfig
   ): Promise<void> => {
     // TODO: This this as an input
@@ -74,7 +74,7 @@ export const ConversationContextProvider: React.FC<
       },
     ]);
     try {
-      let response: ConversationResponse;
+      let response: AgentResponse;
       if (conversationId) {
         response = await replyToConversation(conversationEntity, {
           conversationId,

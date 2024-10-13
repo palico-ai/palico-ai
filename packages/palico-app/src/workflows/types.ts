@@ -1,16 +1,16 @@
-import { ConversationContext, ConversationResponse } from '@palico-ai/common';
+import { AgentRequestContext, AgentResponse } from '@palico-ai/common';
 
 export type ChainNodeRequestHandler<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   Input = any,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   Output = any
-> = (input: Input, context: ConversationContext) => Promise<Output>;
+> = (input: Input, context: AgentRequestContext) => Promise<Output>;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type ResultNodeRequestHandler<Input = any> = ChainNodeRequestHandler<
   Input,
-  ConversationResponse
+  AgentResponse
 >;
 
 /**

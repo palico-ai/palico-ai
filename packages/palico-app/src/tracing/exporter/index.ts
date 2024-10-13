@@ -1,7 +1,7 @@
 import { ExportResult, hrTimeToMilliseconds } from '@opentelemetry/core';
 import { ReadableSpan, SpanExporter } from '@opentelemetry/sdk-trace-base';
 import { InternalSpanAttribute } from '../internal.span';
-import { ConversationRequestSpan } from '@palico-ai/common';
+import { RequestSpan } from '@palico-ai/common';
 import { ConversationTelemetryModel } from '../../services/database/conversation_telemetry';
 
 export class PalicoSpanExporter implements SpanExporter {
@@ -51,7 +51,7 @@ export class PalicoSpanExporter implements SpanExporter {
   }
 
   private async logSpans(spans: ReadableSpan[]): Promise<void> {
-    const spanDBEntries: ConversationRequestSpan[] = [];
+    const spanDBEntries: RequestSpan[] = [];
     spans.forEach((span) => {
       const conversationId = span.attributes[
         InternalSpanAttribute.ConversationId

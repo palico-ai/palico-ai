@@ -1,7 +1,7 @@
 import {
   AppConfig,
-  ConversationContext,
-  ConversationRequestContent,
+  AgentRequestContext,
+  AgentRequestContent,
   ConversationResponseSchema,
 } from '@palico-ai/common';
 import { SpanStatusCode, trace } from '@opentelemetry/api';
@@ -13,7 +13,7 @@ import { ConversationTelemetryModel } from '../services/database/conversation_te
 
 export interface RunWorkflowParams {
   workflowName: string;
-  content: ConversationRequestContent;
+  content: AgentRequestContent;
   conversationId?: string;
   appConfig?: AppConfig;
   traceId?: string;
@@ -61,7 +61,7 @@ export default class ChainWorkflowExecutor {
   private static async runNode(
     node: ChainNode,
     workflowInput: Record<string, unknown>,
-    context: ConversationContext
+    context: AgentRequestContext
   ) {
     return await tracer.startActiveSpan(node.name, async (nodeSpan) => {
       try {
@@ -109,7 +109,7 @@ export default class ChainWorkflowExecutor {
         const workflow = await WorkflowModel.getWorkflowByName(
           params.workflowName
         );
-        const context: ConversationContext = {
+        const context: AgentRequestContext = {
           conversationId,
           isNewConversation: params.conversationId === undefined,
           requestId,

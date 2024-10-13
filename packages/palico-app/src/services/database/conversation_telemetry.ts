@@ -1,21 +1,21 @@
 import {
   AppConfig,
-  ConversationRequestContent,
+  AgentRequestContent,
   RequestLogs,
-  ConversationRequestSpan,
-  ConversationRequestTelemetryItem,
-  ConversationResponse,
-  ConversationTelemetry,
+  RequestSpan,
+  AgentRequestTrace,
+  AgentResponse,
+  AgentConversationTraceWithRequest,
   ConversationTracesWithoutRequests,
   PaginationParams,
 } from '@palico-ai/common';
 import config from '../../config';
 import {
   RequestLogsTable,
-  ConversationRequestSpanTableSchema,
-  ConversationRequestTraceTableSchema,
-  ConversationRequestTracingTable,
-  ConversationTracingTable,
+  RequestSpanTableSchema,
+  AgentRequestTracingTableSchema,
+  AgentRequestTracingTable,
+  AgentConversationTracingTable,
   RequestSpanTable,
 } from './tables';
 
@@ -24,8 +24,8 @@ export interface LogRequestParams {
   agentName?: string;
   workflowName?: string;
   requestId: string;
-  requestInput: ConversationRequestContent;
-  responseOutput: ConversationResponse;
+  requestInput: AgentRequestContent;
+  responseOutput: AgentResponse;
   appConfig?: AppConfig;
   traceId?: string;
   tracePreviewUrl?: string;
@@ -39,17 +39,17 @@ export class ConversationTelemetryModel {
       : basePreviewURL
       ? `${basePreviewURL}/${request.traceId}`
       : undefined;
-    let conversation = await ConversationTracingTable.findByPk(
+    let conversation = await AgentConversationTracingTable.findByPk(
       request.conversationId
     );
     if (!conversation) {
-      conversation = await ConversationTracingTable.create({
+      conversation = await AgentConversationTracingTable.create({
         conversationId: request.conversationId,
         agentName: request.agentName,
         workflowName: request.workflowName,
       });
     }
-    await ConversationRequestTracingTable.create({
+    await AgentRequestTracingTable.create({
       requestId: request.requestId,
       conversationId: request.conversationId,
       requestInput: JSON.stringify(request.requestInput),
@@ -62,9 +62,9 @@ export class ConversationTelemetryModel {
 
   static async getRequestsByConversationId(
     conversationId: string
-  ): Promise<ConversationTelemetry> {
+  ): Promise<AgentConversationTraceWithRequest> {
     const [conversation, requests] = await Promise.all([
-      ConversationTracingTable.findByPk(conversationId),
+      AgentConversationTracingTable.findByPk(conversationId),
       ConversationTelemetryModel.getRequestsForConversation(conversationId),
     ]);
     if (!conversation) {
@@ -78,8 +78,8 @@ export class ConversationTelemetryModel {
 
   static async getRecentRequests(
     pagination?: PaginationParams
-  ): Promise<ConversationRequestTelemetryItem[]> {
-    const requests = await ConversationRequestTracingTable.findAll({
+  ): Promise<AgentRequestTrace[]> {
+    const requests = await AgentRequestTracingTable.findAll({
       limit: pagination?.limit,
       offset: pagination?.offset,
       order: [['createdAt', 'DESC']],
@@ -92,7 +92,7 @@ export class ConversationTelemetryModel {
   static async getRecentConversations(
     pagination?: PaginationParams
   ): Promise<ConversationTracesWithoutRequests[]> {
-    const conversations = await ConversationTracingTable.findAll({
+    const conversations = await AgentConversationTracingTable.findAll({
       limit: pagination?.limit,
       offset: pagination?.offset,
       order: [['createdAt', 'DESC']],
@@ -101,7 +101,7 @@ export class ConversationTelemetryModel {
   }
 
   static async getRequestsForConversation(conversationId: string) {
-    const requests = await ConversationRequestTracingTable.findAll({
+    const requests = await AgentRequestTracingTable.findAll({
       where: { conversationId },
     });
     return requests.map((request) =>
@@ -111,17 +111,15 @@ export class ConversationTelemetryModel {
 
   static async getRequestTelemetry(
     requestId: string
-  ): Promise<ConversationRequestTelemetryItem> {
-    const request = await ConversationRequestTracingTable.findByPk(requestId);
+  ): Promise<AgentRequestTrace> {
+    const request = await AgentRequestTracingTable.findByPk(requestId);
     if (!request) {
       throw new Error('Request not found');
     }
     return ConversationTelemetryModel.parseRequesTraceItem(request.dataValues);
   }
 
-  static async getRequestSpans(
-    requestId: string
-  ): Promise<ConversationRequestSpan[]> {
+  static async getRequestSpans(requestId: string): Promise<RequestSpan[]> {
     const spans = await RequestSpanTable.findAll({
       where: { requestId },
     });
@@ -130,7 +128,7 @@ export class ConversationTelemetryModel {
     );
   }
 
-  static async logSpans(spans: ConversationRequestSpan[]): Promise<void> {
+  static async logSpans(spans: RequestSpan[]): Promise<void> {
     await RequestSpanTable.bulkCreate(
       spans.map((span) => ({
         ...span,
@@ -159,8 +157,8 @@ export class ConversationTelemetryModel {
   }
 
   private static parseRequesTraceItem(
-    request: ConversationRequestTraceTableSchema
-  ): ConversationRequestTelemetryItem {
+    request: AgentRequestTracingTableSchema
+  ): AgentRequestTrace {
     return {
       ...request,
       requestInput: JSON.parse(request.requestInput),
@@ -169,9 +167,7 @@ export class ConversationTelemetryModel {
     };
   }
 
-  private static parseRequestSpan(
-    span: ConversationRequestSpanTableSchema
-  ): ConversationRequestSpan {
+  private static parseRequestSpan(span: RequestSpanTableSchema): RequestSpan {
     return {
       ...span,
       attributes: JSON.parse(span.attributes),

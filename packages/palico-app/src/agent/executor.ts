@@ -1,15 +1,14 @@
 import {
-  ConversationContext,
-  ConversationRequestContent,
-  ConversationResponse,
+  AgentRequestContext,
+  AgentRequestContent,
+  AgentResponse,
 } from '@palico-ai/common';
 import { AgentModel } from './model';
-import { ConversationTelemetryModel } from '../services/database/conversation_telemetry';
 import { getTracer } from '../tracing';
 
 export interface AgentExecutorChatParams {
   agentName: string;
-  content: ConversationRequestContent;
+  content: AgentRequestContent;
   conversationId: string; // For grouping a conversation
   isNewConversation: boolean;
   requestId: string;
@@ -20,9 +19,7 @@ export interface AgentExecutorChatParams {
 const tracer = getTracer('AgentExecutor');
 
 export default class AgentExecutor {
-  static async chat(
-    params: AgentExecutorChatParams
-  ): Promise<ConversationResponse> {
+  static async chat(params: AgentExecutorChatParams): Promise<AgentResponse> {
     const conversationId = params.conversationId;
     return await tracer.trace('AgentExecutor->chat', async (chatSpan) => {
       const { requestId } = params;
@@ -39,7 +36,7 @@ export default class AgentExecutor {
         });
         const traceId = params.traceId || chatSpan.spanContext().traceId;
         const agent = await AgentModel.getAgentByName(params.agentName);
-        const context: ConversationContext = {
+        const context: AgentRequestContext = {
           conversationId,
           requestId,
           isNewConversation: params.isNewConversation,

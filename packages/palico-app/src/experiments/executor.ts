@@ -1,11 +1,11 @@
 import {
-  ConversationResponse,
+  AgentResponse,
   EvalCompositeKey,
   CreateEvaluationParams,
   CreateEvalJobResponse,
   EvalTestCase,
   EvalJSON,
-  EvalJobStatus,
+  JobQueueStatus,
   EvalTestCaseResult,
   EvalMetricOutput,
   AppConfig,
@@ -70,7 +70,7 @@ export class ExperimentExecutor {
     try {
       let test = await ExperimentModel.updateTestJSON(key, {
         status: {
-          state: EvalJobStatus.ACTIVE,
+          state: JobQueueStatus.ACTIVE,
         },
       });
       const dataset = await Application.fetchTestDataset(test.testSuiteName);
@@ -86,7 +86,7 @@ export class ExperimentExecutor {
       );
       test = await ExperimentModel.updateTestJSON(key, {
         status: {
-          state: EvalJobStatus.SUCCESS,
+          state: JobQueueStatus.SUCCESS,
         },
       });
       await ExperimentModel.updateTestResultJSON(key, {
@@ -98,7 +98,7 @@ export class ExperimentExecutor {
       const message = error instanceof Error ? error.message : 'Unknown error';
       await ExperimentModel.updateTestJSON(key, {
         status: {
-          state: EvalJobStatus.FAILED,
+          state: JobQueueStatus.FAILED,
           message,
         },
       });
@@ -110,7 +110,7 @@ export class ExperimentExecutor {
     params: RunTestCaseParams
   ): Promise<EvalTestCaseResult> => {
     const { testCase, agentName, workflowName, appConfig } = params;
-    let response: ConversationResponse;
+    let response: AgentResponse;
     if (agentName) {
       response = await Application.chat({
         agentName,

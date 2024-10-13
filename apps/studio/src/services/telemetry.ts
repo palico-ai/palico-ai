@@ -6,7 +6,7 @@ import {
   GetConversationTelemetryResponse,
   PaginationParams,
   GetRecentRequestTelemetryResponse,
-  ConversationRequestTelemetryItem,
+  AgentRequestTrace,
   GetRequestSpanResponse,
   GetRequestLogsResponse,
 } from '@palico-ai/common';
@@ -36,7 +36,7 @@ export const getConversationTelemetry = async (conversationId: string) => {
 
 export const getRecentRequests = async (
   pagination: PaginationParams
-): Promise<PaginatedResponse<ConversationRequestTelemetryItem>> => {
+): Promise<PaginatedResponse<AgentRequestTrace>> => {
   const response = await palicoFetch<GetRecentRequestTelemetryResponse>(
     `/telemetry/request?limit=${pagination.limit}&offset=${pagination.offset}`,
     {

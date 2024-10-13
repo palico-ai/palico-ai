@@ -1,10 +1,11 @@
 import { Sequelize, DataTypes, Optional, ModelDefined } from 'sequelize';
 import * as dotenv from 'dotenv';
 import {
-  ConversationTelemetry,
-  ConversationRequestTelemetryItem,
-  ConversationRequestSpan,
+  AgentConversationTraceWithRequest,
+  AgentRequestTrace,
+  RequestSpan,
   RequestLogs,
+  AppScriptRequest,
 } from '@palico-ai/common';
 import config from '../../config';
 
@@ -27,16 +28,16 @@ export const sequelize = new Sequelize(dbURL);
 /**
  * Top level container for conversation traces that holds all child request traces
  */
-export type ConversationTracingTableSchema = Omit<
-  ConversationTelemetry,
+export type AgentConversationTracingTableSchema = Omit<
+  AgentConversationTraceWithRequest,
   'requests'
 >;
 
 /**
  * Table schema for individual request traces within a conversation
  */
-export type ConversationRequestTraceTableSchema = Omit<
-  ConversationRequestTelemetryItem,
+export type AgentRequestTracingTableSchema = Omit<
+  AgentRequestTrace,
   'requestInput' | 'responseOutput' | 'appConfig'
 > & {
   requestInput: string; // JSON stringified
@@ -44,8 +45,8 @@ export type ConversationRequestTraceTableSchema = Omit<
   appConfig: string; // JSON stringified
 };
 
-export type ConversationRequestSpanTableSchema = Omit<
-  ConversationRequestSpan,
+export type RequestSpanTableSchema = Omit<
+  RequestSpan,
   'attributes' | 'events'
 > & {
   attributes: string; // JSON stringified
@@ -59,18 +60,22 @@ export type RequestLogsTableSchema = Omit<RequestLogs, 'logs'> & {
 /**
  * Table schema for storing Chat History for conversational agents
  */
-export interface SimpleChatHistorySchema {
+export interface SimpleChatHistoryTableSchema {
   conversationId: string;
   messagesJSON: string;
   createdAt: string;
   updatedAt: string;
 }
 
+export type AppScriptRequestTableSchema = Omit<AppScriptRequest, 'input'> & {
+  inputJSON: string;
+};
+
 // ================== Define Tables ==================
-export type CreateRequestSpanParams = ConversationRequestSpanTableSchema;
+export type CreateRequestSpanParams = RequestSpanTableSchema;
 
 export const RequestSpanTable: ModelDefined<
-  ConversationRequestSpanTableSchema,
+  RequestSpanTableSchema,
   CreateRequestSpanParams
 > = sequelize.define(
   'request_span',
@@ -83,6 +88,7 @@ export const RequestSpanTable: ModelDefined<
       type: DataTypes.STRING,
       allowNull: false,
     },
+    // @deprecated - will be removed in next major version
     conversationId: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -141,14 +147,14 @@ export const RequestLogsTable: ModelDefined<
   }
 );
 
-export type CreateConversationRequestTraceParams = Omit<
-  ConversationRequestTraceTableSchema,
+export type CreateAgentRequestTraceParams = Omit<
+  AgentRequestTracingTableSchema,
   'createdAt' | 'updatedAt'
 >;
 
-export const ConversationRequestTracingTable: ModelDefined<
-  ConversationRequestTraceTableSchema,
-  CreateConversationRequestTraceParams
+export const AgentRequestTracingTable: ModelDefined<
+  AgentRequestTracingTableSchema,
+  CreateAgentRequestTraceParams
 > = sequelize.define(
   'conversation_request_tracing',
   {
@@ -182,14 +188,14 @@ export const ConversationRequestTracingTable: ModelDefined<
   }
 );
 
-export type CreateConversationTracingParams = Omit<
-  ConversationTracingTableSchema,
+export type CreateAgentConversationTracingParams = Omit<
+  AgentConversationTracingTableSchema,
   'createdAt' | 'updatedAt'
 >;
 
-export const ConversationTracingTable: ModelDefined<
-  ConversationTracingTableSchema,
-  CreateConversationTracingParams
+export const AgentConversationTracingTable: ModelDefined<
+  AgentConversationTracingTableSchema,
+  CreateAgentConversationTracingParams
 > = sequelize.define(
   'conversation_tracing',
   {
@@ -200,6 +206,7 @@ export const ConversationTracingTable: ModelDefined<
     agentName: {
       type: DataTypes.STRING,
     },
+    // @deprecated
     workflowName: {
       type: DataTypes.STRING,
     },
@@ -210,12 +217,12 @@ export const ConversationTracingTable: ModelDefined<
 );
 
 export type SimpleChatHistoryCreationAttributes = Optional<
-  SimpleChatHistorySchema,
+  SimpleChatHistoryTableSchema,
   'createdAt' | 'updatedAt'
 >;
 
 export const SimpleChatHistoryTable: ModelDefined<
-  SimpleChatHistorySchema,
+  SimpleChatHistoryTableSchema,
   SimpleChatHistoryCreationAttributes
 > = sequelize.define(
   'simple_chat_history',
@@ -233,37 +240,67 @@ export const SimpleChatHistoryTable: ModelDefined<
   }
 );
 
-ConversationTracingTable.hasMany(ConversationRequestTracingTable, {
+export type CreateAppScriptRequestParams = Omit<
+  AppScriptRequestTableSchema,
+  'createdAt' | 'updatedAt'
+>;
+
+export const AppScriptRequestTable: ModelDefined<
+  AppScriptRequestTableSchema,
+  CreateAppScriptRequestParams
+> = sequelize.define(
+  'app_script_request',
+  {
+    requestId: {
+      type: DataTypes.STRING,
+      primaryKey: true,
+    },
+    scriptName: {
+      type: DataTypes.STRING,
+    },
+    inputJSON: {
+      type: DataTypes.JSONB,
+    },
+    status: {
+      type: DataTypes.STRING,
+    },
+  },
+  {
+    timestamps: true,
+  }
+);
+
+AgentConversationTracingTable.hasMany(AgentRequestTracingTable, {
   foreignKey: 'conversationId',
   onDelete: 'CASCADE',
 });
 
-ConversationRequestTracingTable.belongsTo(ConversationTracingTable, {
+AgentRequestTracingTable.belongsTo(AgentConversationTracingTable, {
   foreignKey: 'conversationId',
 });
 
-ConversationTracingTable.hasMany(RequestSpanTable, {
+AgentConversationTracingTable.hasMany(RequestSpanTable, {
   foreignKey: 'conversationId',
 });
 
-RequestSpanTable.belongsTo(ConversationTracingTable, {
+RequestSpanTable.belongsTo(AgentConversationTracingTable, {
   foreignKey: 'conversationId',
 });
 
-ConversationRequestTracingTable.hasMany(RequestSpanTable, {
+AgentRequestTracingTable.hasMany(RequestSpanTable, {
   foreignKey: 'requestId',
   onDelete: 'CASCADE',
 });
 
-RequestSpanTable.belongsTo(ConversationRequestTracingTable, {
+RequestSpanTable.belongsTo(AgentRequestTracingTable, {
   foreignKey: 'requestId',
 });
 
-ConversationRequestTracingTable.hasOne(RequestLogsTable, {
+AgentRequestTracingTable.hasOne(RequestLogsTable, {
   foreignKey: 'requestId',
   onDelete: 'CASCADE',
 });
 
-RequestLogsTable.belongsTo(ConversationRequestTracingTable, {
+RequestLogsTable.belongsTo(AgentRequestTracingTable, {
   foreignKey: 'requestId',
 });

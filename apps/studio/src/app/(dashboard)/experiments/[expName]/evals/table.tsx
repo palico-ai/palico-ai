@@ -11,7 +11,7 @@ import {
   useTableModel,
 } from '@palico-ai/components';
 import { RoutePath } from '../../../../../utils/route_path';
-import { EvalJobStatus, EvaluationMetadata } from '@palico-ai/common';
+import { JobQueueStatus, EvaluationMetadata } from '@palico-ai/common';
 
 interface TestListProps {
   data: EvaluationMetadata[];
@@ -82,7 +82,7 @@ const EvalTable: React.FC<TestListProps> = ({ data }) => {
     cell: Cell<EvaluationMetadata, unknown>
   ) => {
     if (isStatusCell(cell)) {
-      const status = cell.getValue() as EvalJobStatus;
+      const status = cell.getValue() as JobQueueStatus;
       return (
         <Chip
           size="small"
@@ -93,12 +93,12 @@ const EvalTable: React.FC<TestListProps> = ({ data }) => {
           }
           variant="outlined"
           color={
-            status === EvalJobStatus.SUCCESS
+            status === JobQueueStatus.SUCCESS
               ? 'success'
-              : status === EvalJobStatus.FAILED
+              : status === JobQueueStatus.FAILED
               ? 'error'
-              : status === EvalJobStatus.ACTIVE ||
-                status === EvalJobStatus.CREATED
+              : status === JobQueueStatus.ACTIVE ||
+                status === JobQueueStatus.CREATED
               ? 'warning'
               : 'default'
           }

@@ -5,7 +5,7 @@ import { Application } from '../../../app/app';
 import {
   AgentConversationAPIRequestBody,
   AgentConversationAPIRequestResponse,
-  ConversationResponse,
+  AgentResponse,
 } from '@palico-ai/common';
 
 const tracer = trace.getTracer('agent-route-handler');
@@ -75,7 +75,7 @@ export const replyToConversationRequestHandler: RequestHandler<
           appConfig,
           traceId: requestSpan.spanContext().traceId,
         });
-        const responseJSON: ConversationResponse = {
+        const responseJSON: AgentResponse = {
           ...agentResponse,
           conversationId,
         };

@@ -1,4 +1,4 @@
-import { ConversationRequestContent } from '@palico-ai/common';
+import { AgentRequestContent } from '@palico-ai/common';
 import {
   ChainNode,
   ChainNodeRequestHandler,
@@ -24,10 +24,10 @@ class ChainWorkflowBuilder {
 
   static create(
     name: string,
-    handler: ChainNodeRequestHandler<ConversationRequestContent>,
+    handler: ChainNodeRequestHandler<AgentRequestContent>,
     params?: AppendHandlerParams
   ) {
-    const root: ChainNode<ConversationRequestContent> = {
+    const root: ChainNode<AgentRequestContent> = {
       name,
       handler,
       mapInput: params?.mapInput,
