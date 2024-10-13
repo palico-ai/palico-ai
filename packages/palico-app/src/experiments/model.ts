@@ -7,7 +7,7 @@ import {
   ExperimentMetadata,
   Evaluation,
   EvalJSON,
-  EvalJobStatus,
+  JobQueueStatus,
   EvaluationMetadata,
 } from '@palico-ai/common';
 import { CreateEvalJobConfigResult } from '.';
@@ -89,7 +89,7 @@ export default class ExperimentModel {
     const testJSON: EvalJSON = {
       ...params,
       status: {
-        state: EvalJobStatus.CREATED,
+        state: JobQueueStatus.CREATED,
       },
       createdAt,
     };

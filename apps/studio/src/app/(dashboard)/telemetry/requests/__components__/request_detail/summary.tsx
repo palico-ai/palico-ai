@@ -11,7 +11,7 @@ import {
   TabView,
   Typography,
 } from '@palico-ai/components';
-import { ConversationRequestTelemetryItem } from '@palico-ai/common';
+import { AgentRequestTrace } from '@palico-ai/common';
 
 export interface RequestSummaryProps {
   requestId: string;
@@ -42,10 +42,7 @@ const EditorSnippet: React.FC<{ value: Record<any, any> }> = ({ value }) => {
 };
 
 const CodeSnippetTabs: React.FC<
-  Pick<
-    ConversationRequestTelemetryItem,
-    'requestInput' | 'responseOutput' | 'appConfig'
-  >
+  Pick<AgentRequestTrace, 'requestInput' | 'responseOutput' | 'appConfig'>
 > = ({ requestInput, responseOutput, appConfig }) => {
   return (
     <TabView

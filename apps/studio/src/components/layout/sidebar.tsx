@@ -18,11 +18,11 @@ import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import React, { useContext, useMemo } from 'react';
 import { Link } from '@palico-ai/components';
-import ChatBubbleIcon from '@mui/icons-material/Textsms';
-import ExperimentIcon from '@mui/icons-material/Science';
-import TracerIcon from '@mui/icons-material/MonitorHeart';
-import LabIcon from '@mui/icons-material/Compare';
-import SettingsIcon from '@mui/icons-material/Settings';
+import ChatBubbleIcon from '@mui/icons-material/TextsmsOutlined';
+import ExperimentIcon from '@mui/icons-material/ScienceOutlined';
+import TracerIcon from '@mui/icons-material/MonitorHeartOutlined';
+import LabIcon from '@mui/icons-material/CompareOutlined';
+import SettingsIcon from '@mui/icons-material/SettingsOutlined';
 import { RoutePath } from '../../utils/route_path';
 import { DashboardLayoutContext } from '../../context/dashboard_layout';
 

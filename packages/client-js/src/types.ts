@@ -1,7 +1,7 @@
 import {
   AppConfig,
-  ConversationRequestContent,
-  ConversationResponse,
+  AgentRequestContent,
+  AgentResponse,
 } from '@palico-ai/common';
 
 export type ConversationContextParams = Record<string, unknown>;
@@ -24,13 +24,11 @@ export interface ReplyToToolCallParams {
   toolOutputs: ToolExecutionMessage[];
 }
 
-export interface NewConversationParamsCommon
-  extends ConversationRequestContent {
+export interface NewConversationParamsCommon extends AgentRequestContent {
   appConfig?: AppConfig;
 }
 
-export interface ReplyToConversationParamsCommon
-  extends ConversationRequestContent {
+export interface ReplyToConversationParamsCommon extends AgentRequestContent {
   conversationId: string;
   appConfig?: AppConfig;
 }
@@ -47,13 +45,13 @@ export interface ClientReplyToConversationParams
 
 export type NewConversationFN = (
   params: ClientNewConversationParams
-) => Promise<ConversationResponse>;
+) => Promise<AgentResponse>;
 export type ReplyAsUserFN = (
   params: ClientReplyToConversationParams
-) => Promise<ConversationResponse>;
+) => Promise<AgentResponse>;
 export type AgentReplyToToolCallFN = (
   params: ReplyToToolCallParams
-) => Promise<ConversationResponse>;
+) => Promise<AgentResponse>;
 
 export interface PalicoAgentClient {
   newConversation: NewConversationFN;

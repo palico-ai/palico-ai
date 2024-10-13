@@ -1,10 +1,10 @@
 import {
   ConversationContext,
-  ConversationRequestContent,
   Agent,
-  AgentResponse,
   getTracer,
   Logger,
+  AgentChatOutput,
+  AgentRequestContent,
 } from '@palico-ai/app';
 import { OpenAIService } from '../../utils/openai';
 
@@ -12,33 +12,32 @@ export interface AppConfig {
   model?: 'gpt35' | 'gpt35-turbo' | 'gpt4' | 'gpt4o';
 }
 
+export interface InputPayload {}
+
+export interface OutputData {}
+
 const tracer = getTracer('ChatbotAgent');
 
-class ChatbotAgent implements Agent {
-  static readonly NAME: string = __dirname.split('/').pop()!;
-
+class ChatbotAgent extends Agent<InputPayload, OutputData, AppConfig> {
   async chat(
-    content: ConversationRequestContent,
+    content: AgentRequestContent<InputPayload>,
     context: ConversationContext<AppConfig>
-  ): Promise<AgentResponse> {
+  ): Promise<AgentChatOutput<OutputData>> {
     return await tracer.trace('ChatbotAgent->chat', async (span) => {
       // get the request input
       const { userMessage } = content;
       if (!userMessage) throw new Error('User message is required');
-
       // get the request context
       const {
         isNewConversation,
         conversationId,
         appConfig: { model },
       } = context;
-
       // add request details in traces for better debugging
       span.setAttributes({
         message: userMessage,
         model,
       });
-
       if (isNewConversation) {
         // handle new conversation
         const response = await OpenAIService.newConversation({

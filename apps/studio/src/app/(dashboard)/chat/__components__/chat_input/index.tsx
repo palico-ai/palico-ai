@@ -4,13 +4,10 @@ import { Box, Button, InputAdornment, TextField, Tooltip } from '@mui/material';
 import React, { useEffect, useMemo } from 'react';
 import ExpandIcon from '@mui/icons-material/Expand';
 import AdvanceOption from './advance_option';
-import { AppConfig, ConversationRequestContent } from '@palico-ai/common';
+import { AppConfig, AgentRequestContent } from '@palico-ai/common';
 
 export interface ChatInputProps {
-  onSend: (
-    content: ConversationRequestContent,
-    appConfig: AppConfig
-  ) => Promise<void>;
+  onSend: (content: AgentRequestContent, appConfig: AppConfig) => Promise<void>;
   disabled?: boolean;
   placeholder?: string;
 }

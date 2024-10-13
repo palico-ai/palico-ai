@@ -1,9 +1,7 @@
-import { ConversationRequestSpan } from '@palico-ai/common';
+import { RequestSpan } from '@palico-ai/common';
 import { RequestSpanTreeNode } from './types';
 
-export const createSpanTree = (
-  spans: ConversationRequestSpan[]
-): RequestSpanTreeNode[] => {
+export const createSpanTree = (spans: RequestSpan[]): RequestSpanTreeNode[] => {
   const spanMap: Record<string, RequestSpanTreeNode> = {};
   const rootSpans: RequestSpanTreeNode[] = [];
 

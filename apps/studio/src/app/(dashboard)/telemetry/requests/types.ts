@@ -1,5 +1,5 @@
-import { ConversationRequestSpan } from '@palico-ai/common';
+import { RequestSpan } from '@palico-ai/common';
 
-export interface RequestSpanTreeNode extends ConversationRequestSpan {
+export interface RequestSpanTreeNode extends RequestSpan {
   children: RequestSpanTreeNode[];
 }

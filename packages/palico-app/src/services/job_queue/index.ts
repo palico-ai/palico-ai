@@ -1,12 +1,17 @@
 import PgBoss from 'pg-boss';
-import { ExperimentTestRunner } from './workers';
+import {
+  EvaluationRunnerWorkHandler,
+  ScriptRunnerWorkHandler,
+} from './workers';
 import config from '../../config';
 import { EvalCompositeKey } from '@palico-ai/common';
+import { RunScriptParams } from '../../app/run_script';
 
 export type JobQueueState = PgBoss.Worker['state'];
 
 enum QueueName {
-  ExprimentTestRunner = 'experiment-test-runner',
+  EvaluationRunner = 'evaluation-runner',
+  AppScriptRunner = 'app-script-runner',
 }
 
 export default class JobQueue {
@@ -30,18 +35,27 @@ export default class JobQueue {
       }
       JobQueue._instance = new PgBoss(dbURL);
       JobQueue._instance.work(
-        QueueName.ExprimentTestRunner,
-        ExperimentTestRunner
+        QueueName.EvaluationRunner,
+        EvaluationRunnerWorkHandler
+      );
+      JobQueue._instance.work(
+        QueueName.AppScriptRunner,
+        ScriptRunnerWorkHandler
       );
     }
     return JobQueue._instance;
   }
 
   static async runExperiment(data: EvalCompositeKey) {
-    const jobId = await JobQueue.boss().send(
-      QueueName.ExprimentTestRunner,
-      data
-    );
+    const jobId = await JobQueue.boss().send(QueueName.EvaluationRunner, data);
+    if (!jobId) {
+      throw new Error('failed to start job');
+    }
+    return jobId;
+  }
+
+  static async runScript(params: RunScriptParams) {
+    const jobId = await JobQueue.boss().send(QueueName.AppScriptRunner, params);
     if (!jobId) {
       throw new Error('failed to start job');
     }

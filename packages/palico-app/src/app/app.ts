@@ -1,4 +1,4 @@
-import { ConversationResponse, EvalTestCase } from '@palico-ai/common';
+import { AgentResponse, EvalTestCase } from '@palico-ai/common';
 import ChainWorkflowExecutor, {
   RunWorkflowParams,
 } from '../workflows/executor';
@@ -10,6 +10,7 @@ import { startConversationSpan } from '../tracing/internal.span';
 import { LogQueue } from '../tracing/logger/log_queue';
 import { Logger } from '../tracing/logger';
 import { ConversationTelemetryModel } from '../services/database/conversation_telemetry';
+import { QueueScript, QueueScriptParams } from './run_script';
 
 export interface ApplicationChatParams
   extends Omit<
@@ -20,12 +21,10 @@ export interface ApplicationChatParams
 }
 
 export class Application {
-  static async chat(
-    params: ApplicationChatParams
-  ): Promise<ConversationResponse> {
+  static async chat(params: ApplicationChatParams): Promise<AgentResponse> {
     const conversationId = params.conversationId ?? uuid();
     const requestId = uuid();
-    let output: ConversationResponse;
+    let output: AgentResponse;
     return await startConversationSpan(
       conversationId,
       requestId,
@@ -71,9 +70,15 @@ export class Application {
     );
   }
 
+  static async queueScript(params: QueueScriptParams) {
+    const response = await QueueScript(params);
+    return response;
+  }
+
+  // @unstable
   static async executeWorkflow(
     params: RunWorkflowParams
-  ): Promise<ConversationResponse> {
+  ): Promise<AgentResponse> {
     const result = await ChainWorkflowExecutor.execute(params);
     return result;
   }

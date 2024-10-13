@@ -1,6 +1,6 @@
 import {
-  ConversationRequestContent,
-  ConversationResponse,
+  AgentRequestContent,
+  AgentResponse,
   EvalMetric,
   EvalMetricOutput,
 } from '@palico-ai/common';
@@ -8,7 +8,7 @@ import { ZodSchema } from 'zod';
 
 export interface ValidJSONMetricParams {
   schema?: ZodSchema;
-  responseKey?: keyof Pick<ConversationResponse, 'data' | 'message'>;
+  responseKey?: keyof Pick<AgentResponse, 'data' | 'message'>;
 }
 
 /**
@@ -24,8 +24,8 @@ export class ValidJSONMetric implements EvalMetric {
   }
 
   async evaluate(
-    _: ConversationRequestContent,
-    response: ConversationResponse
+    _: AgentRequestContent,
+    response: AgentResponse
   ): Promise<EvalMetricOutput> {
     try {
       let json = response.data;

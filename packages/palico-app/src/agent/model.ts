@@ -1,6 +1,6 @@
 import Project from '../utils/project';
 import OS from '../utils/os';
-import { Agent } from './types';
+import { Agent } from './agent';
 
 export class AgentModel {
   private static readonly agentFile = 'index.ts';

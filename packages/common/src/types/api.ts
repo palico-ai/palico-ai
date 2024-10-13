@@ -1,12 +1,12 @@
 import {
   AppConfig,
-  ConversationRequestContent,
-  ConversationResponse,
+  AgentRequestContent,
+  AgentResponse,
   CreateEvalJobResponse,
   CreateEvaluationParams,
   CreateExperimentParams,
   CreateQuickLabParams,
-  EvalJobStatus,
+  JobQueueStatus,
   EvaluationMetadata,
   ExperimentMetadata,
   NotebookJSON,
@@ -17,9 +17,9 @@ import {
 } from '.';
 import {
   RequestLogs,
-  ConversationRequestSpan,
-  ConversationRequestTelemetryItem,
-  ConversationTelemetry,
+  RequestSpan,
+  AgentRequestTrace,
+  AgentConversationTraceWithRequest,
   ConversationTracesWithoutRequests,
 } from './telemetry';
 
@@ -40,11 +40,11 @@ export interface GetAllTestSuitesResponse {
 }
 
 export interface GetRecentRequestTelemetryResponse {
-  requests: ConversationRequestTelemetryItem[];
+  requests: AgentRequestTrace[];
 }
 
 export interface GetConversationTelemetryResponse {
-  conversation: ConversationTelemetry;
+  conversation: AgentConversationTraceWithRequest;
 }
 
 export interface GetRecentConversationResponse {
@@ -52,11 +52,11 @@ export interface GetRecentConversationResponse {
 }
 
 export interface GetTelemetryForRequestIdResponse {
-  request: ConversationRequestTelemetryItem;
+  request: AgentRequestTrace;
 }
 
 export interface GetRequestSpanResponse {
-  spans: ConversationRequestSpan[];
+  spans: RequestSpan[];
 }
 
 export interface GetRequestLogsResponse {
@@ -66,19 +66,19 @@ export interface GetRequestLogsResponse {
 // ======== Route: /agent ========
 export interface AgentConversationAPIRequestBody {
   appConfig?: AppConfig;
-  content: ConversationRequestContent;
+  content: AgentRequestContent;
 }
 
-export type AgentConversationAPIRequestResponse = ConversationResponse;
+export type AgentConversationAPIRequestResponse = AgentResponse;
 
 // ======== Route: /workflow ========
 
 export interface WorkflowConverationAPIRequestBody {
   appConfig?: AppConfig;
-  content: ConversationRequestContent;
+  content: AgentRequestContent;
 }
 
-export type WorkflowRequestAPIResponse = ConversationResponse;
+export type WorkflowRequestAPIResponse = AgentResponse;
 // ======== Route: /experiments ========
 
 export type CreateEvalAPIRequestBody = Omit<
@@ -103,7 +103,7 @@ export type GetAllEvalsAPIResponse = {
 };
 
 export type GetEvalStatusAPIResponse = {
-  state: EvalJobStatus;
+  state: JobQueueStatus;
   message?: string;
 };
 
