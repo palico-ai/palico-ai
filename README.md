@@ -41,7 +41,7 @@ https://github.com/palico-ai/palico-main/assets/32821894/54f35583-41c1-48a3-9565
 
 ## 🛠️ Building your Application
 
-### Build your application with complete flexiblity
+### Build your application with complete flexibility
 With Palico, you have complete control over the implementation details of your LLM application. Building an LLM application with Palico just involves implementing the `Agent` interface. Here's an example:
 ```typescript
 import {
