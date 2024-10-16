@@ -10,7 +10,7 @@ class Config {
   }
 
   getStudioDockerImage(): string {
-    return 'palicoai/studio:main@sha256:4511de0ec0422f22d07bc9f11dbfebce110e048782c437b68c79901043b29065';
+    return 'palicoai/studio:main@sha256:32f75d51527273bad7f64f1b56b261267815e46ccf2ac51025289dd249ca37a0';
   }
 
   getAPIPort(): number {
