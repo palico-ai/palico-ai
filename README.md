@@ -9,7 +9,7 @@
 <br>
 </div
 
-Building an LLM application involves continously trying out different ideas (models, prompts, architectures). Palico provides you with an integrated tech stack that helps you quickly iterate on your LLM development.
+Building an LLM application involves continuously trying out different ideas (models, prompts, architectures). Palico provides you with an integrated tech stack that helps you quickly iterate on your LLM development.
 
 #### With Palico you can
 
@@ -98,7 +98,7 @@ https://github.com/user-attachments/assets/c33ae53d-acf5-4c89-9c41-743ea1cb4722
 
 
 ### Easily swap models, prompts, anything and everything
-Working on LLM application involves testing different variations of models, prompts, and application logic. Palico helps you build an interchangable application layer using "feature-flag-like" feature called AppConfig. Using AppConfig, you can easily swap models, prompts, or any logic in your application layer.
+Working on LLM application involves testing different variations of models, prompts, and application logic. Palico helps you build an interchangeable application layer using "feature-flag-like" feature called AppConfig. Using AppConfig, you can easily swap models, prompts, or any logic in your application layer.
 
 Learn more about [AppConfig](https://docs.palico.ai/guides/feature_flag).
 
