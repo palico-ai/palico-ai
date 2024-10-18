@@ -1,15 +1,16 @@
-version: '3.8'
+version: '3.8'  # Specify the version of Docker Compose being used
 
 services:
   studio:
     build:
-      context: ../..
-      dockerfile: apps/studio/Dockerfile
-      target: production
+      context: ../..  # Build context for the Docker image
+      dockerfile: apps/studio/Dockerfile  # Path to the Dockerfile
+      target: production  # Target build stage
     ports:
-      - 3000:3000
+      - "3000:3000"  # Map port 3000 of the container to port 3000 of the host
     extra_hosts:
-      - 'host.docker.internal:host-gateway'
+      - 'host.docker.internal:host-gateway'  # Allows access to the host from the container
     environment:
-      - PALICO_AGENT_API_URL=http://host.docker.internal:8000
-      - PALICO_SERVICE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MTM4MDg3NzB9.GEskObwga-XXXvTM8V6v2d27RNb9-Y8em0Kim5Zazpg
+      # Environment variables
+      - PALICO_AGENT_API_URL=http://host.docker.internal:8000  # API URL for the agent
+      - PALICO_SERVICE_KEY=${PALICO_SERVICE_KEY}  # Load the service key from a .env file
