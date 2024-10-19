@@ -48,7 +48,7 @@ const LandingPageHeader: React.FC = () => {
             opacity: 0.7,
           }}
         >
-          Building an LLM application requires continously trying out different
+          Building an LLM application requires continuously trying out different
           ideas (models, prompts, architectures). Quickly iterate on your LLM
           project with an integrated tech stack.
         </Typography>
