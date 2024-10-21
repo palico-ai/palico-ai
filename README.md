@@ -127,6 +127,6 @@ Learn more from [docs](https://docs.palico.ai/guides/client_sdk).
 
 ## 🤝 Contributing
 
-The easiest way to contribute is to pick an issue with the `good first issue` tag 💪. Read the contribution guidelines [here](/.github/CONTRIBUTING.md).
+The easiest way to contribute is to pick an issue with the `good first issue` tag 💪. Read the contribution guidelines [here](/CONTRIBUTING.md).
 
 Bug Report? [File here](https://github.com/palico-ai/palico-ai/issues) | Feature Request? [File here](https://github.com/palico-ai/palico-ai/issues)
