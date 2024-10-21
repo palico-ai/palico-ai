@@ -6,7 +6,7 @@ import {
   LabTestCaseModel,
 } from '@palico-ai/common';
 import React from 'react';
-import { uuid } from 'uuidv4';
+import { v4 as uuid } from 'uuid';
 import { getRequestTelemetry } from '../../../../../services/telemetry';
 import { newConversation } from '../../../../../services/conversation';
 import { ConversationalEntityType } from '../../../../../types/common';
