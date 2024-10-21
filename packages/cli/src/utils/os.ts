@@ -67,6 +67,7 @@ export const runCommands = async (commands: string[]): Promise<void> => {
     const { stdout, stderr } = await execAsync(command);
     console.log(stdout);
     if (stderr) {
+      console.error(`Error running command: ${command}`);
       throw new Error(stderr);
     }
   }
