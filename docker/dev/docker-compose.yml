@@ -13,4 +13,4 @@ services:
     environment:
       # Environment variables
       - PALICO_AGENT_API_URL=http://host.docker.internal:8000  # API URL for the agent
-      - PALICO_SERVICE_KEY=${eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MTM4MDg3NzB9.GEskObwga-XXXvTM8V6v2d27RNb9-Y8em0Kim5Zazpg}  # Load the service key from a .env file
+      - PALICO_SERVICE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MTM4MDg3NzB9.GEskObwga-XXXvTM8V6v2d27RNb9-Y8em0Kim5Zazpg  # Load the service key from a .env file
