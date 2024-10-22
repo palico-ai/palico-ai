@@ -8,8 +8,11 @@ import config from '../../config';
 
 export const InitSelfHostCommandHandler = async () => {
   const selfhostRootDir = await Project.getSelfhostRootDir();
+  const projectRootDir = await Project.getProjectRootDir();
   const selfhostAssets = path.join(__dirname, 'docker');
   await OS.copyDirectory(selfhostAssets, selfhostRootDir);
+  const dockerIgnorefile = `${projectRootDir}/.dockerignore`
+  await OS.createFile(dockerIgnorefile, ".palico/")
 };
 
 interface ApplyDBMigrationsParams {
