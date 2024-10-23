@@ -4,8 +4,8 @@
 [![Docs](https://img.shields.io/badge/docs-palico?style=flat&label=palico)](https://docs.palico.ai/)
 [![Website](https://img.shields.io/badge/website-palico?style=flat&label=palico)](https://www.palico.ai/)
 [![X (formerly Twitter) Follow](https://img.shields.io/twitter/follow/PalicoAI)](https://x.com/PalicoAI)
+![NPM Downloads](https://img.shields.io/npm/d18m/%40palico-ai%2Fapp)
 [![NPM Version](https://img.shields.io/npm/v/@palico-ai/app)](https://www.npmjs.com/package/@palico-ai/app)
-[![GitHub License](https://img.shields.io/github/license/palico-ai/palico-ai)](https://github.com/palico-ai/palico-ai/blob/main/LICENSE)
 <br>
 </div
 
