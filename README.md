@@ -37,7 +37,7 @@ Checkout our [quickstart](https://docs.palico.ai/) guide.
 
 ### Overview of your Palico App
 
-https://github.com/palico-ai/palico-main/assets/32821894/54f35583-41c1-48a3-9565-95c484a4909b
+https://github.com/user-attachments/assets/de0757a1-c49f-45e4-ba0c-88f98b4c4b6c
 
 ## 🛠️ Building your Application
 
