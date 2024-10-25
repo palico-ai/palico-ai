@@ -13,4 +13,17 @@ services:
     environment:
       # Environment variables
       - PALICO_AGENT_API_URL=http://host.docker.internal:8000  # API URL for the agent
-      - PALICO_SERVICE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MTM4MDg3NzB9.GEskObwga-XXXvTM8V6v2d27RNb9-Y8em0Kim5Zazpg  # Load the service key from a .env file
+      - PALICO_SERVICE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MTM4MDg3NzB9.GEskObwga-XXXvTM8V6v2d27RNb9-Y8em0Kim5Zazpg  # Service key
+    volumes:
+      - ./studio-data:/usr/src/app/data  # Mount a local volume for persistent data storage
+    networks:
+      - studio_network  # Assign to a specific network
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:3000 || exit 1"]  # Check if the service is healthy
+      interval: 30s  # Time between health checks
+      timeout: 10s  # Max time before considering it unhealthy
+      retries: 3  # Number of failed attempts before marking as unhealthy
+
+networks:
+  studio_network:
+    driver: bridge  # Use the bridge network driver for internal communication between services
