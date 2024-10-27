@@ -7,12 +7,12 @@ import { ProjectService } from '../../utils/app_services/common';
 import config from '../../config';
 
 export const InitSelfHostCommandHandler = async () => {
-  const selfhostRootDir = await Project.getSelfhostRootDir();
   const projectRootDir = await Project.getProjectRootDir();
-  const selfhostAssets = path.join(__dirname, 'docker');
-  await OS.copyDirectory(selfhostAssets, selfhostRootDir);
-  const dockerIgnorefile = `${projectRootDir}/.dockerignore`
-  await OS.createFile(dockerIgnorefile, ".palico/")
+  const selfhostAssets = path.join(__dirname, '..', '..', 'assets', 'selfhost');
+  await OS.copyDirectory(selfhostAssets, projectRootDir);
+  const dockerIgnorefile = `${projectRootDir}/.dockerignore`;
+  await OS.createFile(dockerIgnorefile, '.palico/');
+  await UpdatePalicoContainerImages();
 };
 
 interface ApplyDBMigrationsParams {
@@ -29,23 +29,20 @@ export const ApplyDBMigrationsCommandHandler = async (
   console.log('Applying DB migrations...');
   console.log('Database', params);
   const { user, password, db, host, port } = params;
-  // if (!user) {
-  //   throw new Error('--user is required');
-  // }
-  // if (!password) {
-  //   throw new Error('--password is required');
-  // }
   const dbUrl = `postgres://${user}:${password}@${host}:${port}/${db}`;
   const bootstrap = new BootstrapModel({
     devMode: false,
   });
-
   await bootstrap.applyDBMigrations(dbUrl);
 };
 
-export const UpdateDockerComposeCommandHandler = async () => {
-  const selfhostRootDir = await Project.getSelfhostRootDir();
+export const UpdatePalicoContainerImages = async () => {
+  const selfhostRootDir = await Project.getProjectRootDir();
   const composeFilePath = path.join(selfhostRootDir, 'docker-compose.yml');
+  const composeExists = OS.doesFileExist(composeFilePath);
+  if (!composeExists) {
+    throw new Error('Docker compose file does not exist');
+  }
   const composeContent = await OS.readFile(composeFilePath);
   const composeDef = YAML.parse(composeContent);
   const studioImage = composeDef.services[ProjectService.STUDIO].image;

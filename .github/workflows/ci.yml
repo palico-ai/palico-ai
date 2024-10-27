@@ -29,7 +29,7 @@ jobs:
       # - run: npx nx-cloud record -- nx format:check
       - run: npx nx affected -t lint
 
-      - run: npx nx affected -t test --passWithNoTests
+      - run: npx nx affected -t test --passWithNoTests --exclude=palico-ai
 
       # - run: npx nx-cloud start-ci-run --distribute-on="3 linux-medium-js" --stop-agents-after="build"
 

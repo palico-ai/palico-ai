@@ -35,6 +35,7 @@
     },
     {
       "plugin": "@nx/jest/plugin",
+      "include": ["apps/**/*", "packages/**/*"],
       "options": {
         "targetName": "test"
       }

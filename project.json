@@ -19,7 +19,7 @@
       "options": {
         "commands": [
           "npx nx affected -t lint",
-          "npx nx affected -t test  --passWithNoTests",
+          "npx nx affected -t test  --passWithNoTests --exclude=palico-ai",
           "npx nx affected -t build",
           "npx nx run typedoc"
         ],

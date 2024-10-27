@@ -13,7 +13,7 @@
         "tsConfig": "packages/palico-app/tsconfig.lib.json",
         "assets": [
           "packages/palico-app/prisma/**/*",
-          "packages/palico-app/src/cli/selfhost/docker/**/*"
+          "packages/palico-app/src/assets/**/*"
         ]
       }
     },

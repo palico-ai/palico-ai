@@ -8,29 +8,32 @@ services:
       - 'POSTGRES_USER=${DOCKER_COMPOSE_DATABASE_USERNAME}'
       - 'POSTGRES_PASSWORD=${DOCKER_COMPOSE_DATABASE_PASSWORD}'
       - 'POSTGRES_DB=${DOCKER_COMPOSE_DATABASE_NAME}'
-    ports:
-      - '${DOCKER_COMPOSE_DATABASE_PORT}:5432'
+    volumes:
+      - /app/storage/data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U ${DOCKER_COMPOSE_DATABASE_USERNAME}']
+      interval: 5s
+      timeout: 5s
+      retries: 10
   studio:
-    image: 'palicoai/studio:main@sha256:4511de0ec0422f22d07bc9f11dbfebce110e048782c437b68c79901043b29065'
+    image: 'palicoai/studio:main'
     platform: 'linux/amd64'
     restart: 'always'
-    ports:
-      - '${DOCKER_COMPOSE_STUDIO_PORT}:3000'
     environment:
-      - 'PALICO_AGENT_API_URL=http://api:${DOCKER_COMPOSE_API_PORT}'
-      - 'DEV_MODE=false'
+      - 'PALICO_AGENT_API_URL=http://api:8000'
+      - 'DEV_MODE=${DEV_MODE}'
+      - JWT_SECRET=${DOCKER_COMPOSE_JWT_SECRET}
       - PALICO_SERVICE_KEY=${DOCKER_COMPOSE_SERVICE_KEY}
       - STUDIO_USERNAME=${DOCKER_COMPOSE_STUDIO_USERNAME}
       - STUDIO_PASSWORD=${DOCKER_COMPOSE_STUDIO_PASSWORD}
-      - JWT_SECRET=${DOCKER_COMPOSE_JWT_SECRET}
   api:
-    build:
-      context: ..
-      dockerfile: selfhost/Dockerfile
+    depends_on:
+      database:
+        condition: service_healthy
+    build: .
     restart: 'always'
-    ports:
-      - '${DOCKER_COMPOSE_API_PORT}:8000'
     environment:
-      - DATABASE_URL=postgres://${DOCKER_COMPOSE_DATABASE_USERNAME}:${DOCKER_COMPOSE_DATABASE_PASSWORD}@database:${DOCKER_COMPOSE_DATABASE_PORT}/${DOCKER_COMPOSE_DATABASE_NAME}
+      - DATABASE_URL=postgres://${DOCKER_COMPOSE_DATABASE_USERNAME}:${DOCKER_COMPOSE_DATABASE_PASSWORD}@database:5432/${DOCKER_COMPOSE_DATABASE_NAME}
       - PUBLIC_API_PORT=8000
       - JWT_SECRET=${DOCKER_COMPOSE_JWT_SECRET}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
