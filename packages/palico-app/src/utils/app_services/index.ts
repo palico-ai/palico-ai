@@ -7,8 +7,10 @@ import { ENVName } from '../environment';
 import { DockerCompose, ServiceInfo } from './docker';
 import { BootstrapModel } from './bootstrap';
 import { ProjectService } from './common';
+import config from '../../config';
 
 export interface StartAPIServiceParams {
+  devMode: boolean;
   databaseURL: string;
   apiPort: number;
   onStart: () => Promise<void>;
@@ -63,6 +65,7 @@ export class AppServiceManager {
     }
     console.log('Starting API Service...');
     await AppServiceManager.startAPIService({
+      devMode: true,
       databaseURL: serviceInfo[ProjectService.POSTGRES_DB].databaseURL,
       apiPort: ports.apiPort,
       onStart: async () => {
@@ -75,6 +78,28 @@ export class AppServiceManager {
       },
       onExit: async () => {
         await compose.stopServices();
+      },
+    });
+  }
+
+  static async startProductionApp() {
+    const dbUrl = config.getDBUrl();
+    if (!dbUrl) {
+      throw new Error('Database URL is not defined');
+    }
+    const bootstrap = new BootstrapModel({
+      devMode: false,
+    });
+    await bootstrap.applyDBMigrations(dbUrl);
+    await AppServiceManager.startAPIService({
+      devMode: false,
+      databaseURL: dbUrl,
+      apiPort: config.getAPIPort(),
+      onStart: async () => {
+        console.log('API Service Started');
+      },
+      onExit: async () => {
+        console.log('API Service Stopped');
       },
     });
   }
@@ -101,7 +126,9 @@ export class AppServiceManager {
       [ENVName.PALICO_API_PORT]: params.apiPort.toString(),
     };
     console.log('Starting Server...');
-    const command = `npx nodemon --exec ts-node src/main.ts`;
+    const command = params.devMode
+      ? '`npx nodemon --exec ts-node src/main.ts`'
+      : 'npx ts-node src/main.ts';
     const serverPs = exec(command, {
       cwd: projectRoot,
       env: {

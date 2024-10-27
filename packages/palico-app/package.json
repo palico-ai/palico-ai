@@ -17,7 +17,8 @@
   "scripts": {
     "publish:clean": "npm unpublish --force --registry http://localhost:4873",
     "publish:local": "npm publish --registry http://localhost:4873",
-    "prisma:pull": "prisma db pull"
+    "prisma:pull": "prisma db pull",
+    "postinstall": "[ -f src/assets/postinstall.js ] && node src/assets/postinstall.js || echo 'INFO: Ignoring Post-Install Script.'"
   },
   "bin": {
     "palico-app": "src/cli/index.js"

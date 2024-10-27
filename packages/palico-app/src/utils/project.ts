@@ -1,5 +1,6 @@
 import findup from 'find-up';
 import path from 'path';
+import OS from './os';
 
 // This class is used to work with the file system of the project from package.json level
 export default class Project {
@@ -9,7 +10,7 @@ export default class Project {
     if (this.projectPath) {
       return this.projectPath;
     }
-    const fullPath = await findup('package.json');
+    const fullPath = await findup('.palico.json');
     if (!fullPath) {
       throw new Error('Failed to find project root');
     }
@@ -70,8 +71,9 @@ export default class Project {
     }
   }
 
-  static async getSelfhostRootDir(): Promise<string> {
+  static async isSelfHosted(): Promise<boolean> {
     const root = await this.getProjectRootDir();
-    return path.join(root, 'selfhost');
+    const composeFilePath = path.join(root, 'docker-compose.yml');
+    return OS.doesFileExist(composeFilePath);
   }
 }

@@ -3,7 +3,7 @@
 import { Command } from 'commander';
 import { GenerateJWTToken } from './generate/generate_token';
 import UpdateCommand from './update';
-import { StartDevApp } from './__root__';
+import { StartDevApp, StartProdApp } from './__root__';
 import GenerateCommand from './generate';
 import SelfhostCommand from './selfhost';
 
@@ -19,6 +19,11 @@ root
   .description('Starts the Palico App')
   .option('--clean', 'Starts the app in clean mode')
   .action(StartDevApp);
+
+root
+  .command('start-prod')
+  .description('Starts the Palico App in production mode')
+  .action(StartProdApp);
 
 root.addCommand(SelfhostCommand);
 

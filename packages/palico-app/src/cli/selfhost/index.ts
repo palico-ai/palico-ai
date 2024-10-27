@@ -2,7 +2,7 @@ import { Command } from 'commander';
 import {
   ApplyDBMigrationsCommandHandler,
   InitSelfHostCommandHandler,
-  UpdateDockerComposeCommandHandler,
+  UpdatePalicoContainerImages,
 } from './handlers';
 
 const SelfhostCommand = new Command('selfhost');
@@ -18,8 +18,6 @@ SelfhostCommand.command('migrate-db')
   .option('--port <port>', 'Database Port', '5432')
   .action(ApplyDBMigrationsCommandHandler);
 
-SelfhostCommand.command('update-compose').action(
-  UpdateDockerComposeCommandHandler
-);
+SelfhostCommand.command('update-compose').action(UpdatePalicoContainerImages);
 
 export default SelfhostCommand;

@@ -7,7 +7,6 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 
-
 FROM node:18-alpine as runner
 WORKDIR /app
 
@@ -17,4 +16,4 @@ COPY --from=deps /app/node_modules ./node_modules
 
 COPY . .
 
-CMD ["ts-node", "src/main.ts"]
+CMD ["npm", "run", "palico", "start-prod"]
