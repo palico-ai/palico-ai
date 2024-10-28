@@ -1,16 +1,25 @@
 'use client';
 
 import React, { useEffect, useMemo } from 'react';
-import { Box, Divider } from '@mui/material';
-import { SyntaxHighlighter, Typography } from '@palico-ai/components';
+import { Box, Chip, Divider } from '@mui/material';
+import { Markdown, SyntaxHighlighter, Typography } from '@palico-ai/components';
+import UserIcon from '@mui/icons-material/AccountCircle';
+import AssistantIcon from '@mui/icons-material/AutoAwesome';
+import { Badge } from '@mui/base';
+
+export enum HistoryChatRole {
+  User = 'user',
+  Assistant = 'assistant',
+  Tool = 'tool',
+}
 
 export interface ChatMessage {
-  role: 'user' | 'assistant';
+  role: HistoryChatRole;
   content?: string;
 }
 
 export type ConversationHistoryItem = {
-  role: 'user' | 'assistant' | 'tool';
+  role: HistoryChatRole;
   message?: string;
   data?: Record<string, unknown>;
 };
@@ -21,7 +30,7 @@ export interface ChatHistoryProps {
 }
 
 interface ChatHistoryUIItemProps {
-  role: 'user' | 'assistant';
+  role: HistoryChatRole;
   message?: string;
   data?: Record<string, unknown>;
 }
@@ -33,21 +42,10 @@ type ChatListItemProps = ChatHistoryUIItemProps & {
 const ChatListItem: React.FC<ChatListItemProps> = (item) => {
   const { role, message, data, itemRef } = item;
 
-  const roleLabel = useMemo(() => {
-    if (role === 'user') {
-      return 'User Message';
-    }
-    return 'Assistant';
-  }, [role]);
-
   const contentUI = useMemo(() => {
     return (
       <Box>
-        {message && (
-          <Typography variant="body1" whiteSpace={'pre-wrap'}>
-            {message}
-          </Typography>
-        )}
+        {message && <Markdown>{message}</Markdown>}
         {data && (
           <Box>
             <Divider>Data</Divider>
@@ -66,19 +64,33 @@ const ChatListItem: React.FC<ChatListItemProps> = (item) => {
       sx={{
         borderRadius: 2,
         mb: 1,
-        px: 2,
         py: 1,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: role === HistoryChatRole.User ? 'flex-end' : 'flex-start',
       }}
     >
-      <Typography
-        variant="body1"
-        fontWeight={'bold'}
-        whiteSpace={'pre-wrap'}
-        sx={{ color: 'text.secondary' }}
+      <Box
+        sx={{
+          display: 'flex',
+          gap: 1,
+          flexDirection: 'column',
+          // flexDirection: 'row',
+          // alignItems: 'flex-start',
+          maxWidth: '70%',
+        }}
       >
-        {roleLabel}
-      </Typography>
-      {contentUI}
+        <Box>
+          <Chip
+            sx={{
+              borderRadius: 2,
+            }}
+            label={role === HistoryChatRole.User ? 'You' : 'Agent'}
+            variant="filled"
+          />
+        </Box>
+        {contentUI}
+      </Box>
     </Box>
   );
 };
@@ -95,14 +107,14 @@ export const ChatHistory: React.FC<ChatHistoryProps> = ({
     history.forEach((item) => {
       if (item.role === 'user') {
         reformattedHistory.push({
-          role: 'user',
+          role: HistoryChatRole.User,
           message: item.message,
           data: item.data,
         });
       }
       if (item.role === 'assistant') {
         reformattedHistory.push({
-          role: 'assistant',
+          role: HistoryChatRole.Assistant,
           message: item.message,
           data: item.data,
         });
@@ -140,7 +152,7 @@ export const ChatHistory: React.FC<ChatHistoryProps> = ({
     <Box>
       {history.length === 0 && initialMessage && (
         <ChatListItem
-          role="assistant"
+          role={HistoryChatRole.Assistant}
           message={initialMessage}
           itemRef={setLastMessageEl}
         />

@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, Divider, Stack } from '@mui/material';
+import { Box, Container, Divider, Stack } from '@mui/material';
 import React, { useContext, useMemo } from 'react';
 import { ChatHistory } from './chat_history';
 import { ChatInput } from './chat_input';
@@ -51,6 +51,7 @@ const ChatUI: React.FC = () => {
         sx={{
           flexGrow: 1,
           overflowY: 'auto',
+          paddingX: 2,
         }}
       >
         <ChatHistory

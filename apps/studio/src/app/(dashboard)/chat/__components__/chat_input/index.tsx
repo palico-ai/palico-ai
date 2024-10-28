@@ -5,6 +5,7 @@ import React, { useEffect, useMemo } from 'react';
 import ExpandIcon from '@mui/icons-material/Expand';
 import AdvanceOption from './advance_option';
 import { AppConfig, AgentRequestContent } from '@palico-ai/common';
+import { toast } from 'react-toastify';
 
 export interface ChatInputProps {
   onSend: (content: AgentRequestContent, appConfig: AppConfig) => Promise<void>;
@@ -48,6 +49,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     setMessage(event.target.value);
   };
+
   const enableInput = useMemo(() => !loading && !disabled, [loading, disabled]);
 
   useEffect(() => {
