@@ -6,9 +6,13 @@ import {
   AgentResponse,
 } from '@palico-ai/common';
 import React, { useEffect, useState } from 'react';
-import { ConversationHistoryItem } from '../app/(dashboard)/chat/__components__/chat_history';
+import {
+  ConversationHistoryItem,
+  HistoryChatRole,
+} from '../app/(dashboard)/chat/__components__/chat_history';
 import { ConversationalEntity } from '../types/common';
 import { newConversation, replyToConversation } from '../services/conversation';
+import { toast } from 'react-toastify';
 
 export type ConversationContextParams = {
   loading: boolean;
@@ -50,7 +54,7 @@ export const ConversationContextProvider: React.FC<
     response: AgentResponse
   ): ConversationHistoryItem => {
     return {
-      role: 'assistant',
+      role: HistoryChatRole.Assistant,
       message: response.message,
       data: response.data,
     };
@@ -65,10 +69,11 @@ export const ConversationContextProvider: React.FC<
       throw new Error('AgentID not set');
     }
     setLoading(true);
+    const originalHistory = [...history];
     setHistory([
       ...history,
       {
-        role: 'user',
+        role: HistoryChatRole.User,
         message: content.userMessage ?? '',
         data: content.payload,
       },
@@ -94,6 +99,11 @@ export const ConversationContextProvider: React.FC<
         ...current,
         agentResponseToHistoryItem(response),
       ]);
+    } catch (error) {
+      const errorMessage =
+        (error instanceof Error && error.message) || "Couldn't send message";
+      toast.error(errorMessage);
+      setHistory(originalHistory);
     } finally {
       setLoading(false);
     }

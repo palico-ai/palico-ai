@@ -1,5 +1,6 @@
-import { Card, CardContent } from '@mui/material';
-import { Editor, TabPanel, TabView } from '@palico-ai/components';
+import { EditorProps } from '@monaco-editor/react';
+import { Box, Card, CardContent, Grid } from '@mui/material';
+import { Editor, TabPanel, TabView, Typography } from '@palico-ai/components';
 import React from 'react';
 
 export interface AdvanceOptionProps {
@@ -9,7 +10,36 @@ export interface AdvanceOptionProps {
   onChangeAppConfig: (appConfig?: string) => void;
 }
 
-const EDITOR_HEIGHT = '18vh';
+const EDITOR_HEIGHT = '15vh';
+
+const CodeInputPanel: React.FC<{
+  label: string;
+  value?: string;
+  onChange: EditorProps['onChange'];
+}> = ({ label, value, onChange }) => {
+  return (
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 2,
+      }}
+    >
+      <Typography variant="h6">{label}</Typography>
+      <Editor
+        height={EDITOR_HEIGHT}
+        value={value}
+        onChange={onChange}
+        defaultLanguage="json"
+        options={{
+          ariaLabel: 'User Message',
+          scrollBeyondLastColumn: 0,
+          minimap: { enabled: false },
+        }}
+      />
+    </Box>
+  );
+};
 
 const AdvanceOption: React.FC<AdvanceOptionProps> = ({
   requestPayload,
@@ -19,46 +49,30 @@ const AdvanceOption: React.FC<AdvanceOptionProps> = ({
 }) => {
   return (
     <Card>
-      <TabView
-        tabs={[
-          {
-            label: 'Request Payload',
-            value: 'request_payload',
-          },
-          {
-            label: 'App Config',
-            value: 'app_config',
-          },
-        ]}
-      >
-        <CardContent>
-          <TabPanel value="request_payload">
-            <Editor
-              height={EDITOR_HEIGHT}
-              defaultLanguage="json"
+      <CardContent>
+        <Grid
+          container
+          spacing={2}
+          sx={{
+            boxSizing: 'border-box',
+          }}
+        >
+          <Grid item md={6}>
+            <CodeInputPanel
               value={requestPayload}
+              label="Request Payload"
               onChange={(value) => onChangeRequestPayload(value ?? '')}
-              options={{
-                ariaLabel: 'User Message',
-                scrollBeyondLastColumn: 0,
-              }}
-              defaultValue={JSON.stringify({}, null, 2)}
             />
-          </TabPanel>
-          <TabPanel value="app_config">
-            <Editor
-              height={EDITOR_HEIGHT}
+          </Grid>
+          <Grid item md={6}>
+            <CodeInputPanel
               value={appConfig}
+              label="App Config"
               onChange={(value) => onChangeAppConfig(value ?? '')}
-              defaultLanguage="json"
-              options={{
-                ariaLabel: 'User Message',
-                scrollBeyondLastColumn: 0,
-              }}
             />
-          </TabPanel>
-        </CardContent>
-      </TabView>
+          </Grid>
+        </Grid>
+      </CardContent>
     </Card>
   );
 };
