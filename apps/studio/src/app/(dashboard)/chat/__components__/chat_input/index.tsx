@@ -5,7 +5,6 @@ import React, { useEffect, useMemo } from 'react';
 import ExpandIcon from '@mui/icons-material/Expand';
 import AdvanceOption from './advance_option';
 import { AppConfig, AgentRequestContent } from '@palico-ai/common';
-import { toast } from 'react-toastify';
 
 export interface ChatInputProps {
   onSend: (content: AgentRequestContent, appConfig: AppConfig) => Promise<void>;

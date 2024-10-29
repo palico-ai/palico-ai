@@ -1,7 +1,6 @@
 import { EvalTestCaseResult } from '@palico-ai/common';
 import { ColumnDef } from '@tanstack/react-table';
 import { EvalResultTableCell } from '../components/table/eval_result_table_cell';
-import EvalTraceLinkCell from '../components/table/test_cell_conversation_id';
 import { Box } from '@mui/material';
 import { LinkButton } from '@palico-ai/components';
 import { RoutePath } from './route_path';

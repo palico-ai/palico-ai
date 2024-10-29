@@ -2,10 +2,7 @@
 
 import React, { useEffect, useMemo } from 'react';
 import { Box, Chip, Divider } from '@mui/material';
-import { Markdown, SyntaxHighlighter, Typography } from '@palico-ai/components';
-import UserIcon from '@mui/icons-material/AccountCircle';
-import AssistantIcon from '@mui/icons-material/AutoAwesome';
-import { Badge } from '@mui/base';
+import { Markdown, SyntaxHighlighter } from '@palico-ai/components';
 
 export enum HistoryChatRole {
   User = 'user',
@@ -80,7 +77,12 @@ const ChatListItem: React.FC<ChatListItemProps> = (item) => {
           maxWidth: '70%',
         }}
       >
-        <Box>
+        <Box
+          sx={{
+            alignSelf:
+              role === HistoryChatRole.User ? 'flex-end' : 'flex-start',
+          }}
+        >
           <Chip
             sx={{
               borderRadius: 2,

@@ -6,7 +6,7 @@ import 'ag-grid-community/styles/ag-theme-quartz.css'; // Optional Theme applied
 import React, { useContext } from 'react';
 import TestCaseAndResultRow from './table_row';
 import ExperimentCell from './experiment_cell';
-import { LabContext } from './lab.context';
+import { LabCanvasContext } from './canvas.context';
 
 const TableHeader: React.FC = () => {
   const {
@@ -15,7 +15,7 @@ const TableHeader: React.FC = () => {
     addExperiment,
     addTestCase,
     runAllExperiments,
-  } = useContext(LabContext);
+  } = useContext(LabCanvasContext);
 
   const handleClickAddNewExperiment = () => {
     addExperiment({
@@ -96,7 +96,7 @@ const TableHeader: React.FC = () => {
 };
 
 const AgentFeatureTestGrid: React.FC = () => {
-  const { experiments, testCases } = useContext(LabContext);
+  const { experiments, testCases } = useContext(LabCanvasContext);
   return (
     <table
       style={{

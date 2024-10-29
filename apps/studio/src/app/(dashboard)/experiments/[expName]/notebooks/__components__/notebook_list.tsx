@@ -1,13 +1,14 @@
 'use client';
 
-import React, { useContext } from 'react';
-import NotebookListContext from './notebook_list.context';
+import React from 'react';
 import { ColumnDef } from '@tanstack/react-table';
 import { NotebookMetadata } from '@palico-ai/common';
 import {
   Button,
+  ErrorMessage,
   Link,
   PromptAcceptAction,
+  Skeleton,
   Table,
   useDialogController,
   useTableModel,
@@ -18,7 +19,12 @@ import {
   RequireExperimentName,
   RequireNoteobokName,
 } from '../../../../../../types/common';
-import { deleteNotebook } from '../../../../../../services/experiments';
+import {
+  deleteNotebook,
+  getNotebooksForExperiment,
+} from '../../../../../../services/experiments';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { GET_NOTEBOOKS_FOR_EXPERIMENT } from '../../../../../../constants/query_keys';
 
 const ActionColumn: React.FC<RequireNoteobokName & RequireExperimentName> = ({
   experimentName,
@@ -29,14 +35,15 @@ const ActionColumn: React.FC<RequireNoteobokName & RequireExperimentName> = ({
     open: openConfirmDialog,
     close: closeConfirmDialog,
   } = useDialogController();
-  const { setNotebooks, notebooks } = useContext(NotebookListContext);
-
+  const queryClient = useQueryClient();
   const handleDeleteNotebook = async () => {
     await deleteNotebook({
       experimentName,
       notebookName,
     });
-    setNotebooks([...notebooks].filter((n) => n.notebookName !== notebookName));
+    await queryClient.invalidateQueries({
+      queryKey: [GET_NOTEBOOKS_FOR_EXPERIMENT, experimentName],
+    });
     openConfirmDialog();
   };
 
@@ -98,12 +105,33 @@ const columns: ColumnDef<NotebookMetadata>[] = [
   },
 ];
 
-const NotebookList: React.FC = () => {
-  const { notebooks } = useContext(NotebookListContext);
-  const table = useTableModel({
+export interface NotebookListProps {
+  expName: string;
+}
+
+const NotebookList: React.FC<NotebookListProps> = ({ expName }) => {
+  const {
     data: notebooks,
+    isPending,
+    error,
+  } = useQuery({
+    queryKey: [GET_NOTEBOOKS_FOR_EXPERIMENT, expName],
+    queryFn: async () => {
+      return await getNotebooksForExperiment(expName);
+    },
+  });
+
+  const table = useTableModel({
+    data: notebooks || [],
     columns,
   });
+
+  if (error) {
+    return <ErrorMessage message={error.message} />;
+  }
+  if (isPending) {
+    return <Skeleton count={5} height={120} />;
+  }
 
   return (
     <Paper sx={{ p: 2 }}>

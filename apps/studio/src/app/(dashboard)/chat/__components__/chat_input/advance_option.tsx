@@ -1,6 +1,6 @@
 import { EditorProps } from '@monaco-editor/react';
 import { Box, Card, CardContent, Grid } from '@mui/material';
-import { Editor, TabPanel, TabView, Typography } from '@palico-ai/components';
+import { Editor, Typography } from '@palico-ai/components';
 import React from 'react';
 
 export interface AdvanceOptionProps {

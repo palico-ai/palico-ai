@@ -8,10 +8,10 @@ import {
 } from '@palico-ai/components';
 import { createNotebook } from '../../../../../../services/experiments';
 import { useExperimentName } from '../../../../../../hooks/use_params';
-import { useContext } from 'react';
-import NotebookListContext from './notebook_list.context';
 import { useRouter } from 'next/navigation';
 import { RoutePath } from '../../../../../../utils/route_path';
+import { useQueryClient } from '@tanstack/react-query';
+import { GET_NOTEBOOKS_FOR_EXPERIMENT } from '../../../../../../constants/query_keys';
 
 const formFields: FormField[] = [
   {
@@ -28,22 +28,23 @@ const NotebookListTopbarAction: React.FC = () => {
     close: closeDialog,
   } = useDialogController();
   const experimentName = useExperimentName();
-  const { notebooks, setNotebooks } = useContext(NotebookListContext);
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const handleCreateNotebook = async (values: Record<string, unknown>) => {
     const { name } = values;
     if (!name) {
       throw new Error('Notebook name is required');
     }
-    const notebook = await createNotebook({
+    await createNotebook({
       experimentName,
       notebookName: name as string,
       rows: [],
       datasetMetadata: [],
     });
-    console.log(notebook);
-    setNotebooks([notebook, ...notebooks]);
+    await queryClient.invalidateQueries({
+      queryKey: [GET_NOTEBOOKS_FOR_EXPERIMENT],
+    });
     router.push(
       RoutePath.experimentNotebookItem({
         experimentName,

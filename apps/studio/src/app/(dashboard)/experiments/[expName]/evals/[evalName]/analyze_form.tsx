@@ -3,6 +3,8 @@ import { createNotebook } from '../../../../../../services/experiments';
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import { RoutePath } from '../../../../../../utils/route_path';
+import { useQueryClient } from '@tanstack/react-query';
+import { GET_NOTEBOOKS_FOR_EXPERIMENT } from '../../../../../../constants/query_keys';
 
 interface AnalyzeFormProps {
   isOpen: boolean;
@@ -18,7 +20,7 @@ const AnalyzeEvalForm: React.FC<AnalyzeFormProps> = ({
   evalName,
 }) => {
   const router = useRouter();
-
+  const queryClient = useQueryClient();
   const handleSubmit = async (data: Record<string, string>) => {
     const { notebookName, datasetLabel } = data;
     if (!notebookName) {
@@ -38,6 +40,9 @@ const AnalyzeEvalForm: React.FC<AnalyzeFormProps> = ({
         },
       ],
       rows: [],
+    });
+    await queryClient.invalidateQueries({
+      queryKey: [GET_NOTEBOOKS_FOR_EXPERIMENT],
     });
     router.push(
       RoutePath.experimentNotebookItem({
