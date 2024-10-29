@@ -1,6 +1,6 @@
 'use client';
 import React, { useContext, useEffect } from 'react';
-import { LabContext } from './lab.context';
+import { LabCanvasContext } from './canvas.context';
 import {
   LabExperimentModel,
   LabExperimentTestResult,
@@ -11,6 +11,8 @@ import {
 import { updateLabView } from '../../../../../services/studio';
 import { Button } from '@palico-ai/components';
 import { useRouter } from 'next/navigation';
+import { useQueryClient } from '@tanstack/react-query';
+import { GET_QUICK_LAB } from '../../../../../constants/query_keys';
 
 export interface QuicklabTopbarNavProps {
   currentLab: QuickLabMetadata;
@@ -34,7 +36,8 @@ const QuicklabTopbarNav: React.FC<QuicklabTopbarNavProps> = ({
     testCases,
     experimentTestResults,
     baselineExperimentId,
-  } = useContext(LabContext);
+  } = useContext(LabCanvasContext);
+  const queryClient = useQueryClient();
   const [savedState, setSavedState] = React.useState<SavedState>({
     experiments,
     testCases,
@@ -66,6 +69,10 @@ const QuicklabTopbarNav: React.FC<QuicklabTopbarNavProps> = ({
     try {
       setSavingInProgress(true);
       await updateLabView(currentLab.id, currentLabState);
+      console.log(`lab id: ${currentLab.id} saved`);
+      await queryClient.invalidateQueries({
+        queryKey: [GET_QUICK_LAB, currentLab.id],
+      });
       setNeedsSave(false);
       setSavedState(currentLabState);
       setSavingInProgress(false);

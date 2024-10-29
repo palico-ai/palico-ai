@@ -11,16 +11,16 @@ import {
   getAllWorkflows,
 } from '../../../../../services/metadata';
 import React, { useMemo } from 'react';
-import { CreateEvalJobResponse } from '@palico-ai/common';
 import { runEval } from '../../../../../services/experiments';
-import { useExperimentName } from '../../../../../hooks/use_params';
+import { useQueryClient } from '@tanstack/react-query';
+import { GET_EVALS_FOR_EXPERIMENT } from '../../../../../constants/query_keys';
 
-export interface TestListTableHeaderProps {
-  onEvalCreated: (test: CreateEvalJobResponse) => void;
+export interface EvalListTableHeaderProps {
+  experimentName: string;
 }
 
-const TestListTableHeader: React.FC<TestListTableHeaderProps> = ({
-  onEvalCreated: onTestCreated,
+const EvalListTableHeader: React.FC<EvalListTableHeaderProps> = ({
+  experimentName,
 }) => {
   const {
     isOpen,
@@ -30,7 +30,7 @@ const TestListTableHeader: React.FC<TestListTableHeaderProps> = ({
   const [agentList, setAgentList] = React.useState<string[]>([]);
   const [workflowList, setWorkflowList] = React.useState<string[]>([]);
   const [datasetList, setDatasetList] = React.useState<string[]>([]);
-  const experimentName = useExperimentName();
+  const queryClient = useQueryClient();
 
   React.useEffect(() => {
     const fetchInitialData = async (): Promise<void> => {
@@ -111,7 +111,9 @@ const TestListTableHeader: React.FC<TestListTableHeaderProps> = ({
         : { workflowName: (data.executor as string).split(':')[1] }),
     });
     console.log(response);
-    onTestCreated(response);
+    await queryClient.invalidateQueries({
+      queryKey: [GET_EVALS_FOR_EXPERIMENT, experimentName],
+    });
   };
 
   return (
@@ -135,4 +137,4 @@ const TestListTableHeader: React.FC<TestListTableHeaderProps> = ({
   );
 };
 
-export default TestListTableHeader;
+export default EvalListTableHeader;

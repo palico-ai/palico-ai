@@ -1,9 +1,9 @@
 import { useContext, useMemo } from 'react';
-import { LabContext } from './lab.context';
+import { LabCanvasContext } from './canvas.context';
 import { LabExperimentTestResult } from '@palico-ai/common';
 
 export const useTestCase = (testCaseId: string) => {
-  const { testCases, setTestCases, runTestCase } = useContext(LabContext);
+  const { testCases, setTestCases, runTestCase } = useContext(LabCanvasContext);
   const testCase = useMemo(
     () => testCases.find((tc) => tc.id === testCaseId),
     [testCases, testCaseId]
@@ -67,7 +67,7 @@ export const useExperiment = (experimentId: string) => {
     setBaselineExperimentId,
     setExperiments,
     runExperiment,
-  } = useContext(LabContext);
+  } = useContext(LabCanvasContext);
   const experiment = useMemo(
     () => experiments.find((exp) => exp.id === experimentId),
     [experiments, experimentId]
@@ -126,7 +126,8 @@ export const useExpTestResult = (
   experimentId: string,
   testCaseId: string
 ): UseTestResultReturn => {
-  const { experimentTestResults, runExperimentTest } = useContext(LabContext);
+  const { experimentTestResults, runExperimentTest } =
+    useContext(LabCanvasContext);
   return {
     result: experimentTestResults[experimentId]?.[testCaseId],
     runTest: () => {
@@ -137,8 +138,7 @@ export const useExpTestResult = (
 
 export const useBaselineTestResult = (testCaseId: string) => {
   const { baselineExperimentId, experimentTestResults } =
-    useContext(LabContext);
-  console.log(baselineExperimentId);
+    useContext(LabCanvasContext);
   if (!baselineExperimentId) {
     return;
   }

@@ -11,13 +11,20 @@ import {
   Button,
   SimpleDialogForm,
   CardActions,
+  Skeleton,
 } from '@palico-ai/components';
 import React from 'react';
 import { RoutePath } from '../../../utils/route_path';
 import { Box, Divider, Grid } from '@mui/material';
-import { QuickLab, QuickLabMetadata } from '@palico-ai/common';
-import { createLabView, deleteLabView } from '../../../services/studio';
+import {
+  createLabView,
+  deleteLabView,
+  getAllLabViews,
+} from '../../../services/studio';
 import { useRouter } from 'next/navigation';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { GET_ALL_QUICK_LABS } from '../../../constants/query_keys';
+import { toast } from 'react-toastify';
 
 const CreateLabFormField: FormField[] = [
   {
@@ -27,11 +34,9 @@ const CreateLabFormField: FormField[] = [
   },
 ];
 
-export interface LabListHeaderProps {
-  onCreateLab: (item: QuickLab) => void;
-}
-
-const LabListHeader: React.FC<LabListHeaderProps> = ({ onCreateLab }) => {
+const LabListHeader: React.FC = () => {
+  const router = useRouter();
+  const queryClient = useQueryClient();
   const {
     isOpen,
     open: openDialog,
@@ -47,7 +52,10 @@ const LabListHeader: React.FC<LabListHeaderProps> = ({ onCreateLab }) => {
         testCases: [],
         experimentTestResults: {},
       });
-      onCreateLab(item);
+      await queryClient.invalidateQueries({
+        queryKey: [GET_ALL_QUICK_LABS],
+      });
+      router.push(RoutePath.labItem({ labId: item.id }));
     } catch (err) {
       console.log(err);
       throw err;
@@ -79,16 +87,22 @@ const LabListHeader: React.FC<LabListHeaderProps> = ({ onCreateLab }) => {
 interface LabCardProps {
   id: string;
   title: string;
-  onClickDelete: () => Promise<void>;
 }
 
-const LabCard: React.FC<LabCardProps> = ({ id, title, onClickDelete }) => {
-  const [loading, setLoading] = React.useState(false);
+const LabCard: React.FC<LabCardProps> = ({ id, title }) => {
+  const queryClient = useQueryClient();
 
-  const handleDelete = async () => {
-    setLoading(true);
-    await onClickDelete();
-  };
+  const { mutate: handleDelete, isPending: loading } = useMutation({
+    mutationFn: deleteLabView,
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: [GET_ALL_QUICK_LABS],
+      });
+    },
+    onError: (err) => {
+      toast.error(err.message);
+    },
+  });
 
   return (
     <Card>
@@ -108,7 +122,9 @@ const LabCard: React.FC<LabCardProps> = ({ id, title, onClickDelete }) => {
           loading={loading}
           size="small"
           color="warning"
-          onClick={handleDelete}
+          onClick={() => {
+            handleDelete(id);
+          }}
         >
           Delete
         </Button>
@@ -117,42 +133,61 @@ const LabCard: React.FC<LabCardProps> = ({ id, title, onClickDelete }) => {
   );
 };
 
-interface LabListProps {
-  initialLabItems: QuickLabMetadata[];
-}
+const LabList: React.FC = () => {
+  const {
+    data: labItems,
+    isPending,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: [GET_ALL_QUICK_LABS],
+    queryFn: async () => {
+      const response = await getAllLabViews();
+      return response;
+    },
+  });
 
-const LabList: React.FC<LabListProps> = ({ initialLabItems }) => {
-  const [labItems, setLabItems] =
-    React.useState<QuickLabMetadata[]>(initialLabItems);
-  const router = useRouter();
+  if (isPending) {
+    return (
+      <Box
+        sx={{
+          height: '20vh',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          px: 2,
+        }}
+      >
+        <Skeleton count={5} />
+      </Box>
+    );
+  }
 
-  const handleCreateLab = (item: QuickLab) => {
-    setLabItems([
-      ...labItems,
-      { id: item.id, name: item.name, createdAt: item.createdAt },
-    ]);
-    router.push(RoutePath.labItem({ labId: item.id }));
-  };
-
-  const handleDeleteLab = async (id: string) => {
-    await deleteLabView(id);
-    setLabItems([...labItems.filter((item) => item.id !== id)]);
-  };
+  if (isError) {
+    return (
+      <Box
+        sx={{
+          height: '100%',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <Typography variant="h5" color={'error'}>
+          {error.message}
+        </Typography>
+      </Box>
+    );
+  }
 
   return (
     <SimpleListView
       gridView
       items={labItems}
-      renderHeader={() => <LabListHeader onCreateLab={handleCreateLab} />}
+      renderHeader={() => <LabListHeader />}
       renderItem={(labItem) => (
         <Grid item key={labItem.id} sm={3}>
-          <LabCard
-            id={labItem.id}
-            title={labItem.name}
-            onClickDelete={async () => {
-              await handleDeleteLab(labItem.id);
-            }}
-          />
+          <LabCard id={labItem.id} title={labItem.name} />
         </Grid>
       )}
       noItemsMessage={'Get started by creating a lab!'}

@@ -1,4 +1,4 @@
-import { Box, IconButton, Paper, Skeleton, Typography } from '@mui/material';
+import { Box, IconButton, Paper, Skeleton } from '@mui/material';
 import React, { useMemo } from 'react';
 import RunIcon from '@mui/icons-material/PlayCircleFilledWhite';
 import { useBaselineTestResult, useExpTestResult } from '../hooks';
@@ -10,6 +10,7 @@ import {
   Link,
   Editor,
   TextDiff,
+  Markdown,
 } from '@palico-ai/components';
 import LabItemViewConfig from '../constants';
 import { RoutePath } from '../../../../../../utils/route_path';
@@ -53,9 +54,7 @@ const ResultDetails: React.FC<ResultDetailsProps> = ({
           height: LabItemViewConfig.TEST_RESULT_CONTENT_MAX_HEIGHT,
         }}
       >
-        <Typography variant="body2" whiteSpace={'pre-line'}>
-          {message}
-        </Typography>
+        <Markdown>{message ?? ''}</Markdown>
       </Box>
     );
   }, [message]);
@@ -74,7 +73,7 @@ const ResultDetails: React.FC<ResultDetailsProps> = ({
         <TextDiff
           baseline={baselineResult?.message ?? ''}
           current={message ?? ''}
-          variant="body2"
+          variant="body1"
         />
       </Box>
     );

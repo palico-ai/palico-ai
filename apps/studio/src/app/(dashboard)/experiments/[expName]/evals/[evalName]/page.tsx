@@ -9,6 +9,7 @@ import Breadcrumb from '../../../../../../utils/breadcrumb';
 const ExperimentTestPage: React.FC<EvalChildPage> = async ({
   params: { expName, evalName: testName },
 }) => {
+  // Okay to prefetch since eval content doesn't ever change
   const test = await getEvalByName(expName, testName);
 
   return (

@@ -10,6 +10,8 @@ import {
   Button,
   SimpleDialogForm,
   CardActions,
+  ErrorMessage,
+  Skeleton,
 } from '@palico-ai/components';
 import React from 'react';
 import { RoutePath } from '../../../utils/route_path';
@@ -20,7 +22,10 @@ import { toast } from 'react-toastify';
 import {
   createExperiment,
   deleteExperiment,
+  getExperimentList,
 } from '../../../services/experiments';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { GET_ALL_EXPERIMENTS } from '../../../constants/query_keys';
 
 const CreateExperimentFormField: FormField[] = [
   {
@@ -30,18 +35,14 @@ const CreateExperimentFormField: FormField[] = [
   },
 ];
 
-export interface ExperimentListHeaderProps {
-  onCreateExperiment: (item: ExperimentMetadata) => void;
-}
-
-const ExperimentListHeader: React.FC<ExperimentListHeaderProps> = ({
-  onCreateExperiment,
-}) => {
+const ExperimentListHeader: React.FC = () => {
   const {
     isOpen,
     open: openDialog,
     close: closeDialog,
   } = useDialogController();
+  const router = useRouter();
+  const queryClient = useQueryClient();
   const handleCreateExp = async (
     data: Record<string, string>
   ): Promise<void> => {
@@ -49,7 +50,10 @@ const ExperimentListHeader: React.FC<ExperimentListHeaderProps> = ({
       const item = await createExperiment({
         name: data.name,
       });
-      onCreateExperiment(item);
+      await queryClient.invalidateQueries({
+        queryKey: [GET_ALL_EXPERIMENTS],
+      });
+      router.push(RoutePath.experimentEvalList({ experimentName: item.name }));
     } catch (err) {
       console.log(err);
       const message = (err as Error).message || 'Failed to create experiment';
@@ -81,18 +85,20 @@ const ExperimentListHeader: React.FC<ExperimentListHeaderProps> = ({
 
 interface ExperimentCardProps {
   experiment: ExperimentMetadata;
-  onClickDelete: () => Promise<void>;
 }
 
 const ExperimentCard: React.FC<ExperimentCardProps> = ({
   experiment: { name, tags, createdAt },
-  onClickDelete,
 }) => {
   const [loading, setLoading] = React.useState(false);
+  const queryClient = useQueryClient();
 
   const handleDelete = async () => {
     setLoading(true);
-    await onClickDelete();
+    await deleteExperiment(name);
+    await queryClient.invalidateQueries({
+      queryKey: [GET_ALL_EXPERIMENTS],
+    });
   };
 
   return (
@@ -136,44 +142,61 @@ const ExperimentCard: React.FC<ExperimentCardProps> = ({
   );
 };
 
-interface ExpListProps {
-  initialExpItems: ExperimentMetadata[];
-}
+const ExperimentList: React.FC = () => {
+  const {
+    data: expItems,
+    isPending: isPendingExp,
+    error: expError,
+  } = useQuery({
+    queryKey: [GET_ALL_EXPERIMENTS],
+    queryFn: async () => {
+      const response = await getExperimentList();
+      return response;
+    },
+  });
 
-const ExperimentList: React.FC<ExpListProps> = ({ initialExpItems }) => {
-  const [expItems, setExpItems] = React.useState<ExperimentMetadata[]>(
-    initialExpItems || []
-  );
-  const router = useRouter();
+  if (expError) {
+    return (
+      <Box
+        sx={{
+          height: '100%',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <ErrorMessage message={expError.message} />
+      </Box>
+    );
+  }
 
-  const handleCreateExp = (item: ExperimentMetadata) => {
-    setExpItems([...expItems, { ...item }]);
-    router.push(RoutePath.experimentEvalList({ experimentName: item.name }));
-  };
-
-  const handleDeleteExp = async (name: string) => {
-    await deleteExperiment(name);
-    setExpItems([...expItems.filter((item) => item.name !== name)]);
-  };
+  if (isPendingExp) {
+    return (
+      <Box
+        sx={{
+          height: '20vh',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          px: 2,
+        }}
+      >
+        <Skeleton count={5} />
+      </Box>
+    );
+  }
 
   return (
     <SimpleListView
       items={expItems}
-      renderHeader={() => (
-        <ExperimentListHeader onCreateExperiment={handleCreateExp} />
-      )}
+      renderHeader={() => <ExperimentListHeader />}
       renderItem={(expItem) => (
         <Box
           sx={{
             mb: 2,
           }}
         >
-          <ExperimentCard
-            experiment={expItem}
-            onClickDelete={async () => {
-              await handleDeleteExp(expItem.name);
-            }}
-          />
+          <ExperimentCard experiment={expItem} />
         </Box>
       )}
       noItemsMessage={'Get started by creating an experiment!'}

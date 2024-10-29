@@ -1,93 +1,78 @@
 'use client';
 
-import {
-  CreateEvalJobResponse,
-  EvaluationMetadata,
-  JobQueueStatus,
-} from '@palico-ai/common';
-import React, { useEffect } from 'react';
+import { JobQueueStatus } from '@palico-ai/common';
+import React, { useMemo } from 'react';
 import EvalTable from './table';
 import TopbarAction from './page_actions';
-import { cloneDeep, size } from 'lodash';
+import { size } from 'lodash';
 import { useInterval } from 'usehooks-ts';
-import { useExperimentName } from '../../../../../hooks/use_params';
-import { getEvalStatus } from '../../../../../services/experiments';
+import { getEvalsForExperiments } from '../../../../../services/experiments';
 import PageContent from '../../../../../components/layout/page_content';
-import { Paper } from '@mui/material';
+import { Box, Paper } from '@mui/material';
 import Breadcrumb from '../../../../../utils/breadcrumb';
 import ExperimentSubpageLayout from '../../../../../components/layout/experiment_page_tab';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { GET_EVALS_FOR_EXPERIMENT } from '../../../../../constants/query_keys';
+import { ErrorMessage, Skeleton } from '@palico-ai/components';
 
 interface TestListProps {
-  initialTests: EvaluationMetadata[];
+  expName: string;
 }
 
-const EvalList: React.FC<TestListProps> = ({ initialTests }) => {
-  const [data, setData] = React.useState<EvaluationMetadata[]>(initialTests);
-  const [pendingEvals, setPendingEvals] = React.useState<EvaluationMetadata[]>(
-    []
-  );
-  const expName = useExperimentName();
+const EvalList: React.FC<TestListProps> = ({ expName }) => {
+  const {
+    data: evalList,
+    isPending,
+    error,
+  } = useQuery({
+    queryKey: [GET_EVALS_FOR_EXPERIMENT, expName],
+    queryFn: async () => {
+      return await getEvalsForExperiments(expName);
+    },
+  });
+  const queryClient = useQueryClient();
+
+  const pendingEvals = useMemo(() => {
+    return (
+      evalList?.filter(
+        (test) =>
+          test.status.state === JobQueueStatus.ACTIVE ||
+          test.status.state === JobQueueStatus.CREATED
+      ) || []
+    );
+  }, [evalList]);
 
   useInterval(
     async () => {
-      if (pendingEvals.length === 0) return;
-      let testStatusChanged = false;
-      const newTestStatus = await Promise.all(
-        pendingEvals.map(async (test) => {
-          const response = await getEvalStatus(expName, test.evalName);
-          if (response.state !== test.status.state) {
-            testStatusChanged = true;
-          }
-          return response;
-        })
-      );
-      if (!testStatusChanged) return;
-      const newPendingTest: EvaluationMetadata[] = cloneDeep(pendingEvals).map(
-        (test, index) => {
-          return {
-            ...test,
-            status: newTestStatus[index],
-          };
-        }
-      );
-      const pendingTestByName: Record<string, EvaluationMetadata> =
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        newPendingTest.reduce((acc: any, test) => {
-          acc[test.evalName] = test;
-          return acc;
-        }, {});
-      setData((prevData) => {
-        const newData = cloneDeep(prevData).map((test) => {
-          return pendingTestByName[test.evalName] || test;
-        });
-        return newData;
+      await queryClient.invalidateQueries({
+        queryKey: [GET_EVALS_FOR_EXPERIMENT, expName],
       });
-      setPendingEvals(
-        newPendingTest.filter(
-          (test) =>
-            test.status.state === JobQueueStatus.ACTIVE ||
-            test.status.state === JobQueueStatus.CREATED
-        )
-      );
     },
     size(pendingEvals) > 0 ? 2500 : null
   );
 
-  useEffect(() => {
-    console.log('Data Changed', data);
-  }, [data]);
+  if (error) {
+    return <ErrorMessage message={error.message} />;
+  }
 
-  const handleTestCreated = (response: CreateEvalJobResponse): void => {
-    setData((prevData) => [
-      cloneDeep(response.evalName),
-      ...cloneDeep(prevData),
-    ]);
-    setPendingEvals((prevTests) => [
-      cloneDeep(response.evalName),
-      ...prevTests,
-    ]);
-    // TODO: Monitor the test status
-  };
+  if (isPending) {
+    return (
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          flex: 1,
+          gap: 2,
+          p: 2,
+        }}
+      >
+        <Skeleton count={1} height={60} />
+        <Skeleton count={5} height={120} />
+      </Box>
+    );
+  }
 
   return (
     <PageContent
@@ -100,11 +85,11 @@ const EvalList: React.FC<TestListProps> = ({ initialTests }) => {
         }),
         Breadcrumb.experimentEvalList(),
       ]}
-      actions={<TopbarAction onEvalCreated={handleTestCreated} />}
+      actions={<TopbarAction experimentName={expName} />}
     >
       <ExperimentSubpageLayout>
         <Paper sx={{ p: 2 }}>
-          <EvalTable data={data} />
+          <EvalTable data={evalList} />
         </Paper>
       </ExperimentSubpageLayout>
     </PageContent>

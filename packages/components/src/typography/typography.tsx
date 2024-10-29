@@ -39,7 +39,13 @@ export const TextDiff: React.FC<TextDiffProps> = ({
           display={'inline'}
           whiteSpace={'pre-line'}
           variant={variant}
-          color={part.added ? 'lime' : part.removed ? 'orange' : 'initial'}
+          sx={(theme) => ({
+            color: part.added
+              ? theme.palette.success.main
+              : part.removed
+              ? theme.palette.error.main
+              : 'initial',
+          })}
         >
           {part.value}
         </Typography>

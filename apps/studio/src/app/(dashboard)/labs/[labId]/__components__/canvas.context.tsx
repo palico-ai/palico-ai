@@ -7,14 +7,13 @@ import {
 } from '@palico-ai/common';
 import React from 'react';
 import { v4 as uuid } from 'uuid';
-import { getRequestTelemetry } from '../../../../../services/telemetry';
 import { newConversation } from '../../../../../services/conversation';
 import { ConversationalEntityType } from '../../../../../types/common';
 
 export type AddExperimentParams = Omit<LabExperimentModel, 'id'>;
 export type AddTestCaseParams = Omit<LabTestCaseModel, 'id'>;
 
-export interface LabContextParams {
+export interface LabCanvasContextParams {
   baselineExperimentId?: string;
   agentIdList: string[];
   experiments: LabExperimentModel[];
@@ -38,7 +37,11 @@ const NotImplementedFN = () => {
   throw new Error('Not implemented');
 };
 
-export const LabContext = React.createContext<LabContextParams>({
+/**
+ * Tracks Lab State
+ * Does not automatically presist state
+ */
+export const LabCanvasContext = React.createContext<LabCanvasContextParams>({
   baselineExperimentId: undefined,
   agentIdList: [],
   experiments: [],
@@ -67,7 +70,7 @@ export type LabContextProviderProps = {
   children: React.ReactNode;
 };
 
-export const LabContextProvider: React.FC<LabContextProviderProps> = ({
+export const LabCanvasContextProvider: React.FC<LabContextProviderProps> = ({
   children,
   agentIdList,
   initialExperiments,
@@ -125,7 +128,6 @@ export const LabContextProvider: React.FC<LabContextProviderProps> = ({
             : undefined,
         }
       );
-      const trace = await getRequestTelemetry(response.requestId);
       setExperimentTestResults((currentResult) => ({
         ...currentResult,
         [experimentId]: {
@@ -137,7 +139,6 @@ export const LabContextProvider: React.FC<LabContextProviderProps> = ({
             metadata: {
               conversationId: response.conversationId,
               requestId: response.requestId,
-              tracePreviewUrl: trace.tracePreviewUrl,
             },
           },
         },
@@ -203,7 +204,7 @@ export const LabContextProvider: React.FC<LabContextProviderProps> = ({
   };
 
   return (
-    <LabContext.Provider
+    <LabCanvasContext.Provider
       value={{
         baselineExperimentId,
         setBaselineExperimentId,
@@ -222,6 +223,6 @@ export const LabContextProvider: React.FC<LabContextProviderProps> = ({
       }}
     >
       {children}
-    </LabContext.Provider>
+    </LabCanvasContext.Provider>
   );
 };
