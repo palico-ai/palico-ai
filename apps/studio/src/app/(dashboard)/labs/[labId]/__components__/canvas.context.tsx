@@ -6,7 +6,6 @@ import {
   LabTestCaseModel,
 } from '@palico-ai/common';
 import React from 'react';
-import { v4 as uuid } from 'uuid';
 import { newConversation } from '../../../../../services/conversation';
 import { ConversationalEntityType } from '../../../../../types/common';
 
@@ -181,7 +180,7 @@ export const LabCanvasContextProvider: React.FC<LabContextProviderProps> = ({
   };
 
   const addExperiment = (experiment: Omit<LabExperimentModel, 'id'>) => {
-    const id = uuid();
+    const id = crypto.randomUUID();
     setExperiments([
       {
         id,
@@ -193,7 +192,7 @@ export const LabCanvasContextProvider: React.FC<LabContextProviderProps> = ({
   };
 
   const addTestCase = (testCase: Omit<LabTestCaseModel, 'id'>) => {
-    const id = uuid();
+    const id = crypto.randomUUID();
     setTestCases([
       {
         id,
