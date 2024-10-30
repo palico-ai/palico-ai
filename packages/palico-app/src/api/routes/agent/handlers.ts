@@ -37,8 +37,7 @@ export const newConversationRequestHandler: RequestHandler<
         const agentResponse = await Application.chat({
           agentName,
           content,
-          appConfig,
-          traceId: requestSpan.spanContext().traceId,
+          appConfig: appConfig ?? {},
         });
         return res.status(200).json(agentResponse);
       } catch (error) {
@@ -72,8 +71,7 @@ export const replyToConversationRequestHandler: RequestHandler<
           conversationId,
           agentName,
           content,
-          appConfig,
-          traceId: requestSpan.spanContext().traceId,
+          appConfig: appConfig ?? {},
         });
         const responseJSON: AgentResponse = {
           ...agentResponse,

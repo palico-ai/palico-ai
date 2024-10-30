@@ -32,6 +32,7 @@ export interface LogRequestParams {
 }
 
 export class ConversationTelemetryModel {
+  // TODO: Refactor to follow the new ChatRequest pattern
   static async logRequest(request: LogRequestParams): Promise<void> {
     const basePreviewURL = await config.getTraceBasePreviewURL();
     const tracePreviewUrl = request.tracePreviewUrl

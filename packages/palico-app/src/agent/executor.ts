@@ -1,51 +1,45 @@
-import {
-  AgentRequestContext,
-  AgentRequestContent,
-  AgentResponse,
-} from '@palico-ai/common';
+import { AgentResponse } from '@palico-ai/common';
 import { AgentModel } from './model';
 import { getTracer } from '../tracing';
+import { NewChatRequestParams } from './chat';
 
-export interface AgentExecutorChatParams {
+export interface AgentExecutorChatParams extends NewChatRequestParams {
   agentName: string;
-  content: AgentRequestContent;
-  conversationId: string; // For grouping a conversation
-  isNewConversation: boolean;
-  requestId: string;
-  appConfig?: Record<string, unknown>;
-  traceId?: string;
 }
 
 const tracer = getTracer('AgentExecutor');
 
 export default class AgentExecutor {
   static async chat(params: AgentExecutorChatParams): Promise<AgentResponse> {
-    const conversationId = params.conversationId;
     return await tracer.trace('AgentExecutor->chat', async (chatSpan) => {
-      const { requestId } = params;
+      const {
+        agentName,
+        conversationId,
+        requestId,
+        isNewConversation,
+        content,
+        appConfig,
+      } = params;
       try {
         chatSpan.setAttributes({
-          agentName: params.agentName,
-          content: JSON.stringify(params.content, null, 2),
-          inputConversationId: params.conversationId,
-          appConfig: JSON.stringify(params.appConfig, null, 2),
-          traceId: params.traceId,
+          agentName,
+          conversationId,
+          requestId,
+          isNewConversation,
+          content: JSON.stringify(content),
+          appConfig: JSON.stringify(params.appConfig),
         });
         chatSpan.setAttributes({
           assignedConversationId: conversationId,
         });
-        const traceId = params.traceId || chatSpan.spanContext().traceId;
-        const agent = await AgentModel.getAgentByName(params.agentName);
-        const context: AgentRequestContext = {
+        const chatRequest = await AgentModel.getAgentByName(agentName, {
           conversationId,
           requestId,
-          isNewConversation: params.isNewConversation,
-          appConfig: params.appConfig ?? {},
-          otel: {
-            traceId,
-          },
-        };
-        const response = await agent.chat(params.content, context);
+          isNewConversation,
+          content,
+          appConfig,
+        });
+        const response = await chatRequest.handler();
         const output = {
           ...response,
           requestId,

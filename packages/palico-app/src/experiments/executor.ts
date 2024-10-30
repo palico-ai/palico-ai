@@ -115,7 +115,7 @@ export class ExperimentExecutor {
       response = await Application.chat({
         agentName,
         content: testCase.input,
-        appConfig,
+        appConfig: appConfig ?? {},
       });
     } else if (workflowName) {
       response = await Application.executeWorkflow({
