@@ -127,7 +127,7 @@ export class AppServiceManager {
     };
     console.log('Starting Server...');
     const command = params.devMode
-      ? 'npx nodemon --exec tzs-node src/main.ts'
+      ? 'npx nodemon --exec ts-node src/main.ts'
       : 'npx ts-node src/main.ts';
     const serverPs = exec(command, {
       cwd: projectRoot,
