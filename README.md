@@ -130,10 +130,6 @@ You can deploy your Palico app to any cloud provider using Docker or use our man
 
 Learn more from [docs](https://docs.palico.ai/guides/client_sdk).
 
-## ⭐ Star History
-
-[![Star History Chart](https://api.star-history.com/svg?repos=palico-ai/palico-ai&type=Date)](https://star-history.com/#palico-ai/palico-ai&Date)
-
 ## 🤝 Contributing
 
 The easiest way to contribute is to pick an issue with the `good first issue` [tag](https://github.com/palico-ai/palico-ai/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22) 💪. Read the contribution guidelines [here](/CONTRIBUTING.md).
