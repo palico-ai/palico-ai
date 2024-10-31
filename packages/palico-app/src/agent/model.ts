@@ -1,6 +1,5 @@
 import Project from '../utils/project';
 import OS from '../utils/os';
-import { Agent } from './agent';
 import { Chat, NewChatRequestParams } from './chat';
 
 export class AgentModel {

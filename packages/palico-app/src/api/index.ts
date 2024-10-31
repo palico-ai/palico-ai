@@ -6,7 +6,6 @@ import agentRouter from './routes/agent';
 import studioRouter from './routes/studio';
 import telemetryRouter from './routes/telemetry';
 import devRouter from './routes/dev';
-// import workflowRouter from './routes/workflow';
 import metadataRouter from './routes/metadata';
 import { defaultErrorMiddleware } from './middlewares/default_error_middeware';
 import JobQueue from '../services/job_queue';

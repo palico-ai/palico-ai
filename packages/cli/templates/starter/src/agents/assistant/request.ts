@@ -19,7 +19,7 @@ export default class RequestHandler extends Chat<InputData, AppConfig> {
         model: this.getModelName(),
       });
       // log the response
-      Logger.log('New conversation', response);
+      Logger.log('New conversation');
       return response;
     } else {
       // handle existing conversation
@@ -29,7 +29,7 @@ export default class RequestHandler extends Chat<InputData, AppConfig> {
         model: this.getModelName(),
       });
       // log the response
-      Logger.log('Existing conversation', this.conversationId, response);
+      Logger.log('Existing conversation', this.conversationId);
       return response;
     }
   }

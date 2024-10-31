@@ -1,5 +1,14 @@
-import { AppConfig, JSONAbleObject } from '@palico-ai/common';
-import { ChatHandlerResponse } from './chat_response';
+import { AgentResponse, AppConfig, JSONAbleObject } from '@palico-ai/common';
+import { ChatResponseStream } from './stream';
+
+export type ChatResponseMetadata = JSONAbleObject;
+
+export interface ChatResponse<D = JSONAbleObject, M = ChatResponseMetadata>
+  extends Pick<AgentResponse<D>, 'message' | 'data'> {
+  metadata?: M;
+}
+
+export type ChatHandlerResponse = ChatResponse | void;
 
 export interface ChatRequestContent<P = JSONAbleObject> {
   userMessage?: string;
@@ -31,5 +40,5 @@ export abstract class Chat<P = JSONAbleObject, AC = JSONAbleObject> {
     this.appConfig = params.appConfig;
   }
 
-  abstract handler(): Promise<ChatHandlerResponse>;
+  abstract handler(stream: ChatResponseStream): Promise<ChatHandlerResponse>;
 }

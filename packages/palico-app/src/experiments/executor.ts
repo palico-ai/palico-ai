@@ -10,10 +10,11 @@ import {
   EvalMetricOutput,
   AppConfig,
 } from '@palico-ai/common';
-import { Application } from '../app';
 import JobQueue from '../services/job_queue';
 import ExperimentModel from './model';
 import { ResponseMetadataKey } from '../types';
+import { Agent } from '../agent';
+import TestSuiteModel from './test_case.model';
 
 interface RunTestCaseParams {
   testCase: EvalTestCase;
@@ -73,7 +74,7 @@ export class ExperimentExecutor {
           state: JobQueueStatus.ACTIVE,
         },
       });
-      const dataset = await Application.fetchTestDataset(test.testSuiteName);
+      const dataset = await TestSuiteModel.findByName(test.testSuiteName);
       const results = await Promise.all(
         dataset.map((testCase) =>
           ExperimentExecutor.runTestCase({
@@ -112,19 +113,15 @@ export class ExperimentExecutor {
     const { testCase, agentName, workflowName, appConfig } = params;
     let response: AgentResponse;
     if (agentName) {
-      response = await Application.chat({
+      response = await Agent.chat({
         agentName,
         content: testCase.input,
         appConfig: appConfig ?? {},
       });
     } else if (workflowName) {
-      response = await Application.executeWorkflow({
-        workflowName,
-        content: testCase.input,
-        appConfig,
-      });
+      throw new Error('Workflow execution is not supported yet');
     } else {
-      throw new Error('Either agentName or workflowName is required');
+      throw new Error('Agent name required');
     }
     const metrics = await Promise.all(
       testCase.metrics.map(async (metric) => {
