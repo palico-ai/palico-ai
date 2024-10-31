@@ -1,7 +1,7 @@
 import { trace } from '@opentelemetry/api';
 import { RequestHandler } from 'express';
 import { recordRequestErrorSpan } from '../../../utils/api';
-import { Application } from '../../../app/app';
+import { Agent } from '../../../agent';
 import {
   AgentConversationAPIRequestBody,
   AgentConversationAPIRequestResponse,
@@ -34,11 +34,27 @@ export const newConversationRequestHandler: RequestHandler<
         body: JSON.stringify(req.body, null, 2),
       });
       try {
-        const agentResponse = await Application.chat({
+        let streamUsed = false;
+        const agentResponse = await Agent.chat({
           agentName,
           content,
           appConfig: appConfig ?? {},
+          onStreamContentPush: (content) => {
+            if (!streamUsed) {
+              streamUsed = true;
+              res.writeHead(200, {
+                'Content-Type': 'application/json',
+                'Transfer-Encoding': 'chunked',
+                'Cache-Control': 'no-cache',
+                Connection: 'keep-alive',
+              });
+            }
+            res.write(JSON.stringify(content));
+          },
         });
+        if (streamUsed) {
+          return res.end();
+        }
         return res.status(200).json(agentResponse);
       } catch (error) {
         recordRequestErrorSpan(error, requestSpan);
@@ -67,7 +83,7 @@ export const replyToConversationRequestHandler: RequestHandler<
           body: JSON.stringify(req.body, null, 2),
         });
         console.log('Calling Application.chat');
-        const agentResponse = await Application.chat({
+        const agentResponse = await Agent.chat({
           conversationId,
           agentName,
           content,

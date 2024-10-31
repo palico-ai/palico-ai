@@ -5,7 +5,7 @@ import {
 } from './workers';
 import config from '../../config';
 import { EvalCompositeKey } from '@palico-ai/common';
-import { RunScriptParams } from '../../app/run_script';
+import { RunScriptParams } from '../../beta_features/run_script';
 
 export type JobQueueState = PgBoss.Worker['state'];
 

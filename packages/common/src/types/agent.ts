@@ -10,6 +10,18 @@ export interface AgentResponse<Data = Record<string, any>> {
   metadata?: AgentResponseMetadata; // @deprecated - use AgentRawResponse instead
 }
 
+export interface AgentStreamResponseDelta {
+  message?: string;
+  data?: any;
+  done?: boolean;
+}
+
+export interface AgentStreamResponse {
+  conversationId: string;
+  requestId: string;
+  delta: AgentStreamResponseDelta;
+}
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export interface AgentRequestContent<Payload = Record<string, any>> {
   userMessage?: string;

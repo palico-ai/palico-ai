@@ -1,5 +1,4 @@
 export * from './agent';
-export * from './app';
 export * from './api/error';
 export * from './api';
 export * from './experiments';

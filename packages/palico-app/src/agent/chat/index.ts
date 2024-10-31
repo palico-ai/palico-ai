@@ -1,2 +1,2 @@
-export * from './chat_request';
-export * from './chat_response';
+export * from './chat';
+export * from './stream';
