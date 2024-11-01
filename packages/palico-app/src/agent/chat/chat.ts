@@ -23,12 +23,41 @@ export interface NewChatRequestParams<P = JSONAbleObject, AC = AppConfig> {
   appConfig: AC;
 }
 
+/**
+ * Request Handler for a Chat Message
+ *
+ * @template P - Expected input payload from request
+ * @template AC - App Config / Feature Flag values expected
+ */
 export abstract class Chat<P = JSONAbleObject, AC = JSONAbleObject> {
+  /**
+   * The ID of the conversation.
+   */
   conversationId: string;
+
+  /**
+   * The ID of the request.
+   */
   requestId: string;
+
+  /**
+   * Indicates if this is a new conversation.
+   */
   isNewConversation: boolean;
+
+  /**
+   * The message from the user, if any.
+   */
   userMessage?: string;
+
+  /**
+   * The payload of the chat, if any.
+   */
   payload?: P;
+
+  /**
+   * App Config / Feature Flag values.
+   */
   appConfig: AC;
 
   constructor(params: NewChatRequestParams<P, AC>) {
@@ -40,5 +69,12 @@ export abstract class Chat<P = JSONAbleObject, AC = JSONAbleObject> {
     this.appConfig = params.appConfig;
   }
 
+  /**
+   * Handle a chat request.
+   * This function is ran when a chat request is received.
+   *
+   * @param stream - The chat response stream.
+   * @returns Either a ChatResponse JSON, or void if it's a stream
+   */
   abstract handler(stream: ChatResponseStream): Promise<ChatHandlerResponse>;
 }

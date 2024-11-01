@@ -1,26 +1,17 @@
-import { AgentResponse } from '@palico-ai/common';
-
-export interface StreamContentDelta {
-  message?: string;
-  data?: any;
-  done?: boolean;
-}
-
-export interface StreamContent {
-  conversationId: string;
-  requestId: string;
-  delta: StreamContentDelta;
-  done: boolean;
-}
+import {
+  AgentResponse,
+  AgentResponseChunk,
+  AgentResponseChunkDelta,
+} from '@palico-ai/common';
 
 export interface ChatResponseStreamOptions {
-  onPush?: (content: StreamContent) => void;
+  onPush?: (content: AgentResponseChunk) => void;
 }
 
 export class ChatResponseStream {
   conversationId: string;
   requestId: string;
-  chunks: StreamContentDelta[] = [];
+  chunks: AgentResponseChunkDelta[] = [];
 
   private onPush?: ChatResponseStreamOptions['onPush'];
 
@@ -38,13 +29,12 @@ export class ChatResponseStream {
    * Push new content to the stream
    * @param chunk - The content to push to the stream
    */
-  push(chunk: StreamContentDelta) {
+  push(chunk: AgentResponseChunkDelta) {
     if (this.onPush) {
       this.onPush({
         conversationId: this.conversationId,
         requestId: this.requestId,
         delta: chunk,
-        done: false,
       });
     }
     this.chunks.push(chunk);

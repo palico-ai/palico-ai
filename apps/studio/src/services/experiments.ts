@@ -18,11 +18,11 @@ import {
   GetNotebookAPIResponse,
   UpdateNotebookAPIRequestBody,
 } from '@palico-ai/common';
-import { palicoFetch } from './palico';
+import { palicoFetchJSON } from './palico';
 import { RequireExperimentName, RequireNoteobokName } from '../types/common';
 
 export const getExperimentList = async (): Promise<ExperimentMetadata[]> => {
-  const data = await palicoFetch<GetAllExperimentsAPIResponse>(
+  const data = await palicoFetchJSON<GetAllExperimentsAPIResponse>(
     '/dev/experiments',
     {
       method: 'GET',
@@ -32,7 +32,7 @@ export const getExperimentList = async (): Promise<ExperimentMetadata[]> => {
 };
 
 export const createExperiment = async (params: NewExperimentAPIRequestBody) => {
-  return await palicoFetch<
+  return await palicoFetchJSON<
     NewExperimentAPIResponse,
     NewExperimentAPIRequestBody
   >('/dev/experiments', {
@@ -42,13 +42,13 @@ export const createExperiment = async (params: NewExperimentAPIRequestBody) => {
 };
 
 export const deleteExperiment = async (name: string) => {
-  return await palicoFetch(`/dev/experiments/${name}`, {
+  return await palicoFetchJSON(`/dev/experiments/${name}`, {
     method: 'DELETE',
   });
 };
 
 export const getEvalsForExperiments = async (expName: string) => {
-  const data = await palicoFetch<GetAllEvalsAPIResponse>(
+  const data = await palicoFetchJSON<GetAllEvalsAPIResponse>(
     `/dev/experiments/${expName}/evals`,
     {
       method: 'GET',
@@ -58,7 +58,7 @@ export const getEvalsForExperiments = async (expName: string) => {
 };
 
 export const getExperimentByName = async (expName: string) => {
-  return await palicoFetch<GetExperimentByNameAPIResponse>(
+  return await palicoFetchJSON<GetExperimentByNameAPIResponse>(
     `/dev/experiments/${expName}`,
     {
       method: 'GET',
@@ -67,7 +67,7 @@ export const getExperimentByName = async (expName: string) => {
 };
 
 export const runEval = async (params: CreateEvaluationParams) => {
-  return await palicoFetch<CreateEvalAPIResponse, CreateEvalAPIRequestBody>(
+  return await palicoFetchJSON<CreateEvalAPIResponse, CreateEvalAPIRequestBody>(
     `/dev/experiments/${params.experimentName}/evals`,
     {
       method: 'POST',
@@ -84,7 +84,7 @@ export const runEval = async (params: CreateEvaluationParams) => {
 };
 
 export const getEvalByName = async (expName: string, evalName: string) => {
-  return await palicoFetch<Evaluation>(
+  return await palicoFetchJSON<Evaluation>(
     `/dev/experiments/${expName}/evals/${evalName}`,
     {
       method: 'GET',
@@ -93,7 +93,7 @@ export const getEvalByName = async (expName: string, evalName: string) => {
 };
 
 export const getEvalStatus = async (expName: string, testName: string) => {
-  return await palicoFetch<GetEvalStatusAPIResponse>(
+  return await palicoFetchJSON<GetEvalStatusAPIResponse>(
     `/dev/experiments/${expName}/evals/${testName}/status`,
     {
       method: 'GET',
@@ -102,7 +102,7 @@ export const getEvalStatus = async (expName: string, testName: string) => {
 };
 
 export const getNotebooksForExperiment = async (expName: string) => {
-  const response = await palicoFetch<GetNotebooksForExperimentAPIResponse>(
+  const response = await palicoFetchJSON<GetNotebooksForExperimentAPIResponse>(
     `/dev/experiments/${expName}/notebook`,
     {
       method: 'GET',
@@ -114,7 +114,7 @@ export const getNotebooksForExperiment = async (expName: string) => {
 export const createNotebook = async (
   params: CreateNotebookAPIRequestBody & RequireExperimentName
 ) => {
-  return await palicoFetch<
+  return await palicoFetchJSON<
     CreateNotebookAPIResponse,
     CreateNotebookAPIRequestBody
   >(`/dev/experiments/${params.experimentName}/notebook`, {
@@ -130,7 +130,7 @@ export const createNotebook = async (
 export const getNotebook = async (
   params: RequireExperimentName & RequireNoteobokName
 ) => {
-  return await palicoFetch<GetNotebookAPIResponse>(
+  return await palicoFetchJSON<GetNotebookAPIResponse>(
     `/dev/experiments/${params.experimentName}/notebook/${params.notebookName}`,
     {
       method: 'GET',
@@ -143,7 +143,7 @@ export const updateNotebook = async (
     RequireExperimentName &
     RequireNoteobokName
 ) => {
-  await palicoFetch<CreateNotebookAPIResponse>(
+  await palicoFetchJSON<CreateNotebookAPIResponse>(
     `/dev/experiments/${params.experimentName}/notebook/${params.notebookName}`,
     {
       method: 'PUT',
@@ -158,7 +158,7 @@ export const updateNotebook = async (
 export const deleteNotebook = async (
   params: RequireExperimentName & RequireNoteobokName
 ) => {
-  return await palicoFetch(
+  return await palicoFetchJSON(
     `/dev/experiments/${params.experimentName}/notebook/${params.notebookName}`,
     {
       method: 'DELETE',

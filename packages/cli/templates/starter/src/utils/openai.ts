@@ -1,5 +1,5 @@
 import { SpanStatusCode } from '@opentelemetry/api';
-import { ChatHistoryStore, getTracer, Logger } from '@palico-ai/app';
+import { ChatHistory, getTracer, Logger } from '@palico-ai/app';
 import OpenAI from 'openai';
 import { ChatCompletionMessageParam } from 'openai/resources/chat/completions';
 
@@ -24,7 +24,7 @@ export class OpenAIService {
           throw new Error('message is required');
         }
         const historyDB =
-          await ChatHistoryStore.fromConversation<ChatCompletionMessageParam>({
+          await ChatHistory.fromConversation<ChatCompletionMessageParam>({
             conversationId,
           });
         historyDB
@@ -71,7 +71,7 @@ export class OpenAIService {
       try {
         const { conversationId, message, model } = params;
         const historyDB =
-          await ChatHistoryStore.fromConversation<ChatCompletionMessageParam>({
+          await ChatHistory.fromConversation<ChatCompletionMessageParam>({
             conversationId,
           });
         historyDB.append({

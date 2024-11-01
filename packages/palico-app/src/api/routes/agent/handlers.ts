@@ -1,11 +1,12 @@
 import { trace } from '@opentelemetry/api';
-import { RequestHandler } from 'express';
+import { RequestHandler, Response } from 'express';
 import { recordRequestErrorSpan } from '../../../utils/api';
-import { Agent } from '../../../agent';
+import { Agent, AgentChatRequest } from '../../../agent';
 import {
   AgentConversationAPIRequestBody,
   AgentConversationAPIRequestResponse,
   AgentResponse,
+  AgentResponseChunk,
 } from '@palico-ai/common';
 
 const tracer = trace.getTracer('agent-route-handler');
@@ -19,6 +20,46 @@ interface AgentContinueConversationRouteParams
   conversationId: string;
 }
 
+const handleStreamResponse = async (
+  res: Response,
+  chatParams: AgentChatRequest
+) => {
+  // if the agent does not use the stream, this will stay false
+  // in which case we will stream the response as a single chunk
+  let agentUsedStream = false;
+  const handlePushContent = (content: AgentResponseChunk) => {
+    const firstEntry = agentUsedStream === false;
+    if (firstEntry) {
+      agentUsedStream = true;
+      res.writeHead(200, {
+        'Content-Type': 'application/json',
+        'Transfer-Encoding': 'chunked',
+        'Cache-Control': 'no-cache',
+        Connection: 'keep-alive',
+      });
+    }
+    res.write(
+      firstEntry ? `${JSON.stringify(content)}` : `\n${JSON.stringify(content)}`
+    );
+  };
+  const agentResponse = await Agent.chat({
+    ...chatParams,
+    onStreamContentPush: handlePushContent,
+  });
+  if (agentUsedStream) {
+    return res.end();
+  }
+  handlePushContent({
+    conversationId: agentResponse.conversationId,
+    requestId: agentResponse.requestId,
+    delta: {
+      message: agentResponse.message,
+      data: agentResponse.data,
+    },
+  });
+  return res.end();
+};
+
 export const newConversationRequestHandler: RequestHandler<
   AgentConversationRouteParams,
   AgentConversationAPIRequestResponse,
@@ -28,33 +69,25 @@ export const newConversationRequestHandler: RequestHandler<
     '(POST) /agent/:agentId/conversation',
     async (requestSpan) => {
       const { agentName } = req.params;
-      const { content, appConfig } = req.body;
+      const { content, appConfig, stream } = req.body;
       requestSpan.setAttributes({
         agentName,
+        stream,
         body: JSON.stringify(req.body, null, 2),
       });
       try {
-        let streamUsed = false;
+        if (stream) {
+          return await handleStreamResponse(res, {
+            agentName,
+            content,
+            appConfig: appConfig ?? {},
+          });
+        }
         const agentResponse = await Agent.chat({
           agentName,
           content,
           appConfig: appConfig ?? {},
-          onStreamContentPush: (content) => {
-            if (!streamUsed) {
-              streamUsed = true;
-              res.writeHead(200, {
-                'Content-Type': 'application/json',
-                'Transfer-Encoding': 'chunked',
-                'Cache-Control': 'no-cache',
-                Connection: 'keep-alive',
-              });
-            }
-            res.write(JSON.stringify(content));
-          },
         });
-        if (streamUsed) {
-          return res.end();
-        }
         return res.status(200).json(agentResponse);
       } catch (error) {
         recordRequestErrorSpan(error, requestSpan);
@@ -76,13 +109,21 @@ export const replyToConversationRequestHandler: RequestHandler<
     async (requestSpan) => {
       try {
         const { conversationId, agentName } = req.params;
-        const { content, appConfig } = req.body;
+        const { content, appConfig, stream } = req.body;
         requestSpan.setAttributes({
           agentName,
           conversationId,
+          stream,
           body: JSON.stringify(req.body, null, 2),
         });
-        console.log('Calling Application.chat');
+        if (stream) {
+          return await handleStreamResponse(res, {
+            conversationId,
+            agentName,
+            content,
+            appConfig: appConfig ?? {},
+          });
+        }
         const agentResponse = await Agent.chat({
           conversationId,
           agentName,

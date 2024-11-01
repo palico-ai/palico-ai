@@ -2,79 +2,48 @@ import {
   AppConfig,
   AgentRequestContent,
   AgentResponse,
+  AgentResponseChunk,
 } from '@palico-ai/common';
 
-export type ConversationContextParams = Record<string, unknown>;
-
-export interface ReplyAsUserParams {
-  agentId: string;
-  conversationId: string;
-  userMessage: string;
-  context?: ConversationContextParams;
-}
-
-export interface ToolExecutionMessage {
-  functionName: string;
-  toolId: string;
-  output: Record<string, unknown>;
-}
-
-export interface ReplyToToolCallParams {
-  conversationId: string;
-  toolOutputs: ToolExecutionMessage[];
-}
-
-export interface NewConversationParamsCommon extends AgentRequestContent {
+export interface NewConversationParams extends AgentRequestContent {
+  agentName: string;
   appConfig?: AppConfig;
 }
 
-export interface ReplyToConversationParamsCommon extends AgentRequestContent {
+export interface NewConversationWithStreamParams extends NewConversationParams {
+  stream?: boolean;
+}
+
+// TODO: Add support for streaming response in client-js
+export type NewConversationFN = {
+  (params: NewConversationParams): Promise<AgentResponse>;
+  (
+    params: NewConversationWithStreamParams
+  ): AsyncIterableIterator<AgentResponseChunk>;
+};
+
+export interface ReplyToConversationParams extends AgentRequestContent {
+  name: string;
   conversationId: string;
   appConfig?: AppConfig;
 }
 
-export interface ClientNewConversationParams
-  extends NewConversationParamsCommon {
-  name: string;
+export interface IAgent {
+  newConversation: (params: NewConversationParams) => Promise<AgentResponse>;
+  reply: (params: ReplyToConversationParams) => Promise<AgentResponse>;
 }
 
-export interface ClientReplyToConversationParams
-  extends ReplyToConversationParamsCommon {
-  name: string;
+export interface IAPI {
+  get: <R = any>(path: string) => Promise<R>;
+  post: <R = any, B = any>(path: string, body: B) => Promise<R>;
 }
 
-export type NewConversationFN = (
-  params: ClientNewConversationParams
-) => Promise<AgentResponse>;
-export type ReplyAsUserFN = (
-  params: ClientReplyToConversationParams
-) => Promise<AgentResponse>;
-export type AgentReplyToToolCallFN = (
-  params: ReplyToToolCallParams
-) => Promise<AgentResponse>;
-
-export interface PalicoAgentClient {
-  newConversation: NewConversationFN;
-  replyAsUser: ReplyAsUserFN;
-  replyToToolCall: AgentReplyToToolCallFN;
-}
-
-export interface WorkflowNewConversationParams
-  extends NewConversationParamsCommon {
-  workflowId: string;
-}
-
-export interface WorkflowReplyToConversationParams
-  extends ReplyToConversationParamsCommon {
-  workflowId: string;
-}
-
-export interface PalicoWorkflowClient {
-  newConversation: NewConversationFN;
-  replyAsUser: ReplyAsUserFN;
+export interface CreateClientParams {
+  apiURL: string;
+  serviceKey: string;
 }
 
 export interface IPalicoClient {
-  agents: PalicoAgentClient;
-  workflows: PalicoWorkflowClient;
+  agent: IAgent;
+  api: IAPI;
 }

@@ -6,8 +6,7 @@ import {
   LabTestCaseModel,
 } from '@palico-ai/common';
 import React from 'react';
-import { newConversation } from '../../../../../services/conversation';
-import { ConversationalEntityType } from '../../../../../types/common';
+import { newConversation } from '../../../../../services/agent';
 
 export type AddExperimentParams = Omit<LabExperimentModel, 'id'>;
 export type AddTestCaseParams = Omit<LabTestCaseModel, 'id'>;
@@ -112,21 +111,16 @@ export const LabCanvasContextProvider: React.FC<LabContextProviderProps> = ({
         throw new Error('Experiment not found');
       }
       console.log('Running test case', testCase, 'for experiment', experiment);
-      const response = await newConversation(
-        {
-          type: ConversationalEntityType.AGENT,
-          name: experiment.agentId,
-        },
-        {
-          appConfig: experiment.appConfigJSON
-            ? JSON.parse(experiment.appConfigJSON)
-            : undefined,
-          userMessage: testCase.userMessage,
-          payload: testCase.payloadString
-            ? JSON.parse(testCase.payloadString)
-            : undefined,
-        }
-      );
+      const response = await newConversation({
+        agentName: experiment.agentId,
+        appConfig: experiment.appConfigJSON
+          ? JSON.parse(experiment.appConfigJSON)
+          : undefined,
+        userMessage: testCase.userMessage,
+        payload: testCase.payloadString
+          ? JSON.parse(testCase.payloadString)
+          : undefined,
+      });
       setExperimentTestResults((currentResult) => ({
         ...currentResult,
         [experimentId]: {

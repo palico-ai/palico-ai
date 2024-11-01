@@ -10,16 +10,15 @@ export interface AgentResponse<Data = Record<string, any>> {
   metadata?: AgentResponseMetadata; // @deprecated - use AgentRawResponse instead
 }
 
-export interface AgentStreamResponseDelta {
+export interface AgentResponseChunkDelta {
   message?: string;
   data?: any;
-  done?: boolean;
 }
 
-export interface AgentStreamResponse {
+export interface AgentResponseChunk {
   conversationId: string;
   requestId: string;
-  delta: AgentStreamResponseDelta;
+  delta: AgentResponseChunkDelta;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

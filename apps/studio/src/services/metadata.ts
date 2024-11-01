@@ -6,10 +6,10 @@ import {
   GetAllTestSuitesResponse,
   GetWorkflowMetadataResponse,
 } from '@palico-ai/common';
-import { palicoFetch } from './palico';
+import { palicoFetchJSON } from './palico';
 
 export const getAllAgents = async () => {
-  const response = await palicoFetch<GetAgentMetadataResponse>(
+  const response = await palicoFetchJSON<GetAgentMetadataResponse>(
     '/metadata/agents',
     {
       method: 'GET',
@@ -19,7 +19,7 @@ export const getAllAgents = async () => {
 };
 
 export const getAllWorkflows = async () => {
-  const response = await palicoFetch<GetWorkflowMetadataResponse>(
+  const response = await palicoFetchJSON<GetWorkflowMetadataResponse>(
     '/metadata/workflows',
     {
       method: 'GET',
@@ -29,7 +29,7 @@ export const getAllWorkflows = async () => {
 };
 
 export const getAllTestSuites = async () => {
-  const response = await palicoFetch<GetAllTestSuitesResponse>(
+  const response = await palicoFetchJSON<GetAllTestSuitesResponse>(
     '/metadata/test-case-dataset',
     {
       method: 'GET',
@@ -39,8 +39,11 @@ export const getAllTestSuites = async () => {
 };
 
 export const getAllEvals = async () => {
-  const response = await palicoFetch<GetAllEvalsResponse>('/metadata/tests', {
-    method: 'GET',
-  });
+  const response = await palicoFetchJSON<GetAllEvalsResponse>(
+    '/metadata/tests',
+    {
+      method: 'GET',
+    }
+  );
   return response.evals;
 };

@@ -67,6 +67,7 @@ export interface GetRequestLogsResponse {
 export interface AgentConversationAPIRequestBody {
   appConfig?: AppConfig;
   content: AgentRequestContent;
+  stream?: boolean;
 }
 
 export type AgentConversationAPIRequestResponse = AgentResponse;

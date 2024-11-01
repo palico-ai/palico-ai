@@ -1,39 +1,18 @@
 'use client';
 
 import { Box, Divider, Stack } from '@mui/material';
-import React, { useContext, useMemo } from 'react';
+import React, { useContext } from 'react';
 import { ChatHistory } from './chat_history';
 import { ChatInput } from './chat_input';
 import { ConversationContext } from '../../../../context/conversation';
-import ToolExecutionInput from './tool_execution_input';
-import { ReplyToToolCallParams } from '@palico-ai/client-js';
-import { AppConfig, AgentRequestContent } from '@palico-ai/common';
+import { useChat } from '@palico-ai/react';
 
 const ChatUI: React.FC = () => {
-  const { history, loading, sendMessage } = useContext(ConversationContext);
-
-  const handleSend = async (
-    content: AgentRequestContent,
-    appConfig: AppConfig
-  ) => {
-    await sendMessage(content, appConfig);
-  };
-
-  const handleSubmitToolOutput = async (
-    output: ReplyToToolCallParams['toolOutputs']
-  ) => {
-    throw new Error('Not implemented');
-    // await replyToToolCall(output);
-  };
-
-  const requiredToolCalls = useMemo(() => {
-    return false;
-    // const lastMessage = history[history.length - 1];
-    // if (!lastMessage) {
-    //   return
-    // }
-    // return lastMessage.role === 'assistant' && lastMessage.tool_calls;
-  }, []);
+  const { agentName } = useContext(ConversationContext);
+  const { sendMessage, loading, messages } = useChat({
+    agentName: agentName ?? '',
+    apiURL: '/api/palico',
+  });
 
   return (
     <Stack
@@ -56,29 +35,16 @@ const ChatUI: React.FC = () => {
       >
         <ChatHistory
           initialMessage={'Welcome to the chat!'}
-          history={history}
+          history={messages}
         />
       </Box>
-      {/* {errorMessage && (
-        <Typography variant="caption" color={'error'}>
-          {errorMessage}
-        </Typography>
-      )} */}
       <Divider />
       <Box>
-        {requiredToolCalls ? (
-          <ToolExecutionInput
-            // toolCalls={requiredToolCalls}
-            toolCalls={[]}
-            handleSubmit={handleSubmitToolOutput}
-          />
-        ) : (
-          <ChatInput
-            disabled={loading}
-            placeholder={'Begin by typing a message'}
-            onSend={handleSend}
-          />
-        )}
+        <ChatInput
+          disabled={loading}
+          placeholder={'Begin by typing a message'}
+          onSend={sendMessage}
+        />
       </Box>
     </Stack>
   );
