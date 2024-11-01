@@ -1,8 +1,6 @@
 'use client';
 
-import { streamIterator } from '@palico-ai/client-js';
-import { AgentResponseChunk, JSONAbleObject } from '@palico-ai/common';
-import { merge } from 'lodash';
+import { AgentResponseStreamReader, JSONAbleObject } from '@palico-ai/common';
 import { useEffect, useState } from 'react';
 
 export interface UseChatParams {
@@ -43,36 +41,24 @@ export const useChat = (params: UseChatParams) => {
     setConversationId(undefined);
   }, [agentName]);
 
-  const handleStreamResponse = async (reader: ReadableStreamDefaultReader) => {
+  const streamMessageStateUpdate = async (response: Response) => {
     setMessages((prevMessages) => [
       ...prevMessages,
       {
         sender: MessageSender.Agent,
       },
     ]);
-    let responseMessageBuffer: string | undefined;
-    let dataBuffer: JSONAbleObject | undefined;
-    for await (const chunk of streamIterator<AgentResponseChunk>(reader)) {
+    const stream = new AgentResponseStreamReader(response);
+    for await (const chunk of stream.readChunks()) {
       setConversationId(chunk.conversationId);
-      if (chunk.delta.message) {
-        if (!responseMessageBuffer) {
-          responseMessageBuffer = '';
-        }
-        responseMessageBuffer += chunk.delta.message;
-      }
-      if (chunk.delta.data) {
-        if (!dataBuffer) {
-          dataBuffer = {};
-        }
-        merge(dataBuffer, chunk.delta.data);
-      }
       setMessages((prevMessages) => {
         const newMessages = [...prevMessages];
         newMessages.pop();
+        const mergedContent = stream.getMergedChunks();
         newMessages.push({
           sender: MessageSender.Agent,
-          message: responseMessageBuffer,
-          data: dataBuffer,
+          message: mergedContent.message,
+          data: mergedContent.data,
         });
         return newMessages;
       });
@@ -99,28 +85,7 @@ export const useChat = (params: UseChatParams) => {
           appConfig: sendMessageParams.appConfig ?? {},
         }),
       });
-      const isStream = response.headers.get('transfer-encoding') === 'chunked';
-      if (isStream) {
-        console.log('Stream response');
-        const reader = response.body?.getReader();
-        if (!reader) {
-          throw new Error('No reader');
-        }
-        await handleStreamResponse(reader);
-      } else {
-        throw new Error('Only stream responses are supported');
-        const responseBody = await response.json();
-        const { message, data, conversationId } = responseBody;
-        setMessages((messages) => [
-          ...messages,
-          {
-            sender: MessageSender.Agent,
-            message,
-            data,
-          },
-        ]);
-        setConversationId(conversationId);
-      }
+      await streamMessageStateUpdate(response);
     } catch (error) {
       console.error('Error sending message', error);
       const errorMessage =

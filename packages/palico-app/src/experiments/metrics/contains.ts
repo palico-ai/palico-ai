@@ -13,23 +13,19 @@ export interface ContainsMetricParams {
  * Checks if the response contains a substring.
  * Returns 0 if the substring is not found, 1 if it is found.
  */
-export class ContainsMetric implements EvalMetric {
-  private params: ContainsMetricParams;
-  label = 'Contains';
-
-  constructor(params: ContainsMetricParams) {
-    this.params = params;
-  }
-
-  async evaluate(
-    _: AgentRequestContent,
-    response: AgentResponse
-  ): Promise<EvalMetricOutput> {
-    const exists = response.message
-      ?.toLocaleLowerCase()
-      .includes(this.params.substring.toLowerCase());
-    return exists ? 1 : 0;
-  }
+export function containsEvalMetric(params: ContainsMetricParams): EvalMetric {
+  return {
+    label: 'contains',
+    async evaluate(
+      _: AgentRequestContent,
+      response: AgentResponse
+    ): Promise<EvalMetricOutput> {
+      const exists = response.message
+        ?.toLocaleLowerCase()
+        .includes(params.substring.toLowerCase());
+      return exists ? 1 : 0;
+    },
+  };
 }
 
 export interface ContainsAnyMetricParams {
@@ -41,23 +37,21 @@ export interface ContainsAnyMetricParams {
  * Returns 0 if none of the substrings are found.
  * if found, returns 1.
  */
-export class ContainsAnyMetric implements EvalMetric {
-  private params: ContainsAnyMetricParams;
-  label = 'Contains Any';
-
-  constructor(params: ContainsAnyMetricParams) {
-    this.params = params;
-  }
-
-  async evaluate(
-    _: AgentRequestContent,
-    response: AgentResponse
-  ): Promise<EvalMetricOutput> {
-    const found = this.params.substrings.some((substring) =>
-      response.message?.toLocaleLowerCase().includes(substring.toLowerCase())
-    );
-    return found ? 1 : 0;
-  }
+export function containsAnyEvalMetric(
+  params: ContainsAnyMetricParams
+): EvalMetric {
+  return {
+    label: 'contains_any',
+    async evaluate(
+      _: AgentRequestContent,
+      response: AgentResponse
+    ): Promise<EvalMetricOutput> {
+      const found = params.substrings.some((substring) =>
+        response.message?.toLocaleLowerCase().includes(substring.toLowerCase())
+      );
+      return found ? 1 : 0;
+    },
+  };
 }
 
 export interface ContainsAllMetricParams {
@@ -69,21 +63,19 @@ export interface ContainsAllMetricParams {
  * Returns 0 if any of the substrings are not found.
  * if found, returns 1.
  */
-export class ContainsAllMetric implements EvalMetric {
-  private params: ContainsAllMetricParams;
-  label = 'Contains All';
-
-  constructor(params: ContainsAllMetricParams) {
-    this.params = params;
-  }
-
-  async evaluate(
-    _: AgentRequestContent,
-    response: AgentResponse
-  ): Promise<EvalMetricOutput> {
-    const found = this.params.substrings.every((substring) =>
-      response.message?.toLocaleLowerCase().includes(substring.toLowerCase())
-    );
-    return found ? 1 : 0;
-  }
+export function containsAllEvalMetric(
+  params: ContainsAllMetricParams
+): EvalMetric {
+  return {
+    label: 'contains_all',
+    async evaluate(
+      _: AgentRequestContent,
+      response: AgentResponse
+    ): Promise<EvalMetricOutput> {
+      const found = params.substrings.every((substring) =>
+        response.message?.toLocaleLowerCase().includes(substring.toLowerCase())
+      );
+      return found ? 1 : 0;
+    },
+  };
 }

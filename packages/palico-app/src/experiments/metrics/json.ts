@@ -12,35 +12,33 @@ export interface ValidJSONMetricParams {
 }
 
 /**
- * Checks if the response is a valid JSON.
+ * Creates an EvalMetric that checks if the response is a valid JSON.
  * Returns 0 if the response is not valid JSON, 1 if it is.
  */
-export class ValidJSONMetric implements EvalMetric {
-  private params: ValidJSONMetricParams;
-  label = 'Valid JSON';
-
-  constructor(params: ValidJSONMetricParams) {
-    this.params = params;
-  }
-
-  async evaluate(
-    _: AgentRequestContent,
-    response: AgentResponse
-  ): Promise<EvalMetricOutput> {
-    try {
-      let json = response.data;
-      if (this.params.responseKey === 'message') {
-        if (!response.message) {
-          return 0;
+export function createValidJSONMetric(
+  params: ValidJSONMetricParams
+): EvalMetric {
+  return {
+    label: 'valid_json',
+    async evaluate(
+      _: AgentRequestContent,
+      response: AgentResponse
+    ): Promise<EvalMetricOutput> {
+      try {
+        let json = response.data;
+        if (params.responseKey === 'message') {
+          if (!response.message) {
+            return 0;
+          }
+          json = JSON.parse(response.message);
         }
-        json = JSON.parse(response.message);
+        if (params.schema) {
+          await params.schema.parseAsync(json);
+        }
+        return 1;
+      } catch {
+        return 0;
       }
-      if (this.params.schema) {
-        await this.params.schema.parseAsync(json);
-      }
-      return 1;
-    } catch {
-      return 0;
-    }
-  }
+    },
+  };
 }

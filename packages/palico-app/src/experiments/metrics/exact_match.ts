@@ -10,24 +10,20 @@ export interface ExactMatchParams {
  * Checks if the response is an exact match.
  * Returns 0 if the response is not an exact match, 1 if it is.
  */
-export class ExactMatchMetric implements EvalMetric {
-  private params: ExactMatchParams;
-  label = 'Exact Match';
-
-  constructor(params: ExactMatchParams) {
-    this.params = params;
-  }
-
-  async evaluate(
-    _: AgentRequestContent,
-    response: AgentResponse
-  ): Promise<EvalMetricOutput> {
-    if (response.message !== this.params.expected.message) {
-      return 0;
-    }
-    if (!isEqual(response.data, this.params.expected.data)) {
-      return 0;
-    }
-    return 1;
-  }
+export function exactMatchEvalMetric(params: ExactMatchParams): EvalMetric {
+  return {
+    label: 'exact_match',
+    async evaluate(
+      _: AgentRequestContent,
+      response: AgentResponse
+    ): Promise<EvalMetricOutput> {
+      if (response.message !== params.expected.message) {
+        return 0;
+      }
+      if (!isEqual(response.data, params.expected.data)) {
+        return 0;
+      }
+      return 1;
+    },
+  };
 }

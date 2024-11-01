@@ -6,17 +6,17 @@ import {
 import { uuid } from '../utils/common';
 import { startConversationSpan } from '../tracing/internal.span';
 import { ResponseMetadataKey } from '../types';
-import { getTracer, Logger } from '../tracing';
+import { getTracer, logger } from '../tracing';
 import { ConversationTelemetryModel } from '../services/database/conversation_telemetry';
 import { LogQueue } from '../tracing/logger/log_queue';
-import { NewChatRequestParams } from './chat';
+import { ChatRequest } from './chat';
 import { AgentModel } from './model';
 import { ChatResponseStream, ChatResponseStreamOptions } from './chat/stream';
 
 export interface AgentChatRequest
   extends Omit<
-    NewChatRequestParams,
-    'conversationId' | 'requestId' | 'isNewConversation'
+    ChatRequest,
+    'conversationId' | 'requestId' | 'isNewConversation' | 'stream'
   > {
   agentName: string;
   conversationId?: string;
@@ -41,7 +41,6 @@ const tracer = getTracer('AgentExecutor');
  * function for on push, which will be called whenever a new message is streamed
  * For example, express can pass in a function to write to the response stream
  */
-
 export class Agent {
   static async chat(params: AgentChatRequest): Promise<AgentResponse> {
     const conversationId = params.conversationId ?? uuid();
@@ -72,7 +71,7 @@ export class Agent {
         } catch (e) {
           if (e instanceof Error) {
             const stackTrace = e.stack;
-            Logger.error('Application.chat', e.message, stackTrace);
+            logger.error('Application.chat', e.message, stackTrace);
           }
           throw e;
         } finally {
@@ -82,7 +81,10 @@ export class Agent {
             requestId,
             appConfig: params.appConfig,
             agentName: params.agentName,
-            requestInput: params.content,
+            requestInput: {
+              userMessage: params.userMessage,
+              payload: params.payload,
+            },
             responseOutput: output ?? { messages: [] },
           });
           console.log('Flushing logs and spans');
@@ -104,7 +106,8 @@ export class Agent {
         conversationId,
         requestId,
         isNewConversation,
-        content,
+        userMessage,
+        payload,
         appConfig,
       } = params;
       try {
@@ -113,23 +116,27 @@ export class Agent {
           conversationId,
           requestId,
           isNewConversation,
-          content: JSON.stringify(content),
+          userMessage,
+          payload: JSON.stringify(payload),
           appConfig: JSON.stringify(params.appConfig),
         });
         chatSpan.setAttributes({
           assignedConversationId: conversationId,
         });
-        const chatRequest = await AgentModel.getAgentByName(agentName, {
-          conversationId,
-          requestId,
-          isNewConversation,
-          content,
-          appConfig,
-        });
+        const chatRequestHandler = await AgentModel.getAgentByName(agentName);
         const stream = new ChatResponseStream(conversationId, requestId, {
           onPush: params.onStreamContentPush,
         });
-        const response = await chatRequest.handler(stream);
+        const response = await chatRequestHandler({
+          stream,
+          conversationId,
+          requestId,
+          isNewConversation,
+          userMessage: userMessage,
+          payload: payload,
+          appConfig,
+        });
+        console.log('Response from chat', response);
         if (response === undefined) {
           if (stream.chunks.length === 0) {
             throw new Error('No response');

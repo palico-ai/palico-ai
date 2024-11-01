@@ -1,6 +1,6 @@
 'server-only';
 
-import { createClient, IPalicoClient } from '@palico-ai/client-js';
+import { createClient } from '@palico-ai/client-js';
 import { createAPIClient, APIFetchOptions } from '@palico-ai/client-js';
 import { verifySession } from './auth/session';
 
@@ -9,7 +9,7 @@ interface PalicoGetClientParams {
   serviceKey?: string;
 }
 
-let client: IPalicoClient;
+let client: ReturnType<typeof createClient> | undefined;
 
 export async function palicoSDK(params?: PalicoGetClientParams) {
   await verifySession();

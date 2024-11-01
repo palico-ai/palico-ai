@@ -2,7 +2,7 @@ import { JobQueueStatus, JSONAbleObject } from '@palico-ai/common';
 import { startConversationSpan } from '../tracing/internal.span';
 import AppScriptRequestDataStore from '../data_store/app_script_request';
 import AppScriptExecutor from './executor';
-import { Logger } from '../tracing';
+import { logger } from '../tracing';
 import { LogQueue } from '../tracing/logger/log_queue';
 import { uuid } from '../utils/common';
 import JobQueue from '../services/job_queue';
@@ -57,7 +57,7 @@ export const RunScript = async (params: RunScriptParams) => {
       } catch (error) {
         const errorMessage =
           error instanceof Error ? error.message : 'An error occurred';
-        Logger.error('RunScript', errorMessage);
+        logger.error('RunScript', errorMessage);
         await AppScriptRequestDataStore.updateStatus(
           params.requestId,
           JobQueueStatus.FAILED

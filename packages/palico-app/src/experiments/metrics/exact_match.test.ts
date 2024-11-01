@@ -1,4 +1,4 @@
-import { ExactMatchMetric, ExactMatchParams } from './exact_match';
+import { exactMatchEvalMetric, ExactMatchParams } from './exact_match';
 import { AgentRequestContent } from '@palico-ai/common';
 import {
   mockAgentRequestContent,
@@ -13,7 +13,7 @@ describe('ExactMatchMetric', () => {
         data: { key: 'value' },
       },
     };
-    const metric = new ExactMatchMetric(expected);
+    const metric = exactMatchEvalMetric(expected);
 
     const matchingAgentResponse = mockAgentResponse({
       message: 'expected message',
@@ -34,7 +34,7 @@ describe('ExactMatchMetric', () => {
         data: { key: 'value' },
       },
     };
-    const metric = new ExactMatchMetric(expected);
+    const metric = exactMatchEvalMetric(expected);
     const wrongResponse = mockAgentResponse({
       message: 'different message',
       data: { key: 'value' },
@@ -54,7 +54,7 @@ describe('ExactMatchMetric', () => {
       },
     };
 
-    const metric = new ExactMatchMetric(params);
+    const metric = exactMatchEvalMetric(params);
 
     const response = mockAgentResponse({
       message: 'expected message',
