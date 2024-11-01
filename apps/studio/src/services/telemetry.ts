@@ -10,12 +10,12 @@ import {
   GetRequestSpanResponse,
   GetRequestLogsResponse,
 } from '@palico-ai/common';
-import { palicoFetch } from './palico';
+import { palicoFetchJSON } from './palico';
 import { PaginatedResponse } from '../types/common';
 import { paginatedResponse } from '../utils/requests';
 
 export const getRecentConversations = async (pagination: PaginationParams) => {
-  const response = await palicoFetch<GetRecentConversationResponse>(
+  const response = await palicoFetchJSON<GetRecentConversationResponse>(
     `/telemetry/conversation?limit=${pagination.limit}&offset=${pagination.offset}`,
     {
       method: 'GET',
@@ -25,7 +25,7 @@ export const getRecentConversations = async (pagination: PaginationParams) => {
 };
 
 export const getConversationTelemetry = async (conversationId: string) => {
-  const response = await palicoFetch<GetConversationTelemetryResponse>(
+  const response = await palicoFetchJSON<GetConversationTelemetryResponse>(
     `/telemetry/conversation/${conversationId}`,
     {
       method: 'GET',
@@ -37,7 +37,7 @@ export const getConversationTelemetry = async (conversationId: string) => {
 export const getRecentRequests = async (
   pagination: PaginationParams
 ): Promise<PaginatedResponse<AgentRequestTrace>> => {
-  const response = await palicoFetch<GetRecentRequestTelemetryResponse>(
+  const response = await palicoFetchJSON<GetRecentRequestTelemetryResponse>(
     `/telemetry/request?limit=${pagination.limit}&offset=${pagination.offset}`,
     {
       method: 'GET',
@@ -47,7 +47,7 @@ export const getRecentRequests = async (
 };
 
 export const getRequestTelemetry = async (requestId: string) => {
-  const response = await palicoFetch<GetTelemetryForRequestIdResponse>(
+  const response = await palicoFetchJSON<GetTelemetryForRequestIdResponse>(
     `/telemetry/request/${requestId}`,
     {
       method: 'GET',
@@ -57,7 +57,7 @@ export const getRequestTelemetry = async (requestId: string) => {
 };
 
 export const getRequestSpans = async (requestId: string) => {
-  const response = await palicoFetch<GetRequestSpanResponse>(
+  const response = await palicoFetchJSON<GetRequestSpanResponse>(
     `/telemetry/request/${requestId}/spans`,
     {
       method: 'GET',
@@ -67,7 +67,7 @@ export const getRequestSpans = async (requestId: string) => {
 };
 
 export const getRequestLogs = async (requestId: string) => {
-  const response = await palicoFetch<GetRequestLogsResponse>(
+  const response = await palicoFetchJSON<GetRequestLogsResponse>(
     `/telemetry/request/${requestId}/logs`,
     {
       method: 'GET',

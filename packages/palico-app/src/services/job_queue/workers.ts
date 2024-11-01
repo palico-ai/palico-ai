@@ -2,7 +2,7 @@ import { WorkHandler } from 'pg-boss';
 import ExperimentModel from '../../experiments/model';
 import { ExperimentExecutor } from '../../experiments/executor';
 import { EvalCompositeKey } from '@palico-ai/common';
-import { RunScript, RunScriptParams } from '../../beta_features/run_script';
+import { RunScript, RunScriptParams } from '../../app_scripts/run_script';
 
 export const EvaluationRunnerWorkHandler: WorkHandler<
   EvalCompositeKey

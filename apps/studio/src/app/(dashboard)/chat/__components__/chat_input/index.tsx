@@ -4,10 +4,10 @@ import { Box, Button, InputAdornment, TextField, Tooltip } from '@mui/material';
 import React, { useEffect, useMemo } from 'react';
 import ExpandIcon from '@mui/icons-material/Expand';
 import AdvanceOption from './advance_option';
-import { AppConfig, AgentRequestContent } from '@palico-ai/common';
+import { ChatSendMessageParams } from '@palico-ai/react';
 
 export interface ChatInputProps {
-  onSend: (content: AgentRequestContent, appConfig: AppConfig) => Promise<void>;
+  onSend: (params: ChatSendMessageParams) => Promise<void>;
   disabled?: boolean;
   placeholder?: string;
 }
@@ -30,15 +30,13 @@ export const ChatInput: React.FC<ChatInputProps> = ({
     event.preventDefault();
     try {
       setLoading(true);
-      await onSend(
-        {
-          userMessage: message,
-          payload: requestPayloadString?.length
-            ? JSON.parse(requestPayloadString ?? '{}')
-            : undefined,
-        },
-        JSON.parse(appConfigString ?? '{}')
-      );
+      await onSend({
+        userMessage: message,
+        payload: requestPayloadString?.length
+          ? JSON.parse(requestPayloadString ?? '{}')
+          : undefined,
+        appConfig: JSON.parse(appConfigString ?? '{}'),
+      });
       setMessage('');
     } finally {
       setLoading(false);

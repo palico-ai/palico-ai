@@ -1,7 +1,7 @@
 import { JobQueueStatus, JSONAbleObject } from '@palico-ai/common';
 import { startConversationSpan } from '../tracing/internal.span';
 import AppScriptRequestDataStore from '../data_store/app_script_request';
-import AppScriptExecutor from '../app_scripts/executor';
+import AppScriptExecutor from './executor';
 import { Logger } from '../tracing';
 import { LogQueue } from '../tracing/logger/log_queue';
 import { uuid } from '../utils/common';

@@ -19,7 +19,7 @@
       "@palico-ai/client-js": ["packages/client-js/src/index.ts"],
       "@palico-ai/common": ["packages/common/src/index.ts"],
       "@palico-ai/components": ["packages/components/src/index.ts"],
-      "@palico-ai/components/server": ["packages/components/src/server.ts"],
+      "@palico-ai/react": ["packages/react/src/index.ts"],
       "palico": ["packages/cli/src/index.ts"]
     }
   },
