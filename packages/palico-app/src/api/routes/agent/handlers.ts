@@ -79,13 +79,15 @@ export const newConversationRequestHandler: RequestHandler<
         if (stream) {
           return await handleStreamResponse(res, {
             agentName,
-            content,
+            userMessage: content.userMessage,
+            payload: content.payload,
             appConfig: appConfig ?? {},
           });
         }
         const agentResponse = await Agent.chat({
           agentName,
-          content,
+          userMessage: content.userMessage,
+          payload: content.payload,
           appConfig: appConfig ?? {},
         });
         return res.status(200).json(agentResponse);
@@ -120,14 +122,16 @@ export const replyToConversationRequestHandler: RequestHandler<
           return await handleStreamResponse(res, {
             conversationId,
             agentName,
-            content,
+            userMessage: content.userMessage,
+            payload: content.payload,
             appConfig: appConfig ?? {},
           });
         }
         const agentResponse = await Agent.chat({
           conversationId,
           agentName,
-          content,
+          userMessage: content.userMessage,
+          payload: content.payload,
           appConfig: appConfig ?? {},
         });
         const responseJSON: AgentResponse = {

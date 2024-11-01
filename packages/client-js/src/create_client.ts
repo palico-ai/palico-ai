@@ -1,9 +1,9 @@
-import { IAPI, type IPalicoClient, CreateClientParams } from './types';
+import { CreateClientParams } from './types';
 import { createAPIClient } from './request';
 
 import { agent } from './agent';
 
-const api = (config: CreateClientParams): IAPI => {
+const api = (config: CreateClientParams) => {
   const { apiURL, serviceKey } = config;
   const apiClient = createAPIClient({ rootURL: apiURL, serviceKey });
   return {
@@ -16,7 +16,7 @@ const api = (config: CreateClientParams): IAPI => {
   };
 };
 
-export const createClient = (config: CreateClientParams): IPalicoClient => {
+export const createClient = (config: CreateClientParams) => {
   return {
     agent: agent(config),
     api: api(config),

@@ -1,4 +1,4 @@
-import { createPalicoClient } from '@palico-ai/react';
+import { createClient } from '@palico-ai/client-js';
 
 export const maxDuration = 30;
 
@@ -10,17 +10,17 @@ export async function POST(req: Request) {
   }
   const request = await req.json();
   console.log('Input request', request);
-  const client = createPalicoClient({
+  const client = createClient({
     apiURL: agentAPIURL,
     serviceKey: serviceKey,
   });
-  const response = await client.chat({
-    conversationId: request.conversationId,
+  const responseStream = await client.agent.chat({
     agentName: request.agentName,
+    conversationId: request.conversationId,
     userMessage: request.userMessage,
     payload: request.payload,
     appConfig: request.appConfig,
+    stream: true,
   });
-  console.log('Output response', response);
-  return response;
+  return responseStream.response;
 }

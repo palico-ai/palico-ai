@@ -1,44 +1,57 @@
-import {
-  AgentConversationAPIRequestBody,
-  AgentConversationAPIRequestResponse,
-} from '@palico-ai/common';
+import { AgentResponse, AgentResponseStreamReader } from '@palico-ai/common';
 import { createAPIClient } from './request';
-import { CreateClientParams, IAgent, NewConversationFN } from './types';
+import {
+  ChatRequestParams,
+  ChatRequestParamsWithStream,
+  CreateClientParams,
+} from './types';
 
-export const agent = (config: CreateClientParams): IAgent => {
+export const agent = (config: CreateClientParams) => {
   const { apiURL, serviceKey } = config;
-  const { fetchJSON } = createAPIClient({ rootURL: apiURL, serviceKey });
+  const { fetch } = createAPIClient({ rootURL: apiURL, serviceKey });
+
+  function chat(params: ChatRequestParams): Promise<AgentResponse>;
+  function chat(
+    params: ChatRequestParamsWithStream
+  ): Promise<AgentResponseStreamReader>;
+  // implementation of the overloaded function
+  async function chat(
+    params: ChatRequestParams | ChatRequestParamsWithStream
+  ): Promise<AgentResponse | AgentResponseStreamReader> {
+    const url = params.conversationId
+      ? `/agent/${params.agentName}/conversation/${params.conversationId}/reply`
+      : `/agent/${params.agentName}/conversation`;
+    const response = await fetch(url, {
+      method: 'POST',
+      body: {
+        content: {
+          userMessage: params.userMessage,
+          payload: params.payload,
+        },
+        appConfig: params.appConfig ?? {},
+        stream: ('stream' in params && params.stream) ?? false,
+      },
+    });
+    if ('stream' in params && params) {
+      return new AgentResponseStreamReader(response);
+    } else {
+      const json = await response.json();
+      return json as AgentResponse;
+    }
+  }
 
   return {
-    newConversation: async (params) => {
-      return await fetchJSON<
-        AgentConversationAPIRequestResponse,
-        AgentConversationAPIRequestBody
-      >(`/agent/${params.agentName}/conversation`, {
-        method: 'POST',
-        body: {
-          content: {
-            userMessage: params.userMessage,
-            payload: params.payload,
-          },
-          appConfig: params.appConfig,
-        },
-      });
-    },
-    reply: async (params) => {
-      return await fetchJSON<
-        AgentConversationAPIRequestResponse,
-        AgentConversationAPIRequestBody
-      >(`/agent/${params.name}/conversation/${params.conversationId}/reply`, {
-        method: 'POST',
-        body: {
-          content: {
-            userMessage: params.userMessage,
-            payload: params.payload,
-          },
-          appConfig: params.appConfig,
-        },
-      });
-    },
+    chat,
   };
 };
+
+/**
+ * Read a stream of responses from the agent.
+ * Useful for calling the agent without the palico-client or,
+ * piping <AgentResponseStreamReader>.response through
+ * different middleware or systems.
+ * @param response HTTP response with a readable stream
+ * @returns AgentResponseStreamReader for easier handling of the stream
+ */
+export const agentStreamReader = (response: Response) =>
+  new AgentResponseStreamReader(response);

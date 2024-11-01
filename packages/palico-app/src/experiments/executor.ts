@@ -115,7 +115,8 @@ export class ExperimentExecutor {
     if (agentName) {
       response = await Agent.chat({
         agentName,
-        content: testCase.input,
+        userMessage: testCase.input.userMessage,
+        payload: testCase.input.payload,
         appConfig: appConfig ?? {},
       });
     } else if (workflowName) {
