@@ -1,0 +1,82 @@
+[
+  {
+    "userMessage": "Hi there!",
+    "tags": {
+      "intent": "intelligence"
+    },
+    "evals": {
+      "containsAny": ["Hi", "Hello", "Hey"],
+      "similarityReference": "Hi, how can I help you?"
+    }
+  },
+  {
+    "userMessage": "What is the capital of France?",
+    "tags": {
+      "intent": "world"
+    },
+    "evals": {
+      "containsAny": ["capital", "France"],
+      "similarityReference": "The capital of France is Paris."
+    }
+  },
+  {
+    "userMessage": "Prove that the square root of 2 is irrational.",
+    "tags": {
+      "intent": "math"
+    },
+    "evals": {
+      "containsAny": ["square root", "irrational"],
+      "similarityReference": "The square root of 2 is irrational."
+    }
+  },
+  {
+    "userMessage": "What is the largest planet in our solar system?",
+    "tags": {
+      "intent": "science"
+    },
+    "evals": {
+      "containsAny": ["largest planet", "solar system"],
+      "similarityReference": "The largest planet in our solar system is Jupiter."
+    }
+  },
+  {
+    "userMessage": "Translate 'Hello' to Spanish.",
+    "tags": {
+      "intent": "language"
+    },
+    "evals": {
+      "containsAny": ["Translate", "Spanish"],
+      "similarityReference": "Hello in Spanish is 'Hola'."
+    }
+  },
+  {
+    "userMessage": "Who wrote 'To Kill a Mockingbird'?",
+    "tags": {
+      "intent": "literature"
+    },
+    "evals": {
+      "containsAny": ["wrote", "To Kill a Mockingbird"],
+      "similarityReference": "Harper Lee wrote 'To Kill a Mockingbird'."
+    }
+  },
+  {
+    "userMessage": "What is the boiling point of water?",
+    "tags": {
+      "intent": "science"
+    },
+    "evals": {
+      "containsAny": ["boiling point", "water"],
+      "similarityReference": "The boiling point of water is 100 degrees Celsius."
+    }
+  },
+  {
+    "userMessage": "Solve the equation x^2 - 4 = 0.",
+    "tags": {
+      "intent": "math"
+    },
+    "evals": {
+      "containsAny": ["Solve", "equation"],
+      "similarityReference": "The solutions to the equation x^2 - 4 = 0 are x = 2 and x = -2."
+    }
+  }
+]

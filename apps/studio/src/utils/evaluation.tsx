@@ -1,5 +1,5 @@
 import { EvalTestCaseResult } from '@palico-ai/common';
-import { ColumnDef } from '@tanstack/react-table';
+import { aggregationFns, ColumnDef } from '@tanstack/react-table';
 import { EvalResultTableCell } from '../components/table/eval_result_table_cell';
 import { Box } from '@mui/material';
 import { LinkButton } from '@palico-ai/components';
@@ -12,7 +12,7 @@ export const EVAL_RESULT_ACCESSOR_KEYS = {
   data: 'output.data',
   conversationId: 'output.conversationId',
   tag: (tag: string) => `tags.${tag}`,
-  metric: (metric: string) => `metrics.${metric}`,
+  metric: (metric: string) => `metrics.${metric}.score`,
 };
 
 export const ANALYSIS_TABLE_COL_ID = {
@@ -60,9 +60,10 @@ export function getEvalTestColumnDefFragment<D extends EvalTestCaseResult>(
     size: 120,
   }));
 
-  const metricsColumnDef = metrics.map((metric) => ({
+  const metricsColumnDef: ColumnDef<D>[] = metrics.map((metric) => ({
     id: ANALYSIS_TABLE_COL_ID.metric(metric),
     accessorKey: EVAL_RESULT_ACCESSOR_KEYS.metric(metric),
+    aggregationFn: aggregationFns.mean,
     header: 'M:' + metric,
     size: 120,
   }));

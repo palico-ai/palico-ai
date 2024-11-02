@@ -20,7 +20,11 @@ export interface ExperimentJSON {
   createdAt: number;
 }
 
-export type EvalMetricOutput = number;
+export type EvalMetricOutput = {
+  score: number;
+  errorMessage?: string;
+  reason?: string;
+};
 
 export interface EvalMetric {
   label: string;
@@ -43,8 +47,19 @@ export interface EvalTestCaseResult {
 export type EvalTestCaseTag = Record<string, string>;
 
 export interface EvalTestCase<Input = AgentRequestContent> {
+  /**
+   * Input to your application.
+   */
   input: Input;
+  /**
+   * Tags to categorize the test case.
+   * e.g. { 'category': 'cat1', 'sub-category': 'sub-cat1' }
+   * Useful for categorizing test cases and better analysis.
+   */
   tags: EvalTestCaseTag;
+  /**
+   * Metrics to evaluate the test case.
+   */
   metrics: EvalMetric[];
 }
 

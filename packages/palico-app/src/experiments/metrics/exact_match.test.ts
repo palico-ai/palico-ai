@@ -24,7 +24,7 @@ describe('ExactMatchMetric', () => {
       mockAgentRequestContent(),
       matchingAgentResponse
     );
-    expect(result).toBe(1);
+    expect(result.score).toBe(1);
   });
 
   it('should return 0 when the response message does not match', async () => {
@@ -43,7 +43,7 @@ describe('ExactMatchMetric', () => {
       mockAgentRequestContent(),
       wrongResponse
     );
-    expect(result).toBe(0);
+    expect(result.score).toBe(0);
   });
 
   it('should return 0 when the response data does not match', async () => {
@@ -62,6 +62,6 @@ describe('ExactMatchMetric', () => {
     });
 
     const result = await metric.evaluate({} as AgentRequestContent, response);
-    expect(result).toBe(0);
+    expect(result.score).toBe(0);
   });
 });

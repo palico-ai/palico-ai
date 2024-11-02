@@ -3,7 +3,7 @@ import OS from '../utils/os';
 import { ChatRequestHandler } from './chat';
 
 export class AgentModel {
-  private static readonly agentFile = 'chat.ts';
+  private static readonly agentFile = 'index.ts';
 
   static async getAllAgents(): Promise<string[]> {
     const agentDirName = await Project.getAgentRootDir();

@@ -5,8 +5,9 @@ import {
   EvalMetricOutput,
 } from '@palico-ai/common';
 import { ZodSchema } from 'zod';
+import { EvalMetricCommonParams } from './common';
 
-export interface ValidJSONMetricParams {
+export interface ValidJSONMetricParams extends EvalMetricCommonParams {
   schema?: ZodSchema;
   responseKey?: keyof Pick<AgentResponse, 'data' | 'message'>;
 }
@@ -15,11 +16,9 @@ export interface ValidJSONMetricParams {
  * Creates an EvalMetric that checks if the response is a valid JSON.
  * Returns 0 if the response is not valid JSON, 1 if it is.
  */
-export function createValidJSONMetric(
-  params: ValidJSONMetricParams
-): EvalMetric {
+export function validJSONMetric(params: ValidJSONMetricParams): EvalMetric {
   return {
-    label: 'valid_json',
+    label: params.label ?? 'Valid JSON',
     async evaluate(
       _: AgentRequestContent,
       response: AgentResponse
@@ -28,16 +27,22 @@ export function createValidJSONMetric(
         let json = response.data;
         if (params.responseKey === 'message') {
           if (!response.message) {
-            return 0;
+            return {
+              score: 0,
+            };
           }
           json = JSON.parse(response.message);
         }
         if (params.schema) {
           await params.schema.parseAsync(json);
         }
-        return 1;
+        return {
+          score: 1,
+        };
       } catch {
-        return 0;
+        return {
+          score: 0,
+        };
       }
     },
   };

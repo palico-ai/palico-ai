@@ -36,7 +36,7 @@ export default class Project {
 
   static async getTestSuiteRootDir(): Promise<string> {
     const root = await this.getProjectRootDir();
-    return path.join(root, 'src', 'eval_tests');
+    return path.join(root, 'src', 'evals');
   }
 
   static async getWorkflowRootDir(): Promise<string> {
