@@ -9,7 +9,7 @@ import {
   MetadataListItemCommon,
 } from '@palico-ai/common';
 import ExperimentModel from '../../../experiments/model';
-import TestSuiteModel from '../../../experiments/test_case.model';
+import TestSuiteModel from '../../../experiments/test_suite/model';
 
 export const getAgentMetadataHandler: RequestHandler<
   unknown,

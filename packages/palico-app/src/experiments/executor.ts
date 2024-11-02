@@ -14,7 +14,7 @@ import JobQueue from '../services/job_queue';
 import ExperimentModel from './model';
 import { ResponseMetadataKey } from '../types';
 import { Agent } from '../agent';
-import TestSuiteModel from './test_case.model';
+import TestSuiteModel from './test_suite/model';
 
 interface RunTestCaseParams {
   testCase: EvalTestCase;
@@ -126,19 +126,33 @@ export class ExperimentExecutor {
     }
     const metrics = await Promise.all(
       testCase.metrics.map(async (metric) => {
-        const result = await metric.evaluate(testCase.input, response);
-        return {
-          name: metric.label,
-          value: result,
-        };
+        try {
+          const result = await metric.evaluate(testCase.input, response);
+          return {
+            name: metric.label,
+            value: result,
+          };
+        } catch (error) {
+          const errorMessage =
+            error instanceof Error ? error.message : 'Unknown error';
+          return {
+            name: metric.label,
+            value: {
+              score: 0,
+              errorMessage,
+            },
+          };
+        }
       })
     );
     SYSTEM_METRICS.forEach((metric) => {
-      const value = response.metadata?.[metric.metatadataKey];
-      if (value) {
+      const score = response.metadata?.[metric.metatadataKey];
+      if (score !== undefined) {
         metrics.push({
           name: metric.label,
-          value,
+          value: {
+            score,
+          },
         });
       }
     });

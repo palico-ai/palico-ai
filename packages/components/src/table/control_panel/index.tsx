@@ -31,10 +31,14 @@ const DataDisplay: React.FC<DataDisplayProps> = ({
       sx={(theme) => ({
         borderRadius: theme.shape.borderRadius,
         border: `1px solid ${theme.palette.divider}`,
-        padding: 1,
+        px: 2,
+        py: 1,
+        alignItems: 'center',
       })}
     >
-      <Typography variant="subtitle2">{label}</Typography>
+      <Typography variant="caption" fontSize={12}>
+        {label}
+      </Typography>
       {items.map((item, index) => (
         <Chip
           key={`${index}-${item.value}`}

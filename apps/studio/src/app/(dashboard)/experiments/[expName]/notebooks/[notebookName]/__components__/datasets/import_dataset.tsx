@@ -31,7 +31,7 @@ const ImportedDataset: React.FC<ImportedDatasetProps> = ({
           gap: 0.5,
         }}
       >
-        <Typography variant="subtitle2" fontWeight={'bold'}>
+        <Typography variant="subtitle2" fontSize={18} fontWeight={'bold'}>
           {label}
         </Typography>
         <IconButton color="warning" onClick={handleDeleteDataset}>
@@ -47,10 +47,10 @@ const ImportedDataset: React.FC<ImportedDatasetProps> = ({
           gap: 1,
         }}
       >
-        <Typography variant="body1">
+        <Typography variant="body2">
           Experiment: {decodeURIComponent(experimentName)}
         </Typography>
-        <Typography variant="body1">
+        <Typography variant="body2">
           Evaluation: {decodeURIComponent(evaluationName)}
         </Typography>
       </Box>

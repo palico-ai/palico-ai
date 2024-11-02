@@ -3,7 +3,7 @@
 import { Checkbox, FormControlLabel, Tooltip } from '@mui/material';
 import { Table } from '@tanstack/react-table';
 import React from 'react';
-import ViewColumnIcon from '@mui/icons-material/ViewColumn';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import { Typography } from '../../typography';
 import { OptionPanel } from './option_drawer';
 
@@ -18,7 +18,7 @@ function SelectColumnControl<D>(props: SelectColumnProps<D>) {
     <OptionPanel
       button={
         <Tooltip title="Select Columns" placement="top">
-          <ViewColumnIcon />
+          <VisibilityIcon />
         </Tooltip>
       }
     >

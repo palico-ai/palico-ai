@@ -4,8 +4,9 @@ import {
   EvalMetric,
   EvalMetricOutput,
 } from '@palico-ai/common';
+import { EvalMetricCommonParams } from './common';
 
-export interface ContainsMetricParams {
+export interface ContainsMetricParams extends EvalMetricCommonParams {
   substring: string;
 }
 
@@ -15,7 +16,7 @@ export interface ContainsMetricParams {
  */
 export function containsEvalMetric(params: ContainsMetricParams): EvalMetric {
   return {
-    label: 'contains',
+    label: params.label ?? 'Contains',
     async evaluate(
       _: AgentRequestContent,
       response: AgentResponse
@@ -23,12 +24,14 @@ export function containsEvalMetric(params: ContainsMetricParams): EvalMetric {
       const exists = response.message
         ?.toLocaleLowerCase()
         .includes(params.substring.toLowerCase());
-      return exists ? 1 : 0;
+      return {
+        score: exists ? 1 : 0,
+      };
     },
   };
 }
 
-export interface ContainsAnyMetricParams {
+export interface ContainsAnyMetricParams extends EvalMetricCommonParams {
   substrings: string[];
 }
 
@@ -41,7 +44,7 @@ export function containsAnyEvalMetric(
   params: ContainsAnyMetricParams
 ): EvalMetric {
   return {
-    label: 'contains_any',
+    label: params.label ?? 'Contains Any',
     async evaluate(
       _: AgentRequestContent,
       response: AgentResponse
@@ -49,12 +52,14 @@ export function containsAnyEvalMetric(
       const found = params.substrings.some((substring) =>
         response.message?.toLocaleLowerCase().includes(substring.toLowerCase())
       );
-      return found ? 1 : 0;
+      return {
+        score: found ? 1 : 0,
+      };
     },
   };
 }
 
-export interface ContainsAllMetricParams {
+export interface ContainsAllMetricParams extends EvalMetricCommonParams {
   substrings: string[];
 }
 
@@ -67,7 +72,7 @@ export function containsAllEvalMetric(
   params: ContainsAllMetricParams
 ): EvalMetric {
   return {
-    label: 'contains_all',
+    label: params.label ?? 'Contains All',
     async evaluate(
       _: AgentRequestContent,
       response: AgentResponse
@@ -75,7 +80,9 @@ export function containsAllEvalMetric(
       const found = params.substrings.every((substring) =>
         response.message?.toLocaleLowerCase().includes(substring.toLowerCase())
       );
-      return found ? 1 : 0;
+      return {
+        score: found ? 1 : 0,
+      };
     },
   };
 }

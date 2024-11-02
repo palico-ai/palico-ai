@@ -1,7 +1,8 @@
 import { EvalTestCase } from '@palico-ai/common';
-import OS from '../utils/os';
-import Project from '../utils/project';
+import OS from '../../utils/os';
+import Project from '../../utils/project';
 import path from 'path';
+import { TestDatasetFN } from './create_test';
 
 export default class TestSuiteModel {
   static readonly fileName = 'index.ts';
@@ -23,7 +24,9 @@ export default class TestSuiteModel {
   static async findByName(name: string): Promise<EvalTestCase[]> {
     const filePath = await TestSuiteModel.filePath(name);
     const datasetExports = await import(filePath);
-    return datasetExports.default;
+    const builder = datasetExports.default as TestDatasetFN;
+    const dataset = await builder();
+    return dataset;
   }
 
   private static async filePath(name: string) {
