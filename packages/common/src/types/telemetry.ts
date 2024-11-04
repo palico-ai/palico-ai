@@ -1,12 +1,12 @@
 import { TimedEvent } from '@opentelemetry/sdk-trace-node';
-import { AppConfig, AgentRequestContent, AgentResponse } from '.';
+import { AgentRequestContent, AgentResponse, JSONAbleObject } from '.';
 
 export interface AgentRequestTrace {
   requestId: string;
   conversationId: string;
   requestInput: AgentRequestContent;
   responseOutput: AgentResponse;
-  appConfig: AppConfig;
+  appConfig: JSONAbleObject;
   traceId?: string;
   tracePreviewUrl?: string;
   createdAt: string;

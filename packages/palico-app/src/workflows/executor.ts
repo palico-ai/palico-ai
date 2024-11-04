@@ -1,8 +1,8 @@
 import {
-  AppConfig,
   AgentRequestContext,
   AgentRequestContent,
   ConversationResponseSchema,
+  JSONAbleObject,
 } from '@palico-ai/common';
 import { SpanStatusCode, trace } from '@opentelemetry/api';
 import { uuid } from '../utils/common';
@@ -15,7 +15,7 @@ export interface RunWorkflowParams {
   workflowName: string;
   content: AgentRequestContent;
   conversationId?: string;
-  appConfig?: AppConfig;
+  appConfig?: JSONAbleObject;
   traceId?: string;
 }
 
@@ -114,9 +114,6 @@ export default class ChainWorkflowExecutor {
           isNewConversation: params.conversationId === undefined,
           requestId,
           appConfig: params.appConfig ?? {},
-          otel: {
-            traceId,
-          },
         };
         let workflowInput: Record<string, unknown> = params.content as Record<
           string,

@@ -1,5 +1,4 @@
 import {
-  AppConfig,
   AgentRequestContent,
   RequestLogs,
   RequestSpan,
@@ -8,6 +7,7 @@ import {
   AgentConversationTraceWithRequest,
   ConversationTracesWithoutRequests,
   PaginationParams,
+  JSONAbleObject,
 } from '@palico-ai/common';
 import config from '../../config';
 import {
@@ -26,7 +26,7 @@ export interface LogRequestParams {
   requestId: string;
   requestInput: AgentRequestContent;
   responseOutput: AgentResponse;
-  appConfig?: AppConfig;
+  appConfig?: JSONAbleObject;
   traceId?: string;
   tracePreviewUrl?: string;
 }

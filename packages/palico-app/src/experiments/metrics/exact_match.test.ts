@@ -3,7 +3,7 @@ import { AgentRequestContent } from '@palico-ai/common';
 import {
   mockAgentRequestContent,
   mockAgentResponse,
-} from '../../test_utils/utils/mock_agent';
+} from '../../test_utils/mock_agent';
 
 describe('ExactMatchMetric', () => {
   it('should return 1 when the response is an exact match', async () => {

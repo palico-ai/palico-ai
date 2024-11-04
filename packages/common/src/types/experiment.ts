@@ -1,9 +1,9 @@
 import { AggregationFnOption, TableState } from '@tanstack/react-table';
 import {
-  AppConfig,
   AgentRequestContent,
   AgentResponse,
   JobQueueStatus,
+  JSONAbleObject,
 } from '.';
 
 export interface CreateExperimentParams {
@@ -70,7 +70,7 @@ export interface EvalJSON {
   };
   jobId?: string;
   description?: string;
-  appConfig?: AppConfig;
+  appConfig?: JSONAbleObject;
   agentName?: string;
   workflowName?: string;
   testSuiteName: string;

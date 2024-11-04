@@ -8,7 +8,7 @@ import {
   JobQueueStatus,
   EvalTestCaseResult,
   EvalMetricOutput,
-  AppConfig,
+  JSONAbleObject,
 } from '@palico-ai/common';
 import JobQueue from '../services/job_queue';
 import ExperimentModel from './model';
@@ -18,7 +18,7 @@ import TestSuiteModel from './test_suite/model';
 
 interface RunTestCaseParams {
   testCase: EvalTestCase;
-  appConfig?: AppConfig;
+  appConfig?: JSONAbleObject;
   agentName?: string;
   workflowName?: string;
 }
@@ -117,6 +117,7 @@ export class ExperimentExecutor {
         agentName,
         userMessage: testCase.input.userMessage,
         payload: testCase.input.payload,
+        toolCallResults: testCase.input.toolCallResults,
         appConfig: appConfig ?? {},
       });
     } else if (workflowName) {

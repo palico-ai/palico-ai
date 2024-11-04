@@ -55,6 +55,8 @@ const handleStreamResponse = async (
     delta: {
       message: agentResponse.message,
       data: agentResponse.data,
+      intermediateSteps: agentResponse.intermediateSteps,
+      toolCalls: agentResponse.toolCalls,
     },
   });
   return res.end();
@@ -81,6 +83,7 @@ export const newConversationRequestHandler: RequestHandler<
             agentName,
             userMessage: content.userMessage,
             payload: content.payload,
+            toolCallResults: content.toolCallResults,
             appConfig: appConfig ?? {},
           });
         }
@@ -88,6 +91,7 @@ export const newConversationRequestHandler: RequestHandler<
           agentName,
           userMessage: content.userMessage,
           payload: content.payload,
+          toolCallResults: content.toolCallResults,
           appConfig: appConfig ?? {},
         });
         return res.status(200).json(agentResponse);
@@ -123,6 +127,7 @@ export const replyToConversationRequestHandler: RequestHandler<
             conversationId,
             agentName,
             userMessage: content.userMessage,
+            toolCallResults: content.toolCallResults,
             payload: content.payload,
             appConfig: appConfig ?? {},
           });
@@ -131,6 +136,7 @@ export const replyToConversationRequestHandler: RequestHandler<
           conversationId,
           agentName,
           userMessage: content.userMessage,
+          toolCallResults: content.toolCallResults,
           payload: content.payload,
           appConfig: appConfig ?? {},
         });
@@ -138,7 +144,6 @@ export const replyToConversationRequestHandler: RequestHandler<
           ...agentResponse,
           conversationId,
         };
-        console.log('Returning response', responseJSON);
         return res.status(200).json(responseJSON);
       } catch (error) {
         recordRequestErrorSpan(error, requestSpan);

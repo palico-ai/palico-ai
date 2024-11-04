@@ -67,6 +67,8 @@ export class AgentResponseStreamReader {
       requestId: chunks[0].requestId,
       message: undefined,
       data: undefined,
+      toolCalls: undefined,
+      intermediateSteps: undefined,
     };
     for (const chunk of chunks) {
       if (chunk.delta.message) {
@@ -80,6 +82,18 @@ export class AgentResponseStreamReader {
           merged.data = {};
         }
         merged.data = merge(merged.data, chunk.delta.data);
+      }
+      if (chunk.delta.toolCalls) {
+        if (!merged.toolCalls) {
+          merged.toolCalls = [];
+        }
+        merged.toolCalls.push(...chunk.delta.toolCalls);
+      }
+      if (chunk.delta.intermediateSteps) {
+        if (!merged.intermediateSteps) {
+          merged.intermediateSteps = [];
+        }
+        merged.intermediateSteps.push(...chunk.delta.intermediateSteps);
       }
     }
     return merged;

@@ -1,8 +1,4 @@
-import {
-  AgentRequestContext,
-  AgentRequestContent,
-  AgentResponse,
-} from '@palico-ai/common';
+import { AgentRequestContent, AgentResponse } from '@palico-ai/common';
 import { uuid } from '../utils/common';
 import { startConversationSpan } from '../tracing/internal.span';
 import { ResponseMetadataKey } from '../types';
@@ -84,8 +80,9 @@ export class Agent {
             requestInput: {
               userMessage: params.userMessage,
               payload: params.payload,
+              toolCallResults: params.toolCallResults,
             },
-            responseOutput: output ?? { messages: [] },
+            responseOutput: output ?? {},
           });
           console.log('Flushing logs and spans');
           await LogQueue.tryFlushingLogs(requestId);
@@ -108,6 +105,7 @@ export class Agent {
         isNewConversation,
         userMessage,
         payload,
+        toolCallResults,
         appConfig,
       } = params;
       try {
@@ -132,6 +130,7 @@ export class Agent {
           conversationId,
           requestId,
           isNewConversation,
+          toolCallResults,
           userMessage: userMessage,
           payload: payload,
           appConfig,
@@ -159,5 +158,3 @@ export class Agent {
     });
   }
 }
-
-export { AgentRequestContent, AgentRequestContext, AgentResponse };

@@ -8,6 +8,10 @@ export interface RequireLabName {
   labName: string;
 }
 
+export interface RequireAgentName {
+  agentName: string;
+}
+
 export interface RequireExperimentName {
   experimentName: string;
 }
