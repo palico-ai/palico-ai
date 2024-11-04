@@ -7,7 +7,9 @@ import {
 } from '../types/common';
 
 export enum QueryParam {
-  requestId = 'requestId',
+  RequestId = 'requestId',
+  AgentName = 'agentName',
+  NoAgent = 'noAgent',
 }
 
 export class RoutePath {
@@ -15,8 +17,14 @@ export class RoutePath {
     return '/login';
   }
 
-  static chat() {
-    return '/chat';
+  static chat(params?: { agentName?: string; noAgent?: boolean }) {
+    let path = '/chat';
+    if (params?.agentName) {
+      path += `?${QueryParam.AgentName}=${params.agentName}`;
+    } else if (params?.noAgent) {
+      path += `?noAgent=true`;
+    }
+    return path;
   }
 
   static labItem(params: RequireLabId) {
@@ -72,7 +80,7 @@ export class RoutePath {
   }
 
   static requestTraceItem(params: { requestId: string }) {
-    return `${RoutePath.requestTraceList()}?${QueryParam.requestId}=${
+    return `${RoutePath.requestTraceList()}?${QueryParam.RequestId}=${
       params.requestId
     }`;
   }

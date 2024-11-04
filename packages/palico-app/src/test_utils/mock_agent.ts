@@ -24,9 +24,6 @@ export const mockAgentRequestContext = (
     requestId: 'mock-request-id',
     isNewConversation: context.isNewConversation ?? true,
     appConfig: {},
-    otel: {
-      traceId: 'mock-trace-id',
-    },
     ...context,
   };
 };

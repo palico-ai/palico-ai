@@ -1,5 +1,4 @@
 import {
-  AppConfig,
   AgentRequestContent,
   AgentResponse,
   CreateEvalJobResponse,
@@ -14,6 +13,7 @@ import {
   QuickLab,
   QuickLabContentJSON,
   QuickLabMetadata,
+  JSONAbleObject,
 } from '.';
 import {
   RequestLogs,
@@ -65,7 +65,7 @@ export interface GetRequestLogsResponse {
 
 // ======== Route: /agent ========
 export interface AgentConversationAPIRequestBody {
-  appConfig?: AppConfig;
+  appConfig?: JSONAbleObject;
   content: AgentRequestContent;
   stream?: boolean;
 }
@@ -75,7 +75,7 @@ export type AgentConversationAPIRequestResponse = AgentResponse;
 // ======== Route: /workflow ========
 
 export interface WorkflowConverationAPIRequestBody {
-  appConfig?: AppConfig;
+  appConfig?: JSONAbleObject;
   content: AgentRequestContent;
 }
 

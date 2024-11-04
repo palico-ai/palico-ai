@@ -1,6 +1,6 @@
 import { createClient } from '@palico-ai/client-js';
 
-export const maxDuration = 30;
+export const maxDuration = 120;
 
 export async function POST(req: Request) {
   const agentAPIURL = process.env.PALICO_AGENT_API_URL;
@@ -9,7 +9,6 @@ export async function POST(req: Request) {
     throw new Error('Missing Palico environment variables');
   }
   const request = await req.json();
-  console.log('Input request', request);
   const client = createClient({
     apiURL: agentAPIURL,
     serviceKey: serviceKey,

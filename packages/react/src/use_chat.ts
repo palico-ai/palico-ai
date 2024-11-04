@@ -1,22 +1,40 @@
 'use client';
 
-import { AgentResponseStreamReader, JSONAbleObject } from '@palico-ai/common';
-import { useEffect, useState } from 'react';
-
-export interface UseChatParams {
-  apiURL: string;
-  agentName: string;
-}
+import {
+  AgentResponseStreamReader,
+  IntermediateStep,
+  JSONAbleObject,
+  ToolCall,
+  ToolCallResult,
+} from '@palico-ai/common';
+import { useEffect, useMemo, useState } from 'react';
 
 export enum MessageSender {
   User = 'user',
   Agent = 'agent',
 }
 
-export interface Message {
-  sender: MessageSender;
+export interface UserMessage {
+  sender: MessageSender.User;
   message?: string;
   data?: JSONAbleObject;
+  appConfig?: JSONAbleObject;
+  toolCallResults?: ToolCallWithResult[];
+}
+
+export interface AgentMessage {
+  sender: MessageSender.Agent;
+  message?: string;
+  data?: JSONAbleObject;
+  toolCalls?: ToolCall[];
+  intermediateSteps?: IntermediateStep[];
+}
+
+export type Message = UserMessage | AgentMessage;
+
+export interface ToolCallWithResult {
+  toolCall: ToolCall;
+  result: JSONAbleObject;
 }
 
 export interface ChatSendMessageParams {
@@ -29,16 +47,98 @@ export interface ChatError {
   message: string;
 }
 
+export interface UseChatParams {
+  apiURL: string;
+  agentName: string;
+  initialState?: {
+    messages: Message[];
+    conversationId: string;
+  };
+}
+
 export const useChat = (params: UseChatParams) => {
   const { agentName, apiURL } = params;
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<Message[]>(
+    params.initialState?.messages ?? []
+  );
+  const [_agentName, setAgentName] = useState(agentName); // used to prevent unnecessary resets
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<ChatError>();
-  const [conversationId, setConversationId] = useState<string>();
+  const [conversationId, setConversationId] = useState<string | undefined>(
+    params.initialState?.conversationId
+  );
+  const [toolCallResults, setToolCallResults] = useState<ToolCallWithResult[]>(
+    []
+  );
+
+  const pendingToolCalls = useMemo(() => {
+    if (messages.length === 0) return [];
+    const lastMessage = messages[messages.length - 1];
+    if (lastMessage.sender === MessageSender.Agent && lastMessage.toolCalls) {
+      return lastMessage.toolCalls.filter((toolCall) => {
+        return !toolCallResults.some(
+          (toolCallResult) => toolCallResult.toolCall.id === toolCall.id
+        );
+      });
+    }
+    return [];
+  }, [messages, toolCallResults]);
 
   useEffect(() => {
+    const checkAndSendToolCallUpdates = async () => {
+      console.log('checking are there any messages to send');
+      // no messages yet
+      if (messages.length === 0) return;
+      // last message was from user
+      console.log("checking last message's sender");
+      const lastMessage = messages[messages.length - 1];
+      if (lastMessage.sender === MessageSender.User) {
+        return;
+      }
+      console.log('checking last message tool calls');
+      // agent requested no tool calls
+      if (
+        lastMessage.sender === MessageSender.Agent &&
+        lastMessage.toolCalls === undefined
+      ) {
+        return;
+      }
+      console.log('checking pending tool calls', pendingToolCalls);
+      // agent requested tool calls but we have pending tool calls
+      if (pendingToolCalls.length) return;
+      // agent requested tool calls and we have no pending tool calls
+      console.log('Sending tool call updates');
+      // TODO: send tool call updates
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        {
+          sender: MessageSender.User,
+          toolCallResults: toolCallResults,
+        },
+      ]);
+      setToolCallResults([]);
+    };
+
+    checkAndSendToolCallUpdates();
+  }, [messages, pendingToolCalls, toolCallResults]);
+
+  const addToolCallResult = (toolCall: ToolCall, result: JSONAbleObject) => {
+    const newToolCallResults = toolCallResults.filter(
+      (toolCallResult) => toolCallResult.toolCall.id !== toolCall.id
+    );
+    setToolCallResults([...newToolCallResults, { toolCall, result }]);
+  };
+
+  const resetChat = () => {
     setMessages([]);
     setConversationId(undefined);
+  };
+
+  useEffect(() => {
+    if (agentName !== _agentName) {
+      setAgentName(agentName);
+      resetChat();
+    }
   }, [agentName]);
 
   const streamMessageStateUpdate = async (response: Response) => {
@@ -59,6 +159,8 @@ export const useChat = (params: UseChatParams) => {
           sender: MessageSender.Agent,
           message: mergedContent.message,
           data: mergedContent.data,
+          toolCalls: mergedContent.toolCalls,
+          intermediateSteps: mergedContent.intermediateSteps,
         });
         return newMessages;
       });
@@ -72,6 +174,8 @@ export const useChat = (params: UseChatParams) => {
       {
         sender: MessageSender.User,
         message: sendMessageParams.userMessage,
+        data: sendMessageParams.payload,
+        appConfig: sendMessageParams.appConfig,
       },
     ]);
     try {
@@ -97,8 +201,7 @@ export const useChat = (params: UseChatParams) => {
   };
 
   const startNewConversation = async () => {
-    setMessages([]);
-    setConversationId(undefined);
+    resetChat();
   };
 
   return {
@@ -106,8 +209,12 @@ export const useChat = (params: UseChatParams) => {
     loading,
     error,
     conversationId,
+    pendingToolCalls,
+    addResult: addToolCallResult,
     agentName,
     startNewConversation,
     sendMessage,
   };
 };
+
+export { type ToolCall, type ToolCallResult, type IntermediateStep };

@@ -3,5 +3,5 @@ import { useSearchParams } from 'next/navigation';
 
 export const useSelectedRequestId = () => {
   const searchParams = useSearchParams();
-  return searchParams.get(QueryParam.requestId);
+  return searchParams.get(QueryParam.RequestId);
 };

@@ -1,29 +1,36 @@
-import { Accordion, AccordionDetails, AccordionSummary } from '@mui/material';
+import {
+  Accordion as MUIAccordion,
+  AccordionDetails,
+  AccordionSummary,
+} from '@mui/material';
 import React from 'react';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Typography } from '../typography';
 
 export interface AccordingListItemProps {
-  summary: string;
+  summary?: string;
+  summaryJSX?: React.ReactNode;
   detailText?: string;
   details?: React.ReactNode;
 }
 
-const AccordionItem: React.FC<AccordingListItemProps> = ({
+export const Accordion: React.FC<AccordingListItemProps> = ({
   summary,
+  summaryJSX,
   detailText,
   details,
 }) => {
   return (
-    <Accordion>
+    <MUIAccordion>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-        <Typography variant="subtitle2">{summary}</Typography>
+        {summary}
+        {summaryJSX}
       </AccordionSummary>
       <AccordionDetails>
         {detailText && <Typography variant="body2">{detailText}</Typography>}
         {details}
       </AccordionDetails>
-    </Accordion>
+    </MUIAccordion>
   );
 };
 
@@ -35,7 +42,7 @@ export const AccordionList: React.FC<AccordionListProps> = ({ items }) => {
   return (
     <>
       {items.map((item, index) => (
-        <AccordionItem key={index} {...item} />
+        <Accordion key={index} {...item} />
       ))}
     </>
   );
