@@ -1,4 +1,9 @@
-import { AgentResponse, AgentResponseStreamReader } from '@palico-ai/common';
+import {
+  AgentResponse,
+  AgentResponseStreamReader,
+  JSONAbleObject,
+  ToolCallResult,
+} from '@palico-ai/common';
 
 export interface CreateClientParams {
   apiURL: string;
@@ -9,8 +14,9 @@ export interface ChatRequestParams {
   agentName: string;
   conversationId?: string;
   userMessage?: string;
-  payload?: Record<string, unknown>;
-  appConfig?: Record<string, unknown>;
+  payload?: JSONAbleObject;
+  appConfig?: JSONAbleObject;
+  toolCallResults?: ToolCallResult[];
 }
 
 export interface ChatRequestParamsWithStream extends ChatRequestParams {

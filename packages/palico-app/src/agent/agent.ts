@@ -48,6 +48,7 @@ export class Agent {
       'Application.chat',
       async () => {
         try {
+          console.log('Starting chat', params);
           const startTime = performance.now();
           const response = await Agent.executeChat({
             ...params,
@@ -125,6 +126,7 @@ export class Agent {
         const stream = new ChatResponseStream(conversationId, requestId, {
           onPush: params.onStreamContentPush,
         });
+        console.log(`ChatRequestHandler: ${chatRequestHandler}`);
         const response = await chatRequestHandler({
           stream,
           conversationId,

@@ -13,11 +13,13 @@ export async function POST(req: Request) {
     apiURL: agentAPIURL,
     serviceKey: serviceKey,
   });
+  console.log(`Calling agent.chat with request: ${JSON.stringify(request)}`);
   const responseStream = await client.agent.chat({
     agentName: request.agentName,
     conversationId: request.conversationId,
     userMessage: request.userMessage,
     payload: request.payload,
+    toolCallResults: request.toolCallResults,
     appConfig: request.appConfig,
     stream: true,
   });

@@ -84,18 +84,18 @@ export const useChat = (params: UseChatParams) => {
     return [];
   }, [messages, toolCallResults]);
 
+  console.log("pending", pendingToolCalls);
+  console.log("results", toolCallResults)
+
   useEffect(() => {
     const checkAndSendToolCallUpdates = async () => {
-      console.log('checking are there any messages to send');
       // no messages yet
       if (messages.length === 0) return;
       // last message was from user
-      console.log("checking last message's sender");
       const lastMessage = messages[messages.length - 1];
       if (lastMessage.sender === MessageSender.User) {
         return;
       }
-      console.log('checking last message tool calls');
       // agent requested no tool calls
       if (
         lastMessage.sender === MessageSender.Agent &&
@@ -103,30 +103,24 @@ export const useChat = (params: UseChatParams) => {
       ) {
         return;
       }
-      console.log('checking pending tool calls', pendingToolCalls);
       // agent requested tool calls but we have pending tool calls
       if (pendingToolCalls.length) return;
       // agent requested tool calls and we have no pending tool calls
-      console.log('Sending tool call updates');
       // TODO: send tool call updates
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        {
-          sender: MessageSender.User,
-          toolCallResults: toolCallResults,
-        },
-      ]);
-      setToolCallResults([]);
+      await sendToolResult();
     };
 
     checkAndSendToolCallUpdates();
   }, [messages, pendingToolCalls, toolCallResults]);
 
   const addToolCallResult = (toolCall: ToolCall, result: JSONAbleObject) => {
-    const newToolCallResults = toolCallResults.filter(
+    console.log("Adding tool call result", toolCall, result);
+    const newToolCallResults = [...toolCallResults].filter(
       (toolCallResult) => toolCallResult.toolCall.id !== toolCall.id
     );
-    setToolCallResults([...newToolCallResults, { toolCall, result }]);
+    newToolCallResults.push({ toolCall, result });
+    console.log("New tool call results", newToolCallResults);
+    setToolCallResults(newToolCallResults);
   };
 
   const resetChat = () => {
@@ -167,7 +161,43 @@ export const useChat = (params: UseChatParams) => {
     }
   };
 
+  const sendToolResult = async () => {
+    console.log('Sending tool result');
+    setLoading(true);
+    setToolCallResults([]);
+    setMessages((messages) => [
+      ...messages,
+      {
+        sender: MessageSender.User,
+        toolCallResults,
+      },
+      ]);
+    try {
+      const results: ToolCallResult[] = toolCallResults.map((toolCallResult) => ({
+        id: toolCallResult.toolCall.id,
+        result: toolCallResult.result,
+      }));
+      const response = await fetch(apiURL, {
+        method: 'POST',
+        body: JSON.stringify({
+          conversationId,
+          agentName,
+          toolCallResults: results
+        }),
+      });
+      await streamMessageStateUpdate(response);
+    } catch (error) {
+      console.error('Error sending tool result', error);
+      const errorMessage =
+        error instanceof Error ? error.message : 'Unable to send tool result';
+      setError({ message: errorMessage });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const sendMessage = async (sendMessageParams: ChatSendMessageParams) => {
+    console.log('Calling sendMessage');
     setLoading(true);
     setMessages((messages) => [
       ...messages,
