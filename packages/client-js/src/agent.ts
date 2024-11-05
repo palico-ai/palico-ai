@@ -27,6 +27,7 @@ export const agent = (config: CreateClientParams) => {
         content: {
           userMessage: params.userMessage,
           payload: params.payload,
+          toolCallResults: params.toolCallResults,
         },
         appConfig: params.appConfig ?? {},
         stream: ('stream' in params && params.stream) ?? false,

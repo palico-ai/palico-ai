@@ -5,6 +5,7 @@ import React, { useEffect, useMemo } from 'react';
 import ExpandIcon from '@mui/icons-material/Expand';
 import AdvanceOption from './advance_option';
 import { ChatSendMessageParams } from '@palico-ai/react';
+import { useHotkeys } from 'react-hotkeys-hook';
 
 export interface ChatInputProps {
   onSend: (params: ChatSendMessageParams) => Promise<void>;
@@ -23,11 +24,24 @@ export const ChatInput: React.FC<ChatInputProps> = ({
   const [requestPayloadString, setRequestPayloadString] =
     React.useState<string>();
   const [appConfigString, setAppConfigString] = React.useState<string>();
+  
+  useHotkeys("ctrl+enter", () => {
+    handleSubmit();
+  }, {
+    enableOnContentEditable: true,
+    enabled: true,
+    enableOnFormTags: true,
+  });
 
-  const handleFormSubmit = async (
-    event: React.FormEvent<HTMLFormElement>
-  ): Promise<void> => {
-    event.preventDefault();
+  useHotkeys("ctrl + 3", () => {
+    inputRef.current?.focus();
+  }, {
+    enableOnContentEditable: true,
+    enabled: true,
+    enableOnFormTags: true,
+  })
+
+  const handleSubmit = async (): Promise<void> => {
     try {
       setLoading(true);
       await onSend({
@@ -57,7 +71,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({
   }, [inputRef, enableInput]);
 
   return (
-    <form onSubmit={handleFormSubmit}>
+    <Box>
       <AdvanceOption
         requestPayload={requestPayloadString}
         onChangeRequestPayload={setRequestPayloadString}
@@ -65,8 +79,10 @@ export const ChatInput: React.FC<ChatInputProps> = ({
         onChangeAppConfig={setAppConfigString}
       />
       <TextField
+        multiline
+        maxRows={10}
         sx={{ mt: 1 }}
-        label="User Message"
+        label="Message [Ctrl + 3]"
         fullWidth
         variant="outlined"
         autoComplete="off"
@@ -96,19 +112,19 @@ export const ChatInput: React.FC<ChatInputProps> = ({
           endAdornment: (
             <InputAdornment position="end">
               <Button
-                type="submit"
                 size="small"
+                onClick={handleSubmit}
                 color="primary"
                 variant="contained"
                 disabled={!enableInput}
               >
-                Send
+                Send [Ctrl + Enter]
               </Button>
             </InputAdornment>
           ),
         }}
         onChange={handleChange}
       />
-    </form>
+    </Box>
   );
 };

@@ -2,6 +2,8 @@ import { EditorProps } from '@monaco-editor/react';
 import { Box, Card, CardContent, Grid } from '@mui/material';
 import { Editor, Typography } from '@palico-ai/components';
 import React from 'react';
+import {editor} from 'monaco-editor';
+import { useHotkeys } from 'react-hotkeys-hook';
 
 export interface AdvanceOptionProps {
   requestPayload?: string;
@@ -15,8 +17,22 @@ const EDITOR_HEIGHT = '15vh';
 const CodeInputPanel: React.FC<{
   label: string;
   value?: string;
+  focusKey: string;
   onChange: EditorProps['onChange'];
-}> = ({ label, value, onChange }) => {
+}> = ({ label, focusKey, value, onChange }) => {
+  const [editor, setEditor] = React.useState<editor.IStandaloneCodeEditor>();
+
+  useHotkeys(
+    focusKey,
+    () => {
+      editor?.focus();
+    },
+    {
+      enableOnContentEditable: true,
+      enableOnFormTags: true,
+    }
+  );
+
   return (
     <Box
       sx={{
@@ -25,12 +41,15 @@ const CodeInputPanel: React.FC<{
         gap: 2,
       }}
     >
-      <Typography variant="h6">{label}</Typography>
+      <Typography fontWeight={"regular"} variant="body1">{label} [{focusKey}] </Typography>
       <Editor
         height={EDITOR_HEIGHT}
         value={value}
         onChange={onChange}
         defaultLanguage="json"
+        onMount={(e) => {
+          setEditor(e);
+        }}
         options={{
           ariaLabel: 'User Message',
           scrollBeyondLastColumn: 0,
@@ -59,15 +78,17 @@ const AdvanceOption: React.FC<AdvanceOptionProps> = ({
         >
           <Grid item md={6}>
             <CodeInputPanel
+              focusKey='Ctrl + 1'
               value={requestPayload}
-              label="Request Payload"
+              label="Payload"
               onChange={(value) => onChangeRequestPayload(value ?? '')}
             />
           </Grid>
           <Grid item md={6}>
             <CodeInputPanel
+              focusKey='Ctrl + 2'
               value={appConfig}
-              label="App Config"
+              label="App-Config"
               onChange={(value) => onChangeAppConfig(value ?? '')}
             />
           </Grid>
