@@ -17,3 +17,5 @@ export const GET_ALL_EXPERIMENTS = 'getAllExperiments';
 export const GET_EVALS_FOR_EXPERIMENT = 'getEvalsForExperiment';
 
 export const GET_NOTEBOOKS_FOR_EXPERIMENT = 'getNotebooksForExperiment';
+
+export const API_HEALTH_CHECK = 'apiHealthCheck';

@@ -24,6 +24,7 @@ export interface UserMessage {
 
 export interface AgentMessage {
   sender: MessageSender.Agent;
+  requestId: string;
   message?: string;
   data?: JSONAbleObject;
   toolCalls?: ToolCall[];
@@ -133,6 +134,7 @@ export const useChat = (params: UseChatParams) => {
       setAgentName(agentName);
       resetChat();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [agentName]);
 
   const streamMessageStateUpdate = async (response: Response) => {
@@ -140,6 +142,7 @@ export const useChat = (params: UseChatParams) => {
       ...prevMessages,
       {
         sender: MessageSender.Agent,
+        requestId: "",
       },
     ]);
     const stream = new AgentResponseStreamReader(response);
@@ -151,6 +154,7 @@ export const useChat = (params: UseChatParams) => {
         const mergedContent = stream.getMergedChunks();
         newMessages.push({
           sender: MessageSender.Agent,
+          requestId: chunk.requestId,
           message: mergedContent.message,
           data: mergedContent.data,
           toolCalls: mergedContent.toolCalls,

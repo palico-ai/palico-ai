@@ -2,7 +2,7 @@ import { EditorProps } from '@monaco-editor/react';
 import { Box, Card, CardContent, Grid } from '@mui/material';
 import { Editor, Typography } from '@palico-ai/components';
 import React from 'react';
-import {editor} from 'monaco-editor';
+import { editor } from 'monaco-editor';
 import { useHotkeys } from 'react-hotkeys-hook';
 
 export interface AdvanceOptionProps {
@@ -41,7 +41,9 @@ const CodeInputPanel: React.FC<{
         gap: 2,
       }}
     >
-      <Typography fontWeight={"regular"} variant="body1">{label} [{focusKey}] </Typography>
+      <Typography fontWeight={'regular'} variant="overline" fontSize={14}>
+        {label} [{focusKey}]{' '}
+      </Typography>
       <Editor
         height={EDITOR_HEIGHT}
         value={value}
@@ -78,7 +80,7 @@ const AdvanceOption: React.FC<AdvanceOptionProps> = ({
         >
           <Grid item md={6}>
             <CodeInputPanel
-              focusKey='Ctrl + 1'
+              focusKey="Ctrl + 1"
               value={requestPayload}
               label="Payload"
               onChange={(value) => onChangeRequestPayload(value ?? '')}
@@ -86,7 +88,7 @@ const AdvanceOption: React.FC<AdvanceOptionProps> = ({
           </Grid>
           <Grid item md={6}>
             <CodeInputPanel
-              focusKey='Ctrl + 2'
+              focusKey="Ctrl + 2"
               value={appConfig}
               label="App-Config"
               onChange={(value) => onChangeAppConfig(value ?? '')}

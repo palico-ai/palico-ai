@@ -49,10 +49,14 @@ export class ChatResponseStream {
       requestId: this.requestId,
       message: '',
       data: {},
+      toolCalls: [],
     };
     for (const chunk of this.chunks) {
       if (chunk.message) {
         response.message += chunk.message;
+      }
+      if (chunk.toolCalls) {
+        response.toolCalls?.push(...chunk.toolCalls);
       }
       response.data = { ...response.data, ...chunk.data };
     }
