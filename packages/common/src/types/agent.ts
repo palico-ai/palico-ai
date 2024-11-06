@@ -1,12 +1,20 @@
+import { AnyZodObject } from 'zod';
 import { JSONAbleObject } from './common';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type AgentResponseMetadata = Record<string, any>;
 
+export interface Tool<Input = JSONAbleObject, Output = JSONAbleObject> {
+  name: string;
+  description?: string;
+  parameters?: AnyZodObject;
+  execute?: (args: Input) => Promise<Output>;
+}
+
 export interface ToolCall {
   id: string;
   name: string;
-  arguments?: JSONAbleObject;
+  parameters?: JSONAbleObject;
 }
 
 export interface ToolCallResult {
@@ -59,7 +67,7 @@ export interface AgentRequestContent<Payload = Record<string, any>> {
    * E.g. If the previous agent call response was:
    * {
    *  toolCalls: [
-   *   { id: '1', name: 'getWeather', arguments: { ... } },
+   *   { id: '1', name: 'getWeather', parameters: { ... } },
    * }
    * Then when the client-side tool is executed, you can call the agent with:
    * {

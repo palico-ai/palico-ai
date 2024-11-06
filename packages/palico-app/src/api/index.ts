@@ -33,6 +33,9 @@ export class PalicoAPIServer {
     this.expressAPI.route('/').get((_, res) => {
       res.send('Palico API is running');
     });
+    this.expressAPI.route('/health').get((_, res) => {
+      return res.status(200).json({ status: 'UP' });
+    });
     this.expressAPI.use('/agent', agentRouter);
     this.expressAPI.use('/studio', studioRouter);
     this.expressAPI.use('/telemetry', telemetryRouter);

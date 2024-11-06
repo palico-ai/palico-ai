@@ -37,10 +37,6 @@ const columns: ColumnDef<EvaluationMetadata, unknown>[] = [
     header: CELL_HEADER.NAME,
   },
   {
-    accessorKey: 'description',
-    header: CELL_HEADER.DESCRIPTION,
-  },
-  {
     accessorKey: 'status.state',
     header: CELL_HEADER.STATUS,
   },
@@ -49,11 +45,7 @@ const columns: ColumnDef<EvaluationMetadata, unknown>[] = [
     header: CELL_HEADER.AGENT,
   },
   {
-    accessorKey: 'workflowName',
-    header: CELL_HEADER.WORKFLOW,
-  },
-  {
-    accessorKey: 'testCaseDatasetName',
+    accessorKey: 'testSuiteName',
     header: CELL_HEADER.DATASET,
   },
   {

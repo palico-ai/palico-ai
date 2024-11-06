@@ -2,6 +2,7 @@ import { ComponentWithChildren, ThemeProvider } from '@palico-ai/components';
 import ReactQueryProvider from '../context/react_query';
 import { Box } from '@mui/material';
 import './global.css';
+import { WithHealthyAPI } from '../context/health_check';
 
 const AppRootLayout: React.FC<ComponentWithChildren> = ({ children }) => {
   return (
@@ -9,7 +10,7 @@ const AppRootLayout: React.FC<ComponentWithChildren> = ({ children }) => {
       <body>
         <ReactQueryProvider>
           <ThemeProvider>
-            <Box>{children}</Box>
+            <WithHealthyAPI>{children}</WithHealthyAPI>
           </ThemeProvider>
         </ReactQueryProvider>
       </body>

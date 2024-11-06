@@ -23,6 +23,10 @@ import {
   ConversationTracesWithoutRequests,
 } from './telemetry';
 
+export type HealthCheckResponse = {
+  status: 'ok';
+};
+
 export interface MetadataListItemCommon {
   name: string;
 }

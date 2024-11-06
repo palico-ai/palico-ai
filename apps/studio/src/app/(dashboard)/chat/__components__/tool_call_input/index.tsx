@@ -45,7 +45,7 @@ const ToolCallPanelContent: React.FC<ToolCallPanelContentProps> = ({
 
   useEffect(() => {
     setResult('');
-  }, [toolCall])
+  }, [toolCall]);
 
   const handleSubmit = () => {
     try {
@@ -91,7 +91,7 @@ const ToolCallPanelContent: React.FC<ToolCallPanelContentProps> = ({
             language="json"
             height={200}
             options={{ readOnly: true, minimap: { enabled: false } }}
-            value={JSON.stringify(toolCall.arguments ?? '{}', null, 2)}
+            value={JSON.stringify(toolCall.parameters ?? '{}', null, 2)}
           />
         </Grid>
         <Grid item xs={12}>
@@ -139,12 +139,7 @@ const ToolCallInput: React.FC<ToolCallInputProps> = ({
         };
       }}
     >
-      <Typography
-        variant="subtitle1"
-        fontSize={16}
-        fontWeight={'bold'}
-        mb={2}
-      >
+      <Typography variant="subtitle1" fontSize={16} fontWeight={'bold'} mb={2}>
         Tool Call: {currentStepTool.name} + (...)
       </Typography>
       <ToolCallPanelContent

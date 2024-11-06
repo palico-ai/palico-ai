@@ -4,76 +4,10 @@ import { Box, Divider, Stack } from '@mui/material';
 import React, { useMemo } from 'react';
 import { ChatHistory } from './chat_history';
 import { ChatInput } from './chat_input';
-import { Message, MessageSender, useChat } from '@palico-ai/react';
+import { useChat } from '@palico-ai/react';
 import { useSearchParams } from 'next/navigation';
 import { QueryParam } from '../../../../utils/route_path';
 import ToolCallInput from './tool_call_input';
-
-// const DUMMY_MESSAGES: Message[] = [
-//   // {
-//   //   sender: MessageSender.User,
-//   //   message: "what's the weather in nyc",
-//   //   appConfig: {},
-//   // },
-//   // {
-//   //   sender: MessageSender.Agent,
-//   //   message: 'The weather in NYC is currently cloudy.',
-//   //   data: {
-//   //     foo: 'bar',
-//   //   },
-//   //   intermediateSteps: [
-//   //     {
-//   //       name: 'Weather',
-//   //       data: {
-//   //         result: 'loreum ipsum dolor sit amet consectetur adipiscing',
-//   //       },
-//   //     },
-//   //     {
-//   //       name: 'Joke',
-//   //       data: {
-//   //         result: 'loreum ipsum dolor sit amet ',
-//   //       },
-//   //     },
-//   //     {
-//   //       name: 'Joke 2',
-//   //     },
-//   //   ],
-//   // },
-//   {
-//     sender: MessageSender.User,
-//     message: 'Tell me a joke',
-//     data: {
-//       foo: 'bar',
-//     },
-//   },
-//   {
-//     sender: MessageSender.Agent,
-//     intermediateSteps: [
-//       {
-//         name: 'Checking Joke Catelog',
-//         data: {
-//           result: 'loreum ipsum dolor sit amet ',
-//         },
-//       },
-//     ],
-//     toolCalls: [
-//       {
-//         id: '123',
-//         name: 'readyForJoke',
-//         arguments: {
-//           saveJokeToDB: true,
-//         },
-//       },
-//       {
-//         id: '2',
-//         name: 'anotherJoke',
-//         arguments: {
-//           anotherOne: true,
-//         },
-//       },
-//     ],
-//   },
-// ];
 
 const ChatUI: React.FC = () => {
   const searchParams = useSearchParams();
