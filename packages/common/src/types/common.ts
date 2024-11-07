@@ -1,5 +1,7 @@
+/**
+ * Represents an Object that can be converted to JSON
+ */
 export type JSONAbleObject<
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   T extends Record<string, any> = Record<string, any>
 > = T;
 
