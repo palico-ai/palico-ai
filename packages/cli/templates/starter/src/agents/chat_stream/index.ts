@@ -1,56 +1,68 @@
 import {
-  ChatHandlerResponse,
   ChatRequestHandler,
+  ChatResponseStream,
+  createConversationState,
+  getConversationState,
   getTracer,
-  messageRecord,
+  logger,
+  updateConversationState,
 } from "@palico-ai/app";
 import OpenAI from "openai";
+import { Stream } from "openai/streaming";
 
-const tracer = getTracer("ChatbotAgent");
+const tracer = getTracer("StreamingChatbotAgent");
 
 type OpenAIMessage = OpenAI.Chat.Completions.ChatCompletionMessageParam;
+
+export interface ConversationState {
+  messages: OpenAIMessage[];
+}
 
 const handler: ChatRequestHandler = async ({
   conversationId,
   isNewConversation,
   userMessage,
   appConfig,
-}): Promise<ChatHandlerResponse> => {
+  stream,
+}) => {
   return await tracer.trace("ChatbotAgent->chat", async (span) => {
-    // adding tracing for better observability
+    // adding traces for better observability and debugging
     span.setAttributes({
       message: userMessage,
       model: appConfig.model,
     });
-    // building our prompt and message history for OpenAI
+
+    logger.log("Creating message history for LLM Model");
     if (!userMessage) throw new Error("User message is required");
     const messageHistory = await createOpenAIMessageHistory(
       conversationId,
       userMessage,
       isNewConversation
     );
-    // call OpenAI API and get the stream response
+
+    logger.log("Calling OpenAI");
     const openAIResponse = await callGPTModel(
       appConfig.model ?? "gpt-3.5-turbo-0125",
       messageHistory
     );
-    const responseMessage = openAIResponse.choices[0].message.content;
-    // save message history for future requests in the same conversation
-    messageHistory.push({ role: "assistant", content: responseMessage });
+
+    logger.log("Streaming OpenAI's response back to client");
+    const { completeMessage } = await streamResponseToClient(
+      openAIResponse,
+      stream
+    );
+
+    logger.log("Saving message history for future requests");
+    messageHistory.push({ role: "assistant", content: completeMessage });
     if (isNewConversation) {
-      await messageRecord().create<OpenAIMessage>(
-        conversationId,
-        messageHistory
-      );
+      await createConversationState<ConversationState>(conversationId, {
+        messages: messageHistory,
+      });
     } else {
-      await messageRecord().update<OpenAIMessage>(
-        conversationId,
-        messageHistory
-      );
+      await updateConversationState<ConversationState>(conversationId, {
+        messages: messageHistory,
+      });
     }
-    return {
-      message: openAIResponse.choices[0].message.content ?? "",
-    };
   });
 };
 
@@ -72,9 +84,8 @@ const createOpenAIMessageHistory = async (
       }
     );
   } else {
-    const previousMessages = await messageRecord().get<OpenAIMessage>(
-      conversationId
-    );
+    const { messages: previousMessages } =
+      await getConversationState<ConversationState>(conversationId);
     messageHistory.push(...previousMessages, {
       role: "user",
       content: userMessage,
@@ -95,11 +106,29 @@ const callGPTModel = async (
     apiKey: process.env.OPENAI_API_KEY,
   });
   const response = await client.chat.completions.create({
+    stream: true,
     model: model,
     temperature: 0,
     messages: messages,
   });
   return response;
+};
+
+const streamResponseToClient = async (
+  openAIResponse: Stream<OpenAI.Chat.Completions.ChatCompletionChunk>,
+  stream: ChatResponseStream
+) => {
+  let completeMessage = "";
+  for await (const chunk of openAIResponse) {
+    logger.log("Chunk:", chunk.choices[0].delta);
+    if (chunk.choices[0].delta.content) {
+      completeMessage += chunk.choices[0].delta.content;
+      stream.push({
+        message: chunk.choices[0].delta.content,
+      });
+    }
+  }
+  return { completeMessage };
 };
 
 export default handler;

@@ -10,7 +10,7 @@ export default class Project {
     if (this.projectPath) {
       return this.projectPath;
     }
-    const fullPath = await findup('.palico.json');
+    const fullPath = await findup('palico.json');
     if (!fullPath) {
       throw new Error('Failed to find project root');
     }

@@ -4,7 +4,7 @@ import { APIError } from '../error';
 
 export const defaultRequestAuthorizer: RequestHandler = async (
   req,
-  res,
+  _,
   next
 ) => {
   try {

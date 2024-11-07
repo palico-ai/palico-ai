@@ -94,7 +94,7 @@ export class BootstrapModel {
     const rootpath = await Project.getProjectRootDir();
     const packageJsonPath = path.join(rootpath, 'package.json');
     const packageJson = await OS.readJsonFile(packageJsonPath);
-    const packageVersion = packageJson.dependencies['@palico-ai/palico-app'];
+    const packageVersion = packageJson.dependencies['@palico-ai/app'];
     return packageVersion;
   }
 
