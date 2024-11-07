@@ -6,8 +6,15 @@ import {
 } from '@palico-ai/common';
 import { ChatResponseStream } from './stream';
 
+/**
+ * Additional metadata that you want to log with the response.
+ * Often used for tagging metrics data
+ */
 export type ChatResponseMetadata = JSONAbleObject;
 
+/**
+ * Response sent back to the client after processing a chat request.
+ */
 export interface ChatResponse<D = JSONAbleObject, M = ChatResponseMetadata>
   extends Pick<
     AgentResponse<D>,
@@ -24,6 +31,9 @@ export type ChatHandlerResponse<
 export interface ChatRequest<P = JSONAbleObject, AC = JSONAbleObject>
   extends AgentRequestContent<P>,
     AgentRequestContext<AC> {
+  /**
+   * Stream object used to stream messages to the client.
+   */
   stream: ChatResponseStream;
 }
 
