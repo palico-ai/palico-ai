@@ -32,12 +32,12 @@ export interface ChatRequest<P = JSONAbleObject, AC = JSONAbleObject>
   extends AgentRequestContent<P>,
     AgentRequestContext<AC> {
   /**
-   * Stream object used to stream messages to the client.
+   * Stream helper class used to send back chunks of data to the client.
    */
   stream: ChatResponseStream;
 }
 
-export type ChatRequestHandler<
+export type Chat<
   InputPayload = JSONAbleObject,
   AppConfig = JSONAbleObject,
   OutputData = JSONAbleObject,

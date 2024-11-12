@@ -1,7 +1,7 @@
-import { Tool, ToolCall, ToolCallResult } from "@palico-ai/app";
+import { Tool, ToolCall, ToolCallResult } from '@palico-ai/app';
 
 export interface Message {
-  role: "system" | "user" | "tool" | "assistant";
+  role: 'system' | 'user' | 'tool' | 'assistant';
   content?: string;
   toolCalls?: ToolCall[];
   toolCallResult?: ToolCallResult;
@@ -15,7 +15,7 @@ export interface AgentExecutorResponse {
 
 export interface AgentExecutorParams {
   tools: Tool[];
-  message: Message[];
+  messages: Message[];
   chatCompletion: ChatCompletionFunction;
   onToolCall?: (toolCall: ToolCallWithResult) => void;
   maxSteps?: number;
@@ -34,7 +34,7 @@ export interface ToolExecutorParams {
 }
 
 export interface ToolCallWithResult extends ToolCall {
-  result: ToolCallResult["result"];
+  result: ToolCallResult['result'];
 }
 
 export type ChatCompletionFunction = (params: {

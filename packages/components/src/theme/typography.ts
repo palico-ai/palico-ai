@@ -11,14 +11,14 @@ const fontSize = (size: string, lineHeight: string) => ({
 
 export const TYPOGRAPHY_PROPERTIES = {
   fontFamily:
-    'ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',
+    'ui-sans-serif, sans-serif, system-ui, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',
   fontWeightLighter: 100,
   fontWeightLight: 300,
   fontWeightRegular: 400,
   fontWeightMedium: 600,
   fontWeightBold: 700,
   fontSizeXS: fontSize('0.8125rem', '1.5rem'),
-  fontSizeSM: fontSize('0.875rem', '1.5rem'),
+  fontSizeSM: fontSize('0.87rem', '1.5rem'),
   fontSizeMD: fontSize('1rem', '1.75rem'),
   fontSizeLG: fontSize('1.25rem', '1.75rem'),
   fontSizeXL: fontSize('1.5rem', '2rem'),
@@ -108,8 +108,8 @@ const typography: ThemeOptions['typography'] = {
 
   button: {
     fontFamily: TYPOGRAPHY_PROPERTIES.fontFamily,
-    fontSize: TYPOGRAPHY_PROPERTIES.fontSizeMD.fontSize,
-    lineHeight: TYPOGRAPHY_PROPERTIES.fontSizeMD.lineHeight,
+    // fontSize: TYPOGRAPHY_PROPERTIES.fontSizeSM.fontSize,
+    // lineHeight: TYPOGRAPHY_PROPERTIES.fontSizeSM.lineHeight,
     color: color.bodyMain,
     fontWeight: TYPOGRAPHY_PROPERTIES.fontWeightRegular,
     textTransform: 'uppercase',

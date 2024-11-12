@@ -1,14 +1,14 @@
 import {
   ChatRequest,
-  ChatRequestHandler,
+  Chat,
   getConversationState,
   logger,
   setConversationState,
-} from "@palico-ai/app";
-import { Message } from "./types";
-import { tools } from "./tools";
-import { agentExecutor } from "./agent_executor";
-import { openaiChatCompletion } from "./openai";
+} from '@palico-ai/app';
+import { Message } from './types';
+import { tools } from './tools';
+import { agentExecutor } from './agent_executor';
+import { openaiChatCompletion } from './openai';
 
 export interface State {
   messages: Message[];
@@ -16,12 +16,12 @@ export interface State {
 
 const MAX_STEPS = 5;
 
-const handler: ChatRequestHandler = async (params) => {
+const handler: Chat = async (params) => {
   const { conversationId, stream } = params;
-  const state = await buildConversationState(params);
-  logger.log("calling agent executor with: ", state.messages);
+  const state = await createOrRestoreState(params);
+  logger.log('calling agent executor with: ', state.messages);
   const response = await agentExecutor({
-    message: state.messages,
+    messages: state.messages,
     maxSteps: MAX_STEPS,
     chatCompletion: openaiChatCompletion,
     tools,
@@ -32,7 +32,7 @@ const handler: ChatRequestHandler = async (params) => {
           {
             name:
               `Function Call: ${toolCall.name}()` +
-              (resultString.length > 20 ? "" : ": " + resultString),
+              (resultString.length > 20 ? '' : ': ' + resultString),
             data: {
               input: toolCall.parameters,
               result: toolCall.result,
@@ -42,24 +42,24 @@ const handler: ChatRequestHandler = async (params) => {
       });
     },
   });
-  logger.log("response from agent executor", response);
+  logger.log('response from agent executor', response);
   if (response.finalMessage || response.externalToolCalls) {
     stream.push({
       message: response.finalMessage,
       toolCalls: response.externalToolCalls,
     });
   }
-  logger.log("setting conversation state", response.messages);
+  logger.log('setting conversation state', response.messages);
   await setConversationState<State>(conversationId, {
     messages: response.messages,
   });
 };
 
-const buildConversationState = async (params: ChatRequest): Promise<State> => {
+const createOrRestoreState = async (params: ChatRequest): Promise<State> => {
   const { toolCallResults, userMessage, isNewConversation, conversationId } =
     params;
   if (!userMessage && !toolCallResults) {
-    throw new Error("No user message or tool call results");
+    throw new Error('No user message or tool call results');
   }
   let state: State;
   if (isNewConversation) {
@@ -69,18 +69,18 @@ const buildConversationState = async (params: ChatRequest): Promise<State> => {
   } else {
     state = await getConversationState<State>(conversationId);
   }
-  logger.log("building prompt messages", state);
+  logger.log('building prompt messages', state);
   if (userMessage) {
-    console.log("user message", userMessage);
+    console.log('user message', userMessage);
     state.messages.push({
-      role: "user",
+      role: 'user',
       content: userMessage,
     });
   }
   if (toolCallResults) {
     toolCallResults.forEach((toolCallResult) => {
       state.messages.push({
-        role: "tool",
+        role: 'tool',
         toolCallResult,
       });
     });

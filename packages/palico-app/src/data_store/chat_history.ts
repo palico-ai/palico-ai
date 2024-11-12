@@ -41,12 +41,15 @@ export const updateConversationState = async <Schema = JSONAbleObject>(
   conversationId: string,
   state: Schema
 ) => {
-  await SimpleChatHistoryTable.update(
+  const result = await SimpleChatHistoryTable.update(
     {
       messagesJSON: JSON.stringify(state),
     },
     { where: { conversationId } }
   );
+  if (result[0] === 0) {
+    throw new Error('Record not found');
+  }
 };
 
 /**

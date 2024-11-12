@@ -42,30 +42,19 @@ const AppConfigHotSwap: React.FC = () => {
           </Box>
         </Grid>
         <Grid item xs={12} md={8}>
-          <Paper
-            sx={(theme) => ({
-              p: 4,
-              borderRadius: theme.shape.borderRadius,
-              display: 'flex',
-              justifyContent: 'center',
-              '&:hover': {
-                boxShadow: theme.shadows[6],
-              },
-            })}
-          >
-            <Image
-              src={HotswapImage}
-              style={{
-                width: '100%',
-                height: 'auto',
-                objectFit: 'contain',
-                boxSizing: 'border-box',
-              }}
-              width={703}
-              height={811}
-              alt="Hotswap Flow Diagram"
-            />
-          </Paper>
+          <Image
+            src={HotswapImage}
+            style={{
+              padding: 52,
+              width: '100%',
+              height: 'auto',
+              objectFit: 'contain',
+              boxSizing: 'border-box',
+            }}
+            width={703}
+            height={811}
+            alt="Hotswap Flow Diagram"
+          />
         </Grid>
       </Grid>
     </SectionLayout>

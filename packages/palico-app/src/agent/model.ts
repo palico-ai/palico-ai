@@ -1,6 +1,6 @@
 import Project from '../utils/project';
 import OS from '../utils/os';
-import { ChatRequestHandler } from './chat';
+import { Chat } from './chat';
 
 export class AgentModel {
   private static readonly agentFile = 'index.ts';
@@ -19,7 +19,7 @@ export class AgentModel {
     return OS.doesFileExist(filePath);
   }
 
-  static async getAgentByName(name: string): Promise<ChatRequestHandler> {
+  static async getAgentByName(name: string): Promise<Chat> {
     const filePath = await AgentModel.agentFilePath(name);
     const agentExports = await import(filePath);
     return agentExports.default;
