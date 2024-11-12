@@ -101,11 +101,17 @@ const Drawer = styled(MUIDrawer, {
   boxSizing: 'border-box',
   ...(open && {
     ...openedMixin(theme),
-    '& .MuiDrawer-paper': openedMixin(theme),
+    '& .MuiDrawer-paper': {
+      backgroundColor: 'inherit',
+      ...openedMixin(theme),
+    },
   }),
   ...(!open && {
     ...closedMixin(theme),
-    '& .MuiDrawer-paper': closedMixin(theme),
+    '& .MuiDrawer-paper': {
+      backgroundColor: 'inherit',
+      ...closedMixin(theme),
+    },
   }),
 }));
 

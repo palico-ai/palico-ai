@@ -97,6 +97,8 @@ const Topbar: React.FC<TopbarProps> = ({
         position="static"
         color="transparent"
         sx={{
+          backgroundColor: 'transparent',
+          // boxShadow: 'none',
           backdropFilter: 'blur(6px)',
           WebkitBackdropFilter: 'blur(6px)',
         }}
