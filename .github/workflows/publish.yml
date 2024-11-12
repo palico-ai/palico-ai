@@ -36,7 +36,7 @@ jobs:
       # - run: npx nx-cloud start-ci-run --distribute-on="3 linux-medium-js" --stop-agents-after="build"
 
       - name: Build packages
-        run: npx nx run-many -t build -p palico-app -p common -p client-js -p cli
+        run: npx nx run-many -t build -p palico-app -p common -p client-js -p cli -p react
         shell: bash
         env:
           PALICO_AGENT_API_URL: 'http://localhost:8000'
