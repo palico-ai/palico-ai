@@ -5,9 +5,9 @@ import { THEME_COLOR } from './colors';
 const palette: ThemeOptions['palette'] = {
   mode: 'dark',
   background: {
-    default: '#09090b',
-    paper: '#09090b',
-    // paper: '#0a0a0a',
+    // default: '#09090b',
+    // paper: '#09090b',
+    paper: '#0a0a0a',
     // paper: '#2A2A2D',
   },
   text: {
