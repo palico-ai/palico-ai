@@ -46,9 +46,6 @@ export const useChat = (params: UseChatParams): UseChatReturn => {
     return [];
   }, [messages, toolCallResults]);
 
-  console.log('pending', pendingToolCalls);
-  console.log('results', toolCallResults);
-
   useEffect(() => {
     const checkAndSendToolCallUpdates = async () => {
       // no messages yet
@@ -99,34 +96,47 @@ export const useChat = (params: UseChatParams): UseChatReturn => {
   }, [agentName]);
 
   const streamMessageStateUpdate = async (response: Response) => {
-    setMessages((prevMessages) => [
-      ...prevMessages,
-      {
-        sender: MessageSender.Agent,
-        requestId: '',
-      },
-    ]);
-    const stream = new AgentResponseStreamReader(response);
-    for await (const chunk of stream.readChunks()) {
-      setConversationId(chunk.conversationId);
-      setMessages((prevMessages) => {
-        const newMessages = [...prevMessages];
-        newMessages.pop();
-        const mergedContent = stream.getMergedChunks();
-        newMessages.push({
+    try {
+      if (response.status !== 200) {
+        throw new Error(`Unexpected response status: ${response.statusText}`);
+      }
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        {
           sender: MessageSender.Agent,
-          requestId: chunk.requestId,
-          message: mergedContent.message,
-          data: mergedContent.data,
-          toolCalls: mergedContent.toolCalls,
-          intermediateSteps: mergedContent.intermediateSteps,
+          requestId: '',
+        },
+      ]);
+      const stream = new AgentResponseStreamReader(response);
+      for await (const chunk of stream.readChunks()) {
+        setConversationId(chunk.conversationId);
+        setMessages((prevMessages) => {
+          const newMessages = [...prevMessages];
+          newMessages.pop();
+          const mergedContent = stream.getMergedChunks();
+          newMessages.push({
+            sender: MessageSender.Agent,
+            requestId: chunk.requestId,
+            message: mergedContent.message,
+            data: mergedContent.data,
+            toolCalls: mergedContent.toolCalls,
+            intermediateSteps: mergedContent.intermediateSteps,
+          });
+          return newMessages;
         });
-        return newMessages;
-      });
+      }
+    } catch (error) {
+      console.error('Error streaming message state update', error);
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : 'Unable to stream message state update';
+      setError({ message: errorMessage });
     }
   };
 
   const sendToolResult = async () => {
+    setError(undefined);
     console.log('Sending tool result');
     setLoading(true);
     setToolCallResults([]);
@@ -164,6 +174,7 @@ export const useChat = (params: UseChatParams): UseChatReturn => {
   };
 
   const sendMessage = async (sendMessageParams: ChatSendMessageParams) => {
+    setError(undefined);
     console.log('Calling sendMessage');
     setLoading(true);
     setMessages((messages) => [
@@ -186,6 +197,7 @@ export const useChat = (params: UseChatParams): UseChatReturn => {
           appConfig: sendMessageParams.appConfig ?? {},
         }),
       });
+      console.log(`response`, response);
       await streamMessageStateUpdate(response);
     } catch (error) {
       console.error('Error sending message', error);

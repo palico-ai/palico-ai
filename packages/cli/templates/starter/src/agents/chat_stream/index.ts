@@ -9,6 +9,8 @@ import {
 } from '@palico-ai/app';
 import OpenAI from 'openai';
 import { Stream } from 'openai/streaming';
+import { AppConfig } from '../types';
+import { getOpenAIClient } from '../../utils/openai';
 
 const tracer = getTracer('StreamingChatbotAgent');
 
@@ -18,7 +20,14 @@ export interface ConversationState {
   messages: OpenAIMessage[];
 }
 
-const handler: Chat = async ({
+/**
+ * This is a chat agent that can:
+ * - stream the response back to the client
+ * - remember previous messages in the requests in a conversation
+ * - use any openai model through the appConfig
+ * - provides logs and traces for better observability
+ */
+const handler: Chat<unknown, undefined | AppConfig> = async ({
   conversationId,
   isNewConversation,
   userMessage,
@@ -29,7 +38,7 @@ const handler: Chat = async ({
     // adding traces for better observability and debugging
     span.setAttributes({
       message: userMessage,
-      model: appConfig.model,
+      model: appConfig?.model,
     });
 
     logger.log('Creating message history for LLM Model');
@@ -42,7 +51,7 @@ const handler: Chat = async ({
 
     logger.log('Calling OpenAI');
     const openAIResponse = await callGPTModel(
-      appConfig.model ?? 'gpt-3.5-turbo-0125',
+      appConfig?.model ?? 'gpt-3.5-turbo-0125',
       messageHistory
     );
 
@@ -98,13 +107,7 @@ const callGPTModel = async (
   model: string,
   messages: OpenAI.Chat.Completions.ChatCompletionMessageParam[]
 ) => {
-  const apiKey = process.env.OPENAI_API_KEY;
-  if (!apiKey) {
-    throw new Error('OPENAI_API_KEY is not set');
-  }
-  const client = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
-  });
+  const client = getOpenAIClient();
   const response = await client.chat.completions.create({
     stream: true,
     model: model,

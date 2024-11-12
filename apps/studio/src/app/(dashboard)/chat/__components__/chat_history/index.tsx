@@ -21,16 +21,12 @@ export const ChatHistory: React.FC<ChatHistoryProps> = ({
     React.useState<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    console.log('History changed');
     if (lastMessageEl) {
-      console.log('Scrolling to last message');
       lastMessageEl.scrollIntoView({
         behavior: 'smooth',
         block: 'end',
         inline: 'nearest',
       });
-    } else {
-      console.log('No last message element');
     }
   }, [history, lastMessageEl]);
 
@@ -43,7 +39,6 @@ export const ChatHistory: React.FC<ChatHistoryProps> = ({
       )}
       {history.map((message, index) => {
         const isLastMessage = index === history.length - 1;
-        console.log(`isLastMessage: ${isLastMessage}`);
         return (
           <ChatListItem
             key={index}

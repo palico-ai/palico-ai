@@ -49,5 +49,5 @@ export const InitHandler = async (projectName: string, option: Option) => {
   StarterTemplateNextSteps(projectName).forEach((step, index) => {
     console.log(chalk.blue(`${index + 1}. ${step}`));
   });
-  console.log('Read more at https://docs.palico.ai/');
+  console.log('\nRead more at ' + chalk.blue('docs.palico.ai'));
 };

@@ -19,7 +19,8 @@
   },
   "dependencies": {
     "@opentelemetry/api": "^1.8.0",
-    "openai": "^4.52.0"
+    "openai": "^4.72.0",
+    "zod-to-json-schema": "^3.23.5"
   },
   "devDependencies": {
     "@types/nodemon": "^1.19.6",

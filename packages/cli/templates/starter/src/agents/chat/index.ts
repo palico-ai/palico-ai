@@ -1,13 +1,14 @@
-import { Chat, ChatHandlerResponse, getTracer } from '@palico-ai/app';
-import OpenAI from 'openai';
+import { Chat, ChatHandlerResponse, getTracer, logger } from '@palico-ai/app';
+import { AppConfig } from '../types';
+import { getOpenAIClient } from '../../utils/openai';
 
 const tracer = getTracer('ChatbotAgent');
 
-// config value / feature-flags that can be passed to the agent
-interface AppConfig {
-  model?: string;
-}
-
+/**
+ * This is a simple chat agent that can:
+ * - can use any openai model through the appConfig
+ * - provides logs and traces for better observability
+ */
 const handler: Chat<unknown, undefined | AppConfig> = async ({
   userMessage,
   appConfig,
@@ -18,40 +19,42 @@ const handler: Chat<unknown, undefined | AppConfig> = async ({
       message: userMessage,
       model: appConfig?.model,
     });
+
+    logger.log('Creating message history for LLM Model');
     if (!userMessage) throw new Error('User message is required');
+    const responseMessage = await callOpenAI(
+      userMessage,
+      appConfig?.model ?? 'gpt-3.5-turbo-0125'
+    );
 
-    // Calling OpenAI
-    const apiKey = process.env.OPENAI_API_KEY;
-    if (!apiKey) {
-      throw new Error('OPENAI_API_KEY is not set');
-    }
-    const client = new OpenAI({
-      apiKey: process.env.OPENAI_API_KEY,
-    });
-    const response = await client.chat.completions.create({
-      model: appConfig?.model ?? 'gpt-3.5-turbo-0125',
-      temperature: 0,
-      messages: [
-        {
-          role: 'system',
-          content: 'Your response must be in markdown format',
-        },
-        {
-          role: 'user',
-          content: userMessage,
-        },
-      ],
-    });
-
-    // return the response to the client
-    const responseMessage = response.choices[0].message.content;
+    logger.log('Returning response to the client');
     if (!responseMessage) {
       throw new Error('No response message from OpenAI');
     }
     return {
-      message: response.choices[0].message.content ?? '',
+      message: responseMessage,
     };
   });
+};
+
+const callOpenAI = async (userMessage: string, model: string) => {
+  const client = getOpenAIClient();
+  const response = await client.chat.completions.create({
+    model,
+    temperature: 0,
+    messages: [
+      {
+        role: 'system',
+        content: 'Your response must be in markdown format',
+      },
+      {
+        role: 'user',
+        content: userMessage,
+      },
+    ],
+  });
+
+  return response.choices[0].message.content;
 };
 
 export default handler;
