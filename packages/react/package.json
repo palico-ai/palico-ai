@@ -1,6 +1,6 @@
 {
   "name": "@palico-ai/react",
-  "version": "1.21.1",
+  "version": "1.22.0",
   "main": "./src/index.js",
   "typings": "./src/index.d.ts",
   "bugs": {
@@ -15,7 +15,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@palico-ai/common": "1.21.1",
+    "@palico-ai/common": "1.22.0",
     "react": "18.2.0"
   }
 }
