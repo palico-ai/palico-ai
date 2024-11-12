@@ -8,56 +8,17 @@ import {
   ToolCallResult,
 } from '@palico-ai/common';
 import { useEffect, useMemo, useState } from 'react';
+import {
+  ChatError,
+  ChatSendMessageParams,
+  Message,
+  MessageSender,
+  ToolCallWithResult,
+  UseChatParams,
+  UseChatReturn,
+} from './types';
 
-export enum MessageSender {
-  User = 'user',
-  Agent = 'agent',
-}
-
-export interface UserMessage {
-  sender: MessageSender.User;
-  message?: string;
-  data?: JSONAbleObject;
-  appConfig?: JSONAbleObject;
-  toolCallResults?: ToolCallWithResult[];
-}
-
-export interface AgentMessage {
-  sender: MessageSender.Agent;
-  requestId: string;
-  message?: string;
-  data?: JSONAbleObject;
-  toolCalls?: ToolCall[];
-  intermediateSteps?: IntermediateStep[];
-}
-
-export type Message = UserMessage | AgentMessage;
-
-export interface ToolCallWithResult {
-  toolCall: ToolCall;
-  result: JSONAbleObject;
-}
-
-export interface ChatSendMessageParams {
-  userMessage?: string;
-  payload?: any;
-  appConfig?: JSONAbleObject;
-}
-
-export interface ChatError {
-  message: string;
-}
-
-export interface UseChatParams {
-  apiURL: string;
-  agentName: string;
-  initialState?: {
-    messages: Message[];
-    conversationId: string;
-  };
-}
-
-export const useChat = (params: UseChatParams) => {
+export const useChat = (params: UseChatParams): UseChatReturn => {
   const { agentName, apiURL } = params;
   const [messages, setMessages] = useState<Message[]>(
     params.initialState?.messages ?? []
@@ -85,8 +46,8 @@ export const useChat = (params: UseChatParams) => {
     return [];
   }, [messages, toolCallResults]);
 
-  console.log("pending", pendingToolCalls);
-  console.log("results", toolCallResults)
+  console.log('pending', pendingToolCalls);
+  console.log('results', toolCallResults);
 
   useEffect(() => {
     const checkAndSendToolCallUpdates = async () => {
@@ -115,12 +76,12 @@ export const useChat = (params: UseChatParams) => {
   }, [messages, pendingToolCalls, toolCallResults]);
 
   const addToolCallResult = (toolCall: ToolCall, result: JSONAbleObject) => {
-    console.log("Adding tool call result", toolCall, result);
+    console.log('Adding tool call result', toolCall, result);
     const newToolCallResults = [...toolCallResults].filter(
       (toolCallResult) => toolCallResult.toolCall.id !== toolCall.id
     );
     newToolCallResults.push({ toolCall, result });
-    console.log("New tool call results", newToolCallResults);
+    console.log('New tool call results', newToolCallResults);
     setToolCallResults(newToolCallResults);
   };
 
@@ -134,7 +95,7 @@ export const useChat = (params: UseChatParams) => {
       setAgentName(agentName);
       resetChat();
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [agentName]);
 
   const streamMessageStateUpdate = async (response: Response) => {
@@ -142,7 +103,7 @@ export const useChat = (params: UseChatParams) => {
       ...prevMessages,
       {
         sender: MessageSender.Agent,
-        requestId: "",
+        requestId: '',
       },
     ]);
     const stream = new AgentResponseStreamReader(response);
@@ -175,18 +136,20 @@ export const useChat = (params: UseChatParams) => {
         sender: MessageSender.User,
         toolCallResults,
       },
-      ]);
+    ]);
     try {
-      const results: ToolCallResult[] = toolCallResults.map((toolCallResult) => ({
-        id: toolCallResult.toolCall.id,
-        result: toolCallResult.result,
-      }));
+      const results: ToolCallResult[] = toolCallResults.map(
+        (toolCallResult) => ({
+          id: toolCallResult.toolCall.id,
+          result: toolCallResult.result,
+        })
+      );
       const response = await fetch(apiURL, {
         method: 'POST',
         body: JSON.stringify({
           conversationId,
           agentName,
-          toolCallResults: results
+          toolCallResults: results,
         }),
       });
       await streamMessageStateUpdate(response);

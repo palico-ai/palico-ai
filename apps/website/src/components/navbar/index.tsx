@@ -100,9 +100,13 @@ const Navbar: React.FC = () => {
     <>
       <AppBar
         position="sticky"
-        sx={(theme) => ({
-          backgroundColor: theme.palette.background.default,
-        })}
+        color="transparent"
+        sx={{
+          backgroundColor: 'transparent',
+          // boxShadow: 'none',
+          backdropFilter: 'blur(6px)',
+          WebkitBackdropFilter: 'blur(6px)',
+        }}
       >
         <Toolbar>
           <IconButton

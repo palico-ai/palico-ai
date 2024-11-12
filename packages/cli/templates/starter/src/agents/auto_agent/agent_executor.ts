@@ -1,10 +1,10 @@
-import { logger, Tool } from "@palico-ai/app";
+import { logger, Tool } from '@palico-ai/app';
 import {
   AgentExecutorParams,
   AgentExecutorResponse,
   ExecuteToolCallOutput,
   ToolExecutorParams,
-} from "./types";
+} from './types';
 
 export const executeTools = async (
   params: ToolExecutorParams
@@ -32,7 +32,7 @@ export const executeTools = async (
       results.completed.push({ id: toolCall.id, result });
     } catch (error) {
       const errorMessage =
-        error instanceof Error ? error.message : "Unknown error";
+        error instanceof Error ? error.message : 'Unknown error';
       results.failed.push({
         id: toolCall.id,
         result: {
@@ -50,7 +50,7 @@ export const executeTools = async (
 export const agentExecutor = async (
   params: AgentExecutorParams
 ): Promise<AgentExecutorResponse> => {
-  const { message, maxSteps = 5, tools, onToolCall } = params;
+  const { messages: message, maxSteps = 5, tools, onToolCall } = params;
   const messageHistory = [...message];
   for (let i = 0; i < maxSteps; i++) {
     const responseMessage = await params.chatCompletion({
@@ -66,12 +66,12 @@ export const agentExecutor = async (
         onToolCall,
       });
       if (toolResponse.failed.length > 0) {
-        console.log("Failed to execute tool", toolResponse.failed);
-        throw new Error("Failed to execute tool");
+        console.log('Failed to execute tool', toolResponse.failed);
+        throw new Error('Failed to execute tool');
       }
       toolResponse.completed.forEach((result) => {
         messageHistory.push({
-          role: "tool",
+          role: 'tool',
           toolCallResult: {
             id: result.id,
             result: result.result,
@@ -86,8 +86,8 @@ export const agentExecutor = async (
       }
     } else {
       if (!content) {
-        logger.log("No message in response", content);
-        throw new Error("No message in response");
+        logger.log('No message in response', content);
+        throw new Error('No message in response');
       }
       return {
         finalMessage: content,
@@ -95,5 +95,5 @@ export const agentExecutor = async (
       };
     }
   }
-  throw new Error("Max steps reached");
+  throw new Error('Max steps reached');
 };

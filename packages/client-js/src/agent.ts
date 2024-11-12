@@ -14,6 +14,9 @@ export const agent = (config: CreateClientParams) => {
   function chat(
     params: ChatRequestParamsWithStream
   ): Promise<AgentResponseStreamReader>;
+  function chat(
+    params: ChatRequestParams | ChatRequestParamsWithStream
+  ): Promise<AgentResponse | AgentResponseStreamReader>;
   // implementation of the overloaded function
   async function chat(
     params: ChatRequestParams | ChatRequestParamsWithStream
@@ -33,7 +36,7 @@ export const agent = (config: CreateClientParams) => {
         stream: ('stream' in params && params.stream) ?? false,
       },
     });
-    if ('stream' in params && params) {
+    if ('stream' in params && params.stream === true) {
       return new AgentResponseStreamReader(response);
     } else {
       const json = await response.json();

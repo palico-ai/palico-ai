@@ -12,10 +12,10 @@
         "main": "packages/client-js/src/index.ts",
         "outputPath": "dist/packages/client-js",
         "tsConfig": "packages/client-js/tsconfig.lib.json",
-        "compiler": "babel",
+        "compiler": "tsc",
+        "generateExportsField": true,
         "project": "packages/client-js/package.json",
         "format": ["esm", "cjs"],
-        "generateExportsField": true,
         "assets": [
           {
             "glob": "packages/client-js/README.md",

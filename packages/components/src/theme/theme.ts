@@ -5,9 +5,10 @@ import { THEME_COLOR } from './colors';
 const palette: ThemeOptions['palette'] = {
   mode: 'dark',
   background: {
-    default: '#08070B',
-    paper: '#111111',
-    // paper:"#2A2A2D"
+    default: '#09090b',
+    paper: '#09090b',
+    // paper: '#0a0a0a',
+    // paper: '#2A2A2D',
   },
   text: {
     primary: THEME_COLOR.typography.bodyMain,
@@ -82,27 +83,34 @@ export const theme = createTheme({
     MuiButton: {
       styleOverrides: {
         root: {
-          padding: '8px 16px',
-          fontWeight: 500,
-          fontSize: TYPOGRAPHY_PROPERTIES.fontSizeSM.fontSize,
+          padding: '6px 16px',
+          // fontWeight: 600,
+          fontSize: TYPOGRAPHY_PROPERTIES.fontSizeXS.fontSize,
           lineHeight: TYPOGRAPHY_PROPERTIES.fontSizeSM.lineHeight,
+        },
+        containedInfo: {
+          // color: THEME_COLOR.typography.bodyMain,
+          fontWeight: 600,
         },
         text: {
           color: THEME_COLOR.typography.bodyMain,
+          fontSize: TYPOGRAPHY_PROPERTIES.fontSizeSM.fontSize,
+          lineHeight: TYPOGRAPHY_PROPERTIES.fontSizeSM.lineHeight,
+          fontWeight: 600,
         },
         outlinedSecondary: {
           color: THEME_COLOR.typography.bodyMain,
         },
         sizeMedium: {
-          padding: '8px 16px',
+          padding: '6px 18px',
         },
         sizeSmall: {
-          padding: '6px 12px',
+          padding: '4px 12px',
           fontSize: TYPOGRAPHY_PROPERTIES.fontSizeXS.fontSize,
           lineHeight: TYPOGRAPHY_PROPERTIES.fontSizeXS.lineHeight,
         },
         sizeLarge: {
-          padding: '10px 20px',
+          padding: '8px 20px',
         },
       },
     },

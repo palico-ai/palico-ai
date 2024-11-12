@@ -30,6 +30,7 @@ export const WithHealthyAPI: React.FC<ComponentWithChildren> = ({
       <Box
         sx={{
           height: '100vh',
+          // backgroundColor: 'default',
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',

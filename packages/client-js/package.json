@@ -1,6 +1,8 @@
 {
   "name": "@palico-ai/client-js",
   "version": "1.21.1",
+  "main": "./src/index.js",
+  "typings": "./src/index.d.ts",
   "bugs": {
     "url": "https://github.com/palico-ai/palico-ai/issues"
   },
@@ -15,8 +17,5 @@
   "dependencies": {
     "@palico-ai/common": "1.21.1",
     "lodash": "^4.17.21"
-  },
-  "type": "commonjs",
-  "main": "./src/index.js",
-  "typings": "./src/index.d.ts"
+  }
 }

@@ -1,12 +1,7 @@
 'use client';
 
 import { AppBar, Box, Divider, Toolbar } from '@mui/material';
-import {
-  Typography,
-  Button,
-  Link,
-  ButtonProps,
-} from '@palico-ai/components';
+import { Typography, Button, Link, ButtonProps } from '@palico-ai/components';
 import { usePathname } from 'next/navigation';
 import React from 'react';
 
@@ -100,10 +95,11 @@ const Topbar: React.FC<TopbarProps> = ({
     <Box>
       <AppBar
         position="static"
-        sx={(theme) => ({
-          zIndex: (theme) => theme.zIndex.drawer + 1,
-          backgroundColor: theme.palette.common.black,
-        })}
+        color="transparent"
+        sx={{
+          backdropFilter: 'blur(6px)',
+          WebkitBackdropFilter: 'blur(6px)',
+        }}
       >
         <Toolbar>
           <Box>{leftNavItems}</Box>
