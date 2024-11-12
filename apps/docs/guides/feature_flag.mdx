@@ -1,0 +1,61 @@
+---
+title: "Feature Flags"
+description: "Test different variations of prompts, models, RAG, and custom code with feature-flag-like config called **App Config**"
+---
+
+## Server-Side Usage
+
+App config is a key-value object that can you pass into your LLM application for each request. Using this key-value object, you can control the behavior of your LLM application. Here's an example of an app config that let's us easily swap different OpenAI models:
+
+```typescript {1-3,8, 12}
+interface AppConfig {
+  model: string;
+}
+
+const handler: Chat<unknown, AppConfig> = async ({
+  userMessage,
+  // 1. destructure app config from the request
+  appConfig,
+}): Promise<ChatHandlerResponse> => {
+  const response = await openai.chat.completions.create({
+    // 2. use app config in your application logic
+    model: appConfig.model,
+    messages: [{ role: "user", content: userMessage }],
+  });
+  return {
+    message: response.choices[0].message.content,
+  };
+};
+```
+
+## Client-Side Usage
+
+From your external services, such as a frontend application, you can call your agent with the app config. Here's an example of how you can call an agent with app config:
+
+```typescript
+await palico.agent.chat({
+  name: "math_agent",
+  userMessage: "What's 2+2?",
+  appConfig: {
+    openaiModel: "gpt-4o-mini",
+  },
+});
+```
+
+Learn more about calling your agent from external services using our [client SDKs](/guides/client_sdk).
+
+## Development Use-Cases
+
+LLM Development involves testing lots of different ideas and as such you should look to build a modular application. You can use app config to then drive the behavior of your application. Some common use-cases for app config are:
+
+- Trying different LLM models
+- Trying different prompts
+- Trying different RAG versions
+- Trying different call-chaining strategies
+- Trying different LLM architectures
+
+Additional, our [evaluation framework](/guides/experiments) is built around using app config to test different variations of your LLM application.
+
+## Production Use-Cases
+
+You can use app config like feature-flags to test different variations of your application in production or easily roll-back changes if needed.

@@ -1,0 +1,91 @@
+---
+title: "Components"
+description: "Learn about the different components of a Palico app"
+---
+
+## Project Structure
+
+Palico App expects a specific project structure to be able to run your application. The structure is as follows:
+
+```bash
+<project-name>
+│── src
+│   │── agents
+│   │   └── <agent-name>
+│   │       └── index.ts
+│   │── eval_tests
+│   │   └── <test-suite-name>
+│   │       └── index.ts
+│   │── workflows
+│   │   └── <workflow-name>
+│   │       └── index.ts
+│   │── instrumentation.ts
+│   │── main.ts
+│── package.json
+```
+
+- **`/agents`**: This directory contains all the agents that you have created. To create a new agent, just create a new directory with the agent's name and add an `index.ts` file in it
+- **`/eval_tests`**: This directory contains different testsuites that you want to use for experiments. To create a new testsuite, just create a new directory with the testsuite's name and add an `index.ts` file in it
+- **`/workflows`**: This directory contains different workflows that you want to use for experiments. To create a new workflow, just create a new directory with the workflow's name and add an `index.ts` file in it
+- **`instrumentation.ts`**: This file configurations for tracing and logging. You can just leave it as is for now.
+- **`main.ts`**: This file is the entry point of your application. You can just leave it as is for now.
+
+## Agent
+
+Agents are the core building blocks of your Palico App. Agents are just an encapsulation of your LLM application. Agents are generally your prompt logic and a call to your LLM model.
+
+In an LLM application, your call to an LLM model is the main non-deterministic part of your application. As such, for a given agent, you should have a single LLM model call. This will let you systematically improve the accuracy of that LLM component of your overall application. For applications with multiple LLM models, you should have multiple agents and orchestrate them using workflows.
+
+## Tracing
+
+Tracing helps you understand the runtime behavior of your LLM application. You can log events, errors, inputs and outputs, the time it took to run different parts of your application, and more. We provide traces through OpenTelemetry, which is a standard for distributed tracing.
+
+## Experiments
+
+You should treat your LLM application as a scientific experiment. In a have indepdenent variables, (LLM model, your prompt, context to your prompt, etc) and dependent variables (accuracy / metrics). Experiments helps you test your LLM agents by modifying the independent variables and measuring their effects on dependent variables.
+
+In an experiments, you often run multiple tests to measure the effect of multiple independent variables on your dependent variables. Experiments helps you run, manage, and analyze these tests.
+
+Experiments management in done through Palico Studio.
+
+### Test Cases
+
+To systematically improve the accuracy of your LLM application, you need to create some way to measure it's accuracy. This is where test cases come in. Test cases are just a suite of tests you can run against your LLM model to measure it's accuracy. You can create multiple test suites to measure different aspects of your LLM model, or have different test suites for different LLM agents.
+
+### Metrics
+
+It's hard to have a single number that indicates the accuracy of your LLM application. So instead, we want to be able to measure different attributes of an LLM Agents response. This can be things like:
+
+- For JSON mode, is the schema correct?
+- Does the response contain the correct response?
+- Is the response professional?
+
+We call these metrics. You add metrics to each test case item you create. You can use metrics that we provide, or create your own custom metrics.
+
+### Evaluation
+
+Evaluation is a single test-run of an experiment. An evaluation consists of the agent you are testing, the independent variables you are testing, a list of test cases you are running against the agent.
+
+## Palico Studio
+
+Palico Studio is a web application that runs on your local machine. It's a control center for your Palico App. It helps you prototype your LLM application, run and manage experiments, and review runtime traces.
+
+### Chat
+
+Helps you prototype your LLM application by providing a chat interface to interact with your LLM Agents or Workflows.
+
+### Quick Lab
+
+Allows you to compare LLM Agent or Workflows side-by-side across multiple use cases.
+
+### Experiments
+
+Helps you run, manage, and analyze experiments.
+
+### Traces
+
+View runtime traces of your LLM application.
+
+## Version Control
+
+Your Palico App is a codebase that is meant to be version controlled with git and is made for easy collaboration with your team. Alongside your code like your LLM Agents or test suites, some states from your Palico Studio are also version controlled. Mainly all the experiments you run. Experiments are version-controlled alongside their evaluation and results. We however do not version-control traces at the moment. We also do not version-control Chat History Store data.

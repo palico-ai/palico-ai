@@ -1,0 +1,225 @@
+---
+title: "Model Providers"
+description: You can use any LLM Providers with Palico. Here are some examples of popular LLM providers.
+---
+
+## OpenAI
+
+You can use OpenAI models by directly calling the OpenAI API using the `openai` package. For the most up-to-date information on how to call OpenAI via the OpenAI SDK, please refer to the [npm package docs](https://www.npmjs.com/package/openai).
+
+### Installation
+
+```bash
+npm install openai
+```
+
+### Usage
+
+```typescript
+import { OpenAI } from "openai";
+
+const chat: Chat = async ({ userMessage }) => {
+  const client = new OpenAI({
+    apiKey: process.env["OPENAI_API_KEY"],
+  });
+
+  const response = await client.chat.completions.create({
+    messages: [{ role: "user", content: userMessage }],
+    model: "gpt-3.5-turbo",
+    maxTokens: 1000,
+  });
+  return {
+    message: response.choices[0].message.content,
+  };
+};
+```
+
+## Anthropic
+
+You can directly call the Anthropic model using the `@anthropic-ai/sdk` package. For the most up-to-date information on how to call Anthropic via the Anthropic SDK, please refer to the [npm package docs](https://www.npmjs.com/package/@anthropic-ai/sdk).
+
+### Installation
+
+```bash
+npm install @anthropic-ai/sdk
+```
+
+### Usage
+
+```typescript
+import { AnthropicClient } from "@anthropic-ai/sdk";
+
+const chat: Chat = async ({ userMessage }) => {
+  const { userMessage } = content;
+  const client = new AnthropicClient({
+    apiKey: process.env.ANTHROPIC_API_KEY,
+  });
+  const response = await client.messages.create({
+    messages: [{ role: "user", content: userMessage }],
+    model: "claude-3-opus-20240229",
+    max_tokens: 1000,
+  });
+  return {
+    message: response.content,
+  };
+};
+```
+
+## AWS Bedrock
+
+To use a model hosted on AWS Bedrock, you can use the [AWS Bedrock SDK](https://docs.aws.amazon.com/sdk-for-javascript/v3/developer-guide/javascript_bedrock-runtime_code_examples.html).
+
+#### Installation
+
+```bash
+npm install @aws-sdk/client-bedrock-runtime
+```
+
+### Usage
+
+```typescript
+import {
+  BedrockRuntimeClient,
+  InvokeModelCommand,
+} from "@aws-sdk/client-bedrock-runtime";
+
+const chat: Chat = async ({ userMessage }) => {
+  const { userMessage } = content;
+  // Create request parameters
+  const payload = {
+    anthropic_version: "bedrock-2023-05-31",
+    max_tokens: 1000,
+    messages: [
+      { role: "user", content: [{ type: "text", text: userMessage }] },
+    ],
+  };
+
+  // Call the API
+  const client = new BedrockRuntimeClient({
+    region: process.env.AWS_REGION,
+  });
+  const apiResponse = await client.send(
+    new InvokeModelCommand({
+      contentType: "application/json",
+      body: JSON.stringify(payload),
+      modelId: "anthropic.claude-3-haiku-20240307-v1:0",
+    })
+  );
+
+  // Parse the response
+  const decodedResponseBody = new TextDecoder().decode(apiResponse.body);
+  const responseBody = JSON.parse(decodedResponseBody);
+
+  // Return the response
+  return {
+    message: responseBody.content[0].text,
+  };
+};
+```
+
+## GCP Vertex AI
+
+If you are using a model hosted on GCP Vertex AI, you can directly call the GCP Vertex AI model using the `@google-cloud/vertexai` package. For the most up-to-date information on how to call GCP Vertex AI via the GCP Vertex AI SDK, please refer to the [npm package docs](https://www.npmjs.com/package/@google-cloud/vertexai).
+
+### Installation
+
+```bash
+npm install @google-cloud/vertexai
+```
+
+### Usage
+
+```typescript
+import {
+  FunctionDeclarationSchemaType,
+  HarmBlockThreshold,
+  HarmCategory,
+  VertexAI
+} from '@google-cloud/vertexai';
+
+const chat: Chat = async ({userMessage}) => {
+  // Create VertexAI client
+  const client = new VertexAI({
+    project: "PROJECT_ID",
+    location: "LOCATION",
+  });
+  const model = client.getGenerativeModel({
+    model: textModel,
+    // The following parameters are optional
+    // They can also be passed to individual content generation requests
+    safetySettings: [{category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT, threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE}],
+    generationConfig: {maxOutputTokens: 1000},
+  });
+
+
+  const response = await model.generateContent({
+    contents: [{role: 'user', content: parts: [{text: userMessage}]}],
+  });
+  return {
+    message: response.contents[0].parts[0].text,
+  };
+}
+```
+
+## Portkey
+
+Portkey is an AI Gateway that allows you to connect to multiple AI models and providers using a single API. You can setup Portkey [locally](https://github.com/Portkey-AI/gateway), or use the hosted version at [https://portkey.ai](https://portkey.ai).
+
+### Installation
+
+```bash
+npm install portkey
+```
+
+### Example Usage
+
+```typescript
+import { Portkey } from "portkey";
+
+const chat: Chat = async ({ userMessage }) => {
+  const { userMessage } = content;
+  // Create Portkey client
+  const portkey = new Portkey({
+    Authorization: "Bearer sk-xxxxx",
+    provider: "openai",
+  });
+  // Call the API
+  const response = await portkey.chat.completions.create({
+    messages: [{ role: "user", content: userMessage }],
+    model: "gpt-3.5-turbo",
+  });
+  return {
+    message: response.choices[0].message.content,
+  };
+};
+```
+
+## Ollama
+
+Ollama lets you run various LLM models on your own machine. You can setup Ollama by following the [Ollama Installation Guide](https://github.com/ollama/ollama).
+
+### Installation
+
+```bash
+npm install ollama
+```
+
+### Usage
+
+```typescript
+import { Ollama } from "ollama";
+
+const chat: Chat = async ({ userMessage }) => {
+  const ollama = new Ollama({
+    apiKey: process.env.OLLAMA_API_KEY,
+  });
+  const { userMessage } = content;
+  const response = await ollama.chat({
+    model: "llama3",
+    messages: [{ role: "user", content: userMessage }],
+  });
+  return {
+    message: response.choices[0].message.content,
+  };
+};
+```

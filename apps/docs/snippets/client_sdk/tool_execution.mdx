@@ -1,0 +1,27 @@
+```typescript
+const response = await client.agent.chat({
+  agentName: "my-agent",
+  userMessage: "What is the weather in San Francisco?",
+});
+
+if (response.toolCalls) {
+  const results: ToolCallResult[] = [];
+  for (const toolCall of response.toolCalls) {
+    // handle tool call
+    if (toolCall.name === "askForConfirmation") {
+      const confirmed = confirm(toolCall.parameters.message);
+      results.push({
+        id: toolCall.id,
+        result: confirmed,
+      });
+    }
+    // handle other tool calls
+  }
+  // send tool results back to the server
+  const response = await client.agent.sendToolResults({
+    agentName: "my-agent",
+    toolCallResults: results,
+  });
+  // handle response
+}
+```

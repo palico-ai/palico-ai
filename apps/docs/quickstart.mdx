@@ -1,0 +1,50 @@
+---
+title: "Quickstart"
+description: "Setup a Palico app locally in just a few steps."
+---
+
+## Requirements
+
+- [Docker](https://hub.docker.com/)
+- [NodeJS](https://nodejs.org/en)
+
+## Setup and Installation
+
+<Steps>
+
+<Step title="Initialize a Palico Application">
+
+```bash
+npx palico init <project-name>
+```
+
+</Step>
+
+<Step title="Add your Open API Key">
+
+This starter LLM application uses OpenAI so you will need to add an OpenAI API key in your `.env` file. You can get your OpenAI API key from https://platform.openai.com/api-keys.
+
+```bash .env
+OPENAI_API_KEY=<your-openai-api-key>
+```
+
+</Step>
+
+<Step title="Start your Palico App">
+
+```bash
+npm start
+```
+
+</Step>
+
+</Steps>
+
+The starter app comes with a few example agents. You can modify them in the `src/agents/<agent-name>/index.ts` file.
+
+## What's Next?
+
+- [Building your application](/guides/build)
+- [Setup tests for measuring performance](/guides/experiments)
+- [Connect to your agent from client applications](/client-sdk)
+- [Setup deployment and continuous integration](/guides/deployment)

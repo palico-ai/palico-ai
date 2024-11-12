@@ -1,0 +1,19 @@
+---
+title: Getting Started
+description: The Palico REST API allows you to interact your Palico app from any application.
+---
+
+import GenerateServiceKeyFragment from '/snippets/code/generate_service_key.mdx'
+
+## Introduction
+
+To interact with your Palico app, you will need the API URL and a service key. The service key is a JWT token that is used to authenticate your requests to the Palico API.
+
+<GenerateServiceKeyFragment />
+
+You will need to pass the service key in the `Authorization` header of your requests. Here's an example of how you can call an agent using the Palico REST API with your application running on `http://localhost:8000`:
+
+```bash
+curl -X GET http://localhost:8000/health \
+-H "Authorization: Bearer YOUR_SERVICE_KEY"
+```

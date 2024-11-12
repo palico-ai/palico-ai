@@ -1,0 +1,38 @@
+```typescript {9,20,34}
+import {
+  Chat,
+  // import conversation state management functions
+  getConversationState,
+  setConversationState,
+} from "@palico-ai/app";
+
+const handler: Chat = async ({
+  conversationId,
+  isNewConversation,
+  userMessage,
+}) => {
+  let state: {
+    messages: OpenAIMessage[];
+  };
+  // create or restore conversation state
+  if (isNewConversation) {
+    state = { messages: [] };
+  } else {
+    state = await getConversationState(conversationId);
+  }
+
+  // add user message to conversation state and call LLM
+  state.messages.push({ role: "user", content: userMessage });
+  const response = await openai.chat.completions.create({
+    model: "gpt-3.5-turbo-0125",
+    messages: state.messages,
+  });
+  const responseMessage = response.choices[0].message.content;
+  // add agent message to conversation state
+  state.messages.push({ role: "agent", content: responseMessage });
+
+  // save conversation state
+  await setConversationState(conversationId, state);
+  return { message: responseMessage };
+};
+```

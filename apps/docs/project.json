@@ -1,0 +1,16 @@
+{
+  "name": "docs",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/docs",
+  "projectType": "application",
+  "targets": {
+    "dev": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "apps/docs",
+        "command": "npx mintlify dev"
+      }
+    }
+  },
+  "tags": []
+}

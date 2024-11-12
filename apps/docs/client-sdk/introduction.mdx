@@ -1,0 +1,131 @@
+---
+title: "Getting Started"
+---
+
+import GenerateServiceKeyFragment from '/snippets/code/generate_service_key.mdx'
+
+The `@palico-ai/client-js` is a Javascript library that helps you communicate with your Palico application. This library should primarily be used in secured server-side environments, such as a NodeJS server or a NextJS server runtime.
+
+## Setup and Installation
+
+To install the Palico Client SDK on your NodeJS project, run the following command:
+
+```bash
+npm install @palico-ai/client-js
+```
+
+### Create a Palico Client
+
+<Steps>
+  <Step title="Generate a Service Key">
+    <GenerateServiceKeyFragment />
+  </Step>
+  <Step title="Create a Palico Client">
+    ```typescript
+    import { createClient } from "@palico-ai/client-js";
+
+    const client = createClient({
+      serviceKey: "<your-service-key>",
+      apiURL: "http://localhost:8000", // replace with your API URL
+    });
+    ```
+
+  </Step>
+</Steps>
+
+## Calling an Agent
+Here's an example of how you can call an agent using the Palico Client SDK:
+```typescript
+const response = await client.agent.chat({
+  agentName: "chat",
+  userMessage: "What is the weather today?",
+  payload: {
+    location: "San Francisco",
+  },
+  appConfig: {
+    model: "gpt-3.5-turbo",
+    provider: "openai",
+  },
+});
+
+const { conversationId, requestId, message, data, toolCalls } = response;
+```
+
+Learn about the API reference for the `chat` method [here](#api-reference).
+
+## Stream Response
+You can also stream the response from the agent. Here's an example of how you can stream the response from the agent:
+```typescript
+  const response = await client.agent.chat({
+    agentName: "chat_stream",
+    userMessage: "Hello",
+    appConfig: {},
+    stream: true,
+  });
+
+for await (const chunk of response.readChunks()) {
+  // Do something with the chunk
+}
+```
+
+You can also get the merged chunks from the stream _during_ or _after_ the stream has completed:
+```typescript
+const mergedChunks = await response.getMergedChunks();
+```
+
+## API Reference
+
+### `chat()`
+<Card title="Input">
+  The `chat` method accepts the following parameters:
+  <ResponseField name="agentName" type="string" required>
+    The name of the agent you want to call. This should match the agent folder name.
+  </ResponseField>
+  <ResponseField name="userMessage" type="string" required>
+    Message to send to the agent.
+  </ResponseField>
+  <ResponseField name="payload" type="json">
+    Additional data to send to the agent.
+  </ResponseField>
+  <ResponseField name="appConfig" type="json">
+    App Config value to send to your agent. Learn more about [App Config](/guides/feature_flag).
+  </ResponseField>
+  <ResponseField name="stream" type="boolean">
+    Should the response be streamed back to the client
+  </ResponseField>
+  <ResponseField name="toolCallResults" type="ToolCallResult[]">
+    For client-side tool execution, the results of the tool call. The schema for a ToolCallResult is as follows:
+    ```typescript
+    interface ToolCallResult {
+      name: string;
+      result: any;
+    }
+    ```
+  </ResponseField>
+</Card>
+
+<Card title="Output (Non-Streaming)">
+  The `chat` method returns a promise that resolves to a `ChatResponse` object:
+  <ResponseField name="conversationId" type="string" required>
+    Unique identifier for the conversation.
+  </ResponseField>
+  <ResponseField name="requestId" type="string" required>
+    Unique identifier for the request.
+  </ResponseField>
+  <ResponseField name="message" type="string">
+    The message to be sent back to the user.
+  </ResponseField>
+  <ResponseField name="data" type="json">
+    Additional data to be sent back to the user.
+  </ResponseField>
+  <ResponseField name="toolCalls" type="ToolCall[]">
+    If the agent requires a client-side tool execution, this field will contain the tool name and parameters. The schema for a ToolCall is as follows:
+    ```typescript
+    interface ToolCall {
+      id: string;
+      name: string;
+      parameters?: JSON;
+    }
+    ```
+  </ResponseField>
+</Card>

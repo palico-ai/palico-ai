@@ -18,6 +18,13 @@
         "parallel": true
       }
     },
+    "docs": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["npx mintlify dev"],
+        "cwd": "apps/docs"
+      }
+    },
     "typedoc": {
       "executor": "nx:run-commands",
       "options": {
