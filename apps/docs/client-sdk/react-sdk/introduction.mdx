@@ -1,0 +1,220 @@
+---
+title: "Getting Started"
+---
+
+import GenerateServiceKeyFragment from "/snippets/code/generate_service_key.mdx";
+
+The `@palico-ai/react` helps you communicate with your Palico agents, manage message history, and handle client-side tool calls in your React application.
+
+## Setup and Installation
+
+<Note>
+  The following guide assumes you are using NextJS for your React application.
+</Note>
+<Steps>
+  <Step title="Install Packages">
+    Get started by installing the required packages:
+
+    ```bash
+    npm install @palico-ai/client-js @palico-ai/react
+    ```
+
+  </Step>
+
+  <Step title="Add API URL and Service Key to `.env`">
+    **Generate a service key**
+    <GenerateServiceKeyFragment />
+
+    **Add the entries to your NextJS `.env` file**:
+
+    ```bash
+    # replace with your Palico API URL
+    PALICO_AGENT_API_URL=http://localhost:8000
+    # replace with your Palico service key
+    PALICO_SERVICE_KEY=<your-service-key>
+    ```
+
+  </Step>
+
+  <Step title="Setup Server-Side Authorization">
+    We want to handle calling our Palico application in a server-side environment. To do this, we'll create an API route in NextJS.
+
+    Create a new file in `src/app/api/palico/route.ts` in your NextJS application and add the following code:
+
+    <Note>
+      You should authorize the request before calling your Palico app.
+    </Note>
+
+    ```typescript
+    import { createClient } from "@palico-ai/client-js";
+
+    export const maxDuration = 120;
+
+    export async function POST(req: Request) {
+      await verifyUser(); // replace with your authorization logic
+      const agentAPIURL = process.env.PALICO_AGENT_API_URL;
+      const serviceKey = process.env.PALICO_SERVICE_KEY;
+      if (!agentAPIURL || !serviceKey) {
+        throw new Error("Missing Palico environment variables");
+      }
+      const request = await req.json();
+      const client = createClient({
+        apiURL: agentAPIURL,
+        serviceKey: serviceKey,
+      });
+      const responseStream = await client.agent.chat({
+        ...request,
+        stream: true,
+      });
+      return responseStream.response;
+    }
+    ```
+
+  </Step>
+</Steps>
+
+## Usage
+
+You can use the `useChat()` hook to interact with your Palico agent in your React components.
+
+```tsx
+import { useChat } from "@palico-ai/react";
+
+const Assistant: React.FC = () => {
+  const { messages, sendMessage } = useChat({
+    agentName: "assistant",
+    apiURL: "/api/palico", // the API route we created
+  });
+
+  const handleSendMessage = async (message: string) => {
+    await sendMessage({
+      userMessage: message,
+    });
+  };
+
+  return (
+    <div>
+      {messages.map((message, index) => (
+        <div key={index}>
+          {message.sender} - {message.message}
+        </div>
+      ))}
+      <input
+        type="text"
+        placeholder="Type a message..."
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            handleSendMessage(e.currentTarget.value);
+            e.currentTarget.value = "";
+          }
+        }}
+      />
+    </div>
+  );
+};
+```
+
+## Client-Side Tool Execution
+
+You can handle client-side tool calls in your React application using the `pendingToolCalls` and `addResult` params from the `useChat` hook. Here's an example of how you can handle client-side tool calls:
+
+```tsx
+import { useChat } from "@palico-ai/react";
+
+const Assistant: React.FC = () => {
+  const { addResult, pendingToolCalls } = useChat({
+    agentName: "assistant",
+    apiURL: "/api/palico", // the API route we created
+  });
+  const { showDialog } = useDialog();
+
+  if(pendingToolCalls.length > 0) {
+    // handle client-side tool calls
+    const toolCall = pendingToolCalls[0];
+    if(toolCall.name === "askForConfirmation") {
+      showDialog({
+        title: "Confirmation",
+        message: toolCall.parameters.message,
+        onConfirm: () => {
+          addResult(toolCall, {
+            confirmed: true,
+          });
+        },
+        onCancel: () => {
+          addResult(toolCall, {
+            confirmed: false,
+          });
+        },
+      });
+    } else if(/*... other tool calls */) {
+      // handle other tool calls
+    }
+  }
+
+  return (
+    //... your UI
+  )
+};
+```
+
+## API reference
+
+### `useChat()`
+
+The `useChat()` hook returns an object with the following properties:
+
+<Card>
+  <ResponseField name="messages" type="Message[]">
+    A list of messages sent by the agent and user. Learn more about the [Message](#message) object.
+  </ResponseField>
+  <ResponseField name="sendMessage" type="function">
+    A function to send a message to the agent. It takes the following parameters:
+    ```
+    {
+      userMessage: string;
+      appConfig: any;
+      payload?: any;
+    }
+    ```
+  </ResponseField>
+  <ResponseField name="startNewConversation" type="function">
+    A function to start a new conversation with the agent.
+  </ResponseField>
+</Card>
+
+### `Message`
+
+The `Message` object has the following properties:
+
+<Card>
+  <ResponseField name="sender" type="enum: MessageSender" required>
+    The sender of the message. Can be either `user` or `agent`.
+  </ResponseField>
+  <ResponseField name="message" type="string">
+    The content of the message.
+  </ResponseField>
+  <ResponseField name="data" type="json">
+    Additional data associated with the message.
+  </ResponseField>
+  <ResponseField name="toolCallResults" type="ToolCallResult[]">
+    [User-Only] For client-side tool execution, the results of the tool call
+  </ResponseField>
+  <ResponseField name="appConfig" type="json">
+    [User-Only] App config value for your Agent. Learn more about [App Config](/guides/feature_flag).
+  </ResponseField>
+  <ResponseField name="requestId" type="string">
+    [Agent-Only] Request ID associated with the message.
+  </ResponseField>
+  <ResponseField name="intermediateSteps" type="IntermediateStep[]">
+    [Agent-Only] Intermediate steps that the agent has taken. This can be used for debugging or logging purposes, or to provide additional context to the client. IntermediateStep has the following fields:
+    ```
+    {
+      name: string; // name or description of the intermediate step
+      data?: any; // additional data for the intermediate step
+    }
+    ```
+  </ResponseField>
+  <ResponseField name="toolCalls">
+    [Agent-Only] For client-side tool execution, the tool calls to be executed
+  </ResponseField>
+</Card>

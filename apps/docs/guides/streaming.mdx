@@ -1,0 +1,77 @@
+---
+title: "Streaming"
+description: "You can stream messages, intermediate steps, and other data back to the user using the [ChatResponseStream](https://typedoc.palico.ai/classes/_palico_ai_app.ChatResponseStream.html) object. You can access this object from your `Chat` function's input."
+---
+
+## Basic Usage
+
+```typescript {4, 16-18}
+const handler: Chat = async ({
+  userMessage,
+  // 1. destructure the stream object
+  stream,
+}) => {
+  // 2. call llm with streaming
+  const response = await openai.chat.completions.create({
+    model: "gpt-3.5-turbo-0125",
+    stream: true,
+    messages: [{ role: "user", content: userMessage }],
+  });
+  // 3. read the response stream
+  for await (const chunk of response) {
+    if (chunk.choices[0].delta.content) {
+      // 4. stream chunks back to the client
+      stream.push({
+        message: chunk.choices[0].delta.content,
+      });
+    }
+  }
+};
+```
+
+You can then use the Client SDK to read the stream from other services such as an API or NextJS application.
+
+```typescript
+const responseStream = await palico.agent.chat({
+  agentName: "my_agent",
+  userMessage: "Hello",
+  stream: true,
+});
+for await (const chunk of responseStream.readChunks()) {
+  // Do something with the chunk
+}
+```
+
+Learn more about [Client SDK](/client-sdk).
+
+## Stream Intermediate Steps
+
+For agent-based application, you can stream intermediate steps back to the client. This can be useful for debugging, or for providing more context to the user. Here's an example of an agent streaming intermediate step when a new tool is called:
+
+```typescript {6-11}
+const handler: Chat = async ({ userMessage, stream }) => {
+  // ...
+  const response = await agentExecutor({
+    onToolCall: (toolCall) => {
+      // streaming tool calls back to the client
+      stream.push({
+        intermediateSteps: [{
+          name: `Function Call: ${toolCall.name}()`
+          data: { input: toolCall.parameters, result: toolCall.result },
+        }],
+      })
+    },
+    // ... other parameters
+  })
+  // ...
+}
+```
+
+The `IntermediateStep` object contains the following fields:
+
+<ResponseField name="name" type="string" required>
+  A name or description of the intermediate step.
+</ResponseField>
+<ResponseField name="data" type="json">
+  Data associated with the intermediate step.
+</ResponseField>

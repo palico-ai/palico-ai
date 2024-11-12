@@ -1,0 +1,82 @@
+---
+title: "AI Gateway"
+description: "AI Gateway is a service that let's you use with different LLM models from a single endpoint"
+---
+
+Some notable AI Gateway are:
+
+- <a target="_blank" href="https://portkey.ai/">
+    Portkey
+  </a>
+- <a target="_blank" href="https://cloud.google.com/vertex-ai">
+    GCP Vertex
+  </a>
+- <a target="_blank" href="https://aws.amazon.com/bedrock/">
+    AWS Bedrock
+  </a>
+
+For this guide, we'll use Portkey as our AI Gateway.
+
+## Setup Portkey
+
+You can setup Portkey <a target="_blank" href="https://github.com/Portkey-AI/gateway">locally</a>, or use the hosted version at <a target="_blank" href="https://portkey.ai">portkey.ai</a>. Once you have Portkey setup, continue with the following steps.
+
+### Add Portkey to your project
+
+```bash
+npm install portkey
+```
+
+## Using Portkey to call OpenAI models
+
+```typescript
+const handler: Chat = async ({ userMessage }) => {
+  const { userMessage } = content;
+  // Create Portkey client
+  const portkey = new Portkey({
+    Authorization: "Bearer sk-xxxxx",
+    provider: "openai",
+  });
+  // Call the API
+  const response = await portkey.chat.completions.create({
+    messages: [{ role: "user", content: userMessage }],
+    model: "gpt-3.5-turbo",
+  });
+  return {
+    message: response.choices[0].message.content,
+  };
+};
+```
+
+## Using Portkey to call any LLM model with App Config
+
+To be able to easily swap different LLM models in your application, you can use [App Config](/guides/feature_flag) along with Portkey. This will allow you to use any LLM model without changing your code and just updating the AppConfig.
+
+```typescript {9, 13, 18}
+import { Portkey } from "portkey";
+
+interface AppConfig {
+  model: string;
+  provider: string;
+}
+
+const handler: Chat = async ({ userMessage, appConfig }) => {
+  const { model, provider } = appConfig;
+  // highlight-start
+  const portkey = new Portkey({
+    Authorization: "Bearer sk-xxxxx",
+    provider: provider,
+    // ...additional authorization params
+  });
+  const response = await portkey.chat.completions.create({
+    messages: [{ role: "user", content: userMessage }],
+    model: model,
+  });
+  // highlight-end
+  return {
+    message: response.choices[0].message.content,
+  };
+};
+```
+
+Using AppConfig to swap LLM models allows you to easily run experiments with different variations of your applications locally, or run A/B tests in production without changing your code.

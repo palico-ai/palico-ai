@@ -1,0 +1,210 @@
+---
+title: "Experiments"
+description: "To improve the performance of an application, we need to setup an iterative loop that helps us _systematically_ measure and improve performance of our application."
+---
+
+![Experiment Loop](/images/iterative_loop.svg)
+
+Palico helps you setup this iterative loop for you and your team with Experiments.
+
+## Setting up Experiments
+
+<Steps>
+  <Step title="Setup your test-cases">
+    Create a list of test-cases that models the expected behavior of your application. Add these test-cases to `src/evals/<test-group>/index.ts` file.
+
+    ```typescript src/evals/history/index.ts
+    const testCases: TestDatasetFN = async () => {
+      return [
+        {
+          input: { // input to your LLM Application
+            userMessage: "What is the capital of France?",
+          },
+          tags: { // tags to help you categorize your test-cases
+            intent: "question",
+          },
+          metrics: [
+            // example metrics
+            containsEvalMetric({
+              substring: "Paris",
+            }),
+            levensteinEvalMetric({
+              expected: "Paris",
+            }),
+            rougeSkipBigramSimilarityEvalMetric({
+              expected: "Paris",
+            }),
+          ],
+        },
+      ];
+    };
+    ```
+    You can setup test-cases by creating a static list or fetching from external data-sources. You have access to various metrics to measure the performance of your LLM Application but you can also create your own custom metrics. Learn more about [setting up test-cases](#defining-test-cases).
+
+  </Step>
+  <Step title="Run an evaluation">
+    Run evaluations against different variation of your application in Studio using [App Config](/guides/feature_flag). Navigate to the Studio > Experiments, create a new experiment, and run evaluations against different versions of your application.
+    <video
+      className={"rounded-lg"}
+      width={"100%"}
+      height={"auto"}
+      autoPlay
+      loop
+      muted
+      playsInline
+      src="https://d3i78uz5w7h3ks.cloudfront.net/videos/run_eval.m4v
+"
+    />
+  </Step>
+  <Step title="Analyze results">
+    Analyze result across different evaluations in Studio > Experiments > Notebooks. Notebook gives you various data analysis tools to help you analyze the results.
+    <video
+      className={"rounded-lg"}
+      width={"100%"}
+      height={"auto"}
+      autoPlay
+      loop
+      muted
+      playsInline
+      src="https://d3i78uz5w7h3ks.cloudfront.net/videos/analyze_evals.mov"
+    />
+  </Step>
+</Steps>
+
+## Defining Test Cases
+
+Create test groups by creating a folder within `evals` directory. Each test group should have an `index.ts` file that exports a `TestDatasetFN` function. This function should return an array of test-cases.
+
+Here's an example of statically defining test-cases:
+
+```typescript src/evals/history/index.ts
+const testCases: TestDatasetFN = async () => {
+  return [
+    {
+      input: {
+        userMessage: "What is the capital of France?",
+      },
+      tags: {
+        intent: "question",
+      },
+      metrics: [
+        containsEvalMetric({
+          substring: "Paris",
+        }),
+        levensteinEvalMetric({
+          expected: "Paris",
+        }),
+        rougeSkipBigramSimilarityEvalMetric({
+          expected: "Paris",
+        }),
+      ],
+    },
+  ];
+};
+```
+
+### Test Cases from External Data-Source
+
+You can also fetch test-cases from external data-sources. Here's an example fetching test-cases from a database:
+
+```typescript src/evals/history/index.ts {4, 7}
+import {
+  containsAllEvalMetric,
+  levensteinEvalMetric,
+  testFromDataset,
+} from "@palico-ai/app";
+
+export default testFromDataset({
+  fetchDataset: async () => {
+    // get dataset from external data-source
+    return dataset;
+  },
+  testCase: (item) => {
+    // return a test case for each item in the dataset
+    return {
+      input: {
+        // input to your agent
+        userMessage: item.userMessage,
+      },
+      tags: {
+        // tags to help categorize the test case
+        intent: item.tags.intent,
+      },
+      metrics: [
+        // different metrics to evaluate the response
+        containsAllEvalMetric({
+          substrings: item.evals.containsAny,
+        }),
+        levensteinEvalMetric({
+          expected: item.evals.similarityReference,
+        }),
+      ],
+    };
+  },
+});
+```
+
+## Metrics
+
+We provide a set of metrics out of the box but you can also create your own custom metrics. Here's a list of metrics we provide:
+| Metric Name                                                                                                                        | Description                                                                                                                                              |
+| :--------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [containsAllEvalMetric](https://typedoc.palico.ai/functions/_palico_ai_app.containsAllEvalMetric.html)                             | Checks if the response contains the provided substring                                                                                                   |
+| [containsAnyEvalMetric](https://typedoc.palico.ai/functions/_palico_ai_app.containsAnyEvalMetric.html)                             | Checks if the response contains any of the provided substrings                                                                                           |
+| [exactMatchEvalMetric](https://typedoc.palico.ai/functions/_palico_ai_app.exactMatchEvalMetric.html)                               | Check if the response is contains the exact string                                                                                                       |
+| [levensteinEvalMetric](https://typedoc.palico.ai/functions/_palico_ai_app.levensteinEvalMetric.html)                               | NLP Similarity based metrics that checks the Levenstein distance                                                                                         |
+| [rougeLCSSimilarityEvalMetric](https://typedoc.palico.ai/functions/_palico_ai_app.rougeLCSSimilarityEvalMetric.html)               | Similarity metrics for sentence structure ([Learn more](https://www.npmjs.com/package/rouge#usage))                                                      |
+| [rougeNGramSimilarityEvalMetric](https://typedoc.palico.ai/functions/_palico_ai_app.rougeNGramSimilarityEvalMetric.html)           | Similarity metrics at words and phrase levels ([Learn more](https://www.npmjs.com/package/rouge#usage))                                                  |
+| [rougeSkipBigramSimilarityEvalMetric](https://typedoc.palico.ai/functions/_palico_ai_app.rougeSkipBigramSimilarityEvalMetric.html) | Captures more flexible phrase structures, reflecting coherence in non-contiguous word patterns ([Learn more](https://www.npmjs.com/package/rouge#usage)) |
+
+### System Metrics
+
+You can measure system metrics such as latency, cost, and more. To measure a specific metrics, you need to add the metric to your agent's `response.metadata`. Here's an example tracking total cost:
+
+```typescript {6}
+const handler: Chat = async (params) => {
+  // your LLM application logic
+  return {
+    message: response.message,
+    metadata: {
+      [ResponseMetadataKey.TotalCost]: response.usage?.total_tokens,
+    },
+  };
+};
+```
+
+You can add the following system metrics as part of your `Chat` handler:
+
+- `ResponseMetadataKey.TotalCost`
+- `ResponseMetadataKey.InputTokens`
+- `ResponseMetadataKey.OutputTokens`
+- `ResponseMetadataKey.TotalTokens`
+
+The following system metrics are automatically tracked:
+- `Execution Time`
+
+### Custom Metrics
+
+You can create your own metrics by providing an `EvalMetric` object. Here's an example of a custom metric that checks if the response length is within a specific range:
+
+```typescript
+import { EvalMetric } from "@palico-ai/app";
+
+export const strLengthEvalMetric = (min: number, max: number) => {
+  return {
+    label: "Str Length",
+    async evaluate(request: AgentRequestContent, response: AgentResponse): Promise<number> {
+      const length = response.length;
+      if (length >= min && length <= max) {
+        return {
+          score: 1,
+        }
+      }
+      return {
+        score: 0,
+        reason: `Expected length between ${min} and ${max} but got ${length}`,
+      }
+    },
+  }
+}
+```

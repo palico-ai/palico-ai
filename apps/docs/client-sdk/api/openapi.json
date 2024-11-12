@@ -1,0 +1,206 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "palico-app/api",
+    "description": "API Endpoint for your Palico App"
+  },
+  "paths": {
+    "/agent/{agentName}/conversation": {
+      "post": {
+        "tags": [
+          "Agent"
+        ],
+        "parameters": [
+          {
+            "name": "agentName",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "This refers to the folder name of your agent"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AgentResponse"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AgentAPIRequestBody"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/agent/{agentName}/conversation/{conversationId}/reply": {
+      "post": {
+        "tags": [
+          "Agent"
+        ],
+        "parameters": [
+          {
+            "name": "agentName",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "This refers to the folder name of your agent"
+          },
+          {
+            "name": "conversationId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Conversation ID to reply to"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AgentAPIRequestBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AgentResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {
+      "AgentAPIRequestBody": {
+        "type": "object",
+        "properties": {
+          "appConfig": {
+            "type": "object",
+            "description": "App Config value to use for executing your Agent"
+          },
+          "content": {
+            "$ref": "#/components/schemas/AgentRequestContent"
+          }
+        }
+      },
+      "AgentRequestContent": {
+        "type": "object",
+        "properties": {
+          "userMessage": {
+            "type": "string",
+            "description": "For chat-based agents, this is the user message sent from the client."
+          },
+          "payload": {
+            "type": "object",
+            "description": "Additional data to pass to your pass"
+          },
+          "toolCallResults": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ToolCallResult"
+            }
+          }
+        }
+      },
+      "ToolCallResult": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "ID associated with the tool-call"
+          },
+          "result": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "AgentResponse": {
+        "type": "object",
+        "properties": {
+          "conversationId": {
+            "type": "string"
+          },
+          "requestId": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string",
+            "description": "String-based message sent from the Agent"
+          },
+          "data": {
+            "type": "object",
+            "description": "Additional data sent from the Agent"
+          },
+          "toolCalls": {
+            "type": "array",
+            "description": "The tools that needs to be executed from the client-side",
+            "items": {
+              "$ref": "#/components/schemas/ToolCall"
+            }
+          }
+        },
+        "required": [
+          "conversationId",
+          "requestId"
+        ]
+      },
+      "ToolCall": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique ID associated with the call request"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the tool to call"
+          },
+          "parameters": {
+            "type": "object",
+            "description": "Input Params to tool"
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ]
+}

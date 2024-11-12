@@ -1,0 +1,72 @@
+---
+title: "Logs And Traces"
+description: "Add custom logs and traces and view them in Palico Studio."
+---
+
+## Adding Traces
+
+You can add custom traces using `tracer`. Here's an example of adding traces to a call from OpenAI API.
+
+```typescript {1, 8, 10, 21}
+import { tracer } from "@palico-ai/app";
+
+// 1. Create a new tracer
+const tracer = getTracer("ChatbotAgent");
+
+const newConversation = async (message: string) => {
+  // 2. Start a new span
+  return tracer.trace("OpenAIConversation", async (span) => {
+    // 3. Add attributes to the span
+    span.setAttribute("message", message);
+
+    const response = await openaiClient.chat.completions.create({
+      model: "gpt-3.5-turbo",
+      messages: [
+        // ... your prompts
+      ],
+    });
+    const responseMessage = response.choices[0].message.content;
+
+    // additonal attributes
+    span.setAttribute("LLM reply", responseMessage);
+    return response;
+  });
+};
+```
+
+## Adding Logs
+
+You can add logs using the `logger` object from Palico. Here's an example of adding logs to a call from OpenAI API.
+
+```typescript {1, 4, 13}
+import { logger } from "@palico-ai/app";
+
+const newConversation = async (message: string) => {
+  logger.info("Starting new conversation", { message });
+
+  const response = await openaiClient.chat.completions.create({
+    model: "gpt-3.5-turbo",
+    messages: [
+      // ... your prompts
+    ],
+  });
+  const responseMessage = response.choices[0].message.content;
+  logger.info("LLM reply", { responseMessage });
+  return response;
+};
+```
+
+## View Logs and Traces
+
+You can view logs and traces in Palico Studio's Trace View.
+
+<video
+  className={"rounded-lg"}
+  width={"100%"}
+  height={"auto"}
+  autoPlay
+  loop
+  muted
+  playsInline
+  src="https://d3i78uz5w7h3ks.cloudfront.net/videos/trace_clip.mp4"
+/>

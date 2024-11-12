@@ -1,0 +1,48 @@
+---
+title: "Long-Term Memory"
+description: "Create and restore conversation state without worrying about underlying storage infrastructure. Build chatbot with memory or complex stateless agent interactions."
+---
+
+import MemoryExampleCodeSnippet from "/snippets/code/agent_with_memory.mdx";
+
+## State Management Function
+
+You can use the following functions to manage conversation state in your application.
+
+### Get Conversation State
+
+Gets the conversation state for a given conversation ID.
+
+```typescript
+const state = await getConversationState<Schema>(conversationId);
+```
+
+### Set Conversation State
+
+Sets the conversation state for a given conversation ID. If the conversation state already exists, it will be overwritten.
+
+```typescript
+await setConversationState<Schema>(conversationId, state);
+```
+
+### Update Conversation State
+
+Updates the conversation state for a given conversation ID. If the conversation state does not exist, it will throw an error.
+
+```typescript
+await updateConversationState<Schema>(conversationId, state);
+```
+
+### Create Conversation State
+
+Creates a new conversation state for a given conversation ID. If the conversation state already exists, it will throw an error.
+
+```typescript
+await createConversationState<Schema>(conversationId, state);
+```
+
+## Usage
+
+Here's an example of a conversational assistant that remember's the user's previous messages:
+
+<MemoryExampleCodeSnippet />

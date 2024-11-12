@@ -1,0 +1,133 @@
+{
+  "$schema": "https://mintlify.com/schema.json",
+  "name": "Palico AI",
+  "logo": {
+    "dark": "/logo/logo.png",
+    "light": "/logo/logo.png"
+  },
+  "favicon": "/favicon.png",
+  "colors": {
+    "primary": "#a855f7",
+    "light": "#c084fc",
+    "dark": "#a855f7",
+    "anchors": {
+      "from": "#c084fc",
+      "to": "#a855f7"
+    }
+  },
+  "topbarLinks": [
+    {
+      "name": "Support",
+      "url": "mailto:asif@palico.ai"
+    }
+  ],
+  "topbarCtaButton": {
+    "name": "GitHub",
+    "url": "https://github.com/palico-ai/palico-ai"
+  },
+  "api": {
+    "baseUrl": "http://localhost:8000",
+    "playground": {
+      "mode": "hide"
+    },
+    "auth": {
+      "method": "bearer"
+    }
+  },
+  "primaryTab": {
+    "name": "Palico App"
+  },
+  "tabs": [
+    {
+      "name": "Client SDKs",
+      "url": "client-sdk"
+    },
+    {
+      "name": "Types",
+      "url": "https://typedoc.palico.ai/"
+    }
+  ],
+  "anchors": [
+    {
+      "name": "Palico.AI",
+      "icon": "globe",
+      "url": "https://www.palico.ai/"
+    },
+    {
+      "name": "Blog",
+      "icon": "newspaper",
+      "url": "https://blog.palico.ai/"
+    },
+    {
+      "name": "Community",
+      "icon": "discord",
+      "url": "https://discord.gg/TyQPVSXa"
+    }
+  ],
+  "navigation": [
+    {
+      "group": "Get Started",
+      "pages": [
+        "quickstart",
+        "components"
+      ]
+    },
+    {
+      "group": "Guides",
+      "pages": [
+        "guides/build",
+        "guides/agents",
+        "guides/feature_flag",
+        "guides/streaming",
+        "guides/conversation_state",
+        "guides/telemetry",
+        "guides/experiments",
+        "guides/ai_gateway",
+        "guides/prompt_management",
+        "guides/deployment"
+      ]
+    },
+    {
+      "group": "Integrations",
+      "pages": [
+        "integrations/langchain",
+        "integrations/llamaindex",
+        "integrations/llm_providers",
+        "integrations/vector_db"
+      ]
+    },
+    {
+      "group": "@palico-ai / client-js",
+      "pages": [
+        "client-sdk/introduction"
+      ]
+    },
+    {
+      "group": "@palico-ai / react",
+      "pages": [
+        "client-sdk/react-sdk/introduction"
+      ]
+    },
+    {
+      "group": "REST API",
+      "pages": [
+        "client-sdk/api/introduction",
+        "client-sdk/api/agent/new_conversation",
+        "client-sdk/api/agent/conversation_reply"
+      ]
+    }
+  ],
+  "footerSocials": {
+    "x": "https://x.com/shikderNYC",
+    "github": "https://github.com/palico-ai/palico-ai",
+    "linkedin": "https://www.linkedin.com/company/102658123"
+  },
+  "analytics": {
+    "ga4": {
+      "measurementId": "G-Q39NFM4PTV"
+    },
+    "gtm": {
+      "tagId": "GTM-5C2WKP72"
+    }
+  }
+}
