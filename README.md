@@ -2,7 +2,7 @@
 
 <div align="center">
 
-# Palico AI - LLM Tech Stack for Rapid Iteration
+# Palico AI - Tech-Stack for Iterative Development
 
 [![Docs](https://img.shields.io/badge/docs-palico?style=flat&label=palico)](https://docs.palico.ai/)
 [![Website](https://img.shields.io/badge/website-palico?style=flat&label=palico)](https://www.palico.ai/)
@@ -13,17 +13,17 @@
 
 </div
 
-Building an LLM application involves continuously trying out different ideas (models, prompts, architectures). Palico gives you the tech stack that helps you quickly iterate on your LLM development.
+Building an LLM application involves continuously trying out different ideas (models, prompts, architectures). Palico gives you a tech stack that's designed for quickly iterating on your LLM development.
 
 #### With Palico you can
 
-- ✅&nbsp; **Build** any application in code with complete flexibility ([docs](https://docs.palico.ai/guides/build))
-- ✅&nbsp; **Integrate** with any external libraries like LangChain, LlamaIndex, Portkey, and more ([docs](https://docs.palico.ai/integrations/langchain)) <br>
-- ✅&nbsp; **Preview changes** instantly with Playground UI ([docs](https://docs.palico.ai/guides/preview_changes)) <br>
-- ✅&nbsp; **Improve performance** with Evaluations ([docs](https://docs.palico.ai/guides/experiments)) <br>
-- ✅&nbsp; Debug issues with comprehensive **logs and tracs** ([docs](https://docs.palico.ai/guides/telemetry)) <br>
-- ✅&nbsp; Deploy your application behind a **REST API** ([docs](https://docs.palico.ai/guides/client_sdk)) <br>
-- ✅&nbsp; Manage your application from a **control panel** ([docs](https://docs.palico.ai/components#palico-studio)) <br>
+- ✅&nbsp; Build any application with complete flexibility ([docs](https://docs.palico.ai/guides/build))
+- ✅&nbsp; Preview changes locally with a Playground UI ([docs](https://docs.palico.ai/guides/preview_changes)) <br>
+- ✅&nbsp; Improve performance with Experiments and Evals ([docs](https://docs.palico.ai/guides/experiments)) <br>
+- ✅&nbsp; Debug issues with logs and traces ([docs](https://docs.palico.ai/guides/telemetry)) <br>
+- ✅&nbsp; Integrate with your frontend with ClientSDKs or REST API ([docs](https://docs.palico.ai/client-sdk/introduction)) <br>
+- ✅&nbsp; Setup Continous Integration and Pull-Request Previews ([docs](https://docs.palico.ai/guides/deployment)) <br>
+- ✅&nbsp; Manage your application from a control panel ([docs](https://docs.palico.ai/components#palico-studio)) <br>
 
 > [!TIP]
 > ⭐️ **Star this repo** to get release notifications for new features.
@@ -46,18 +46,18 @@ https://github.com/user-attachments/assets/bfee992b-56d9-41a0-90b2-43269575ea2a
 
 ### Build your application with complete flexibility
 
-With Palico, you have complete control over the implementation details of your LLM application. Build any application by creating a `Chat` function. Here's an example:
+With Palico, you have complete control over the implementation details of your LLM application. Build any application by creating a `Chat` function.
 
 ```typescript src/agents/my_agent/index.ts {5,17}
-import { Chat } from "@palico-ai/app";
-import OpenAI from "openai";
+import { Chat } from '@palico-ai/app';
+import OpenAI from 'openai';
 
 // 1. implement the Chat type
 const handler: Chat = async ({ userMessage }) => {
   // 2. implement your application logic
   const response = await openai.chat.completions.create({
-    model: "gpt-3.5-turbo-0125",
-    messages: [{ role: "user", content: userMessage }],
+    model: 'gpt-3.5-turbo-0125',
+    messages: [{ role: 'user', content: userMessage }],
   });
   return {
     message: response.choices[0].message.content,
@@ -69,6 +69,16 @@ export default handler;
 ```
 
 Learn more about building your application with palico ([docs](https://docs.palico.ai/guides/build)).
+
+### Build complex interactions with powerful primitives
+
+| Feature                                                               | Description                                                                           |
+| --------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| [Streaming](https://docs.palico.ai/guides/streaming)                  | Stream messages, data, and intermediate steps to your client-app                      |
+| [Memory Management](https://docs.palico.ai/guides/conversation_state) | Store conversation states between request without managing any storage infrastructure |
+| [Tool Executions](https://docs.palico.ai/guides/agents)               | Build Agents that can execute tools on client-side and server-side                    |
+| [Feature Flags](https://docs.palico.ai/guides/feature_flag)           | Easily swap models, prompts, RAG, and custom logic at runtime                         |
+| [Monitoring](https://docs.palico.ai/guides/telemetry)                 | Debug issues with faster with comprehensive logs and traces                           |
 
 ### Integrates with your favorite tools and libraries
 
@@ -91,21 +101,16 @@ Since you own the implementation details, you can use Palico with most other ext
 
 Learn more from [docs](https://docs.palico.ai/guides/build).
 
-### Instantly preview your changes
+### Locally test your changes in Playground UI
 
 Make a code change and instantly preview it locally on our playground UI
 
-https://github.com/user-attachments/assets/c33ae53d-acf5-4c89-9c41-743ea1cb4722
+![CleanShot 2024-11-12 at 21 37 50](https://github.com/user-attachments/assets/c7fc3321-12c9-49a5-973c-4ad7d6d73b57)
 
-### Easily swap models, prompts, anything and everything
 
-Working on LLM application involves testing different variations of models, prompts, and application logic. Palico helps you build an interchangeable application layer using "feature-flag-like" feature called AppConfig. Using AppConfig, you can easily swap models, prompts, or any logic in your application layer.
+## 🔄 Improve Performance with Experiments
 
-Learn more about [AppConfig](https://docs.palico.ai/guides/feature_flag).
-
-## 🔄 Improving Performance with Experiments
-
-Palico helps you create an iterative loop to systematically improve performance of your LLM application using experiments.
+Palico helps you create an iterative loop to systematically improve the performance of your application.
 
 <div align="center">
   
@@ -113,20 +118,81 @@ Palico helps you create an iterative loop to systematically improve performance 
 
 </div>
 
-With experiments, you can:
+### Create Test-Cases
+Define test-cases that models the expected behavior of your application
+```typescript
+const testCases: TestDatasetFN = async () => {
+  return [
+    {
+      input: { // input to your LLM Application
+        userMessage: "What is the capital of France?",
+      },
+      tags: { // tags to help you categorize your test-cases
+        intent: "question",
+      },
+      metrics: [
+        // example metrics
+        containsEvalMetric({
+          substring: "Paris",
+        }),
+        levensteinEvalMetric({
+          expected: "Paris",
+        }),
+        rougeSkipBigramSimilarityEvalMetric({
+          expected: "Paris",
+        }),
+      ],
+    },
+  ];
+};
+```
+### Run Evaluations
 
-1. Setup a list of test-cases that models the behavior of your application
-2. Make a change to your application
-3. Run an evaluation to measure how well your application performed against your test-cases
-4. Iterate
+![CleanShot 2024-11-12 at 20 57 29](https://github.com/user-attachments/assets/526fb5cf-4548-4b0b-a62f-115e05410ba9)
+
+
+### Analyze Results
+
+![385547731-bed393b9-64e8-4735-8548-1d5ff52c0c01](https://github.com/user-attachments/assets/16c3e5d2-f035-41ad-98a8-9dd87ffb06e3)
+
 
 Learn more about [experiments](https://docs.palico.ai/guides/experiments)
 
 ## 🚀 Going to Production
 
-You can deploy your Palico app to any cloud provider using Docker or use our managed hosting (coming soon). You can then use our ClientSDK or REST API to communicate with your LLM application.
+You can deploy your Palico app to any cloud provider using Docker.
 
-Learn more from [docs](https://docs.palico.ai/guides/client_sdk).
+### Continuous Integration
+
+Setup CI/CD and Pull-Request preview with Coolify and Palico. Learn more about [deployment](https://docs.palico.ai/guides/client_sdk).
+
+### Integrate with Client SDKs
+
+```typescript
+const response = await client.agent.chat({
+  agentName: "chat",
+  stream: true,
+  userMessage: "What is the weather today?",
+  payload: {
+    location: "San Francisco",
+  },
+  appConfig: {
+    model: "gpt-3.5-turbo",
+    provider: "openai",
+  },
+});
+```
+### First-party support for React
+```typescript
+import { useChat } from "@palico-ai/react";
+
+const { messages, sendMessage } = useChat({
+  agentName: "assistant",
+  apiURL: "/api/palico", // the API route we created
+});
+```
+
+Learn more about [Client SDKs](https://docs.palico.ai/client-sdk/introduction)
 
 ## 🤝 Contributing
 
