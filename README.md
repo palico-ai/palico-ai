@@ -13,7 +13,7 @@
 
 </div
 
-Building an LLM application involves continuously iterating on different ideas (models, prompts, architectures). Palico gives you a tech stack that's designed for iterative development.
+Building an LLM application involves continuously iterating on different ideas (models, prompts, architectures). Palico is a framework for efficiently iterating on your LLM Development.
 
 #### With Palico you can
 
