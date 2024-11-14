@@ -1,9 +1,9 @@
 ---
-title: "Build You Application"
-description: "With Palico you can build complex LLM applications with complete flexibility."
+title: 'Build You Application'
+description: 'With Palico you can build complex LLM applications with complete flexibility.'
 ---
 
-import MemoryExampleCodeSnippet from "/snippets/code/agent_with_memory.mdx";
+import MemoryExampleCodeSnippet from '/snippets/code/agent_with_memory.mdx';
 
 ## Your First Application
 
@@ -16,21 +16,30 @@ src/
       index.ts
 ```
 
-The `index.ts` file should export a function of type `Chat`. Here you can define your LLM app logic and you have complete control over your implementation details.
+The `index.ts` file should export a function of type `Chat`. You have complete control over the implementation detail of your chat function.
 
-```typescript src/agents/my_agent/index.ts {5,17}
-import { Chat } from "@palico-ai/app";
-import OpenAI from "openai";
+```typescript src/agents/my_agent/index.ts {5,26}
+import { Chat } from '@palico-ai/app';
+import { getOpenAIClient } from '../../utils/openai';
 
-// 1. implement the Chat type
+// 1. implement Chat function
 const handler: Chat = async ({ userMessage }) => {
   // 2. implement your application logic
-  const response = await openai.chat.completions.create({
-    model: "gpt-3.5-turbo-0125",
-    messages: [{ role: "user", content: userMessage }],
+  if (!userMessage) throw new Error('User message is required');
+
+  const response = await getOpenAIClient().chat.completions.create({
+    model: 'gpt-3.5-turbo-0125',
+    messages: [{ role: 'user', content: userMessage }],
   });
+
+  const responseMessage = response.choices[0].message.content;
+  if (!responseMessage) {
+    throw new Error('No response message from OpenAI');
+  }
+
   return {
-    message: response.choices[0].message.content,
+    message: responseMessage,
+    data: { /* additional data*/ }
   };
 };
 
@@ -38,11 +47,11 @@ const handler: Chat = async ({ userMessage }) => {
 export default handler;
 ```
 
-Learn more about the [Chat](#chat-handler-function) function.
+Learn more about the `Chat` function's [interface](<(#chat-handler-function)>).
 
 ## Preview Changes
 
-You can preview your changes in the Chat UI in Palico Studio. Start your Palico App by running the following command:
+You can preview your changes in the Chat Playground in Palico Studio. Start your Palico App by running the following command:
 
 ```bash
 npm start
@@ -59,9 +68,9 @@ API URL: http://localhost:8000
 By default, the Palico Studio runs on http://localhost:3000.
 
 <video
-  className={"rounded-lg"}
-  width={"100%"}
-  height={"auto"}
+  className={'rounded-lg'}
+  width={'100%'}
+  height={'auto'}
   autoPlay
   loop
   muted
@@ -73,24 +82,28 @@ By default, the Palico Studio runs on http://localhost:3000.
 
 Can you stream responses to the client using the `stream.push()` method in the `ChatRequest` object.
 
-```typescript {11-13}
+```typescript {5, 11-15}
 const handler: Chat = async ({ userMessage, stream }) => {
   // call llm with streaming
   const response = await openai.chat.completions.create({
-    model: "gpt-3.5-turbo-0125",
+    model: 'gpt-3.5-turbo-0125',
     stream: true,
-    messages: [{ role: "user", content: userMessage }],
+    messages: [{ role: 'user', content: userMessage }],
   });
   for await (const chunk of response) {
     if (chunk.choices[0].delta.content) {
       // stream chunks back to the client
       stream.push({
         message: chunk.choices[0].delta.content,
+        data: { /* additional data */ },
+        intermediateSteps: [ /* intermediate steps */ ],
       });
     }
   }
 };
 ```
+
+You can stream chunks of data back to the user such as messages, intermediate steps, or other data.
 
 Learn more about [Streaming](/guides/streaming).
 
@@ -108,7 +121,7 @@ const handler: Chat = async ({
 };
 ```
 
-## Conversation Memory
+## Long-Term Memory
 
 With Palico you can create and restore conversation state without worrying about underlying storage infrastructure. This allows you to build multi-turn conversation applications such as chatbot with memory, or complex Agent interactions.
 
@@ -132,13 +145,13 @@ src/
 You can call `my_other_agent` from `my_agent` like this:
 
 ```typescript {4-8} agents/my_agent/index.ts
-import { Chat, Agent } from "@palico-ai/app";
+import { Chat, Agent } from '@palico-ai/app';
 
 const handler: Chat = async ({ userMessage }) => {
   const response = await Agent.chat({
-    agentName: "my_other_agent", // refers to the agent folder name
+    agentName: 'my_other_agent', // refers to the agent folder name
     userMessage,
-    appConfig: { model: "gpt-3.5-turbo" },
+    appConfig: { model: 'gpt-3.5-turbo' },
   });
   return {
     message: response.message,

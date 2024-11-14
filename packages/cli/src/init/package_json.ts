@@ -1,3 +1,4 @@
+import path = require('path');
 import { readFile, runCommands, setFileContent } from '../utils/os';
 
 export type PackageJSONSchema = {
@@ -45,32 +46,37 @@ export default class PackageJSON {
       .map((dep) => `${dep.name}@${dep.version ?? 'latest'}`)
       .join(' ');
     const installCommand = isDev ? 'npm install -D' : 'npm install';
-    const command = `cd ${this.packageDirectory} && ${installCommand} ${dependencyList}`;
-    await runCommands([command]);
+    const command = `${installCommand} ${dependencyList}`;
+    await runCommands([command], {
+      cwd: this.packageDirectory,
+    });
   }
 
   async addScript(name: string, script: string) {
-    const command = `cd ${this.packageDirectory} && npm set-script ${name} "${script}"`;
-    await runCommands([command]);
+    const command = `npm set-script ${name} "${script}"`;
+    await runCommands([command], {
+      cwd: this.packageDirectory,
+    });
   }
 
   async getCurrentPackageJSON() {
-    const packageJSON = await readFile(`${this.packageDirectory}/package.json`);
+    const packagePath = path.join(this.packageDirectory, 'package.json');
+    const packageJSON = await readFile(packagePath);
     return JSON.parse(packageJSON);
   }
 
   async updatePackageJSON(packageJSON: Partial<PackageJSONSchema>) {
     const currentPackageJSON = await this.getCurrentPackageJSON();
     const newPackageJSON = { ...currentPackageJSON, ...packageJSON };
-    await setFileContent(
-      `${this.packageDirectory}/package.json`,
-      JSON.stringify(newPackageJSON, null, 2)
-    );
+    const packagePath = path.join(this.packageDirectory, 'package.json');
+    await setFileContent(packagePath, JSON.stringify(newPackageJSON, null, 2));
   }
 
   async install() {
-    const command = `cd ${this.packageDirectory} && npm install`;
-    await runCommands([command]);
+    const command = `npm install`;
+    await runCommands([command], {
+      cwd: this.packageDirectory,
+    });
   }
 
   static async init(params: InitPackageJSON): Promise<PackageJSON> {
@@ -79,7 +85,9 @@ export default class PackageJSON {
     if (createDirectoryIfNotExists) {
       await runCommands([`mkdir -p ${packageDirectory}`]);
     }
-    await runCommands([`cd ${packageDirectory} && npm init -y`]);
+    await runCommands([`npm init -y`], {
+      cwd: packageDirectory,
+    });
     const packageJSON = new PackageJSON(packageDirectory);
     const packageJSONParams: Partial<PackageJSONSchema> = {
       name: projectName,

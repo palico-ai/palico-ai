@@ -61,10 +61,20 @@ export const renameFile = async (
   );
 };
 
-export const runCommands = async (commands: string[]): Promise<void> => {
+export interface RunCommandOptions {
+  cwd?: string;
+}
+
+export const runCommands = async (
+  commands: string[],
+  options: RunCommandOptions = {}
+): Promise<void> => {
+  console.log(`RUN ${options.cwd ? `in ${options.cwd}` : ''}: ${commands}`);
   const execAsync = promisify(exec);
   for (const command of commands) {
-    const { stdout, stderr } = await execAsync(command);
+    const { stdout, stderr } = await execAsync(command, {
+      cwd: options.cwd,
+    });
     console.log(stdout);
     if (stderr) {
       console.error(`Error running command: ${command}`);

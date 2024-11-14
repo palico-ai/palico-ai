@@ -12,7 +12,7 @@ export interface AdvanceOptionProps {
   onChangeAppConfig: (appConfig?: string) => void;
 }
 
-const EDITOR_HEIGHT = '15vh';
+const EDITOR_HEIGHT = '18vh';
 
 const CodeInputPanel: React.FC<{
   label: string;
