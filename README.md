@@ -18,7 +18,7 @@ Building an LLM application involves continuously iterating on different ideas (
 #### With Palico you can
 
 - ✅&nbsp; Build any application with complete flexibility ([docs](https://docs.palico.ai/guides/build))
-- ✅&nbsp; Preview changes locally with a Playground UI ([docs](https://docs.palico.ai/guides/preview_changes)) <br>
+- ✅&nbsp; Preview changes locally with a Playground UI ([docs](https://docs.palico.ai/guides/build#preview-changes)) <br>
 - ✅&nbsp; Improve performance with Experiments and Evals ([docs](https://docs.palico.ai/guides/experiments)) <br>
 - ✅&nbsp; Debug issues with logs and traces ([docs](https://docs.palico.ai/guides/telemetry)) <br>
 - ✅&nbsp; Integrate with your frontend with ClientSDKs or REST API ([docs](https://docs.palico.ai/client-sdk/introduction)) <br>
@@ -164,7 +164,7 @@ You can deploy your Palico app to any cloud provider using Docker.
 
 ### Continuous Integration
 
-Setup CI/CD and Pull-Request preview with Coolify and Palico. Learn more about [deployment](https://docs.palico.ai/guides/client_sdk).
+Setup CI/CD and Pull-Request preview with Coolify and Palico. Learn more about [deployment](https://docs.palico.ai/guides/deployment).
 
 ### Integrate with Client SDKs
 
