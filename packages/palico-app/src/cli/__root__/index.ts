@@ -1,6 +1,4 @@
 import { AppServiceManager } from '../../utils/app_services';
-import Project from '../../utils/project';
-import { UpdatePalicoContainerImages } from '../selfhost/handlers';
 
 interface StartDevAppParams {
   clean?: boolean;

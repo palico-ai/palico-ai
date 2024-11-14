@@ -38,11 +38,13 @@ export const InitHandler = async (projectName: string, option: Option) => {
   }
   console.log(`Initializing ${projectName}...`);
   const destinationDirectory = path.join(process.cwd(), projectName);
+  console.log('Copying template: ', template);
   await copyTemplate(template, destinationDirectory);
   const packageJSON = new PackageJSON(destinationDirectory);
   await packageJSON.updatePackageJSON({
     name: projectName,
   });
+  console.log('Installing dependencies...');
   await packageJSON.installDependencies([{ name: '@palico-ai/app' }]);
   console.log(chalk.green('Project initialized!'));
   console.log(chalk.blue('Next Steps:'));

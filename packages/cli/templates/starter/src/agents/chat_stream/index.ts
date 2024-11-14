@@ -123,7 +123,6 @@ const streamResponseToClient = async (
 ) => {
   let completeMessage = '';
   for await (const chunk of openAIResponse) {
-    logger.log('Chunk:', chunk.choices[0].delta);
     if (chunk.choices[0].delta.content) {
       completeMessage += chunk.choices[0].delta.content;
       stream.push({

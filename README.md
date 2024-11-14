@@ -49,15 +49,15 @@ https://github.com/user-attachments/assets/bfee992b-56d9-41a0-90b2-43269575ea2a
 With Palico, you have complete control over the implementation details of your LLM application. Build any application by creating a `Chat` function. Here's an example:
 
 ```typescript src/agents/my_agent/index.ts {5,17}
-import { Chat } from "@palico-ai/app";
-import OpenAI from "openai";
+import { Chat } from '@palico-ai/app';
+import OpenAI from 'openai';
 
 // 1. implement the Chat type
 const handler: Chat = async ({ userMessage }) => {
   // 2. implement your application logic
   const response = await openai.chat.completions.create({
-    model: "gpt-3.5-turbo-0125",
-    messages: [{ role: "user", content: userMessage }],
+    model: 'gpt-3.5-turbo-0125',
+    messages: [{ role: 'user', content: userMessage }],
   });
   return {
     message: response.choices[0].message.content,
