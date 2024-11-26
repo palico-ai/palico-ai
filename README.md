@@ -18,8 +18,8 @@
 
   <div>
   
-  [![NPM Downloads](https://img.shields.io/npm/d18m/%40palico-ai%2Fapp)](https://www.npmjs.com/package/@palico-ai/app)
-  [![NPM Version](https://img.shields.io/npm/v/@palico-ai/app)](https://www.npmjs.com/package/@palico-ai/app)
+  ![NPM Downloads](https://img.shields.io/npm/d18m/%40palico-ai%2Fapp)
+  ![NPM Version](https://img.shields.io/npm/v/@palico-ai/app)
   [![X (formerly Twitter) Follow](https://img.shields.io/twitter/follow/PalicoAI)](https://x.com/PalicoAI)
   ![GitHub Repo stars](https://img.shields.io/github/stars/palico-ai/palico-ai)
   ![GitHub License](https://img.shields.io/github/license/palico-ai/palico-ai)
