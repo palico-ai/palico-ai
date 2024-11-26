@@ -2,15 +2,31 @@
 
 <div align="center">
 
-# Palico AI - Tech-Stack for Iterative Development
+  # Palico AI - Tech-Stack for Iterative Development
+  <h4>
+    <p>
+        <a href="https://docs.palico.ai">Documentation</a> |
+        <a href="https://docs.palico.ai/quickstart">Quickstart</a> |
+        <a href="https://docs.palico.ai/guides/agents">Agents</a> |
+        <a href="https://docs.palico.ai/guides/conversation_state">Memory</a> |
+        <a href="https://docs.palico.ai/guides/telemetry">Tracing</a> |
+        <a href="https://docs.palico.ai/guides/experiments"> Evaluations</a> |
+        <a href="https://docs.palico.ai/client-sdk/introduction">SDKs</a> |
+        <a href="https://docs.palico.ai/guides/deployment">Deployment</a>
+    <p>
+  </h4>
 
-[![Docs](https://img.shields.io/badge/docs-palico?style=flat&label=palico)](https://docs.palico.ai/)
-[![Website](https://img.shields.io/badge/website-palico?style=flat&label=palico)](https://www.palico.ai/)
-[![X (formerly Twitter) Follow](https://img.shields.io/twitter/follow/PalicoAI)](https://x.com/PalicoAI)
-[![NPM Downloads](https://img.shields.io/npm/d18m/%40palico-ai%2Fapp)](https://www.npmjs.com/package/@palico-ai/app)
-[![NPM Version](https://img.shields.io/npm/v/@palico-ai/app)](https://www.npmjs.com/package/@palico-ai/app)
-<br>
+  <div>
+  
+  [![NPM Downloads](https://img.shields.io/npm/d18m/%40palico-ai%2Fapp)](https://www.npmjs.com/package/@palico-ai/app)
+  [![NPM Version](https://img.shields.io/npm/v/@palico-ai/app)](https://www.npmjs.com/package/@palico-ai/app)
+  [![X (formerly Twitter) Follow](https://img.shields.io/twitter/follow/PalicoAI)](https://x.com/PalicoAI)
+  ![GitHub Repo stars](https://img.shields.io/github/stars/palico-ai/palico-ai)
+  ![GitHub License](https://img.shields.io/github/license/palico-ai/palico-ai)
 
+
+  
+  </div>
 </div
 
 Building an LLM application involves continuously iterating on different ideas (models, prompts, architectures). Palico is a framework for efficiently iterating on your LLM Development.
@@ -188,7 +204,7 @@ import { useChat } from "@palico-ai/react";
 
 const { messages, sendMessage } = useChat({
   agentName: "assistant",
-  apiURL: "/api/palico", // the API route we created
+  apiURL: "/api/palico",
 });
 ```
 
