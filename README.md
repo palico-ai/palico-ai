@@ -29,7 +29,7 @@
   </div>
 </div
 
-Building an LLM application involves continuously iterating on different ideas (models, prompts, architectures). Palico is a framework for efficiently iterating on your LLM Development.
+Developing an LLM application requires continuously trying different combinations of models, prompts, RAG datasets, call chaining, custom code, and more. Palico helps you build a tech-stack designed for the iterative nature of LLM Development.
 
 #### With Palico you can
 
